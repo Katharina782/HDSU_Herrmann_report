@@ -1,0 +1,3456 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="kmikulik" />
+
+
+<title>Analysis of HIV-1 CSF dataset</title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">report</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Analysis of HIV-1 CSF dataset</h1>
+<h4 class="author">kmikulik</h4>
+<h4 class="date">3 12 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-12-06
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211203code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211203)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20211203code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20211203)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstronga2f6c0c"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> a2f6c0c </a>
+</p>
+</div>
+<div id="strongRepositoryversionstronga2f6c0c" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version a2f6c0c. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  analysis/HIV_CSF_dataset_analysis.Rmd
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre><code>knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
+                      cache = TRUE, cache.lazy = FALSE, autodep = TRUE)
+set.seed(42)</code></pre>
+<p>The aim was to reproduce the analysis done by Farhadian et al., JCL Insight, 2018. Some additional analysis was performed on the Microlglia-like clusters identified in this dataset.</p>
+<p>The dataset contains:</p>
+<ul>
+<li>3 CSF samples from HIV1-infected patients</li>
+<li>2 Blood samples from HIV1-infected patients</li>
+<li>2 CSF samples from uninfected patients</li>
+</ul>
+<p>For more details see: Farhadian et al., JCL Insight, 2018 (<a href="https://doi.org/10.1172/jci.insight.121718" class="uri">https://doi.org/10.1172/jci.insight.121718</a>)</p>
+<ul>
+<li>Import libraries</li>
+</ul>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+✓ tibble  3.1.6     ✓ dplyr   1.0.7
+✓ tidyr   1.1.2     ✓ stringr 1.4.0
+✓ readr   1.4.0     ✓ forcats 0.5.0</code></pre>
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(Seurat)</code></pre>
+<pre><code>Registered S3 method overwritten by &#39;spatstat.geom&#39;:
+  method     from
+  print.boxx cli </code></pre>
+<pre><code>Attaching SeuratObject</code></pre>
+<pre class="r"><code>library(edgeR)</code></pre>
+<pre><code>Loading required package: limma</code></pre>
+<pre class="r"><code>library(Matrix)</code></pre>
+<pre><code>
+Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
+
+    expand, pack, unpack</code></pre>
+<pre class="r"><code>library(data.table)</code></pre>
+<pre><code>
+Attaching package: &#39;data.table&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
+
+    between, first, last</code></pre>
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
+
+    transpose</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(ggrepel)
+library(RColorBrewer)
+library(pheatmap)
+library(ggcorrplot)
+library(ComplexHeatmap)</code></pre>
+<pre><code>Loading required package: grid</code></pre>
+<pre><code>========================================
+ComplexHeatmap version 2.9.4
+Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
+Github page: https://github.com/jokergoo/ComplexHeatmap
+Documentation: http://jokergoo.github.io/ComplexHeatmap-reference
+
+If you use it in published research, please cite:
+Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
+  genomic data. Bioinformatics 2016.
+
+The new InteractiveComplexHeatmap package can directly export static 
+complex heatmaps into an interactive Shiny app with zero effort. Have a try!
+
+This message can be suppressed by:
+  suppressPackageStartupMessages(library(ComplexHeatmap))
+========================================
+! pheatmap() has been masked by ComplexHeatmap::pheatmap(). Most of the arguments
+   in the original pheatmap() are identically supported in the new function. You 
+   can still use the original function by explicitly calling pheatmap::pheatmap().</code></pre>
+<pre><code>
+Attaching package: &#39;ComplexHeatmap&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:pheatmap&#39;:
+
+    pheatmap</code></pre>
+<pre class="r"><code>library(circlize)</code></pre>
+<pre><code>========================================
+circlize version 0.4.13
+CRAN page: https://cran.r-project.org/package=circlize
+Github page: https://github.com/jokergoo/circlize
+Documentation: https://jokergoo.github.io/circlize_book/book/
+
+If you use it in published research, please cite:
+Gu, Z. circlize implements and enhances circular visualization
+  in R. Bioinformatics 2014.
+
+This message can be suppressed by:
+  suppressPackageStartupMessages(library(circlize))
+========================================</code></pre>
+<pre class="r"><code>library(ggpubr)
+library(gridExtra)</code></pre>
+<pre><code>
+Attaching package: &#39;gridExtra&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:dplyr&#39;:
+
+    combine</code></pre>
+<pre class="r"><code>library(corrplot)</code></pre>
+<pre><code>corrplot 0.92 loaded</code></pre>
+<pre class="r"><code>library(rstatix)</code></pre>
+<pre><code>
+Attaching package: &#39;rstatix&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:ggcorrplot&#39;:
+
+    cor_pmat</code></pre>
+<pre><code>The following object is masked from &#39;package:stats&#39;:
+
+    filter</code></pre>
+<pre class="r"><code>library(knitr)
+library(metap)
+library(multtest)</code></pre>
+<pre><code>Loading required package: BiocGenerics</code></pre>
+<pre><code>Loading required package: parallel</code></pre>
+<pre><code>
+Attaching package: &#39;BiocGenerics&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:parallel&#39;:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB</code></pre>
+<pre><code>The following object is masked from &#39;package:gridExtra&#39;:
+
+    combine</code></pre>
+<pre><code>The following object is masked from &#39;package:limma&#39;:
+
+    plotMA</code></pre>
+<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
+
+    combine, intersect, setdiff, union</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    IQR, mad, sd, var, xtabs</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min</code></pre>
+<pre><code>Loading required package: Biobase</code></pre>
+<pre><code>Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    &#39;browseVignettes()&#39;. To cite Bioconductor, see
+    &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
+<pre class="r"><code>library(readxl)
+library(harmony)</code></pre>
+<pre><code>Loading required package: Rcpp</code></pre>
+<pre class="r"><code>library(SeuratDisk)</code></pre>
+<pre><code>Registered S3 method overwritten by &#39;SeuratDisk&#39;:
+  method            from  
+  as.sparse.H5Group Seurat</code></pre>
+<pre class="r"><code>library(patchwork)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<ul>
+<li>Read in count matrices</li>
+</ul>
+<p>The data is available under <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397</a> There is one count matrix for each of the 7 samples.</p>
+<pre class="r"><code>path &lt;- &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE117397_RAW (1)/&quot;
+all_files &lt;- list.files(path)
+
+#Function to create a sparse matrix from each of the dataframes
+sparse_matrix_from_df &lt;- function(df) {
+  #print(df)
+  #class(df)
+  genes &lt;- df$GENE
+  df_minus &lt;- df[,-1]
+  #matrix &lt;- as.matrix(df_minus)
+  sparse_matrix &lt;- as.sparse(df_minus)
+  rownames(sparse_matrix) &lt;- genes
+  return(sparse_matrix)
+}
+
+hiv_object_list &lt;- map(seq.int(2,6), function(n) {
+  file &lt;- all_files[grepl(paste0(&quot;GSM329382&quot;, n), all_files)]
+  name &lt;- str_extract(file, &quot;HIV[1-3]_\\w{3}&quot;)
+  df &lt;- read_delim(paste0(path, file), delim = &quot;\t&quot;)
+  sparse_matrix &lt;- sparse_matrix_from_df(df)
+  seurat_ob &lt;- CreateSeuratObject(sparse_matrix, project = name, 
+                     assay = &quot;RNA&quot;, min.cells = 1,
+                     min.features = 1)
+  list(df=df, sparse_matrix = sparse_matrix, seurat_ob = seurat_ob, name=name)
+})</code></pre>
+<pre><code>
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  GENE = col_character()
+)
+ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
+(&#39;-&#39;)</code></pre>
+<pre><code>
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  GENE = col_character()
+)
+ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
+(&#39;-&#39;)</code></pre>
+<pre><code>
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  GENE = col_character()
+)
+ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
+(&#39;-&#39;)</code></pre>
+<pre><code>
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  GENE = col_character()
+)
+ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
+(&#39;-&#39;)</code></pre>
+<pre><code>
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  GENE = col_character()
+)
+ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
+(&#39;-&#39;)</code></pre>
+<pre class="r"><code>uninfected_list &lt;- map(seq.int(7,8), function(n) {
+  file &lt;- all_files[grepl(paste0(&quot;GSM329382&quot;, n), all_files)]
+  name &lt;- str_extract(file, &quot;Uninfected[12]_CSF&quot;)
+  df &lt;- read_delim(paste0(path, file), delim = &quot;\t&quot;)
+  sparse_matrix &lt;- sparse_matrix_from_df(df)
+  seurat_ob &lt;- CreateSeuratObject(sparse_matrix, project = name, 
+                     assay = &quot;RNA&quot;, min.cells = 1,
+                     min.features = 1, verbose = FALSE)
+  list(df=df, sparse_matrix = sparse_matrix, seurat_ob = seurat_ob, name=name)
+})</code></pre>
+<pre><code>
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  GENE = col_character()
+)
+ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
+(&#39;-&#39;)</code></pre>
+<pre><code>
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  GENE = col_character()
+)
+ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
+(&#39;-&#39;)</code></pre>
+<pre class="r"><code>write.table(uninfected_list[[1]]$sparse_matrix,
+            &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/job_test.tsv&quot;, 
+            sep = &quot;\t&quot;)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<ul>
+<li>Create a Seurat object with all samples</li>
+</ul>
+<pre class="r"><code>hiv &lt;- merge(hiv_object_list[[1]]$seurat_ob, 
+                   c(hiv_object_list[[2]]$seurat_ob,
+                     hiv_object_list[[3]]$seurat_ob,
+                     hiv_object_list[[4]]$seurat_ob,
+                     hiv_object_list[[5]]$seurat_ob, 
+                     uninfected_list[[1]]$seurat_ob,
+                     uninfected_list[[2]]$seurat_ob), 
+                   project = &quot;hiv_total&quot;,
+                   add.cell.ids = c(&quot;1B&quot;, &quot;1C&quot;, &quot;2B&quot;, &quot;2C&quot;, &quot;3C&quot;, &quot;U1&quot;, &quot;U2&quot;))
+
+# add percentage of mitochondrial genes to the metadata
+hiv[[&quot;percent_mt&quot;]] &lt;- PercentageFeatureSet(hiv, pattern = &quot;^MT-&quot;)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<div id="quality-control" class="section level1">
+<h1>Quality Control</h1>
+<p>(on every individual object)</p>
+<ul>
+<li>Function to remove features that are expressed in less than three cells:</li>
+</ul>
+<pre class="r"><code>#returns a list of feature names to keep
+remove_features &lt;- function(seurat_ob) {
+  count_matrix &lt;- seurat_ob@assays$RNA@counts 
+  ncells &lt;- rowSums(count_matrix != 0) # how many cells are expressing a 
+  #certain gene? 
+  names(ncells[ncells &gt; 3]) #extract gene names of genes expressed in more 
+  #than 3 cells
+}</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<ul>
+<li>Function to remove 10% of cell with highest mitochondrial gene expression</li>
+</ul>
+<pre class="r"><code># remove 10% of cells with the highest mitochondrial percentage
+#returns a list of cell names to keep
+remove_mt_genes &lt;- function(seurat_ob){
+  thr &lt;- quantile(seurat_ob@meta.data$percent_mt, .9)
+  seurat_ob@meta.data %&gt;% 
+    filter(percent_mt &lt; thr) %&gt;%
+    rownames()
+}</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<ul>
+<li><p>Perform Quality Control</p></li>
+<li><p>I do the quality control for each sample separately and then combine them again.</p></li>
+<li><p>Question: Does it make sense to scale the data separately? Not really, because when you merge them you have to scale them anyways.</p></li>
+<li><p>When doing the quality control how important is the order of the operations? If you first remove nFeatures &gt; 500 and then features exppressed in more than 3 cells -&gt; then the nFeatures might be below 500.</p></li>
+</ul>
+<pre class="r"><code>separate_objects &lt;- SplitObject(hiv, split.by = &quot;orig.ident&quot;)#[-c(5,6,7)] 
+# only keep two blood samples and two csf samples
+
+qc &lt;- lapply(X = separate_objects, FUN = function(x) {
+    #x[[&quot;percent_mt&quot;]] &lt;- PercentageFeatureSet(x, pattern = &quot;^MT-&quot;) 
+    # add percentage of mitochondrial genes to the metadata
+    x &lt;- subset(x, features = remove_features(x)) 
+    #create a list of cells excluding the 10% of cells with the highest mt gene expression
+    x &lt;- subset(x, nFeature_RNA &lt; 2500 &amp; nFeature_RNA &gt; 500)
+    x &lt;- subset(x, cells = remove_mt_genes(x)) 
+    # remove 10% of cells with highest mitochondrial gene expression
+    #x &lt;- NormalizeData(x)
+    #x &lt;- ScaleData(x)
+})
+
+hiv_filt &lt;- merge(qc[[1]],
+                        c(qc[[2]],
+                        qc[[3]],
+                        qc[[4]],
+                        qc[[5]],
+                        qc[[6]],
+                        qc[[7]]),
+                        project = &quot;hiv_filt&quot;)#,
+                        #add.cell.ids = c(&quot;1B&quot;, &quot;1C&quot;, &quot;2B&quot;, &quot;2C&quot;, &quot;3C&quot;, &quot;U1&quot;, &quot;U2&quot;))</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="have-a-look-at-the-quality-of-the-different-samples." class="section level1">
+<h1>Have a look at the quality of the different samples.</h1>
+<div id="number-of-features" class="section level4">
+<h4>Number of Features</h4>
+<pre class="r"><code>#have a look at the number of detected features
+p1 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p2 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_histogram(aes(x = nFeature_RNA, fill = orig.ident), bins = 100) +
+  facet_wrap(~ orig.ident, ncol = 4) +
+  NoLegend()
+
+p3 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p4 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+figure &lt;- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob(&quot;Number of Features&quot;,
+                                        size = 25,  face = &quot;bold&quot;))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-7-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hiv@meta.data %&gt;%
+  group_by(orig.ident) %&gt;% 
+  summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
+            q50 = quantile(nFeature_RNA, .5), 
+            q75 = quantile(nFeature_RNA, .75), 
+            mean = mean(nFeature_RNA)) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">orig.ident</th>
+<th align="right">n</th>
+<th align="right">q25</th>
+<th align="right">q50</th>
+<th align="right">q75</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HIV1_Bld</td>
+<td align="right">4998</td>
+<td align="right">128</td>
+<td align="right">458.0</td>
+<td align="right">1021</td>
+<td align="right">654.7989</td>
+</tr>
+<tr class="even">
+<td align="left">HIV1_CSF</td>
+<td align="right">4995</td>
+<td align="right">16</td>
+<td align="right">32.0</td>
+<td align="right">341</td>
+<td align="right">315.3642</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV2_Bld</td>
+<td align="right">5000</td>
+<td align="right">360</td>
+<td align="right">581.0</td>
+<td align="right">987</td>
+<td align="right">738.4262</td>
+</tr>
+<tr class="even">
+<td align="left">HIV2_CSF</td>
+<td align="right">4996</td>
+<td align="right">126</td>
+<td align="right">584.5</td>
+<td align="right">1087</td>
+<td align="right">697.9960</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV3_CSF</td>
+<td align="right">5000</td>
+<td align="right">175</td>
+<td align="right">309.0</td>
+<td align="right">666</td>
+<td align="right">542.9580</td>
+</tr>
+<tr class="even">
+<td align="left">Uninfected1_CSF</td>
+<td align="right">4994</td>
+<td align="right">22</td>
+<td align="right">44.0</td>
+<td align="right">114</td>
+<td align="right">151.0993</td>
+</tr>
+<tr class="odd">
+<td align="left">Uninfected2_CSF</td>
+<td align="right">4990</td>
+<td align="right">31</td>
+<td align="right">79.0</td>
+<td align="right">206</td>
+<td align="right">205.2401</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="library-size" class="section level4">
+<h4>Library Size</h4>
+<pre class="r"><code># have a look at the library size
+p1 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p2 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_histogram(aes(x = nCount_RNA, fill = orig.ident), bins = 100) +
+  facet_wrap(~ orig.ident, ncol = 4) +
+  NoLegend()
+
+p3 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p4 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+  
+figure &lt;- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob(&quot;Library size (number of counts)&quot;,
+                                        size = 25,  face = &quot;bold&quot;))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-8-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hiv@meta.data %&gt;%
+  group_by(orig.ident) %&gt;% 
+  summarise(n = n(), q25 = quantile( nCount_RNA, .25),
+            q50 = quantile(nCount_RNA, .5), 
+            q75 = quantile(nCount_RNA, .75), 
+            mean = mean(nCount_RNA)) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">orig.ident</th>
+<th align="right">n</th>
+<th align="right">q25</th>
+<th align="right">q50</th>
+<th align="right">q75</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HIV1_Bld</td>
+<td align="right">4998</td>
+<td align="right">196</td>
+<td align="right">772.0</td>
+<td align="right">2098.00</td>
+<td align="right">1424.6823</td>
+</tr>
+<tr class="even">
+<td align="left">HIV1_CSF</td>
+<td align="right">4995</td>
+<td align="right">19</td>
+<td align="right">39.0</td>
+<td align="right">517.00</td>
+<td align="right">648.8895</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV2_Bld</td>
+<td align="right">5000</td>
+<td align="right">577</td>
+<td align="right">1006.0</td>
+<td align="right">1970.50</td>
+<td align="right">1523.0344</td>
+</tr>
+<tr class="even">
+<td align="left">HIV2_CSF</td>
+<td align="right">4996</td>
+<td align="right">173</td>
+<td align="right">929.0</td>
+<td align="right">2053.25</td>
+<td align="right">1369.0498</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV3_CSF</td>
+<td align="right">5000</td>
+<td align="right">238</td>
+<td align="right">473.5</td>
+<td align="right">1280.50</td>
+<td align="right">1216.9344</td>
+</tr>
+<tr class="even">
+<td align="left">Uninfected1_CSF</td>
+<td align="right">4994</td>
+<td align="right">26</td>
+<td align="right">53.0</td>
+<td align="right">146.00</td>
+<td align="right">269.5036</td>
+</tr>
+<tr class="odd">
+<td align="left">Uninfected2_CSF</td>
+<td align="right">4990</td>
+<td align="right">37</td>
+<td align="right">96.5</td>
+<td align="right">272.00</td>
+<td align="right">356.2377</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="percentage-of-mitochondrial-genes" class="section level4">
+<h4>Percentage of Mitochondrial genes</h4>
+<pre class="r"><code># have a look at the percentage of mitochondrial genes
+p1 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p2 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_histogram(aes(x = percent_mt, fill = orig.ident), bins = 100) +
+  facet_wrap(~ orig.ident, ncol = 4) +
+  NoLegend()
+
+p3 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p4 &lt;- hiv@meta.data %&gt;% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+  
+figure &lt;- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)</code></pre>
+<pre><code>Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<pre><code>Warning: Removed 2014 rows containing non-finite values (stat_ydensity).</code></pre>
+<pre class="r"><code>annotate_figure(figure, top = text_grob(&quot;Percentage of Mitochondrial gene&quot;,
+                                        size = 25,  face = &quot;bold&quot;))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hiv@meta.data %&gt;%
+  group_by(orig.ident) %&gt;% 
+  summarise(n = n(), q25 = quantile( percent_mt, .25),
+            q50 = quantile(percent_mt, .5), 
+            q75 = quantile(percent_mt, .75), 
+            mean = mean(percent_mt)) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">orig.ident</th>
+<th align="right">n</th>
+<th align="right">q25</th>
+<th align="right">q50</th>
+<th align="right">q75</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HIV1_Bld</td>
+<td align="right">4998</td>
+<td align="right">6.140696</td>
+<td align="right">10.314638</td>
+<td align="right">16.83490</td>
+<td align="right">13.746867</td>
+</tr>
+<tr class="even">
+<td align="left">HIV1_CSF</td>
+<td align="right">4995</td>
+<td align="right">4.000000</td>
+<td align="right">8.522727</td>
+<td align="right">15.38462</td>
+<td align="right">12.092172</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV2_Bld</td>
+<td align="right">5000</td>
+<td align="right">9.558731</td>
+<td align="right">14.370956</td>
+<td align="right">20.53664</td>
+<td align="right">16.562072</td>
+</tr>
+<tr class="even">
+<td align="left">HIV2_CSF</td>
+<td align="right">4996</td>
+<td align="right">7.387619</td>
+<td align="right">11.188337</td>
+<td align="right">16.68489</td>
+<td align="right">13.814837</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV3_CSF</td>
+<td align="right">5000</td>
+<td align="right">2.590861</td>
+<td align="right">4.413543</td>
+<td align="right">7.26931</td>
+<td align="right">5.785039</td>
+</tr>
+<tr class="even">
+<td align="left">Uninfected1_CSF</td>
+<td align="right">4994</td>
+<td align="right">4.165372</td>
+<td align="right">8.333333</td>
+<td align="right">14.70588</td>
+<td align="right">10.832587</td>
+</tr>
+<tr class="odd">
+<td align="left">Uninfected2_CSF</td>
+<td align="right">4990</td>
+<td align="right">3.675874</td>
+<td align="right">7.462687</td>
+<td align="right">12.73541</td>
+<td align="right">9.618704</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+<div id="quality-of-the-different-samples-after-quality-control" class="section level1">
+<h1>Quality of the different samples after quality control</h1>
+<ul>
+<li>removing the 10% of cells with the highest percentage of mitochdonrial genes</li>
+<li>remove features that are expressed in less than 3 cells</li>
+<li>remove cells with 500 &lt; nFeature_RNA &gt; 2500</li>
+</ul>
+<p>It seems that the CSF1 samples, as well as the two uninfected samples have very few cells with nFeature_RNA &gt; 500, so we are left with less cells from these samples</p>
+<div id="number-of-features-after-quality-control" class="section level4">
+<h4>Number of features after Quality Control</h4>
+<pre class="r"><code># Have a look at the number of Feature RNA
+p1 &lt;- hiv_filt@meta.data %&gt;%
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  NoLegend()
+
+p2 &lt;- hiv_filt@meta.data %&gt;% 
+  ggplot()+
+  geom_violin(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p3 &lt;- hiv_filt@meta.data %&gt;% 
+  ggplot() +
+  geom_histogram(aes(x = nFeature_RNA, fill = orig.ident)) +
+  facet_wrap(~orig.ident, ncol = 4) +
+  NoLegend()
+
+figure &lt;- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre class="r"><code>annotate_figure(figure, top = text_grob(&quot;Number of features after quality control&quot;,
+                                        size = 25,  face = &quot;bold&quot;))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-10-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hiv_filt@meta.data %&gt;% group_by(orig.ident) %&gt;%
+  summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
+            q50 = quantile(nFeature_RNA, .5),
+            q75 = quantile(nFeature_RNA, .75),
+            mean = mean(nFeature_RNA)) %&gt;% kable</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">orig.ident</th>
+<th align="right">n</th>
+<th align="right">q25</th>
+<th align="right">q50</th>
+<th align="right">q75</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HIV1_Bld</td>
+<td align="right">2076</td>
+<td align="right">786.75</td>
+<td align="right">1053.0</td>
+<td align="right">1413.25</td>
+<td align="right">1140.157</td>
+</tr>
+<tr class="even">
+<td align="left">HIV1_CSF</td>
+<td align="right">932</td>
+<td align="right">800.00</td>
+<td align="right">1077.0</td>
+<td align="right">1395.00</td>
+<td align="right">1142.855</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV2_Bld</td>
+<td align="right">2520</td>
+<td align="right">672.00</td>
+<td align="right">914.0</td>
+<td align="right">1277.00</td>
+<td align="right">1023.094</td>
+</tr>
+<tr class="even">
+<td align="left">HIV2_CSF</td>
+<td align="right">2309</td>
+<td align="right">809.00</td>
+<td align="right">1063.0</td>
+<td align="right">1359.00</td>
+<td align="right">1129.844</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV3_CSF</td>
+<td align="right">1384</td>
+<td align="right">703.00</td>
+<td align="right">1091.0</td>
+<td align="right">1492.25</td>
+<td align="right">1153.576</td>
+</tr>
+<tr class="even">
+<td align="left">Uninfected1_CSF</td>
+<td align="right">216</td>
+<td align="right">672.50</td>
+<td align="right">887.5</td>
+<td align="right">1526.00</td>
+<td align="right">1133.796</td>
+</tr>
+<tr class="odd">
+<td align="left">Uninfected2_CSF</td>
+<td align="right">340</td>
+<td align="right">670.50</td>
+<td align="right">1066.5</td>
+<td align="right">1606.00</td>
+<td align="right">1155.576</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="library-size-after-quality-control" class="section level4">
+<h4>Library size after Quality Control</h4>
+<pre class="r"><code>p1 &lt;- hiv_filt@meta.data %&gt;%
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  NoLegend()
+
+p2 &lt;- hiv_filt@meta.data %&gt;% 
+  ggplot()+
+  geom_violin(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p3 &lt;- hiv_filt@meta.data %&gt;% 
+  ggplot() +
+  geom_histogram(aes(x = nCount_RNA, fill = orig.ident)) +
+  facet_wrap(~orig.ident, ncol = 4) +
+  NoLegend()
+
+figure &lt;- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre class="r"><code>annotate_figure(figure, top = text_grob(&quot;Library size (number of counts) after quality control&quot;,
+                                        size = 25,  face = &quot;bold&quot;))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-11-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hiv_filt@meta.data %&gt;% group_by(orig.ident) %&gt;%
+  summarise(n = n(), q25 = quantile(nCount_RNA, .25),
+            q50 = quantile(nCount_RNA, .5),
+            q75 = quantile(nCount_RNA, .75),
+            mean = mean(nCount_RNA)) %&gt;% kable</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">orig.ident</th>
+<th align="right">n</th>
+<th align="right">q25</th>
+<th align="right">q50</th>
+<th align="right">q75</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HIV1_Bld</td>
+<td align="right">2076</td>
+<td align="right">1458.75</td>
+<td align="right">2179.5</td>
+<td align="right">3264.25</td>
+<td align="right">2522.768</td>
+</tr>
+<tr class="even">
+<td align="left">HIV1_CSF</td>
+<td align="right">932</td>
+<td align="right">1410.75</td>
+<td align="right">2102.5</td>
+<td align="right">3066.75</td>
+<td align="right">2378.643</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV2_Bld</td>
+<td align="right">2520</td>
+<td align="right">1187.50</td>
+<td align="right">1779.5</td>
+<td align="right">2822.25</td>
+<td align="right">2158.089</td>
+</tr>
+<tr class="even">
+<td align="left">HIV2_CSF</td>
+<td align="right">2309</td>
+<td align="right">1374.00</td>
+<td align="right">1984.0</td>
+<td align="right">2745.00</td>
+<td align="right">2222.453</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV3_CSF</td>
+<td align="right">1384</td>
+<td align="right">1377.25</td>
+<td align="right">2381.5</td>
+<td align="right">3845.25</td>
+<td align="right">2842.006</td>
+</tr>
+<tr class="even">
+<td align="left">Uninfected1_CSF</td>
+<td align="right">216</td>
+<td align="right">1063.25</td>
+<td align="right">1491.5</td>
+<td align="right">2968.75</td>
+<td align="right">2177.278</td>
+</tr>
+<tr class="odd">
+<td align="left">Uninfected2_CSF</td>
+<td align="right">340</td>
+<td align="right">1063.50</td>
+<td align="right">1876.0</td>
+<td align="right">3399.50</td>
+<td align="right">2328.871</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="percentage-of-mitochondrial-genes-after-quality-conrol" class="section level4">
+<h4>Percentage of Mitochondrial genes after Quality Conrol</h4>
+<pre class="r"><code>p1 &lt;- hiv_filt@meta.data %&gt;%
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  NoLegend()
+
+p2 &lt;- hiv_filt@meta.data %&gt;% 
+  ggplot()+
+  geom_violin(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p3 &lt;- hiv_filt@meta.data %&gt;% 
+  ggplot() +
+  geom_histogram(aes(x = percent_mt, fill = orig.ident)) +
+  facet_wrap(~orig.ident, ncol = 4) +
+  NoLegend()
+
+figure &lt;- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre class="r"><code>annotate_figure(figure, top = text_grob(&quot;Percentage of Mitochondrial genes after quality control&quot;,
+                                        size = 25,  face = &quot;bold&quot;))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-12-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hiv_filt@meta.data %&gt;% group_by(orig.ident) %&gt;%
+  summarise(n = n(), q25 = quantile(percent_mt, .25),
+            q50 = quantile(percent_mt, .5),
+            q75 = quantile(percent_mt, .75),
+            mean = mean(percent_mt)) %&gt;% kable</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">orig.ident</th>
+<th align="right">n</th>
+<th align="right">q25</th>
+<th align="right">q50</th>
+<th align="right">q75</th>
+<th align="right">mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HIV1_Bld</td>
+<td align="right">2076</td>
+<td align="right">5.659778</td>
+<td align="right">8.616470</td>
+<td align="right">12.057771</td>
+<td align="right">9.006083</td>
+</tr>
+<tr class="even">
+<td align="left">HIV1_CSF</td>
+<td align="right">932</td>
+<td align="right">5.067679</td>
+<td align="right">7.526483</td>
+<td align="right">10.327807</td>
+<td align="right">7.820102</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV2_Bld</td>
+<td align="right">2520</td>
+<td align="right">8.428856</td>
+<td align="right">12.017682</td>
+<td align="right">15.653130</td>
+<td align="right">12.183780</td>
+</tr>
+<tr class="even">
+<td align="left">HIV2_CSF</td>
+<td align="right">2309</td>
+<td align="right">7.420091</td>
+<td align="right">10.051282</td>
+<td align="right">13.119900</td>
+<td align="right">10.296168</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV3_CSF</td>
+<td align="right">1384</td>
+<td align="right">2.045621</td>
+<td align="right">3.169997</td>
+<td align="right">4.804080</td>
+<td align="right">3.582988</td>
+</tr>
+<tr class="even">
+<td align="left">Uninfected1_CSF</td>
+<td align="right">216</td>
+<td align="right">4.339334</td>
+<td align="right">5.927984</td>
+<td align="right">8.122936</td>
+<td align="right">6.373704</td>
+</tr>
+<tr class="odd">
+<td align="left">Uninfected2_CSF</td>
+<td align="right">340</td>
+<td align="right">3.683668</td>
+<td align="right">5.999618</td>
+<td align="right">8.409969</td>
+<td align="right">6.088557</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+<div id="subset-seurat-object" class="section level1">
+<h1>Subset Seurat object</h1>
+<p>Use 4 samples (2 blood, 2 csf) from two patients for further analysis like in the paper:</p>
+<pre class="r"><code>hiv4 &lt;- subset(hiv_filt, orig.ident %in% c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV1_Bld&quot;, &quot;HIV2_Bld&quot;))</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<ul>
+<li>Normalize, Scale and find variable features</li>
+</ul>
+<pre class="r"><code>hiv4 &lt;- NormalizeData(hiv4, verbose = FALSE)
+hiv4 &lt;- ScaleData(hiv4, verbose = FALSE)
+hiv4 &lt;- FindVariableFeatures(hiv4, verbose = FALSE)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<ul>
+<li>Save the log-normalized count matrix as a tsv file for Scenic Workflow</li>
+</ul>
+<pre><code># use only the infected samples, but not the uninfected samples
+scenic_samples &lt;- subset(hiv_filt, orig.ident %in% c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;,
+                                                     &quot;HIV1_Bld&quot;, &quot;HIV2_Bld&quot;, &quot;HIV3_CSF&quot;))
+
+# because the snakemake pipeline of Carlos pySCENIC_pipeline: https://github.com/hdsu-bioquant/pySCENIC_pipeline/blob/master/input/gene_exp_mtx_example.tsv
+# requires an input matrix which has genes as columns and cells as rows
+# I will transpose the matrix
+
+## Try with SCTTransform 
+# select only the 3000 most highly variable features
+# this might solve the problem with the snakemake file, because then you do not have genes with very low expression...
+scenic_samples &lt;- SCTransform(scenic_samples, verbose = FALSE)
+#hvg &lt;- scenic_samples@assays$SCT@var.features
+sct_test_seurat &lt;- subset(scenic_samples, 
+                          features = scenic_samples@assays$SCT@var.features)
+
+sct_test_mtx &lt;- sct_test_seurat@assays$SCT@scale.data
+
+# full matrix for Scenic workflow
+sct_hiv_mtx &lt;- t(sct_test_mtx)
+#write.table(x = sct_hiv_mtx,
+#           file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/pySCENIC_pipeline/input/sct_hi#v_mtx.tsv&quot;, sep = &quot;\t&quot;)
+</code></pre>
+<div id="dimensionality-reduction" class="section level3">
+<h3>Dimensionality reduction</h3>
+<div id="pca" class="section level4">
+<h4>PCA</h4>
+<p>Compute PCA for highly variable genes: The first 10 dimensions seem to account for most of the variance (see elbow plot). The plots seem to indicate that the blood samples and csf samples are different.</p>
+<pre class="r"><code>hiv4 &lt;- RunPCA(hiv4, features = VariableFeatures(hiv4), verbose = FALSE)
+
+# elbow plot to determine which PCs account for most of the variance
+ElbowPlot(hiv4)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-15-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#pca plots
+pca_plots &lt;- comprehenr::to_list(for (i in 1:13)
+  DimPlot(hiv4, reduction = &quot;pca&quot;, dims = i : (i+1)) +
+    theme())
+do.call(gridExtra::grid.arrange, c(pca_plots, ncol=3, nrow = 5))</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-15-2.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+<div id="clustering-tsne-embedding" class="section level3">
+<h3>Clustering &amp; tSNE embedding</h3>
+<ul>
+<li>compute KNN-graph</li>
+<li>find clusters based on KNN-graph with Louvian algorithm</li>
+</ul>
+<pre class="r"><code>hiv4 &lt;- FindNeighbors(hiv4, verbose = FALSE)
+hiv4 &lt;- FindClusters(hiv4, verbose = FALSE)
+
+table(hiv4$seurat_clusters)</code></pre>
+<pre><code>
+   0    1    2    3    4    5    6    7    8    9   10   11   12   13   14 
+1301 1119  948  868  742  687  677  415  308  301  132  106  105   72   56 </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Questions:</p>
+<p>When looking at the nFeatureRNA, percent_mt should some clustes be removed?</p>
+<p>Is there a batch effect?</p>
+<pre class="r"><code>hiv4 &lt;- RunTSNE(hiv4, dims = 1:10, verbose = FALSE)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<pre class="r"><code>tsne_coord &lt;- Embeddings(hiv4[[&quot;tsne&quot;]]) # tsne coordinates
+meta &lt;- hiv4@meta.data # metadata
+cm &lt;- hiv4@assays$RNA@counts # count matrix
+
+# UMAP with number of features detected per cell
+p1 &lt;- cbind(meta, tsne_coord) %&gt;%
+  ggplot() +
+  geom_point(aes(x=tSNE_1, y=tSNE_2, col=nFeature_RNA), size=.5) +
+  scale_color_viridis_c()
+
+# percentage of mitochondrial genes per cell
+p2 &lt;- cbind(meta, tsne_coord) %&gt;% 
+  ggplot() +
+  geom_point(aes(x = tSNE_1, y = tSNE_2, col = percent_mt ), size = .5) +
+  scale_color_viridis_c()
+
+# UMAP indicating the sample where each cell came from
+p3 &lt;- cbind(meta, tsne_coord) %&gt;% 
+  ggplot() +
+  geom_point(aes(x = tSNE_1, y = tSNE_2, col = orig.ident ), size = .5) 
+
+# UMAP labeled according to clusters
+p4 &lt;- cbind(meta, tsne_coord) %&gt;% 
+  ggplot() +
+  geom_point(aes(x = tSNE_1, y = tSNE_2, col = seurat_clusters ), size = .5)
+
+ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-18-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="find-marker-genes" class="section level3">
+<h3>Find Marker genes</h3>
+<pre><code>marker_genes &lt;- FindAllMarkers(hiv4, logfc.threshold = .01, min.pct = .01)</code></pre>
+<pre class="r"><code># filter for significant marker genes
+#sign_marker_genes &lt;- marker_genes %&gt;% filter(p_val_adj &lt;= .1)
+
+sign_marker_genes &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/sign_marker_genes.tsv&quot;)
+
+#show the top 10 differentially expressed genes for each cluster
+sign_marker_genes %&gt;% group_by(cluster) %&gt;% top_n(n = 2, wt = avg_logFC ) %&gt;% kable</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">p_val</th>
+<th align="right">avg_logFC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+<th align="right">cluster</th>
+<th align="left">gene</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.9583899</td>
+<td align="right">0.545</td>
+<td align="right">0.144</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">CCR7</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.7910095</td>
+<td align="right">0.463</td>
+<td align="right">0.149</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">LEF1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1.3378085</td>
+<td align="right">0.955</td>
+<td align="right">0.401</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">CCL5</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1.3312006</td>
+<td align="right">0.627</td>
+<td align="right">0.117</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">GZMK</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.9648694</td>
+<td align="right">0.818</td>
+<td align="right">0.141</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="left">LYZ</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.9325701</td>
+<td align="right">0.039</td>
+<td align="right">0.002</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="left">CLC</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.5249648</td>
+<td align="right">0.814</td>
+<td align="right">0.617</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="left">IL7R</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.5271194</td>
+<td align="right">0.358</td>
+<td align="right">0.172</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="left">GZMK</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.5918064</td>
+<td align="right">0.681</td>
+<td align="right">0.468</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="left">LTB</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.4685953</td>
+<td align="right">0.831</td>
+<td align="right">0.618</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="left">IL7R</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1.3880325</td>
+<td align="right">0.713</td>
+<td align="right">0.183</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="left">GNLY</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1.1492939</td>
+<td align="right">0.677</td>
+<td align="right">0.177</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="left">NKG7</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.7306204</td>
+<td align="right">0.875</td>
+<td align="right">0.457</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="left">LTB</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.6855607</td>
+<td align="right">0.481</td>
+<td align="right">0.172</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="left">MAF</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">2.7480043</td>
+<td align="right">0.983</td>
+<td align="right">0.093</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="left">MS4A1</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">2.2013054</td>
+<td align="right">0.670</td>
+<td align="right">0.041</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="left">IGHM</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">3.4870174</td>
+<td align="right">1.000</td>
+<td align="right">0.191</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="left">LYZ</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">3.1688361</td>
+<td align="right">0.977</td>
+<td align="right">0.123</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="left">S100A9</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">2.1622754</td>
+<td align="right">0.804</td>
+<td align="right">0.063</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="left">FGFBP2</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">2.2885232</td>
+<td align="right">0.957</td>
+<td align="right">0.201</td>
+<td align="right">0</td>
+<td align="right">9</td>
+<td align="left">GNLY</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">2.3732654</td>
+<td align="right">0.955</td>
+<td align="right">0.098</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="left">FCGR3A</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">2.4715316</td>
+<td align="right">0.977</td>
+<td align="right">0.137</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="left">AIF1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">3.0007641</td>
+<td align="right">0.860</td>
+<td align="right">0.004</td>
+<td align="right">0</td>
+<td align="right">11</td>
+<td align="left">C1QB</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">2.8593634</td>
+<td align="right">0.794</td>
+<td align="right">0.002</td>
+<td align="right">0</td>
+<td align="right">11</td>
+<td align="left">C1QC</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">2.8500142</td>
+<td align="right">1.000</td>
+<td align="right">0.235</td>
+<td align="right">0</td>
+<td align="right">12</td>
+<td align="left">HLA-DPA1</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">2.8524059</td>
+<td align="right">1.000</td>
+<td align="right">0.239</td>
+<td align="right">0</td>
+<td align="right">12</td>
+<td align="left">HLA-DRA</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">3.7525676</td>
+<td align="right">0.986</td>
+<td align="right">0.014</td>
+<td align="right">0</td>
+<td align="right">13</td>
+<td align="left">FCGR3B</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">3.6378226</td>
+<td align="right">0.653</td>
+<td align="right">0.053</td>
+<td align="right">0</td>
+<td align="right">13</td>
+<td align="left">IL8</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">4.1426093</td>
+<td align="right">0.911</td>
+<td align="right">0.039</td>
+<td align="right">0</td>
+<td align="right">14</td>
+<td align="left">IGJ</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">4.0013955</td>
+<td align="right">0.321</td>
+<td align="right">0.026</td>
+<td align="right">0</td>
+<td align="right">14</td>
+<td align="left">IGHG1</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="cell-type-annotation-with-canonical-marker-genes" class="section level2">
+<h2>Cell type annotation with canonical marker genes:</h2>
+<div id="b-cell-markers" class="section level4">
+<h4>B cell markers</h4>
+<p>Are found primarily in cluster 7.</p>
+<pre class="r"><code>p1 &lt;- VlnPlot(hiv4, features = c(&quot;MS4A1&quot;, &quot;CD79A&quot;, &quot;TCL1A&quot;), pt.size = .01)
+p2 &lt;- RidgePlot(hiv4, features =  c(&quot;MS4A1&quot;, &quot;CD79A&quot;, &quot;TCL1A&quot;), sort = &quot;decreasing&quot; )
+ggarrange(p1,p2, nrow = 2, ncol = 1)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0311</code></pre>
+<pre><code>Picking joint bandwidth of 0.0413</code></pre>
+<pre><code>Picking joint bandwidth of 2.99e-06</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-20-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="nk-cells" class="section level4">
+<h4>NK cells</h4>
+<p>In cluster 5 and 9. GZMB is also foudn in cluster 14.</p>
+<pre class="r"><code>p1 &lt;- VlnPlot(hiv4, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;GZMB&quot;),
+        pt.size = .01, ncol = 3)#, stack = TRUE)
+p2 &lt;- RidgePlot(hiv4, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;GZMB&quot;), sort = &quot;decreasing&quot;)
+
+ggarrange(p1,p2, nrow = 2, ncol = 1)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0482</code></pre>
+<pre><code>Picking joint bandwidth of 0.0544</code></pre>
+<pre><code>Picking joint bandwidth of 0.0471</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-21-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="tcells" class="section level4">
+<h4>Tcells</h4>
+<ul>
+<li>A general T cell marker CD3E is expressed in cluster 0,1,3,4,5,6.</li>
+<li>IL7R in clusters 0-6</li>
+<li>TRAC in clusters 0-6, excluding 2</li>
+<li>CCR7 in 0,6,7</li>
+<li>LDHB not very clear, but 0,1,3,4,6</li>
+<li>LTB in 0-7</li>
+<li>CD2 in 1,3,4,5,9</li>
+</ul>
+<p>Tcells 1, 2, 3 are assigned arbitrarily, because they are not used for further analysis.</p>
+<p>CD8+ T cells * CD8A is expressed in decreasing order in 1,5,3 (could cluster 1 and 5 be CD8 T cells?)</p>
+<pre class="r"><code># general T cell marker for CD4+ and CD8+ Tcells
+p1 &lt;- VlnPlot(hiv4, features = c(&quot;CD8A&quot;,&quot;CD3E&quot;), pt.size = .01, ncol = 2)
+p2 &lt;- RidgePlot(hiv4, features = c(&quot;CD8A&quot;,&quot;CD3E&quot;), sort = &quot;decreasing&quot;)
+
+
+p3 &lt;- VlnPlot(hiv4, features = c(&quot;IL7R&quot;, &quot;TRAC&quot;), pt.size = 0.01)
+p4 &lt;- RidgePlot(hiv4, features = c(&quot;IL7R&quot;, &quot;TRAC&quot;), sort = &quot;decreasing&quot;)
+
+# helper T cells
+p5 &lt;- VlnPlot(hiv4, features = c(&quot;LTB&quot;, &quot;CD2&quot;), pt.size = .01, ncol = 2)
+p6 &lt;- RidgePlot(hiv4, features = c(&quot;LTB&quot;, &quot;CD2&quot;), sort = &quot;decreasing&quot;)
+
+# CD4+ naive T cells
+p7 &lt;- VlnPlot(hiv4, features = c(&quot;LDHB&quot;, &quot;CCR7&quot;), pt.size = .01, ncol = 2)
+p8 &lt;- RidgePlot(hiv4, features = c(&quot;LDHB&quot;, &quot;CCR7&quot;), sort = &quot;decreasing&quot;)
+
+
+ggarrange(p1, p2,p3, p4, p5, p6, p7,p8, ncol = 2, nrow = 4)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0515</code></pre>
+<pre><code>Picking joint bandwidth of 0.0941</code></pre>
+<pre><code>Picking joint bandwidth of 0.169</code></pre>
+<pre><code>Picking joint bandwidth of 0.1</code></pre>
+<pre><code>Picking joint bandwidth of 0.17</code></pre>
+<pre><code>Picking joint bandwidth of 0.161</code></pre>
+<pre><code>Picking joint bandwidth of 0.248</code></pre>
+<pre><code>Picking joint bandwidth of 0.0395</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-22-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="plasma-cells" class="section level4">
+<h4>plasma cells</h4>
+<p>in cluster 14</p>
+<pre class="r"><code>p1 &lt;- VlnPlot(hiv4, features = c(&quot;IGJ&quot;), pt.size = .01, ncol = 2)
+p2 &lt;- RidgePlot(hiv4, features = c(&quot;IGJ&quot;), sort = &quot;decreasing&quot;)
+ggarrange(p1,p2, nrow = 1, ncol = 2)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0585</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-23-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="myeloid-cells" class="section level4">
+<h4>Myeloid cells</h4>
+<ul>
+<li>granulocytes</li>
+<li>monocytes</li>
+<li>macrophages</li>
+<li>dendritic cells</li>
+</ul>
+<p>-&gt; clusters 8, 10, 11, 12, 13 are myeloid cells</p>
+<p>The 3 genes (AXL, APOE, TREM2) associated with neurodegenrative-disaes-associated microglia are expressed in myeloid2, however, only at very low concentrations</p>
+<p>Myeloid1, 3, 4 are assigned arbitrarily, because they are not of interest.</p>
+<pre class="r"><code>p1 &lt;- VlnPlot(hiv4, features = c(&quot;LYZ&quot;, &quot;FCER1A&quot;, &quot;CD14&quot;, &quot;FCGR3A&quot;), # FCG3A is also expressed in cluster 9 (NK cells)
+        pt.size = .01, ncol = 2)
+p2 &lt;- RidgePlot(hiv4, features = c(&quot;LYZ&quot;, &quot;FCER1A&quot;),
+          sort = &quot;decreasing&quot;, ncol = 2) # DC markers
+p3 &lt;- RidgePlot(hiv4, features = c(&quot;CD14&quot;, &quot;FCGR3A&quot;), 
+          sort = &quot;decreasing&quot;, ncol = 2) # monocytes (LYC also in monocytes)
+ggarrange(p1,p2,p3, nrow = 3, ncol = 1)</code></pre>
+<pre><code>Picking joint bandwidth of 0.14</code></pre>
+<pre><code>Picking joint bandwidth of 0.0228</code></pre>
+<pre><code>Picking joint bandwidth of 0.0393</code></pre>
+<pre><code>Picking joint bandwidth of 0.0896</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-24-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<div id="myeloid-5" class="section level5">
+<h5>Myeloid 5</h5>
+<ul>
+<li>(from paper)</li>
+<li>was characterized by: FCER1A, CD1C</li>
+<li>cluster 12</li>
+</ul>
+<pre class="r"><code># Myeloid 5 in the paper
+p1 &lt;- VlnPlot(hiv4, features = c( &quot;FCER1A&quot;, &quot;CD1C&quot;), pt.size = .01, ncol = 2)
+p2 &lt;- RidgePlot(hiv4, features = c(&quot;FCER1A&quot;, &quot;CD1C&quot;), sort = &quot;decreasing&quot;, ncol = 2)
+ggarrange(p1, p2, nrow = 2, ncol = 1)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0228</code></pre>
+<pre><code>Picking joint bandwidth of 0.0264</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-25-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="myeloid-2" class="section level5">
+<h5>Myeloid 2</h5>
+<ul>
+<li>(from paper) -&gt; cluster 11</li>
+<li>AXL, APOE, TREM2 (these genes are enriched in neurodegenerative disease-associated microglia)</li>
+<li>“CTSB”, “APOC1”, “MSR1”, “C1QA-C” are expressed more highly in myeloid 2 compared to other myeloid clusters</li>
+</ul>
+<pre class="r"><code># Myeloid 2
+p1 &lt;- VlnPlot(hiv4, features = c(&quot;AXL&quot;, &quot;APOE&quot;, &quot;TREM2&quot;), pt.size = .01, ncol = 3)
+p2 &lt;- RidgePlot(hiv4, features = c(&quot;AXL&quot;, &quot;APOE&quot;, &quot;TREM2&quot;), sort = &quot;decreasing&quot;)
+p3 &lt;- VlnPlot(hiv4, features = c(&quot;CTSB&quot;, &quot;APOC1&quot;, &quot;MSR1&quot;, &quot;C1QA&quot;), 
+              pt.size = .01, ncol = 4)
+p4 &lt;- RidgePlot(hiv4, features = c(&quot;CTSB&quot;, &quot;APOC1&quot;, &quot;MSR1&quot;, &quot;C1QA&quot;),
+                sort = &quot;decreasing&quot;, ncol = 4)
+
+ggarrange(p1, p2, p3, p4, ncol = 1, nrow = 4)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0119</code></pre>
+<pre><code>Picking joint bandwidth of 0.0305</code></pre>
+<pre><code>Picking joint bandwidth of 0.0205</code></pre>
+<pre><code>Picking joint bandwidth of 0.0836</code></pre>
+<pre><code>Picking joint bandwidth of 0.0249</code></pre>
+<pre><code>Picking joint bandwidth of 0.0291</code></pre>
+<pre><code>Picking joint bandwidth of 0.0248</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-26-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="annotate-cells" class="section level2">
+<h2>Annotate cells</h2>
+<ul>
+<li>Why is the mixed population primarily composed of cells from HIV1 patient blood sample?</li>
+<li>Why are T cells primarily from CSF samples and CD8 T cells primarily from blood?</li>
+</ul>
+<pre class="r"><code>Idents(hiv4) &lt;- &quot;seurat_clusters&quot;
+cell_types &lt;- c(&quot;Tcell2&quot;, &quot;CD8&quot;, &quot;mixed&quot;, &quot;CD81&quot;, &quot;Tcell3&quot;, &quot;NKcell1&quot;,
+                &quot;Tcell1&quot;, &quot;Bcell&quot;, &quot;Myeloid1&quot;, &quot;NKcell2&quot;, &quot;Myeloid3&quot;, &quot;Myeloid2&quot;
+                , &quot;Myeloid5&quot;, &quot;Myeloid4&quot;, &quot;plasma cell&quot; )
+
+names(cell_types) &lt;- levels(hiv4)
+hiv4 &lt;- RenameIdents(hiv4, cell_types)
+as.data.frame(cell_types) %&gt;%  rownames_to_column(&quot;cluster&quot;) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">cluster</th>
+<th align="left">cell_types</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">Tcell2</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">CD8</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">mixed</td>
+</tr>
+<tr class="even">
+<td align="left">3</td>
+<td align="left">CD81</td>
+</tr>
+<tr class="odd">
+<td align="left">4</td>
+<td align="left">Tcell3</td>
+</tr>
+<tr class="even">
+<td align="left">5</td>
+<td align="left">NKcell1</td>
+</tr>
+<tr class="odd">
+<td align="left">6</td>
+<td align="left">Tcell1</td>
+</tr>
+<tr class="even">
+<td align="left">7</td>
+<td align="left">Bcell</td>
+</tr>
+<tr class="odd">
+<td align="left">8</td>
+<td align="left">Myeloid1</td>
+</tr>
+<tr class="even">
+<td align="left">9</td>
+<td align="left">NKcell2</td>
+</tr>
+<tr class="odd">
+<td align="left">10</td>
+<td align="left">Myeloid3</td>
+</tr>
+<tr class="even">
+<td align="left">11</td>
+<td align="left">Myeloid2</td>
+</tr>
+<tr class="odd">
+<td align="left">12</td>
+<td align="left">Myeloid5</td>
+</tr>
+<tr class="even">
+<td align="left">13</td>
+<td align="left">Myeloid4</td>
+</tr>
+<tr class="odd">
+<td align="left">14</td>
+<td align="left">plasma cell</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># add cell types to metadata
+hiv4 &lt;- AddMetaData(hiv4, metadata = Idents(hiv4), col.name = &quot;cell_type&quot;)
+
+
+# add condition blood or csf to metadata
+Idents(hiv4) &lt;- &quot;orig.ident&quot;
+conditions &lt;- c(&quot;Blood&quot;, &quot;Blood&quot;, &quot;CSF&quot;, &quot;CSF&quot;)
+names(conditions) &lt;- c(&quot;HIV1_Bld&quot;, &quot;HIV2_Bld&quot;, &quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;)
+hiv4 &lt;- RenameIdents(hiv4, conditions)
+
+hiv4 &lt;- AddMetaData(hiv4, col.name = &quot;Condition&quot;, metadata = Idents(hiv4))</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Overview of some of the most important marker genes:</p>
+<pre class="r"><code>DotPlot(object = hiv4, features = c(&quot;MS4A1&quot;, # B cells
+                                    &quot;TRAC&quot;, &quot;IL7R&quot;, 
+                                    &quot;CD8A&quot;, # CD8 T cells
+                                    &quot;NKG7&quot;, &quot;GNLY&quot;, # NK cells
+                                    &quot;CD3E&quot;, # T cells
+                                    &quot;CD14&quot;,&quot;FCGR3A&quot;, &quot;LYZ&quot;, # myeloid cells
+                                    &quot;IGJ&quot;, # plasma cells
+                                    &quot;AXL&quot;, &quot;APOE&quot;, &quot;TREM2&quot;, # myeloid 2
+                                     &quot;FCER1A&quot;, &quot;CD1C&quot; # myeloid 5
+)) + theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Visualize the cell types, conditions, samples and nCountRNA:</p>
+<pre class="r"><code>p1 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, label = TRUE, 
+              group.by = &quot;cell_type&quot;, pt.size = 0.1) +
+  NoLegend()
+p2 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, group.by =  &quot;Condition&quot;, pt.size = 0.1)
+p3 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, group.by = &quot;orig.ident&quot;, pt.size = 0.1)
+p4 &lt;- FeaturePlot(hiv4, features= &quot;nCount_RNA&quot;, pt.size = 0.1) + 
+    scale_color_viridis_c()</code></pre>
+<pre><code>Scale for &#39;colour&#39; is already present. Adding another scale for &#39;colour&#39;,
+which will replace the existing scale.</code></pre>
+<pre class="r"><code>ggarrange(p1,p2,p3,p4, ncol = 2, nrow = 2)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#p1 + p2 + p3 + p4</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p>Blood and CSF were processed separately for scRNAseq using SeqWell. The 4 samples were sequenced separately. One SeqWell array per CSF or PBMC samples. Farhadian et al., JCL Insight, 2018</p>
+</div>
+</div>
+<div id="relative-contributions-of-csf-and-blood-cells-to-each-cluster" class="section level1">
+<h1>Relative contributions of CSF and blood cells to each cluster</h1>
+<p>Plot a histogram in order to identify clusters that are predominantly composed of CSF cells.</p>
+<pre class="r"><code>custom_color &lt;- c(&quot;#C3D7A4&quot;, &quot;#4E84C4&quot;, &quot;#52854C&quot;, &quot;#293352&quot;)
+
+#plot a barplot of the proportions of samples and cell types
+ggplot(hiv4@meta.data) +
+  geom_bar(aes(x = cell_type, fill = orig.ident)) +
+  scale_fill_manual( values = custom_color) +
+  ylab(&quot;Number of cells in each cluster&quot;) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<p><strong>Question</strong>: Myeloid-1, Myeloid-2 are mainly found in Blood cells, Myeloid-4 is only found in Blood cells from HIV1 patient. What does that mean?</p>
+<div id="how-big-are-myeloid2-and-myeloid5-clusters-and-where-do-cells-come-from" class="section level2">
+<h2>How big are Myeloid2 and Myeloid5 clusters and where do cells come from?</h2>
+<p>Myeloid2 cells originate from the CSF samples of HIV-1-infected patients, while a few (13) cells classified as Myeloid5 cells originate from Blood samples.</p>
+<pre class="r"><code>hiv4@meta.data %&gt;% 
+  filter(cell_type %in% c(&quot;Myeloid2&quot;, &quot;Myeloid5&quot;)) %&gt;% 
+  group_by(cell_type, orig.ident) %&gt;% 
+  summarize(n = n()) %&gt;% kable()</code></pre>
+<pre><code>`summarise()` has grouped output by &#39;cell_type&#39;. You can override using the `.groups` argument.</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">cell_type</th>
+<th align="left">orig.ident</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Myeloid2</td>
+<td align="left">HIV1_CSF</td>
+<td align="right">71</td>
+</tr>
+<tr class="even">
+<td align="left">Myeloid2</td>
+<td align="left">HIV2_CSF</td>
+<td align="right">35</td>
+</tr>
+<tr class="odd">
+<td align="left">Myeloid5</td>
+<td align="left">HIV1_Bld</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Myeloid5</td>
+<td align="left">HIV1_CSF</td>
+<td align="right">24</td>
+</tr>
+<tr class="odd">
+<td align="left">Myeloid5</td>
+<td align="left">HIV2_Bld</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">Myeloid5</td>
+<td align="left">HIV2_CSF</td>
+<td align="right">68</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="which-genes-are-upregulated-in-myeloid-2-compared-to-the-four-other-myeloid-subsets" class="section level2">
+<h2>Which genes are upregulated in Myeloid-2 compared to the four other myeloid subsets?</h2>
+<p>In the paper they find 60 genes that are upregulated compared to the other 4 myeloid subsets. (FDR &lt; 0.01)</p>
+<p>Compare the genes upregulated in myeloid-2 to the four other myeloid subsets. <code>FindAllMarkers()</code> will compare one cluster to all other clusters. <code>FindMarkers()</code> will compare an indicated cluster with a second indicated cluster. Therefore, the difference will not be diluted, which might be the case if we compare one cluster to many other clusters.</p>
+<pre class="r"><code>#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
+paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;, sep = &quot;\t&quot;,
+                    header = FALSE, skipNul = TRUE)#, n_max = 60)
+paper[1,] &lt;- &quot;APOC1&quot;
+colnames(paper) &lt;- &quot;&quot;
+paper &lt;- as.vector(paper[,1])
+
+Idents(hiv4) &lt;- &quot;cell_type&quot;
+all.comp &lt;- purrr::map(c(1,3,4,5), function(n){
+  markers &lt;- FindMarkers(hiv4,
+              ident.1 = &quot;Myeloid2&quot;,
+              ident.2 = paste0(&quot;Myeloid&quot;, n), only.pos = TRUE)
+  markers &lt;- rownames_to_column(markers, var = &quot;gene&quot;)
+  name &lt;- paste0(&quot;Comparison Myeloid 2 vs Myeloid &quot;, n)
+  list(df = markers, name = name)
+})
+
+
+map(seq.int(1,4), function(n) {
+  all.comp[[n]]$df %&gt;% 
+  filter(p_val_adj &lt;= .2) %&gt;%
+  filter(gene %in% paper) %&gt;% head() %&gt;% kable()
+})</code></pre>
+<p>[[1]]</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">C1QB</td>
+<td align="right">0</td>
+<td align="right">4.322413</td>
+<td align="right">0.858</td>
+<td align="right">0.006</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">C1QC</td>
+<td align="right">0</td>
+<td align="right">4.154311</td>
+<td align="right">0.792</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">C1QA</td>
+<td align="right">0</td>
+<td align="right">3.320555</td>
+<td align="right">0.783</td>
+<td align="right">0.016</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">APOE</td>
+<td align="right">0</td>
+<td align="right">3.594296</td>
+<td align="right">0.726</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">LYVE1</td>
+<td align="right">0</td>
+<td align="right">3.889012</td>
+<td align="right">0.651</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">MSR1</td>
+<td align="right">0</td>
+<td align="right">2.784011</td>
+<td align="right">0.679</td>
+<td align="right">0.058</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>[[2]]</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">C1QB</td>
+<td align="right">0</td>
+<td align="right">3.830956</td>
+<td align="right">0.858</td>
+<td align="right">0.068</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">C1QC</td>
+<td align="right">0</td>
+<td align="right">4.022519</td>
+<td align="right">0.792</td>
+<td align="right">0.008</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">CD14</td>
+<td align="right">0</td>
+<td align="right">3.605687</td>
+<td align="right">0.830</td>
+<td align="right">0.053</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">HLA-DPB1</td>
+<td align="right">0</td>
+<td align="right">2.540395</td>
+<td align="right">0.962</td>
+<td align="right">0.470</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">HLA-DRA</td>
+<td align="right">0</td>
+<td align="right">2.381817</td>
+<td align="right">0.981</td>
+<td align="right">0.720</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">APOE</td>
+<td align="right">0</td>
+<td align="right">3.594296</td>
+<td align="right">0.726</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>[[3]]</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HLA-DRA</td>
+<td align="right">0</td>
+<td align="right">4.314835</td>
+<td align="right">0.981</td>
+<td align="right">0.069</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">HLA-DPB1</td>
+<td align="right">0</td>
+<td align="right">3.571806</td>
+<td align="right">0.962</td>
+<td align="right">0.097</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">CD74</td>
+<td align="right">0</td>
+<td align="right">3.850998</td>
+<td align="right">0.972</td>
+<td align="right">0.236</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">HLA-DPA1</td>
+<td align="right">0</td>
+<td align="right">3.969028</td>
+<td align="right">0.915</td>
+<td align="right">0.083</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">C1QB</td>
+<td align="right">0</td>
+<td align="right">4.376544</td>
+<td align="right">0.858</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">HLA-DRB1</td>
+<td align="right">0</td>
+<td align="right">3.970074</td>
+<td align="right">0.887</td>
+<td align="right">0.069</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>[[4]]</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">C1QB</td>
+<td align="right">0</td>
+<td align="right">3.957066</td>
+<td align="right">0.858</td>
+<td align="right">0.048</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">C1QC</td>
+<td align="right">0</td>
+<td align="right">4.154311</td>
+<td align="right">0.792</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">CD14</td>
+<td align="right">0</td>
+<td align="right">3.253946</td>
+<td align="right">0.830</td>
+<td align="right">0.133</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">C1QA</td>
+<td align="right">0</td>
+<td align="right">3.136295</td>
+<td align="right">0.783</td>
+<td align="right">0.048</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">APOE</td>
+<td align="right">0</td>
+<td align="right">3.564194</td>
+<td align="right">0.726</td>
+<td align="right">0.010</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">LYVE1</td>
+<td align="right">0</td>
+<td align="right">3.889012</td>
+<td align="right">0.651</td>
+<td align="right">0.000</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>my2_genes &lt;- map(seq.int(1,4), function(n) {
+  name &lt;- all.comp[[]]$name
+  my2_genes &lt;- all.comp[[n]]$df %&gt;% 
+  filter(p_val_adj &lt;= .2) %&gt;%
+  filter(gene %in% paper)
+  my2_genes &lt;- my2_genes[,&quot;gene&quot;]
+})</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="show-expression-of-the-60-genes-identified-in-the-paper-as-myeloid-2-markers" class="section level2">
+<h2>Show expression of the 60 genes identified in the paper as Myeloid 2 markers</h2>
+<p>The genes show the highest expression in Myeloid2 and Myeloid5 cells.</p>
+<pre class="r"><code>DotPlot(hiv4, features = c(paper)) + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))</code></pre>
+<pre><code>Warning in FetchData(object = object, vars = features, cells = cells): The
+following requested variables were not found: SELENOP</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-33-1.png" width="1152" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="percentage-of-myeloid2-transcripts-per-cell-in-blood-csf-and-uninfected-samples" class="section level2">
+<h2>Percentage of Myeloid2 transcripts per Cell in Blood, CSF and Uninfected samples</h2>
+<pre class="r"><code>Idents(hiv_filt) = &quot;orig.ident&quot;
+table(Idents(hiv_filt))</code></pre>
+<pre><code>
+       HIV1_Bld        HIV1_CSF        HIV2_Bld        HIV2_CSF        HIV3_CSF 
+           2076             932            2520            2309            1384 
+Uninfected1_CSF Uninfected2_CSF 
+            216             340 </code></pre>
+<pre class="r"><code>bld &lt;- subset(hiv_filt, 
+              orig.ident %in% c(&quot;HIV1_Bld&quot;, 
+                                &quot;HIV2_Bld&quot;))@assays$RNA@counts
+csf &lt;- subset(hiv_filt, 
+              orig.ident %in% c(&quot;HIV1_CSF&quot;, 
+                                &quot;HIV2_CSF&quot;, 
+                                &quot;HIV3_CSF&quot;))@assays$RNA@counts
+healthy &lt;- subset(hiv_filt,
+                  orig.ident %in% c(&quot;Uninfected1_CSF&quot;,
+                                    &quot;Uninfected2_CSF&quot;))@assays$RNA@counts
+
+matrix_list &lt;- list(&quot;blood&quot; = bld, &quot;csf&quot; = csf, &quot;uninfected&quot; = healthy)
+
+percentage_my2_transcripts &lt;- map(seq(1,3), function(n) {
+  count_m &lt;- matrix_list[[n]]
+  total_transcripts &lt;- colSums(count_m) # number of transcripts per cell
+  my2_matrix &lt;- count_m[rownames(count_m) %in% paper, ] # get only myeloid2 genes 
+  my2_transcripts &lt;- colSums(my2_matrix) # sum of myeloid2 transcripts
+  percentage_my2_transcripts &lt;- my2_transcripts/total_transcripts # fraction
+})
+
+
+ggplot() +
+  geom_boxplot(aes(x = &quot;HIV+ CSF&quot;, y= percentage_my2_transcripts[[2]], fill = &quot;CSF&quot;)) +
+  geom_boxplot(aes(x = &quot;Uninfected_CSF&quot;, y = percentage_my2_transcripts[[3]], fill = &quot;Uninfeced_CSF&quot;)) +
+  geom_boxplot(aes(x = &quot;HIV+ Blood&quot;,y = percentage_my2_transcripts[[1]], fill = &quot;Blood&quot;)) +
+  xlab(&quot;Sample origin&quot;) +
+  ylab(&quot;Frequency of myeloid2 transcripts per cell&quot;) </code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<div id="summary-statistics" class="section level3">
+<h3>Summary statistics</h3>
+<div id="csf-from-hiv-1-infected-patients" class="section level4">
+<h4>CSF from HIV-1 infected patients</h4>
+<pre class="r"><code>#CSF
+summary(percentage_my2_transcripts[[2]])#%&gt;% kable()</code></pre>
+<pre><code>Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </code></pre>
+0.003974 0.015144 0.018277 0.020325 0.021825 0.135734
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="blood-from-hiv-1-infected-patients" class="section level4">
+<h4>Blood from HIV-1 infected patients</h4>
+<pre class="r"><code>#Blood
+summary(percentage_my2_transcripts[[1]]) </code></pre>
+<pre><code> Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </code></pre>
+0.0009302 0.0154600 0.0189051 0.0191886 0.0223501 0.0556745
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="csf-from-uninfected-patients" class="section level4">
+<h4>CSF from uninfected patients</h4>
+<pre class="r"><code># Uninfected
+summary(percentage_my2_transcripts[[3]])</code></pre>
+<pre><code>Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </code></pre>
+0.005771 0.012050 0.015132 0.021576 0.028695 0.096354
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+<div id="what-are-the-differences-in-myeloid2-transcripts-between-samples" class="section level3">
+<h3>What are the differences in Myeloid2 transcripts between samples?</h3>
+<ul>
+<li><strong>HIV+ Blood</strong> vs. <strong>HIV+ CSF</strong>: p-value = 2.95 * 10^-4</li>
+<li><strong>HIV+ CSF</strong> vs. <strong>HIV- CSF</strong>: p-value = 2.87 * 10^-7 (same result as in the paper)</li>
+<li><strong>HIV+ Blood</strong> vs. <strong>HIV- CSF</strong>: p-value = 7.98 * 10^-7</li>
+</ul>
+<p>In the paper they found the largest difference between infected blood and csf samples, but I find larger differences between HIV+ CSF/Blood and HIV- CSF samples.</p>
+<ul>
+<li>My results suggest that Myeloid2 transcripts are detected at lower levels in HIV- CSF samples than in HIV+ CSF samples.</li>
+<li>Myeloid2 transcripts are found at lower levels in HIV- CSF samples than in HIV+ Blood samples.</li>
+<li>Myeloid2 transcripts are detected at similar levels in HIV+ CSF samples and in HIV+ Blood samples, however there are far more outliers with very high frequency of Myeloid2 transcripts in HIV+ CSF samples compared to HIV+ Blood.</li>
+</ul>
+<p>How much sense does this interpretation make? The median is rather robust to outliers, so even if in CSF there are some cells which have much higher frequencies of transcripts, it might be that the median is still lower than in blood.</p>
+<p>Wilcoxon rank sum test of the null hypothesis that the distribution of x and y differs by a location shift of mu and the alternative is that they differ by some other location shif. (If I set mu = 0, the null hypothesis is that the distributiosn differ by a location shift of 0).</p>
+<div id="wilcoxon-test-between-hiv-blood-an-hiv-csf" class="section level5">
+<h5>Wilcoxon test between HIV+ Blood an HIV+ CSF</h5>
+<pre class="r"><code># bld vs csf
+wilcox.test(percentage_my2_transcripts[[1]], # blood samples
+            percentage_my2_transcripts[[2]], # csf samples
+            alternative = &quot;two.sided&quot;, 
+            paired = FALSE, 
+            conf.int = TRUE)# %&gt;% kable()</code></pre>
+<pre><code>Wilcoxon rank sum test with continuity correction</code></pre>
+data: percentage_my2_transcripts[[1]] and percentage_my2_transcripts[[2]] W = 11090858, p-value = 0.0002952 alternative hypothesis: true location shift is not equal to 0 95 percent confidence interval: 0.0001932858 0.0006133828 sample estimates: difference in location 0.0004188108
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="wilcoxon-test-between-hiv-csf-and-hiv--csf" class="section level5">
+<h5>Wilcoxon test between HIV+ CSF and HIV- CSF</h5>
+<pre class="r"><code># csf vs uninfected
+wilcox.test(percentage_my2_transcripts[[2]], # csf samples
+            percentage_my2_transcripts[[3]],
+            alternative = &quot;two.sided&quot;,
+            conf.int = TRUE) # uninfected samples</code></pre>
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  percentage_my2_transcripts[[2]] and percentage_my2_transcripts[[3]]
+W = 1456760, p-value = 2.87e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.001120779 0.002379251
+sample estimates:
+difference in location 
+           0.001757612 </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="wilcoxon-test-between-hiv-blood-and-hiv--csf" class="section level5">
+<h5>Wilcoxon test between HIV+ Blood and HIV- CSF</h5>
+<pre class="r"><code># blood vs uninfected
+wilcox.test(percentage_my2_transcripts[[1]], # blood samples
+            percentage_my2_transcripts[[3]], # uninfected samples
+            alternative = &quot;two.sided&quot;,
+            conf.int = TRUE)</code></pre>
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  percentage_my2_transcripts[[1]] and percentage_my2_transcripts[[3]]
+W = 1441190, p-value = 7.984e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.001101844 0.002441881
+sample estimates:
+difference in location 
+           0.001778961 </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="label-transfer" class="section level1">
+<h1>Label Transfer</h1>
+<p>After reproducing the results from Farhadian et al., JCSL Insight, 2018 the next step was to transfer the labels from the four HIV+ Blood and CSF samples to the remaining samples:</p>
+<ul>
+<li>1 CSF smaple from HIV-1 infected patient</li>
+<li>2 CSF samples from uninfected patients</li>
+</ul>
+<p>For reference see: <a href="https://satijalab.org/seurat/articles/integration_mapping.html" class="uri">https://satijalab.org/seurat/articles/integration_mapping.html</a> <a href="https://satijalab.org/seurat/articles/multimodal_reference_mapping.html" class="uri">https://satijalab.org/seurat/articles/multimodal_reference_mapping.html</a></p>
+<pre class="r"><code># Seurat objects
+hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)
+
+hiv7 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds&quot;)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<div id="find-integration-anchors" class="section level2">
+<h2>Find Integration anchors</h2>
+<p>We perform Normalization separately for each dataset and try to find Variable Features.</p>
+<pre class="r"><code>#hiv_list &lt;- SplitObject(hiv7, split.by = &quot;orig.ident&quot;)
+
+#for (i in 1:length(hiv_list)) {
+ # hiv_list[[i]] &lt;- NormalizeData(hiv_list[[i]], verbose = FALSE)
+  #hiv_list[[i]] &lt;- FindVariableFeatures(hiv_list[[1]],
+   #                                     selection.method = &quot;vst&quot;,
+    #                                    nfeatures = 2000,
+     #                                   verbose = FALSE)
+#}
+
+#saveRDS(hiv_list, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list&quot;)
+hiv_list &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list&quot;)
+#reference.list &lt;- SplitObject(hiv4, split.by = &quot;orig.ident&quot;)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="cell-type-classification-using-an-integrated-reference" class="section level2">
+<h2>Cell type classification using an integrated reference</h2>
+<ul>
+<li>in data transfer we begin with identifying anchors</li>
+<li>we do not correct or modify the query expression data</li>
+<li>it is suggested to use the default method tsne (which project the PCA structure of a reference onto a query dataset (instead of learning a joint structure)</li>
+<li>we classify the query cells based on the reference data (a vector of reference cell type labels)</li>
+</ul>
+<p>We will use the four samples we have analyzed above as a reference. The query dataset will be the HIV+ CSF3 sample and the two uninfected sample:</p>
+<p>The label transfer identifies hardly any B cells and Myeloid 1, 3, 4 are also not/hardly present in the CSF samples which is expected, since they originated exclusively from the Blood samples.</p>
+<pre class="r"><code># get Seurat object for CSF3 sample
+#hiv3csf &lt;- hiv_list[[&quot;HIV3_CSF&quot;]]
+# merge the 3 query Seurat objects
+query &lt;- merge(hiv_list[[&quot;Uninfected1_CSF&quot;]], 
+               c(hiv_list[[&quot;Uninfected2_CSF&quot;]], hiv_list[[&quot;HIV3_CSF&quot;]]))</code></pre>
+<pre><code>Warning in CheckDuplicateCellNames(object.list = objects): Some cell names are
+duplicated across objects provided. Renaming to enforce unique cell names.</code></pre>
+<pre class="r"><code># find transfer anchors between the 3 query samples and the 4 samples we have 
+# analyzed previously
+hiv4.transfer_anchors &lt;- FindTransferAnchors(reference = hiv4,
+                                             query = query, 
+                                             dims = 1:15,
+                                             normalization.method = &quot;LogNormalize&quot;,
+                                             reference.reduction = &quot;pca&quot;,
+                                             reduction = &quot;pcaproject&quot;,
+                                             verbose = FALSE)
+
+predictions &lt;- TransferData(anchorset = hiv4.transfer_anchors, 
+                            refdata = hiv4$cell_type, 
+                            dims = 1:15,
+                            verbose = FALSE)
+#predictions %&gt;% head %&gt;% kable()
+
+query &lt;- AddMetaData(query, metadata = predictions)
+table(query$predicted.id) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bcell</td>
+<td align="right">501</td>
+</tr>
+<tr class="even">
+<td align="left">CD8</td>
+<td align="right">180</td>
+</tr>
+<tr class="odd">
+<td align="left">CD81</td>
+<td align="right">141</td>
+</tr>
+<tr class="even">
+<td align="left">mixed</td>
+<td align="right">144</td>
+</tr>
+<tr class="odd">
+<td align="left">Myeloid1</td>
+<td align="right">381</td>
+</tr>
+<tr class="even">
+<td align="left">Myeloid3</td>
+<td align="right">237</td>
+</tr>
+<tr class="odd">
+<td align="left">Myeloid4</td>
+<td align="right">207</td>
+</tr>
+<tr class="even">
+<td align="left">Myeloid5</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">NKcell1</td>
+<td align="right">738</td>
+</tr>
+<tr class="even">
+<td align="left">NKcell2</td>
+<td align="right">450</td>
+</tr>
+<tr class="odd">
+<td align="left">plasma cell</td>
+<td align="right">72</td>
+</tr>
+<tr class="even">
+<td align="left">Tcell1</td>
+<td align="right">258</td>
+</tr>
+<tr class="odd">
+<td align="left">Tcell2</td>
+<td align="right">2541</td>
+</tr>
+<tr class="even">
+<td align="left">Tcell4</td>
+<td align="right">366</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="check-the-gene-expression-levels-in-the-predicted-cell-types" class="section level2">
+<h2>Check the gene expression levels in the predicted cell types</h2>
+<p>The Label Transfer seems to work nicely, judging by the correct expression of common cell type markers for the individual cell types.</p>
+<div id="myeloid2-marker-genes" class="section level4">
+<h4>Myeloid2 marker genes</h4>
+<p>```#{r, fig.width=12, fig.height = } # ceck the Myeloid2 markers p1 &lt;- VlnPlot(query, features = c(“AXL”, “APOE”, “TREM2”), group.by = “predicted.id”, pt.size = .01, ncol = 3) p2 &lt;- VlnPlot(query, features = c(“CTSB”, “MSR1”, “C1QA”), group.by = “predicted.id”, pt.size = .01, ncol = 4)</p>
+<p>figure &lt;- ggarrange(p1, p2, ncol = 1, nrow = 2) annotate_figure(figure, top = text_grob(“Myeloid2 marker genes”))</p>
+<pre><code>
+#### Myeloid5 marker genes
+
+```r
+# Myeloid 5 markers
+p1 &lt;- VlnPlot(query, c(&quot;FCER1A&quot;, &quot;CD1C&quot;),
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2) 
+p1</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-44-1.png" width="672" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="plasma-cell-marker-genes" class="section level4">
+<h4>Plasma cell marker genes</h4>
+<pre class="r"><code># plasma cell markers
+p2 &lt;- VlnPlot(query, features = c(&quot;IGJ&quot;), 
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2) 
+p2</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="cd8-t-cell-marker-genes" class="section level4">
+<h4>CD8 T cell marker genes</h4>
+<pre class="r"><code># CD8 T Cells
+p3 &lt;- VlnPlot(query, features = c(&quot;CD8A&quot;),
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2) + NoLegend()
+p3</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="t-cell-marker-genes" class="section level4">
+<h4>T cell marker genes</h4>
+<pre class="r"><code># T cells 
+VlnPlot(query, features = c(&quot;IL7R&quot;, &quot;TRAC&quot;),
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2)</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="nk-cell-marker-genes" class="section level4">
+<h4>NK cell marker genes</h4>
+<pre class="r"><code># NK cells
+VlnPlot(query, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;GZMB&quot;), 
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 3)</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-48-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+<div id="b-cell-marker-genes" class="section level4">
+<h4>B cell marker genes</h4>
+<pre class="r"><code># B cells
+VlnPlot(query, features = c(&quot;MS4A1&quot;, &quot;CD79A&quot;, &quot;TCL1A&quot;), 
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 3)</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-49-1.png" width="1440" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+<div id="umap-projection-of-additional-samples" class="section level2">
+<h2>UMAP projection of additional samples</h2>
+<ul>
+<li>Calculate UMAP on the four reference samples</li>
+<li>Integrate the embeddings of the reference samples with the embeddings of the query samples</li>
+</ul>
+<pre class="r"><code>hiv4_test &lt;- RunUMAP(hiv4, dims = 1:15, 
+                     reduction = &quot;pca&quot;, 
+                     return.model = TRUE, 
+                     verbose = FALSE)</code></pre>
+<pre><code>Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric
+To use Python UMAP via reticulate, set umap.method to &#39;umap-learn&#39; and metric to &#39;correlation&#39;
+This message will be shown once per session</code></pre>
+<pre class="r"><code>hiv3csf &lt;- MapQuery(anchorset = hiv4.transfer_anchors,
+                    reference = hiv4_test, query = query,
+                    refdata = list(celltype = &quot;cell_type&quot;),
+                    reference.reduction = &quot;pca&quot;,
+                    reduction.model = &quot;umap&quot;, 
+                    verbose = FALSE)</code></pre>
+<pre><code>Warning: Keys should be one or more alphanumeric characters followed by an
+underscore, setting key from ref.pca_ to refpca_</code></pre>
+<pre><code>Warning: UNRELIABLE VALUE: One of the &#39;future.apply&#39; iterations
+(&#39;future_lapply-1&#39;) unexpectedly generated random numbers without declaring so.
+There is a risk that those random numbers are not statistically sound and the
+overall results might be invalid. To fix this, specify &#39;future.seed=TRUE&#39;. This
+ensures that proper, parallel-safe random numbers are produced via the L&#39;Ecuyer-
+CMRG method. To disable this check, use &#39;future.seed = NULL&#39;, or set option
+&#39;future.rng.onMisuse&#39; to &quot;ignore&quot;.</code></pre>
+<pre><code>Warning: Keys should be one or more alphanumeric characters followed by an
+underscore, setting key from ref.pca_ to refpca_</code></pre>
+<pre><code>Warning: All keys should be one or more alphanumeric characters followed by an
+underscore &#39;_&#39;, setting key to refpca_</code></pre>
+<pre><code>Computing nearest neighbors</code></pre>
+<pre><code>Running UMAP projection</code></pre>
+<pre><code>23:04:03 Read 6228 rows and found  numeric columns</code></pre>
+<pre><code>23:04:03 Processing block 1 of 1</code></pre>
+<pre><code>23:04:03 Commencing smooth kNN distance calibration using 1 thread</code></pre>
+<pre><code>23:04:03 Initializing by weighted average of neighbor coordinates using 1 thread</code></pre>
+<pre><code>23:04:03 Commencing optimization for 167 epochs, with 124560 positive edges</code></pre>
+<pre><code>23:04:07 Finished</code></pre>
+<pre><code>Warning: No assay specified, setting assay as RNA by default.</code></pre>
+<pre class="r"><code>query &lt;- TransferData(anchorset = hiv4.transfer_anchors,
+                               reference = hiv4_test,
+                               query = query,
+                               refdata = list(celltype = &quot;cell_type&quot;), 
+                      verbose = FALSE)
+
+query &lt;- IntegrateEmbeddings(anchorset = hiv4.transfer_anchors,
+                                      reference = hiv4_test,
+                                      query = query,
+                               new.reduction.name = &quot;ref.pca&quot;,
+                             verbose = FALSE)</code></pre>
+<pre><code>Warning: Keys should be one or more alphanumeric characters followed by an
+underscore, setting key from ref.pca_ to refpca_</code></pre>
+<pre><code>Warning: UNRELIABLE VALUE: One of the &#39;future.apply&#39; iterations
+(&#39;future_lapply-1&#39;) unexpectedly generated random numbers without declaring so.
+There is a risk that those random numbers are not statistically sound and the
+overall results might be invalid. To fix this, specify &#39;future.seed=TRUE&#39;. This
+ensures that proper, parallel-safe random numbers are produced via the L&#39;Ecuyer-
+CMRG method. To disable this check, use &#39;future.seed = NULL&#39;, or set option
+&#39;future.rng.onMisuse&#39; to &quot;ignore&quot;.</code></pre>
+<pre><code>Warning: Keys should be one or more alphanumeric characters followed by an
+underscore, setting key from ref.pca_ to refpca_</code></pre>
+<pre><code>Warning: All keys should be one or more alphanumeric characters followed by an
+underscore &#39;_&#39;, setting key to refpca_</code></pre>
+<pre class="r"><code>query &lt;- ProjectUMAP(query = query,
+                       query.reduction = &quot;ref.pca&quot;,
+                       reference = hiv4_test,
+                       reference.reduction = &quot;pca&quot;,
+                       reduction.model = &quot;umap&quot;, verbose = FALSE)</code></pre>
+<pre><code>Computing nearest neighbors</code></pre>
+<pre><code>Warning: No assay specified, setting assay as RNA by default.</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<pre class="r"><code># Visualize the query cells alongside the reference
+p1 &lt;- DimPlot(hiv4_test,
+              reduction = &quot;umap&quot;,
+              group.by = &quot;cell_type&quot;,
+              label = TRUE,
+              label.size = 5,
+              repel = TRUE, 
+              pt.size = .1) + NoLegend() +
+  ggtitle(&quot;Reference anntoations&quot;)
+
+p2 &lt;- DimPlot(query, 
+              reduction = &quot;ref.umap&quot;,
+              group.by = &quot;predicted.celltype&quot;, 
+              label = TRUE,
+              label.size = 5,
+              pt.size = .1,
+              repel = TRUE) + NoLegend() +
+   ggtitle(&quot;Transferred Labels&quot;)
+
+p1 + p2</code></pre>
+<img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-51-1.png" width="1152" style="display: block; margin: auto;" />
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<pre class="r"><code>#save this new Seurat obejct including the SCTransformatin
+
+#saveRDS(hiv_label_transfer, file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds&quot;)</code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/libopenblasp-r0.3.3.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] parallel  grid      stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] patchwork_1.1.1       SeuratDisk_0.0.0.9019 harmony_0.1.0        
+ [4] Rcpp_1.0.7            readxl_1.3.1          multtest_2.46.0      
+ [7] Biobase_2.50.0        BiocGenerics_0.36.1   metap_1.6            
+[10] knitr_1.30            rstatix_0.6.0         corrplot_0.92        
+[13] gridExtra_2.3         ggpubr_0.4.0          circlize_0.4.13      
+[16] ComplexHeatmap_2.9.4  ggcorrplot_0.1.3      pheatmap_1.0.12      
+[19] RColorBrewer_1.1-2    ggrepel_0.9.1         data.table_1.14.2    
+[22] Matrix_1.3-4          edgeR_3.32.0          limma_3.46.0         
+[25] SeuratObject_4.0.3    Seurat_4.0.5          forcats_0.5.0        
+[28] stringr_1.4.0         dplyr_1.0.7           purrr_0.3.4          
+[31] readr_1.4.0           tidyr_1.1.2           tibble_3.1.6         
+[34] ggplot2_3.3.5         tidyverse_1.3.0       workflowr_1.6.2      
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2            reticulate_1.22       tidyselect_1.1.1     
+  [4] htmlwidgets_1.5.4     Rtsne_0.15            munsell_0.5.0        
+  [7] mutoss_0.1-12         codetools_0.2-18      ica_1.0-2            
+ [10] future_1.23.0         miniUI_0.1.1.1        withr_2.4.3          
+ [13] colorspace_2.0-2      highr_0.8             rstudioapi_0.13      
+ [16] stats4_4.0.2          ROCR_1.0-11           ggsignif_0.6.0       
+ [19] tensor_1.5            listenv_0.8.0         labeling_0.4.2       
+ [22] Rdpack_2.1.2          git2r_0.27.1          mnormt_2.0.2         
+ [25] polyclip_1.10-0       farver_2.1.0          bit64_4.0.5          
+ [28] rprojroot_2.0.2       TH.data_1.0-10        parallelly_1.29.0    
+ [31] vctrs_0.3.8           generics_0.1.1        xfun_0.19            
+ [34] R6_2.5.1              doParallel_1.0.16     clue_0.3-60          
+ [37] locfit_1.5-9.4        hdf5r_1.3.3           spatstat.utils_2.2-0 
+ [40] assertthat_0.2.1      promises_1.2.0.1      scales_1.1.1         
+ [43] multcomp_1.4-15       gtable_0.3.0          globals_0.14.0       
+ [46] goftest_1.2-3         sandwich_3.0-0        rlang_0.4.12         
+ [49] GlobalOptions_0.1.2   splines_4.0.2         lazyeval_0.2.2       
+ [52] spatstat.geom_2.3-0   broom_0.7.2           yaml_2.2.1           
+ [55] reshape2_1.4.4        abind_1.4-5           modelr_0.1.8         
+ [58] backports_1.2.0       httpuv_1.6.3          tools_4.0.2          
+ [61] ellipsis_0.3.2        spatstat.core_2.3-1   ggridges_0.5.2       
+ [64] TFisher_0.2.0         plyr_1.8.6            comprehenr_0.6.10    
+ [67] rpart_4.1-15          deldir_1.0-6          pbapply_1.5-0        
+ [70] GetoptLong_1.0.5      cowplot_1.1.1         S4Vectors_0.28.1     
+ [73] zoo_1.8-9             haven_2.3.1           cluster_2.1.0        
+ [76] fs_1.5.1              magrittr_2.0.1        RSpectra_0.16-0      
+ [79] scattermore_0.7       openxlsx_4.2.3        lmtest_0.9-39        
+ [82] reprex_0.3.0          RANN_2.6.1            tmvnsim_1.0-2        
+ [85] mvtnorm_1.1-1         fitdistrplus_1.1-6    matrixStats_0.61.0   
+ [88] hms_1.1.1             mime_0.12             evaluate_0.14        
+ [91] xtable_1.8-4          rio_0.5.16            IRanges_2.24.1       
+ [94] shape_1.4.6           compiler_4.0.2        KernSmooth_2.23-18   
+ [97] crayon_1.4.2          htmltools_0.5.2       mgcv_1.8-33          
+[100] later_1.3.0           lubridate_1.7.9.2     DBI_1.1.1            
+[103] dbplyr_2.0.0          MASS_7.3-53           car_3.0-10           
+[106] cli_3.1.0             rbibutils_2.2.4       igraph_1.2.9         
+[109] pkgconfig_2.0.3       sn_2.0.1              numDeriv_2016.8-1.1  
+[112] foreign_0.8-80        plotly_4.9.2.1        spatstat.sparse_2.0-0
+[115] xml2_1.3.2            foreach_1.5.1         rvest_0.3.6          
+[118] digest_0.6.29         sctransform_0.3.2     RcppAnnoy_0.0.19     
+[121] spatstat.data_2.1-0   rmarkdown_2.6         cellranger_1.1.0     
+[124] leiden_0.3.5          uwot_0.1.10           curl_4.3.2           
+[127] shiny_1.7.1           rjson_0.2.20          lifecycle_1.0.1      
+[130] nlme_3.1-150          jsonlite_1.7.2        carData_3.0-4        
+[133] viridisLite_0.4.0     fansi_0.5.0           pillar_1.6.4         
+[136] lattice_0.20-41       plotrix_3.8-2         fastmap_1.1.0        
+[139] httr_1.4.2            survival_3.2-7        glue_1.5.1           
+[142] zip_2.1.1             png_0.1-7             iterators_1.0.13     
+[145] bit_4.0.4             stringi_1.7.6         mathjaxr_1.4-0       
+[148] irlba_2.3.3           future.apply_1.8.1   </code></pre>
+<div class="alert alert-warning">
+<p>
+<strong>Warning:</strong> The above code chunk cached its results, but it won’t be re-run if previous chunks it depends on are updated. If you need to use caching, it is highly recommended to also set <code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the file (in a chunk that is not cached). Alternatively, you can customize the option <code>dependson</code> for each individual chunk that is cached. Using either <code>autodep</code> or <code>dependson</code> will remove this warning. See the <a href="https://yihui.name/knitr/options/#cache"
+>knitr cache options</a> for more details.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

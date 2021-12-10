@@ -1,0 +1,1267 @@
+---
+title: "Analysis of HIV-1 CSF dataset"
+author: "kmikulik"
+date: "3 12 2021"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 5
+---
+
+
+```
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
+                      cache = TRUE, cache.lazy = FALSE, autodep = TRUE)
+set.seed(42)
+```
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE, autodep = TRUE, 
+                      collapse = TRUE)
+
+set.seed(42)
+```
+
+
+The aim was to reproduce the analysis done by Farhadian et al., JCL Insight, 2018.
+Some additional analysis was performed on the Microlglia-like clusters identified
+in this dataset. 
+
+The dataset contains:
+
+* 3 CSF samples from HIV1-infected patients
+* 2 Blood samples from HIV1-infected patients
+* 2 CSF samples from uninfected patients
+
+For more details see: Farhadian et al., JCL Insight, 2018 (https://doi.org/10.1172/jci.insight.121718)
+
+* Import libraries
+
+```{r}
+library(tidyverse)
+library(Seurat)
+library(edgeR)
+library(Matrix)
+library(data.table)
+library(ggplot2)
+library(dplyr)
+library(ggrepel)
+library(RColorBrewer)
+library(pheatmap)
+library(ggcorrplot)
+library(ComplexHeatmap)
+library(circlize)
+library(ggpubr)
+library(gridExtra)
+library(corrplot)
+library(rstatix)
+library(knitr)
+library(metap)
+library(multtest)
+library(readxl)
+library(harmony)
+library(SeuratDisk)
+library(patchwork)
+```
+
+* Read in count matrices
+
+The data is available under https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397
+There is one count matrix for each of the 7 samples.
+
+```{r}
+path <- "/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE117397_RAW (1)/"
+all_files <- list.files(path)
+
+#Function to create a sparse matrix from each of the dataframes
+sparse_matrix_from_df <- function(df) {
+  #print(df)
+  #class(df)
+  genes <- df$GENE
+  df_minus <- df[,-1]
+  #matrix <- as.matrix(df_minus)
+  sparse_matrix <- as.sparse(df_minus)
+  rownames(sparse_matrix) <- genes
+  return(sparse_matrix)
+}
+
+hiv_object_list <- map(seq.int(2,6), function(n) {
+  file <- all_files[grepl(paste0("GSM329382", n), all_files)]
+  name <- str_extract(file, "HIV[1-3]_\\w{3}")
+  df <- read_delim(paste0(path, file), delim = "\t")
+  sparse_matrix <- sparse_matrix_from_df(df)
+  seurat_ob <- CreateSeuratObject(sparse_matrix, project = name, 
+                     assay = "RNA", min.cells = 1,
+                     min.features = 1)
+  list(df=df, sparse_matrix = sparse_matrix, seurat_ob = seurat_ob, name=name)
+})
+
+uninfected_list <- map(seq.int(7,8), function(n) {
+  file <- all_files[grepl(paste0("GSM329382", n), all_files)]
+  name <- str_extract(file, "Uninfected[12]_CSF")
+  df <- read_delim(paste0(path, file), delim = "\t")
+  sparse_matrix <- sparse_matrix_from_df(df)
+  seurat_ob <- CreateSeuratObject(sparse_matrix, project = name, 
+                     assay = "RNA", min.cells = 1,
+                     min.features = 1, verbose = FALSE)
+  list(df=df, sparse_matrix = sparse_matrix, seurat_ob = seurat_ob, name=name)
+})
+
+write.table(uninfected_list[[1]]$sparse_matrix,
+            "/media/ag-cherrmann/kmikulik/HIV_microglia/src/job_test.tsv", 
+            sep = "\t")
+```
+
+* Create a Seurat object with all samples
+
+```{r}
+hiv <- merge(hiv_object_list[[1]]$seurat_ob, 
+                   c(hiv_object_list[[2]]$seurat_ob,
+                     hiv_object_list[[3]]$seurat_ob,
+                     hiv_object_list[[4]]$seurat_ob,
+                     hiv_object_list[[5]]$seurat_ob, 
+                     uninfected_list[[1]]$seurat_ob,
+                     uninfected_list[[2]]$seurat_ob), 
+                   project = "hiv_total",
+                   add.cell.ids = c("1B", "1C", "2B", "2C", "3C", "U1", "U2"))
+
+# add percentage of mitochondrial genes to the metadata
+hiv[["percent_mt"]] <- PercentageFeatureSet(hiv, pattern = "^MT-")
+```
+
+
+
+# Quality Control
+
+(on every individual object)
+
+
+* Function to remove features that are expressed in less than three cells:
+
+```{r}
+#returns a list of feature names to keep
+remove_features <- function(seurat_ob) {
+  count_matrix <- seurat_ob@assays$RNA@counts 
+  ncells <- rowSums(count_matrix != 0) # how many cells are expressing a 
+  #certain gene? 
+  names(ncells[ncells > 3]) #extract gene names of genes expressed in more 
+  #than 3 cells
+}
+```
+
+* Function to remove 10% of cell with highest mitochondrial gene expression
+```{r}
+# remove 10% of cells with the highest mitochondrial percentage
+#returns a list of cell names to keep
+remove_mt_genes <- function(seurat_ob){
+  thr <- quantile(seurat_ob@meta.data$percent_mt, .9)
+  seurat_ob@meta.data %>% 
+    filter(percent_mt < thr) %>%
+    rownames()
+}
+
+```
+
+
+
+*  Perform Quality Control 
+
+  + I do the quality control for each sample separately and then combine them again.
+  + Question: Does it make sense to scale the data separately? Not really, 
+  because when you merge them you have to scale them anyways. 
+
+  + When doing the quality control how important is the order of the operations?
+  If you first remove nFeatures > 500 and then features exppressed in more than
+  3 cells -> then the nFeatures might be below 500.
+
+```{r}
+separate_objects <- SplitObject(hiv, split.by = "orig.ident")#[-c(5,6,7)] 
+# only keep two blood samples and two csf samples
+
+qc <- lapply(X = separate_objects, FUN = function(x) {
+    #x[["percent_mt"]] <- PercentageFeatureSet(x, pattern = "^MT-") 
+    # add percentage of mitochondrial genes to the metadata
+    x <- subset(x, features = remove_features(x)) 
+    #create a list of cells excluding the 10% of cells with the highest mt gene expression
+    x <- subset(x, nFeature_RNA < 2500 & nFeature_RNA > 500)
+    x <- subset(x, cells = remove_mt_genes(x)) 
+    # remove 10% of cells with highest mitochondrial gene expression
+    #x <- NormalizeData(x)
+    #x <- ScaleData(x)
+})
+
+hiv_filt <- merge(qc[[1]],
+                        c(qc[[2]],
+                        qc[[3]],
+                        qc[[4]],
+                        qc[[5]],
+                        qc[[6]],
+                        qc[[7]]),
+                        project = "hiv_filt")#,
+                        #add.cell.ids = c("1B", "1C", "2B", "2C", "3C", "U1", "U2"))
+
+```
+
+
+# Have a look at the quality of the different samples.
+
+#### Number of Features
+
+```{r, results="asis", fig.width=15, figh.height = 12}
+
+#have a look at the number of detected features
+p1 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p2 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_histogram(aes(x = nFeature_RNA, fill = orig.ident), bins = 100) +
+  facet_wrap(~ orig.ident, ncol = 4) +
+  NoLegend()
+
+p3 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p4 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+figure <- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob("Number of Features",
+                                        size = 25,  face = "bold"))
+
+
+hiv@meta.data %>%
+  group_by(orig.ident) %>% 
+  summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
+            q50 = quantile(nFeature_RNA, .5), 
+            q75 = quantile(nFeature_RNA, .75), 
+            mean = mean(nFeature_RNA)) %>% kable()
+
+```
+
+
+#### Library Size
+
+```{r, results = "asis", fig.width=15, fig.height=12}
+# have a look at the library size
+p1 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p2 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_histogram(aes(x = nCount_RNA, fill = orig.ident), bins = 100) +
+  facet_wrap(~ orig.ident, ncol = 4) +
+  NoLegend()
+
+p3 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p4 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+  
+figure <- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob("Library size (number of counts)",
+                                        size = 25,  face = "bold"))
+hiv@meta.data %>%
+  group_by(orig.ident) %>% 
+  summarise(n = n(), q25 = quantile( nCount_RNA, .25),
+            q50 = quantile(nCount_RNA, .5), 
+            q75 = quantile(nCount_RNA, .75), 
+            mean = mean(nCount_RNA)) %>% kable()
+
+```
+
+
+#### Percentage of Mitochondrial genes
+
+```{r, results = "asis", fig.width=15, fig.height=12}
+# have a look at the percentage of mitochondrial genes
+p1 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p2 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_histogram(aes(x = percent_mt, fill = orig.ident), bins = 100) +
+  facet_wrap(~ orig.ident, ncol = 4) +
+  NoLegend()
+
+p3 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p4 <- hiv@meta.data %>% 
+  ggplot() +
+  geom_violin(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+  
+figure <- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob("Percentage of Mitochondrial gene",
+                                        size = 25,  face = "bold"))
+
+hiv@meta.data %>%
+  group_by(orig.ident) %>% 
+  summarise(n = n(), q25 = quantile( percent_mt, .25),
+            q50 = quantile(percent_mt, .5), 
+            q75 = quantile(percent_mt, .75), 
+            mean = mean(percent_mt)) %>% kable()
+
+```
+
+# Quality of the different samples after quality control
+
+* removing the 10% of cells with the highest percentage of mitochdonrial genes
+* remove features that are expressed in less than 3 cells
+* remove cells with 500 < nFeature_RNA > 2500
+
+It seems that the CSF1 samples, as well as the two uninfected samples have very
+few cells with nFeature_RNA > 500, so we are left with less cells from these
+samples
+
+#### Number of features after Quality Control
+
+```{r, results = "asis", fig.width=15, fig.height=12}
+
+# Have a look at the number of Feature RNA
+p1 <- hiv_filt@meta.data %>%
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  NoLegend()
+
+p2 <- hiv_filt@meta.data %>% 
+  ggplot()+
+  geom_violin(aes(x = orig.ident, y = nFeature_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p3 <- hiv_filt@meta.data %>% 
+  ggplot() +
+  geom_histogram(aes(x = nFeature_RNA, fill = orig.ident)) +
+  facet_wrap(~orig.ident, ncol = 4) +
+  NoLegend()
+
+figure <- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob("Number of features after quality control",
+                                        size = 25,  face = "bold"))
+
+hiv_filt@meta.data %>% group_by(orig.ident) %>%
+  summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
+            q50 = quantile(nFeature_RNA, .5),
+            q75 = quantile(nFeature_RNA, .75),
+            mean = mean(nFeature_RNA)) %>% kable
+```
+
+#### Library size after Quality Control
+
+```{r, results = "asis", fig.width=15, fig.height=12}
+p1 <- hiv_filt@meta.data %>%
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  NoLegend()
+
+p2 <- hiv_filt@meta.data %>% 
+  ggplot()+
+  geom_violin(aes(x = orig.ident, y = nCount_RNA, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p3 <- hiv_filt@meta.data %>% 
+  ggplot() +
+  geom_histogram(aes(x = nCount_RNA, fill = orig.ident)) +
+  facet_wrap(~orig.ident, ncol = 4) +
+  NoLegend()
+
+figure <- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob("Library size (number of counts) after quality control",
+                                        size = 25,  face = "bold"))
+
+hiv_filt@meta.data %>% group_by(orig.ident) %>%
+  summarise(n = n(), q25 = quantile(nCount_RNA, .25),
+            q50 = quantile(nCount_RNA, .5),
+            q75 = quantile(nCount_RNA, .75),
+            mean = mean(nCount_RNA)) %>% kable
+```
+
+#### Percentage of Mitochondrial genes after Quality Conrol
+
+```{r, results = "asis", fig.width=15, fig.height=12}
+p1 <- hiv_filt@meta.data %>%
+  ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  NoLegend()
+
+p2 <- hiv_filt@meta.data %>% 
+  ggplot()+
+  geom_violin(aes(x = orig.ident, y = percent_mt, fill = orig.ident)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1)) +
+  NoLegend()
+
+p3 <- hiv_filt@meta.data %>% 
+  ggplot() +
+  geom_histogram(aes(x = percent_mt, fill = orig.ident)) +
+  facet_wrap(~orig.ident, ncol = 4) +
+  NoLegend()
+
+figure <- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
+annotate_figure(figure, top = text_grob("Percentage of Mitochondrial genes after quality control",
+                                        size = 25,  face = "bold"))
+
+hiv_filt@meta.data %>% group_by(orig.ident) %>%
+  summarise(n = n(), q25 = quantile(percent_mt, .25),
+            q50 = quantile(percent_mt, .5),
+            q75 = quantile(percent_mt, .75),
+            mean = mean(percent_mt)) %>% kable
+```
+
+
+# Subset Seurat object
+
+Use 4 samples (2 blood, 2 csf) from two patients for further analysis like 
+in the paper:
+
+```{r}
+hiv4 <- subset(hiv_filt, orig.ident %in% c("HIV1_CSF", "HIV2_CSF", "HIV1_Bld", "HIV2_Bld"))
+```
+
+* Normalize, Scale and find variable features
+
+```{r}
+hiv4 <- NormalizeData(hiv4, verbose = FALSE)
+hiv4 <- ScaleData(hiv4, verbose = FALSE)
+hiv4 <- FindVariableFeatures(hiv4, verbose = FALSE)
+```
+
+* Save the log-normalized count matrix as a tsv file for Scenic Workflow
+
+```
+# use only the infected samples, but not the uninfected samples
+scenic_samples <- subset(hiv_filt, orig.ident %in% c("HIV1_CSF", "HIV2_CSF",
+                                                     "HIV1_Bld", "HIV2_Bld", "HIV3_CSF"))
+
+# because the snakemake pipeline of Carlos pySCENIC_pipeline: https://github.com/hdsu-bioquant/pySCENIC_pipeline/blob/master/input/gene_exp_mtx_example.tsv
+# requires an input matrix which has genes as columns and cells as rows
+# I will transpose the matrix
+
+## Try with SCTTransform 
+# select only the 3000 most highly variable features
+# this might solve the problem with the snakemake file, because then you do not have genes with very low expression...
+scenic_samples <- SCTransform(scenic_samples, verbose = FALSE)
+#hvg <- scenic_samples@assays$SCT@var.features
+sct_test_seurat <- subset(scenic_samples, 
+                          features = scenic_samples@assays$SCT@var.features)
+
+sct_test_mtx <- sct_test_seurat@assays$SCT@scale.data
+
+# full matrix for Scenic workflow
+sct_hiv_mtx <- t(sct_test_mtx)
+#write.table(x = sct_hiv_mtx,
+#           file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/pySCENIC_pipeline/input/sct_hi#v_mtx.tsv", sep = "\t")
+
+```
+
+
+
+### Dimensionality reduction
+
+#### PCA
+
+Compute PCA for highly variable genes:
+The first 10 dimensions seem to account for most of the variance (see elbow plot).
+The plots seem to indicate that the blood samples and csf samples are different.
+
+```{r, fig.width=15, fig.height=15 }
+hiv4 <- RunPCA(hiv4, features = VariableFeatures(hiv4), verbose = FALSE)
+
+# elbow plot to determine which PCs account for most of the variance
+ElbowPlot(hiv4)
+
+#pca plots
+pca_plots <- comprehenr::to_list(for (i in 1:13)
+  DimPlot(hiv4, reduction = "pca", dims = i : (i+1)) +
+    theme())
+do.call(gridExtra::grid.arrange, c(pca_plots, ncol=3, nrow = 5))
+
+```
+
+### Clustering & tSNE embedding
+
+* compute KNN-graph 
+* find clusters based on KNN-graph with Louvian algorithm
+
+```{r}
+hiv4 <- FindNeighbors(hiv4, verbose = FALSE)
+hiv4 <- FindClusters(hiv4, verbose = FALSE)
+
+table(hiv4$seurat_clusters)
+```
+
+Questions:
+
+When looking at the nFeatureRNA, percent_mt should some clustes be removed?
+
+Is there a batch effect?
+
+```{r}
+hiv4 <- RunTSNE(hiv4, dims = 1:10, verbose = FALSE)
+```
+
+```{r, fig.height=12, fig.width=15}
+tsne_coord <- Embeddings(hiv4[["tsne"]]) # tsne coordinates
+meta <- hiv4@meta.data # metadata
+cm <- hiv4@assays$RNA@counts # count matrix
+
+# UMAP with number of features detected per cell
+p1 <- cbind(meta, tsne_coord) %>%
+  ggplot() +
+  geom_point(aes(x=tSNE_1, y=tSNE_2, col=nFeature_RNA), size=.5) +
+  scale_color_viridis_c()
+
+# percentage of mitochondrial genes per cell
+p2 <- cbind(meta, tsne_coord) %>% 
+  ggplot() +
+  geom_point(aes(x = tSNE_1, y = tSNE_2, col = percent_mt ), size = .5) +
+  scale_color_viridis_c()
+
+# UMAP indicating the sample where each cell came from
+p3 <- cbind(meta, tsne_coord) %>% 
+  ggplot() +
+  geom_point(aes(x = tSNE_1, y = tSNE_2, col = orig.ident ), size = .5) 
+
+# UMAP labeled according to clusters
+p4 <- cbind(meta, tsne_coord) %>% 
+  ggplot() +
+  geom_point(aes(x = tSNE_1, y = tSNE_2, col = seurat_clusters ), size = .5)
+
+ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+```
+
+### Find Marker genes
+
+```
+marker_genes <- FindAllMarkers(hiv4, logfc.threshold = .01, min.pct = .01)
+```
+```{r, results = "asis"}
+# filter for significant marker genes
+#sign_marker_genes <- marker_genes %>% filter(p_val_adj <= .1)
+
+sign_marker_genes <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/sign_marker_genes.tsv")
+
+#show the top 10 differentially expressed genes for each cluster
+sign_marker_genes %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC ) %>% kable
+```
+
+
+## Cell type annotation with canonical marker genes:
+
+#### B cell markers
+Are found primarily in cluster 7.
+
+```{r, fig.width=15, fig.height=12}
+p1 <- VlnPlot(hiv4, features = c("MS4A1", "CD79A", "TCL1A"), pt.size = .01)
+p2 <- RidgePlot(hiv4, features =  c("MS4A1", "CD79A", "TCL1A"), sort = "decreasing" )
+ggarrange(p1,p2, nrow = 2, ncol = 1)
+```
+
+#### NK cells
+In cluster 5 and 9. 
+GZMB is also foudn in cluster 14.
+
+```{r, fig.width=15, fig.height=12}
+p1 <- VlnPlot(hiv4, features = c("NKG7", "GNLY", "GZMB"),
+        pt.size = .01, ncol = 3)#, stack = TRUE)
+p2 <- RidgePlot(hiv4, features = c("NKG7", "GNLY", "GZMB"), sort = "decreasing")
+
+ggarrange(p1,p2, nrow = 2, ncol = 1)
+```
+
+#### Tcells 
+
+* A general T cell marker CD3E is expressed in cluster 0,1,3,4,5,6.
+* IL7R in clusters 0-6
+* TRAC in clusters 0-6, excluding 2
+* CCR7 in 0,6,7
+* LDHB not very clear, but 0,1,3,4,6
+* LTB in 0-7
+* CD2 in 1,3,4,5,9
+
+Tcells 1, 2, 3 are assigned arbitrarily, because they are not used for further analysis.
+
+CD8+ T cells
+* CD8A is expressed in decreasing order in 1,5,3
+(could cluster 1 and 5 be CD8 T cells?)
+
+```{r, fig.height=20, fig.width=15}
+# general T cell marker for CD4+ and CD8+ Tcells
+p1 <- VlnPlot(hiv4, features = c("CD8A","CD3E"), pt.size = .01, ncol = 2)
+p2 <- RidgePlot(hiv4, features = c("CD8A","CD3E"), sort = "decreasing")
+
+
+p3 <- VlnPlot(hiv4, features = c("IL7R", "TRAC"), pt.size = 0.01)
+p4 <- RidgePlot(hiv4, features = c("IL7R", "TRAC"), sort = "decreasing")
+
+# helper T cells
+p5 <- VlnPlot(hiv4, features = c("LTB", "CD2"), pt.size = .01, ncol = 2)
+p6 <- RidgePlot(hiv4, features = c("LTB", "CD2"), sort = "decreasing")
+
+# CD4+ naive T cells
+p7 <- VlnPlot(hiv4, features = c("LDHB", "CCR7"), pt.size = .01, ncol = 2)
+p8 <- RidgePlot(hiv4, features = c("LDHB", "CCR7"), sort = "decreasing")
+
+
+ggarrange(p1, p2,p3, p4, p5, p6, p7,p8, ncol = 2, nrow = 4)
+```
+
+#### plasma cells
+
+in cluster 14
+
+```{r, fig.width=15, fig.height=8}
+p1 <- VlnPlot(hiv4, features = c("IGJ"), pt.size = .01, ncol = 2)
+p2 <- RidgePlot(hiv4, features = c("IGJ"), sort = "decreasing")
+ggarrange(p1,p2, nrow = 1, ncol = 2)
+```
+
+#### Myeloid cells
+
+* granulocytes
+* monocytes
+* macrophages
+* dendritic cells
+
+-> clusters 8, 10, 11, 12, 13 are myeloid cells
+
+
+  
+The 3 genes (AXL, APOE, TREM2) associated with neurodegenrative-disaes-associated
+microglia are expressed in myeloid2, however, only at very low concentrations
+
+Myeloid1, 3, 4 are assigned arbitrarily, because they are not of interest. 
+
+
+```{r, fig.width=15, fig.height=15}
+p1 <- VlnPlot(hiv4, features = c("LYZ", "FCER1A", "CD14", "FCGR3A"), # FCG3A is also expressed in cluster 9 (NK cells)
+        pt.size = .01, ncol = 2)
+p2 <- RidgePlot(hiv4, features = c("LYZ", "FCER1A"),
+          sort = "decreasing", ncol = 2) # DC markers
+p3 <- RidgePlot(hiv4, features = c("CD14", "FCGR3A"), 
+          sort = "decreasing", ncol = 2) # monocytes (LYC also in monocytes)
+ggarrange(p1,p2,p3, nrow = 3, ncol = 1)
+```
+
+##### Myeloid 5 
+
+  + (from paper) 
+  + was characterized by: FCER1A, CD1C 
+  + cluster 12
+
+
+```{r, fig.width=15, fig.height=12}
+# Myeloid 5 in the paper
+p1 <- VlnPlot(hiv4, features = c( "FCER1A", "CD1C"), pt.size = .01, ncol = 2)
+p2 <- RidgePlot(hiv4, features = c("FCER1A", "CD1C"), sort = "decreasing", ncol = 2)
+ggarrange(p1, p2, nrow = 2, ncol = 1)
+```
+
+##### Myeloid 2 
+  + (from paper) -> cluster 11
+  + AXL, APOE, TREM2 (these genes are enriched in neurodegenerative 
+  disease-associated microglia)
+  + "CTSB", "APOC1", "MSR1", "C1QA-C" are expressed more highly in myeloid 2
+  compared to other myeloid clusters
+
+```{r, fig.width=15, fig.height=20}
+# Myeloid 2
+p1 <- VlnPlot(hiv4, features = c("AXL", "APOE", "TREM2"), pt.size = .01, ncol = 3)
+p2 <- RidgePlot(hiv4, features = c("AXL", "APOE", "TREM2"), sort = "decreasing")
+p3 <- VlnPlot(hiv4, features = c("CTSB", "APOC1", "MSR1", "C1QA"), 
+              pt.size = .01, ncol = 4)
+p4 <- RidgePlot(hiv4, features = c("CTSB", "APOC1", "MSR1", "C1QA"),
+                sort = "decreasing", ncol = 4)
+
+ggarrange(p1, p2, p3, p4, ncol = 1, nrow = 4)
+
+```
+
+
+## Annotate cells 
+
+* Why is the mixed population primarily composed of cells from HIV1 
+patient blood sample?
+* Why are T cells primarily from CSF samples and CD8 T cells primarily from blood?
+
+```{r}
+Idents(hiv4) <- "seurat_clusters"
+cell_types <- c("Tcell2", "CD8", "mixed", "CD81", "Tcell3", "NKcell1",
+                "Tcell1", "Bcell", "Myeloid1", "NKcell2", "Myeloid3", "Myeloid2"
+                , "Myeloid5", "Myeloid4", "plasma cell" )
+
+names(cell_types) <- levels(hiv4)
+hiv4 <- RenameIdents(hiv4, cell_types)
+as.data.frame(cell_types) %>%  rownames_to_column("cluster") %>% knitr::kable()
+
+# add cell types to metadata
+hiv4 <- AddMetaData(hiv4, metadata = Idents(hiv4), col.name = "cell_type")
+
+
+# add condition blood or csf to metadata
+Idents(hiv4) <- "orig.ident"
+conditions <- c("Blood", "Blood", "CSF", "CSF")
+names(conditions) <- c("HIV1_Bld", "HIV2_Bld", "HIV1_CSF", "HIV2_CSF")
+hiv4 <- RenameIdents(hiv4, conditions)
+
+hiv4 <- AddMetaData(hiv4, col.name = "Condition", metadata = Idents(hiv4))
+
+
+```
+
+Overview of some of the most important marker genes:
+
+```{r}
+
+DotPlot(object = hiv4, features = c("MS4A1", # B cells
+                                    "TRAC", "IL7R", 
+                                    "CD8A", # CD8 T cells
+                                    "NKG7", "GNLY", # NK cells
+                                    "CD3E", # T cells
+                                    "CD14","FCGR3A", "LYZ", # myeloid cells
+                                    "IGJ", # plasma cells
+                                    "AXL", "APOE", "TREM2", # myeloid 2
+                                     "FCER1A", "CD1C" # myeloid 5
+)) + theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+
+```
+
+Visualize the cell types, conditions, samples and nCountRNA:
+
+```{r, fig.widht = 15, fig.height=10}
+p1 <- DimPlot(hiv4, reduction = "tsne", label = TRUE, 
+              group.by = "cell_type", pt.size = 0.1) +
+  NoLegend()
+p2 <- DimPlot(hiv4, reduction = "tsne", group.by =  "Condition", pt.size = 0.1)
+p3 <- DimPlot(hiv4, reduction = "tsne", group.by = "orig.ident", pt.size = 0.1)
+p4 <- FeaturePlot(hiv4, features= "nCount_RNA", pt.size = 0.1) + 
+    scale_color_viridis_c()
+ggarrange(p1,p2,p3,p4, ncol = 2, nrow = 2)
+#p1 + p2 + p3 + p4
+```
+
+Blood and CSF were processed separately for scRNAseq using SeqWell. 
+The 4 samples were sequenced separately. 
+One SeqWell array per CSF or PBMC samples.
+Farhadian et al., JCL Insight, 2018
+
+# Relative contributions of CSF and blood cells to each cluster 
+
+Plot a histogram in order to identify clusters that are predominantly
+composed of CSF cells. 
+
+```{r}
+
+custom_color <- c("#C3D7A4", "#4E84C4", "#52854C", "#293352")
+
+#plot a barplot of the proportions of samples and cell types
+ggplot(hiv4@meta.data) +
+  geom_bar(aes(x = cell_type, fill = orig.ident)) +
+  scale_fill_manual( values = custom_color) +
+  ylab("Number of cells in each cluster") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+```
+
+
+**Question**: Myeloid-1, Myeloid-2 are mainly found in Blood cells, 
+Myeloid-4 is only found in Blood cells from HIV1 patient. What does that mean?
+
+
+## How big are Myeloid2 and Myeloid5 clusters and where do cells come from?
+
+Myeloid2 cells originate from the CSF samples of HIV-1-infected patients, while
+a few (13) cells classified as Myeloid5 cells originate from Blood samples. 
+
+```{r, results = "asis"}
+hiv4@meta.data %>% 
+  filter(cell_type %in% c("Myeloid2", "Myeloid5")) %>% 
+  group_by(cell_type, orig.ident) %>% 
+  summarize(n = n()) %>% kable()
+```
+
+## Which genes are upregulated in Myeloid-2 compared to the four other myeloid subsets?
+
+In the paper they find 60 genes that are upregulated compared to the other 4 
+myeloid subsets. (FDR < 0.01)
+
+Compare the genes upregulated in myeloid-2 to the four other myeloid subsets. 
+`FindAllMarkers()` will compare one cluster to all other clusters. 
+`FindMarkers()` will compare an indicated cluster with a second indicated cluster. 
+Therefore, the difference will not be diluted, which might be the case if we
+compare one cluster to many other clusters. 
+
+```{r, results = "asis"}
+#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
+paper <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv", sep = "\t",
+                    header = FALSE, skipNul = TRUE)#, n_max = 60)
+paper[1,] <- "APOC1"
+colnames(paper) <- ""
+paper <- as.vector(paper[,1])
+
+Idents(hiv4) <- "cell_type"
+all.comp <- purrr::map(c(1,3,4,5), function(n){
+  markers <- FindMarkers(hiv4,
+              ident.1 = "Myeloid2",
+              ident.2 = paste0("Myeloid", n), only.pos = TRUE)
+  markers <- rownames_to_column(markers, var = "gene")
+  name <- paste0("Comparison Myeloid 2 vs Myeloid ", n)
+  list(df = markers, name = name)
+})
+
+
+map(seq.int(1,4), function(n) {
+  all.comp[[n]]$df %>% 
+  filter(p_val_adj <= .2) %>%
+  filter(gene %in% paper) %>% head() %>% kable()
+})
+
+my2_genes <- map(seq.int(1,4), function(n) {
+  name <- all.comp[[]]$name
+  my2_genes <- all.comp[[n]]$df %>% 
+  filter(p_val_adj <= .2) %>%
+  filter(gene %in% paper)
+  my2_genes <- my2_genes[,"gene"]
+})
+
+```
+
+## Show expression of the 60 genes identified in the paper as Myeloid 2 markers
+
+The genes show the highest expression in Myeloid2 and Myeloid5 cells.
+```{r, fig.height =15, fig.width=12}
+DotPlot(hiv4, features = c(paper)) + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+```
+
+
+
+## Percentage of Myeloid2 transcripts per Cell in Blood, CSF and Uninfected samples
+
+
+```{r}
+Idents(hiv_filt) = "orig.ident"
+table(Idents(hiv_filt))
+bld <- subset(hiv_filt, 
+              orig.ident %in% c("HIV1_Bld", 
+                                "HIV2_Bld"))@assays$RNA@counts
+csf <- subset(hiv_filt, 
+              orig.ident %in% c("HIV1_CSF", 
+                                "HIV2_CSF", 
+                                "HIV3_CSF"))@assays$RNA@counts
+healthy <- subset(hiv_filt,
+                  orig.ident %in% c("Uninfected1_CSF",
+                                    "Uninfected2_CSF"))@assays$RNA@counts
+
+matrix_list <- list("blood" = bld, "csf" = csf, "uninfected" = healthy)
+
+percentage_my2_transcripts <- map(seq(1,3), function(n) {
+  count_m <- matrix_list[[n]]
+  total_transcripts <- colSums(count_m) # number of transcripts per cell
+  my2_matrix <- count_m[rownames(count_m) %in% paper, ] # get only myeloid2 genes 
+  my2_transcripts <- colSums(my2_matrix) # sum of myeloid2 transcripts
+  percentage_my2_transcripts <- my2_transcripts/total_transcripts # fraction
+})
+
+
+ggplot() +
+  geom_boxplot(aes(x = "HIV+ CSF", y= percentage_my2_transcripts[[2]], fill = "CSF")) +
+  geom_boxplot(aes(x = "Uninfected_CSF", y = percentage_my2_transcripts[[3]], fill = "Uninfeced_CSF")) +
+  geom_boxplot(aes(x = "HIV+ Blood",y = percentage_my2_transcripts[[1]], fill = "Blood")) +
+  xlab("Sample origin") +
+  ylab("Frequency of myeloid2 transcripts per cell") 
+
+```
+
+### Summary statistics
+
+#### CSF from HIV-1 infected patients
+
+```{r, results = "asis"}
+#CSF
+summary(percentage_my2_transcripts[[2]])#%>% kable()
+```
+
+#### Blood from HIV-1 infected patients
+
+```{r, results = "asis"}
+#Blood
+summary(percentage_my2_transcripts[[1]]) 
+```
+
+#### CSF from uninfected patients
+
+```{r, results = "asis"}
+# Uninfected
+summary(percentage_my2_transcripts[[3]])
+```
+
+
+### What are the differences in Myeloid2 transcripts between samples?
+
+* **HIV+ Blood** vs. **HIV+ CSF**: p-value  = 2.95 * 10^-4
+* **HIV+ CSF** vs. **HIV- CSF**: p-value = 2.87 * 10^-7 (same result as in the paper)
+* **HIV+ Blood** vs. **HIV- CSF**: p-value = 7.98 * 10^-7
+
+In the paper they found the largest difference between infected blood and csf
+samples, but I find larger differences between HIV+ CSF/Blood and HIV- CSF samples.
+
+* My results suggest that Myeloid2 transcripts are detected at lower levels in 
+HIV- CSF samples than in HIV+ CSF samples.
+* Myeloid2 transcripts are found at lower levels in HIV- CSF samples than 
+in HIV+ Blood samples.
+* Myeloid2 transcripts are detected at similar levels in HIV+ CSF samples and
+in HIV+ Blood samples, however there are far more outliers with very high 
+frequency of Myeloid2 transcripts in HIV+ CSF samples compared to HIV+ Blood.
+
+How much sense does this interpretation make? The median is rather robust
+to outliers, so even if in CSF there are some cells which have much higher
+frequencies of transcripts, it might be that the median is still lower than 
+in blood.
+
+Wilcoxon rank sum test of the null hypothesis that the distribution
+of x and y differs by a location shift of mu and the alternative is that they
+differ by some other location shif. (If I set mu = 0, the null hypothesis is that
+the distributiosn differ by a location shift of 0).
+
+##### Wilcoxon test between HIV+ Blood an HIV+ CSF
+
+```{r, results = "asis"}
+
+# bld vs csf
+wilcox.test(percentage_my2_transcripts[[1]], # blood samples
+            percentage_my2_transcripts[[2]], # csf samples
+            alternative = "two.sided", 
+            paired = FALSE, 
+            conf.int = TRUE)# %>% kable()
+```
+
+
+##### Wilcoxon test between HIV+ CSF and HIV- CSF
+
+```{r}
+# csf vs uninfected
+wilcox.test(percentage_my2_transcripts[[2]], # csf samples
+            percentage_my2_transcripts[[3]],
+            alternative = "two.sided",
+            conf.int = TRUE) # uninfected samples
+```
+
+##### Wilcoxon test between HIV+ Blood and HIV- CSF
+
+```{r}
+# blood vs uninfected
+wilcox.test(percentage_my2_transcripts[[1]], # blood samples
+            percentage_my2_transcripts[[3]], # uninfected samples
+            alternative = "two.sided",
+            conf.int = TRUE)
+
+```
+
+
+
+
+# Label Transfer
+
+After reproducing the results from Farhadian et al., JCSL Insight, 2018 the next 
+step was to transfer the labels from the four HIV+ Blood and CSF samples to 
+the remaining samples:
+
+* 1 CSF smaple from HIV-1 infected patient
+* 2 CSF samples from uninfected patients
+
+
+For reference see:
+https://satijalab.org/seurat/articles/integration_mapping.html
+https://satijalab.org/seurat/articles/multimodal_reference_mapping.html
+
+
+```{r}
+# Seurat objects
+hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
+
+hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds")
+```
+
+
+## Find Integration anchors
+
+We perform Normalization separately for each dataset and try to find 
+Variable Features.
+
+```{r}
+#hiv_list <- SplitObject(hiv7, split.by = "orig.ident")
+
+#for (i in 1:length(hiv_list)) {
+ # hiv_list[[i]] <- NormalizeData(hiv_list[[i]], verbose = FALSE)
+  #hiv_list[[i]] <- FindVariableFeatures(hiv_list[[1]],
+   #                                     selection.method = "vst",
+    #                                    nfeatures = 2000,
+     #                                   verbose = FALSE)
+#}
+
+#saveRDS(hiv_list, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list")
+hiv_list <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list")
+#reference.list <- SplitObject(hiv4, split.by = "orig.ident")
+```
+
+
+
+
+## Cell type classification using an integrated reference
+
+* in data transfer we begin with identifying anchors
+* we do not correct or modify the query expression data
+* it is suggested to use the default method tsne (which project the PCA structure
+of a reference onto a query dataset (instead of learning a joint structure)
+* we classify the query cells based on the reference data (a vector of reference 
+cell type labels)
+
+We will use the four samples we have analyzed above as a reference.
+The query dataset will be the HIV+ CSF3 sample and the two uninfected sample:
+
+The label transfer identifies hardly any B cells and Myeloid 1, 3, 4 are also
+not/hardly present in the CSF samples which is expected, since they originated
+exclusively from the Blood samples.
+
+```{r, results = "asis"}
+# get Seurat object for CSF3 sample
+#hiv3csf <- hiv_list[["HIV3_CSF"]]
+# merge the 3 query Seurat objects
+query <- merge(hiv_list[["Uninfected1_CSF"]], 
+               c(hiv_list[["Uninfected2_CSF"]], hiv_list[["HIV3_CSF"]]))
+
+# find transfer anchors between the 3 query samples and the 4 samples we have 
+# analyzed previously
+hiv4.transfer_anchors <- FindTransferAnchors(reference = hiv4,
+                                             query = query, 
+                                             dims = 1:15,
+                                             normalization.method = "LogNormalize",
+                                             reference.reduction = "pca",
+                                             reduction = "pcaproject",
+                                             verbose = FALSE)
+
+predictions <- TransferData(anchorset = hiv4.transfer_anchors, 
+                            refdata = hiv4$cell_type, 
+                            dims = 1:15,
+                            verbose = FALSE)
+#predictions %>% head %>% kable()
+
+query <- AddMetaData(query, metadata = predictions)
+table(query$predicted.id) %>% kable()
+```
+
+## Check the gene expression levels in the predicted cell types
+
+The Label Transfer seems to work nicely, judging by the correct expression of
+common cell type markers for the individual cell types.
+
+#### Myeloid2 marker genes
+
+```#{r, fig.width=12, fig.height = }
+# ceck the Myeloid2 markers
+p1 <- VlnPlot(query,
+              features =  c("AXL", "APOE", "TREM2"), 
+              group.by = "predicted.id", 
+              pt.size = .01, ncol = 3)
+p2 <- VlnPlot(query, 
+              features =  c("CTSB", "MSR1", "C1QA"), 
+              group.by = "predicted.id",
+              pt.size = .01, ncol = 4)
+
+figure <- ggarrange(p1, p2, ncol = 1, nrow = 2)
+annotate_figure(figure, top = text_grob("Myeloid2 marker genes"))
+```
+
+#### Myeloid5 marker genes
+```{r}
+
+# Myeloid 5 markers
+p1 <- VlnPlot(query, c("FCER1A", "CD1C"),
+        group.by = "predicted.id", pt.size = .01, ncol = 2) 
+p1
+```
+
+
+#### Plasma cell marker genes
+```{r}
+# plasma cell markers
+p2 <- VlnPlot(query, features = c("IGJ"), 
+        group.by = "predicted.id", pt.size = .01, ncol = 2) 
+p2
+```
+
+#### CD8 T cell marker genes
+
+```{r}
+# CD8 T Cells
+p3 <- VlnPlot(query, features = c("CD8A"),
+        group.by = "predicted.id", pt.size = .01, ncol = 2) + NoLegend()
+p3
+```
+
+#### T cell marker genes
+
+```{r}
+# T cells 
+VlnPlot(query, features = c("IL7R", "TRAC"),
+        group.by = "predicted.id", pt.size = .01, ncol = 2)
+```
+
+#### NK cell marker genes
+
+```{r, fig.width=15}
+# NK cells
+VlnPlot(query, features = c("NKG7", "GNLY", "GZMB"), 
+        group.by = "predicted.id", pt.size = .01, ncol = 3)
+```
+
+
+#### B cell marker genes
+
+```{r, fig.width=15}
+# B cells
+VlnPlot(query, features = c("MS4A1", "CD79A", "TCL1A"), 
+        group.by = "predicted.id", pt.size = .01, ncol = 3)
+
+
+```
+
+
+
+## UMAP projection of additional samples
+
+* Calculate UMAP on the four reference samples
+* Integrate the embeddings of the reference samples with the embeddings
+of the query samples
+
+```{r, fig.width=10, fig.height=8}
+hiv4_test <- RunUMAP(hiv4, dims = 1:15, 
+                     reduction = "pca", 
+                     return.model = TRUE, 
+                     verbose = FALSE)
+
+hiv3csf <- MapQuery(anchorset = hiv4.transfer_anchors,
+                    reference = hiv4_test, query = query,
+                    refdata = list(celltype = "cell_type"),
+                    reference.reduction = "pca",
+                    reduction.model = "umap", 
+                    verbose = FALSE)
+
+
+
+
+query <- TransferData(anchorset = hiv4.transfer_anchors,
+                               reference = hiv4_test,
+                               query = query,
+                               refdata = list(celltype = "cell_type"), 
+                      verbose = FALSE)
+
+query <- IntegrateEmbeddings(anchorset = hiv4.transfer_anchors,
+                                      reference = hiv4_test,
+                                      query = query,
+                               new.reduction.name = "ref.pca",
+                             verbose = FALSE)
+
+query <- ProjectUMAP(query = query,
+                       query.reduction = "ref.pca",
+                       reference = hiv4_test,
+                       reference.reduction = "pca",
+                       reduction.model = "umap", verbose = FALSE)
+```
+
+```{r, fig.width=12}
+# Visualize the query cells alongside the reference
+p1 <- DimPlot(hiv4_test,
+              reduction = "umap",
+              group.by = "cell_type",
+              label = TRUE,
+              label.size = 5,
+              repel = TRUE, 
+              pt.size = .1) + NoLegend() +
+  ggtitle("Reference anntoations")
+
+p2 <- DimPlot(query, 
+              reduction = "ref.umap",
+              group.by = "predicted.celltype", 
+              label = TRUE,
+              label.size = 5,
+              pt.size = .1,
+              repel = TRUE) + NoLegend() +
+   ggtitle("Transferred Labels")
+
+p1 + p2
+```
+
+```{r}
+#save this new Seurat obejct including the SCTransformatin
+
+#saveRDS(hiv_label_transfer, file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds")
+```
+
+
+
+## Frequency of cell types in each sample
+
+How are cell types distributed across samples, considering also the additional
+HIV+ CSF sample and the two uninfected samples which were annotated using label 
+transfer.
+```{r, fig.width = 15}
+hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds")
+
+custom_color <- c("#C3D7A4", "#4E84C4", "#52854C", "#293352", "lightskyblue", "orangered2", "orange2")
+
+#plot a barplot of the proportions of samples and cell types
+p2 <- ggplot(hiv7@meta.data) +
+  geom_bar(aes(x = cell_type, fill = orig.ident)) +
+  scale_fill_manual( values = custom_color) +
+  ylab("Number of cells in each cluster") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  labs(title = "Frequency of cell types from each sample after label transfer")
+
+custom_color <- c("#C3D7A4", "#4E84C4", "#52854C", "#293352")
+
+#plot a barplot of the proportions of samples and cell types
+p1 <- ggplot(hiv4@meta.data) +
+  geom_bar(aes(x = cell_type, fill = orig.ident)) +
+  scale_fill_manual( values = custom_color) +
+  ylab("Number of cells in each cluster") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  labs(title = "Frequecy of cell types from each sample after label transfer")
+
+ggarrange(p1, p2, ncol = 2, nrow = 1)
+
+```
