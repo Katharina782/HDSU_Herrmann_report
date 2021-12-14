@@ -7,7 +7,10 @@ output:
     toc: true
     toc_depth: 3
     code_folding: hide
+bibliography: references.bib
+link-citations: yes
 ---
+
 
 
 ```{r setup, include = FALSE}
@@ -37,11 +40,12 @@ library(pheatmap)
 
 # Independent annotation of Myeloid2 and Myeloid5 clusters as Microglia-like cells
 
-Can we identify the microglia-like myeloid2/myeloid5 cluster they found in the Farhadian Paper 
-(doi: 10.1172/jci.insight.121718) when using independent genes for annotations?
+Can we identify the microglia-like myeloid2/myeloid5 cluster they found in the 
+paper by [@Farhadian] when using independent genes for annotations?
+
 
 Here, I will first use the 881 Microglia marker genes and then also try the list
-of TFs provided by Gosselin D. et al., Science, 2017 (DOI: 10.1126/science.aal3222).
+of TFs provided by [@Gosselin].
 
 #### Function Add Module Score
 
@@ -62,10 +66,10 @@ hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhad
 
 
 
-## Gene signature defined by Farhadian S. F. et al., JCL Insight, 2018 
+## Gene signature defined by [@Farhadian]
 
-Do we find the 60 signature genes from Farhadian et al., JCL Insight, 2018 for 
-myeloid2 among the signature defined by Gosselin D. et al., Science, 2017?
+Do we find the 60 signature genes from [@Farhadian] for 
+myeloid2 among the signature defined by @[Gossselin]?
 
 ##### Read in list of microglia signature genes found in the Gosselin paper
 which are also found in the HIV1 and HIV2 samples:
@@ -74,8 +78,8 @@ which are also found in the HIV1 and HIV2 samples:
 microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
 ```
 
-28 of the 60 genes used as microglia signature in the Farhadian Paper are also 
-found in the 881 microglia signature genes defined by Gosselin D. et al., Science, 2017 
+28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
+found in the 881 microglia signature genes defined by [@Gosselin].
 
 ```{r, results = "asis"}
 # Are there any genes overlapping between Farhadian and Glass paper?
@@ -111,7 +115,7 @@ FeaturePlot(hiv_farhadian, features = "Cluster1" , pt.size = .5, label = TRUE, r
 
 ```
 
-## Gene signature defined by Gosselin D. et al., Science, 2017 
+## Gene signature defined by @[Gosselin]
 
 The Transcription Factors mentioned in the paper do not seem to be 
 specific for the Myeloid2 cluster. Interestingly, there is a very low score  
@@ -134,7 +138,7 @@ FeaturePlot(hiv4_glass, features = "Cluster1", label = TRUE, repel = TRUE, pt.si
 
 ### signature of HAND (HIV-associated neurodegenerative disease)
 
-Gosselin D. et al., Science, 2017 defined a group of genes upregulated
+[@Gosselin] defined a group of genes upregulated
 in microglia from patients with HAND. 
 
 This gene signature can, however not be detected in any of the Myeloid clusters.
@@ -156,11 +160,11 @@ FeaturePlot(hiv_hand, features = "Cluster1", pt.size = .01) +
 
 ##### TFs downregulated in in vitro microglia
 
-The list of TFs is derived from Gosselin D. et al., Science, 2017:
+The list of TFs is derived from [@Gosselin]:
 
 **Comparison between microglia and primitive yolk sac macrphages:**
 
-Gosselin D. et al., Science, 2017 found:
+In this paper they found:
 
 * a subset of mRNAs was expressed in primitive yolk sac macrophages and 
 maintained expression levels in brain microglia
@@ -195,13 +199,12 @@ FeaturePlot(hiv_down, features = "Cluster1",
 
 
 
-## Features identified in a paper on convergence of microglia and macrophages
+## Features identified in a paper on convergence of microglia and macrophages [@Grassivaro]
 
-They identified 14 genes that are conserved in microglia trhoughout development,
+They identified 14 genes that are conserved in microglia throughout development,
 but not expressed in myeloid-derived monocytes
 MDM. Only in the context of neuroinflammation are the
 14 genes expressed in macrophages.
-https://www.jneurosci.org/content/40/4/784
 
 ```{r}
 tfs <- c("CRYBB1", "GARNL3", "GPR34", "LAG3", "NUAK1", "OLFML3", "RTN1",  "SALL3",  "SLC1A3", "SPARC", "TNFRSF17")
@@ -223,7 +226,7 @@ FeaturePlot(hivt, features = "Cluster2",
 ```
 
 
-## Marker genes referred to by Farhadian et al. 
+## Marker genes referred to by [@Farhadian] 
 
 References:
 
