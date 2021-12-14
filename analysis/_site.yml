@@ -1,14 +1,28 @@
-name: "report"
+name: report
 output_dir: ../docs
 navbar:
-  title: "report"
+  title: report
   left:
   - text: Home
     href: index.html
+  - text: CSF data from HIV patients
+    href: HIV_CSF_dataset_analysis.html
+  - text: TF activity in Myeloid2
+    href: TF_activity_analysis_of_myeloid2_cluster.html
+  - text: Myeloid2 are a microglia-like
+    href: Independent_cell_type_identification_Farhadian_dataset.html
+  - text: Integration of CSF and triculture dataset
+    href: Triculture_datset_analysis_and_integration_Farhadian_dataset.html
+  - text: TF activity in iMg
+    href: Triculture_dataset_GRN_with_Scenic.html
   - text: About
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/Katharina782/report
 output:
   workflowr::wflow_html:
     toc: yes
