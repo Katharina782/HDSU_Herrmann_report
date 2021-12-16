@@ -230,12 +230,8 @@ FeaturePlot(hivt, features = "Cluster2",
 
 References:
 
-* Keren-Shaul H. et al. 2017. A Unique Microglia Type Associated with Restricting
-Development of Alzheimer's Disease. Cell 169, 1276-1290.
-DOI: 10.1016/j.cell.2017.05.018
-* Krasemann S. et al. 2017. The TREM2-APOE Pathway Drives the Transcriptional 
-Phenotype of Dysfunctional Microglia in Neurodegenerative Diseases. Immunity 47, 566-581
-https://www.sciencedirect.com/science/article/pii/S1074761317303667?via%3Dihub#mmc2
+* [@Keren-Shaul]
+* [@Kraseman]
 
 Neither of these signatures shows a high score for the Myeloid2 clusters.
 
@@ -282,9 +278,9 @@ FeaturePlot(hiv_mgnd, features = "Cluster1", pt.size = .01) +
 
 Neither of the signature genes are very specific for the Myeloid2/5 cluster.
 
-* The signature genes defined by Keren-Shaul et al. are expressed to some level 
+* The signature genes defined by [@Keren-Shaul] are expressed to some level 
 in all myeloid clusters
-* The signature defined by Kraseman et al. is also mainly expressed in the 
+* The signature defined by [@Kraseman] is also mainly expressed in the 
 Myeloid clusters
 * CD9 and SPP1 might be added to the list of microglia marker genes expressed
 in Myeloid2 cluster
@@ -314,13 +310,7 @@ DotPlot(hiv4, features = c("CD9", "APOE", "AXL", "CTSL", "SPP1"), group.by = "ce
 ```
 
 
-## Gene signature defined by Esaulova E. et al., Neurol Neuroimmunol Neuroinflamm, 2020
-
-Reference: 
-Esaulova E. et al. 2020. Single-cell RNA-seq analysis of human CSF microglia 
-and myeloid cells in neuroinflammation. Neurol Neuroimmunol Neuroinflamm.
-7(4):e732. doi: 10.1212/NXI.0000000000000732
-[https://nn.neurology.org/content/7/4/e732.long]
+## Gene signature defined by [@Esaulova]
 
 
 ##### Homeostatic genes
@@ -337,7 +327,7 @@ FeaturePlot(hiv4, features = microglia, ncol = 3)
 ```
 
 
-The 
+
 ```{r}
 DotPlot(hiv4, features = microglia, group.by = "cell_type") + 
   coord_flip() +
@@ -595,4 +585,4 @@ FeaturePlot(hiv_new, features = "Cluster1") +
 
 
 
-
+# References
