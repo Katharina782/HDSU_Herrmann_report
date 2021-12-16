@@ -3,7 +3,7 @@ title: "Analysis of HIV-1 CSF dataset"
 author: "kmikulik"
 date: "3 12 2021"
 output: 
-  html_document:
+  htmldocument:
     code_folding: hide
     toc: true
     toc_depth: 5
@@ -109,9 +109,9 @@ uninfected_list <- map(seq.int(7,8), function(n) {
   list(df=df, sparse_matrix = sparse_matrix, seurat_ob = seurat_ob, name=name)
 })
 
-write.table(uninfected_list[[1]]$sparse_matrix,
-            "/media/ag-cherrmann/kmikulik/HIV_microglia/src/job_test.tsv", 
-            sep = "\t")
+#write.table(uninfected_list[[1]]$sparse_matrix,
+ #           "/media/ag-cherrmann/kmikulik/HIV_microglia/src/job_test.tsv", 
+  #          sep = "\t")
 ```
 
 * Create a Seurat object with all samples
@@ -761,7 +761,7 @@ DotPlot(object = hiv4, features = c("MS4A1", # B cells
 
 Visualize the cell types, conditions, samples and nCountRNA:
 
-```{r, fig.widht = 15, fig.height=10}
+```{r,  fig.height=12, fig.width=15}
 p1 <- DimPlot(hiv4, reduction = "tsne", label = TRUE, 
               group.by = "cell_type", pt.size = 0.1) +
   NoLegend()
