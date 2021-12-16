@@ -8,15 +8,4 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to a summary of my labrotation. 
-
-
-Click on this [link](HIV_CSF_dataset_analysis.Rmd) to see my analysis of the dataset
-by Farhadian S.F. et al., JCI Insight, 2018.
-
-Click on this [link](Independent_cell_type_identification_Farhadian_dataset.Rmd)
-to see my independent confirmation that the Myeloid2 subcluster is microlgia-like.
-
-Click on this [link](HIV_CSF_dataset_analysis.Rmd) to see my analysis of the 
-dataset provided by Ryan S.K., Stem Cell Reports, 2020 and the integration with 
-the dataset from Farhadian S.F. et al., JCI Insight, 2018.
+Welcome to the report of my labrotation.

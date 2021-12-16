@@ -1,5 +1,5 @@
 ---
-title: "Determine number of k for Hierarchical clustering of Myeloid2 cluster in one patient"
+title: "TF-activity analysis of myeloid2 cells"
 author: "kmikulik"
 date: "7 12 2021"
 output: html_document

@@ -5,6 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
+  - text: Introduction
+    href: Introduction.Rmd
   - text: CSF data from HIV patients
     href: HIV_CSF_dataset_analysis.html
   - text: TF activity in Myeloid2
@@ -15,10 +17,11 @@ navbar:
     href: Triculture_datset_analysis_and_integration_Farhadian_dataset.html
   - text: TF activity in iMg
     href: Triculture_dataset_GRN_with_Scenic.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+  - text: Discussion
+    href: Discussion.Rmd
+  - text: Methods
+    href: Methods.Rmd
+
   right:
   - icon: fa-github
     text: Source code
@@ -31,3 +34,6 @@ output:
     toc_float: yes
     theme: cosmo
     highlight: textmate
+bibliography: references.bib
+link-citations: yes
+    
