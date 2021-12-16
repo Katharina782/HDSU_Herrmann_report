@@ -5,6 +5,8 @@ date: "15 12 2021"
 output: html_document
 ---
 
+<div style="text-align: justify"> 
+
 The World Health Organization (WHO) reports the number of people living with 
 HIV to be approximately ... . The use of antiretroviral therapy(ART) has 
 increased the life expectancy in the past years. One of the most prevalent 
@@ -140,3 +142,5 @@ between infected and uninfected cells would allow additional inferences about
 the effect of HIV infection on microglia.
 
 # References
+
+</div>
