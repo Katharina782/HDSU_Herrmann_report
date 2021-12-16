@@ -8,7 +8,7 @@ output: html_document
 
 ```{r setup}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
-                      cache = TRUE)
+                      cache = TRUE, autodep = TRUE)
 set.seed(42)
 ```
 
@@ -34,12 +34,17 @@ library(knitr)
 library(ggVennDiagram)
 library(corrplot)
 
+# "Multitasking/Multiprocessing"
+library(future)
+#plan("multisession", workers = 24)
 ```
 
 # GRN inference with Scenic
 
 Using Scenic I tried to infer Gene regulatory networks from the gene expression
-data. The output is a matrix of TF activity per cell. 
+data. The output is a matrix of TF (Transcription Factor) activity per cell. In this case the activity
+matrix contains activity of 125 different transcription factors.
+
 
 First, we wanted to see if we can identify patterns in the TF activity in the
 Myeloid2 cells. We compared the TF activity to TFs shown to have differential 
@@ -63,8 +68,6 @@ hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhad
 ```
 
 * read in AuCell matrix (output from Scenic)
-
-Transcription factor (TF) activity of 125 different transcription factors.
 
 ```{r}
 auc_mtx <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/aucell_matrix_10k_hvg.tsv", sep = "\t")
@@ -136,7 +139,7 @@ up_uninf <- overlap_atac$name[overlap_atac$uninf_red_change > 0]
 Interestingly, only four TFs found in the TF activity matrix of Myeloid2 cells 
 are more bound in latent infection than in uninfected primary microglia.
 
-```{r}
+```{r, fig.height=10}
 
 top_tfs %>% 
   # add a column containing information in which condition the corresponding TF 
@@ -151,7 +154,7 @@ top_tfs %>%
              label = label)) +
   geom_point() +
   geom_hline(yintercept = -log10(1e-50), col = "red") +
-  geom_text(nudge_x = .05, nudge_y = 1.5) +
+  geom_text(nudge_x = .05, nudge_y = 2) +
   labs(title = "TFs with differential binding scores between latent infection and uninfected primary microglia")
 
 ```
@@ -289,7 +292,7 @@ plot(2:15, wss, type = "b",
 
 ## K = 3 Hierarchical Clustering
 
-### Heatmap for just the HIV1 patient
+### Heatmap for patient 1
 
 ```{r, fig.width=15, fig.height=17}
 #map(seq.int(1:5), function(k){
@@ -300,7 +303,7 @@ mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
 # heatmap
 set.seed(123)
 ht_pat1 <-draw(Heatmap(t(mtx), 
-             column_title = "HIV1_CSF", 
+             column_title = "Myeloid2 cells from patient 1, k = 3", 
 
              column_km = 3,
              column_km_repeats = 100,
@@ -312,22 +315,22 @@ ht_pat1 <-draw(Heatmap(t(mtx),
 ```
 
 
-### extract cells from each cluster
+### Extract cells from each cluster
 
 ```{r}
 # if you draw the heatmap, the results of th eclustering will not change anymore
 #png("/media/ag-cherrmann/kmikulik/HIV_microglia/analysis/Myeloid2_cluster/Myeloid2_3clusters.png", width = 15, height = 17, res = 1200)
-ht <- draw(ht_pat1)
+#ht <- draw(ht_pat1)
 # get the columns names of cluster one
-c1 <- colnames(t(mtx[column_order(ht)[[1]],]))
+c1 <- colnames(t(mtx[column_order(ht_pat1)[[1]],]))
 #write.table(c1, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster1.tsv", sep = "\t")
 
 # get the column names of cluster two
-c2 <- colnames(t(mtx[column_order(ht)[[2]],]))
+c2 <- colnames(t(mtx[column_order(ht_pat1)[[2]],]))
 #write.table(c2, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster2.tsv", sep = "\t")
 
 # get the column names of cluster 3
-c3 <- colnames(t(mtx[column_order(ht)[[3]],]))
+c3 <- colnames(t(mtx[column_order(ht_pat1)[[3]],]))
 #write.table(c3, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster3.tsv", sep = "\t")
 ```
 
@@ -355,6 +358,14 @@ hiv7_scenic@meta.data %>%
 
 ## TF activity per cluster
 
+Plot TF activity for all TFs which showed differential binding scores in primary
+microglia. For some TFs it appears that there are differences in activity
+between the clusters. The next step will be to quantitate these differences. 
+
+From the violin plots below it becomes evident, that the acitivity is not normally 
+distributed. Therefore, we will use Kruskal-Wallis test (non-parametric) instead 
+of ANOVA (parametric).
+
 ```{r, fig.width = 15, fig.height=20}
 # make boxplots  and violin plots for all TFs
 p <- list()
@@ -381,24 +392,18 @@ do.call(grid.arrange,c(p, ncol = 4, top= "Transcription factor activity per clus
 
 ## Are there significant differences in TF activity between the three clusters?
 
-* ANOVA test is parametric and assumes normally distributed data
-* Kruskal-Wallis-Test compares the mean of one or more groups, but is 
-non-parametric -> seems more appropriate in this case
-* in both cases the Null-Hypothesis is that there is no difference
-between the groups
-* Posthoc analysis -> pairwise comparisons
-  + pairwise wilcox (does not assume normal distribution, while t test does)
-  -> adapt the p value, because repeatedly testing will increase the alpha
-  error ->  p.adjust() -> use bonferroni (most conservative)
-  + use Dunn's test
-* Effect size of Kruskal-Wallis-Test -> eta-squared 
+* **ANOVA** test is parametric and assumes normally distributed data
+* **Kruskal-Wallis-Test** compares the mean of one or more groups, but is 
+non-parametric. This seems more appropriate in this case.
+* In both cases the Null-Hypothesis is that there is no difference
+between the groups.
 
 Since I am repeating the test 125 times, I adjust the p-values with the
-FDR method.
+FDR method. This methods is more powerful than more conservative methdos, like
+bonferroni, Holm or Hochberg. 
 
-### For all 125 TFs
 
-#### Kruskal-Wallis Test
+### Kruskal-Wallis Test and p-value adjustments for all 125 TFs
 
 ```{r}
 # non-parametric alternative to ANOVA -> Kruskal_wallis test
@@ -414,26 +419,12 @@ p_values <- map(seq.int(1:125), function(n){
   p_values <- unlist(kruskal.test(pull(k3_df[tf]) ~ ht_cluster, k3_df))["p.value"]
   #list(tf = tf, p_value = p_values)
 })
-```
 
-
-#### Adjust for multiple testing
-
-* numeric vector of p-values as input
-* specify method
-
-  + bonferroni -> p-values are multiplied by the number of comparisons
-  + Holm, Hochberg, Hommel, Benjamini & Hochberg (less conservative)
-
-I will use FDR, because it is more powerful. 
-
-
-```{r}
 # plot distribution of p_values
-hist(as.numeric(unname(unlist(p_values))), 
-     main = "distribution of p_values",
-     xlab = "p_values",
-     breaks = 20)
+#hist(as.numeric(unname(unlist(p_values))), 
+ #    main = "distribution of p_values",
+  #   xlab = "p_values",
+   #  breaks = 20)
 
 # adjust for multiple testing with FDR
 adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
@@ -448,9 +439,8 @@ hiv1_diff <- colnames(auc_mtx)[adj_p_values < .05]
 #write.table(diff3, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1")
 ```
 
-### For 24 TFs also identified by ATAC-seq
+### Kruskal-Wallis test and p-value adjustment  for 24 TFs also identified by ATAC-seq
 
-#### Kruskal-Wallis test and p-value adjustment 
 
 ```{r}
 # check 24 TFs with Kruskal Wallis test
@@ -472,22 +462,21 @@ hiv1_atac <- overlap_atac$name[adj_p_values < .05]
 #write.table(diff3_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1")
 ```
 
-
 * 54 of the 125 TFs are differentially active between the three clusters
-* 16 of the 24 TFs from ATAC-seq data are differentially active between the three 
-clusters.
+* 16 of the 24 TFs with differential binding scores in primary microglia are
+differentially active between the three clusters.
 
 
 ### Posthoc tests for k = 3
 
-** Pairwise Wilcox Test**
+Now that we know that there are significant differences between clusters, we 
+want to identify which cluster/s are different from which other cluster/s.
 
-* adjust p_values with fdr method
-* since we have < 50 observations in some clusters the test returns a normal 
-approximated p value
+** Pairwise Wilcox Test** is a non-parameteric pariwise test. Again, because 
+we repeat the test we will correct for multiple hypothesis testin using the 
+FDR method.
 
-**16 TFs have significantly different activity between the 3 clusters.** 
-**For these I performed a Wilcox test to see which of them are differen**
+**For the 16 TFs with significantly different activity between the 3 clusters:** 
 
 ```{r, warning = FALSE}
 # We perform a posthoc test
@@ -507,7 +496,7 @@ wilcox_list <- map(seq.int(1:length(hiv1_atac)), function(i){
 
 ## K = 4 Hierarchical clustering
 
-### draw heatmap for k = 4
+### Heatmap for patient 1
 
 ```{r, fig.width=15, fig.height=17}
 #map(seq.int(1:5), function(k){
@@ -518,7 +507,7 @@ mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
 # heatmap
 set.seed(123)
 ht <- draw(Heatmap(t(mtx), 
-             column_title = "HIV1_CSF", 
+             column_title = "Myeloid2 cells from patient 2, k = 4", 
 
              column_km = 4,
              column_km_repeats = 100,
@@ -531,7 +520,7 @@ ht <- draw(Heatmap(t(mtx),
 
 ```
 
-### extract cells from each cluster of k = 4
+### Extract cells from each cluster of k = 4
 
 ```{r}
 # get the columns names of cluster one
@@ -549,7 +538,7 @@ cl4 <- colnames(t(mtx[column_order(ht)[[4]],]))
 
 ### Kruskal-Wallis Test for k = 4
 
-For all 125 TFs, we find 51 that are significantly different between the clusters
+* For all 125 TFs, we find 51 that are significantly different between the clusters.
 
 ```{r}
 
@@ -584,7 +573,8 @@ diff4 <- colnames(auc_mtx)[adj_p_values < 0.05]
 
 ```
 
-For the 24 TFs from ATAC-seq there are 14 differentially expressed between clusters
+* For the 24 TFs from ATAC-seq footprintin in primary microglia there are 14 
+differentially expressed between clusters.
 
 ```{r}
 # check 24 TFs with Kruskal Wallis test
@@ -610,11 +600,7 @@ diff4_atac <- overlap_atac$name[adj_p_values < .05]
 
 ### Posthoc tests for k = 4
 
-** Pairwise Wilcox Test**
-
-* adjust p_values with fdr method
-* since we have < 50 observations in some clusters the test returns a normal 
-approximated p value
+**Pairwise Wilcox Test** 
 
 ```{r, warning = FALSE}
 # We perform a posthoc test
@@ -634,7 +620,7 @@ wilcox_list <- map(seq.int(1:length(diff4_atac)), function(i){
 
 ## K = 5 Hierarchical Clustering
 
-### draw heatmap for k = 5
+### Heatmap for patient 1
 
 ```{r, fig.width=15, fig.height=17}
 #map(seq.int(1:5), function(k){
@@ -645,7 +631,7 @@ mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
 # heatmap
 set.seed(123)
 ht <- draw(Heatmap(t(mtx), 
-             column_title = "HIV1_CSF", 
+             column_title = "Myeloid2 cells from patient 1, k = 5", 
 
              column_km = 5,
              column_km_repeats = 100,
@@ -657,7 +643,7 @@ ht <- draw(Heatmap(t(mtx),
 ```
 
 
-### extract cells from each cluster for k= 5
+### Extract cells from each cluster for k= 5
 
 ```{r}
 # get the columns names of cluster one
@@ -678,7 +664,7 @@ clu5 <- colnames(t(mtx[column_order(ht)[[5]], ]))
 
 ### Kruskal-Wallis Test for k = 5
 
-For all 125 TFs, we find 51 that are significantly different between the clusters
+* For all 125 TFs, we find 51 that are significantly different between the clusters
 
 ```{r}
 # all TFs
@@ -713,7 +699,8 @@ diff5 <- colnames(auc_mtx)[adj_p_values < 0.05]
 #write.table(diff5, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=5")
 ```
 
-For the 24 TFs from ATAC-seq there are 14 differentially expressed between clusters
+* For the 24 TFs from ATAC-seq footprinting in primary microglia there are 14 
+differentially expressed between clusters
 
 ```{r}
 # check 24 TFs with Kruskal Wallis test
@@ -736,118 +723,49 @@ diff5_atac <- overlap_atac$name[adj_p_values < .05]
 #write.table(diff5_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=5")
 ```
 
+### Posthoc tests for k = 4
 
+**Pairwise Wilcox Test** 
 
+```{r, warning = FALSE}
+# We perform a posthoc test
+#wilcox_list = list()
+wilcox_list <- map(seq.int(1:length(diff5_atac)), function(i){
+  tf <- diff5_atac[i]
+  print(tf)
+  wilcox <- pairwise.wilcox.test(pull(k5_df[tf]), pull(k5_df["ht_cluster"]), 
+                                 p.adjust.method = "fdr")
+  list(TF = tf, wilcox = wilcox)
+})
+  
+#length(wilcox_list)
+#wilcox_list
+```
 
-## Which Clusters are significantly different for k = 3?
+## Which Clusters are sifnificantly different for differen k? 
 
-```{r, fig.height=15, fig.width=25}
+### Which Clusters are significantly different for k = 3?
+
+```{r, fig.height=20, fig.width=25}
 library(rstatix)
 library(ggpubr)
 
 test <- k3_df
-
-p1 <- ggplot(test, aes(x = ht_cluster, y = CTCF)) +
-  geom_boxplot() +
+#tf.oi <- c("CTCF", "REST", "YY1")
+#names(tf.oi) <- tf.oi
+test.list <- map(hiv1_atac, function(tf) {
+  ggplot() +
+  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
+                   fill = test %>% pull("ht_cluster"))) +
   stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CTCF ~ ht_cluster) %>% 
-                       add_xy_position())
+    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
+      add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
 
-
-p2 <- ggplot(test, aes(x = ht_cluster, y = NFIL3)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(NFIL3 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p3 <- ggplot(test, aes(x = ht_cluster, y = MXI1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MXI1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p4 <- ggplot(test, aes(x = ht_cluster, y = CREB1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CREB1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p5 <- ggplot(test, aes(x = ht_cluster, y = NFATC2)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(NFATC2 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p6 <- ggplot(test, aes(x = ht_cluster, y = MEF2A)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MEF2A ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p7 <- ggplot(test, aes(x = ht_cluster, y = LEF1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(LEF1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p8 <- ggplot(test, aes(x = ht_cluster, y = YY1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(YY1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p9 <- ggplot(test, aes(x = ht_cluster, y = MYB)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MYB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p10 <- ggplot(test, aes(x = ht_cluster, y = ETS1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(ETS1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p11 <- ggplot(test, aes(x = ht_cluster, y = JUNB)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(JUNB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p12 <- ggplot(test, aes(x = ht_cluster, y = CEBPB)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CEBPB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p13 <- ggplot(test, aes(x = ht_cluster, y = ETV6)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(ETV6 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p14 <- ggplot(test, aes(x = ht_cluster, y = MEF2C)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MEF2C ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p15 <- ggplot(test, aes(x = ht_cluster, y = KLF4)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(KLF4 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-figure <- ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, 
-                    p13, p14, p15, ncol = 5, nrow = 3)
-annotate_figure(figure, top = text_grob("HIV1_CSF      k = 3 for k-means clustering (TFs from ATAC-seq)", 
-               color = "black", face = "bold", size = 25))
+do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 4))
 ```
 
 
@@ -859,191 +777,45 @@ library(rstatix)
 library(ggpubr)
 
 test <- k4_df
-p1 <- ggplot(test, aes(x = ht_cluster, y = CTCF)) +
-  geom_boxplot() +
+
+test.list <- map(diff4_atac, function(tf) {
+  ggplot() +
+  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
+                   fill = test %>% pull("ht_cluster"))) +
   stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CTCF ~ ht_cluster) %>% 
-                       add_xy_position())
+    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
+      add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
+
+do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
 
 
-p2 <- ggplot(test, aes(x = ht_cluster, y = NFIL3)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(NFIL3 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p3 <- ggplot(test, aes(x = ht_cluster, y = MXI1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MXI1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p4 <- ggplot(test, aes(x = ht_cluster, y = CREB1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CREB1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p5 <- ggplot(test, aes(x = ht_cluster, y = NFATC2)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(NFATC2 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p6 <- ggplot(test, aes(x = ht_cluster, y = MEF2A)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MEF2A ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p7 <- ggplot(test, aes(x = ht_cluster, y = LEF1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(LEF1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p8 <- ggplot(test, aes(x = ht_cluster, y = YY1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(YY1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p9 <- ggplot(test, aes(x = ht_cluster, y = MYB)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MYB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p10 <- ggplot(test, aes(x = ht_cluster, y = ETS1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(ETS1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p11 <- ggplot(test, aes(x = ht_cluster, y = JUNB)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(JUNB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p12 <- ggplot(test, aes(x = ht_cluster, y = CEBPB)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CEBPB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p13 <- ggplot(test, aes(x = ht_cluster, y = ETV6)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(ETV6 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p14 <- ggplot(test, aes(x = ht_cluster, y = MEF2C)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MEF2C ~ ht_cluster) %>% 
-                       add_xy_position())
-
-figure <- ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14,
-                    ncol = 5, nrow = 3)
-annotate_figure(figure, top = text_grob("HIV1_CSF      k = 4 for k-means clustering (TFs from ATAC-seq)", 
-               color = "black", face = "bold", size = 25))
 ```
 
 
 ## Which clusters are significantly different for k = 5
-```{r, fig.width=15, fig.height=15}
+```{r, fig.width=25, fig.height=15}
 library(rstatix)
 library(ggpubr)
 
 test <- k5_df
 
-p1 <- ggplot(test, aes(x = ht_cluster, y = CTCF)) +
-  geom_boxplot() +
+test.list <- map(diff5_atac, function(tf) {
+  ggplot() +
+  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
+                   fill = test %>% pull("ht_cluster"))) +
   stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CTCF ~ ht_cluster) %>% 
-                       add_xy_position())
+    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
+      add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
 
-
-p2 <- ggplot(test, aes(x = ht_cluster, y = NFIL3)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(NFIL3 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p3 <- ggplot(test, aes(x = ht_cluster, y = MXI1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MXI1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p4 <- ggplot(test, aes(x = ht_cluster, y = CREB1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CREB1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p5 <- ggplot(test, aes(x = ht_cluster, y = NFATC2)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(NFATC2 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p6 <- ggplot(test, aes(x = ht_cluster, y = MEF2A)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MEF2A ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p7 <- ggplot(test, aes(x = ht_cluster, y = YY1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(YY1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p8 <- ggplot(test, aes(x = ht_cluster, y = ETS1)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(ETS1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p9 <- ggplot(test, aes(x = ht_cluster, y = CEBPB)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(CEBPB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p10 <- ggplot(test, aes(x = ht_cluster, y = ETV6)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(ETV6 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p11 <- ggplot(test, aes(x = ht_cluster, y = MEF2C)) +
-  geom_boxplot() +
-  stat_pvalue_manual(test %>% 
-                       pairwise_wilcox_test(MEF2C ~ ht_cluster) %>% 
-                       add_xy_position())
-
-figure <- ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, 
-                    ncol = 3, nrow = 4)
-annotate_figure(figure, top = text_grob("HIV1_CSF      k = 5 for k-means clustering (TFs from ATAC-seq)", 
-               color = "black", face = "bold", size = 25))
+do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
 ```
 
 ## Conclusion on how many k's to use for hierarchical clustering
@@ -1140,7 +912,7 @@ for (i in names(hiv_list)) {
 query <-merge(hiv_list[[1]], hiv_list[[3]])
 reference <- hiv_list[[2]]
 reference <- RunPCA(reference, 
-                    # by default a partial PCA is run, but we compute most singular values -> run standard SVD instead
+                    # by default a partial PCA is run, but we compute mostgular values -> run standard SVD instead
                     approx = FALSE, 
                     verbose = FALSE)
 
@@ -1256,7 +1028,7 @@ activities in the 3 clusters show similar patterns across the different patients
 When you perform hierarchical clustering of the cells in patient2 the clusters
 look better than the clusters we saw after cluster identity transfer.
 
-```{r}
+```{r, fig.width=15, fig.height=20}
 #map(seq.int(1:5), function(k){
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
                                   orig.ident == "HIV2_CSF")
@@ -1280,22 +1052,7 @@ ht_pat2 <- draw(ht2)
 
 ```
 
-## Which TFs show significantly different activity between the clusters across patients?
 
-Since the independent hierarchical clustering for all 3 patients yields 
-clusters which look more reasonable, we will compare the 3 clusters we obtain 
-across the 3 patients to see if there is a pattern between them. 
-
-We already saw that there are a few TFs which show significantly different
-activity between the clusters in each patient.
-
-Next, we want to see if the same group of TFs characterize the three 
-clusters in all three patients or if they are different. 
-
-### Kruskal-Wallis Test & Wilcox test
-
-We will test which TFs are significantly different between clusters and then
-use a Wilcox test to determine which clusters are different.
 
 #### Kruskal_Wallis Test Patient2 
 
@@ -1359,7 +1116,7 @@ hiv2_atac <- overlap_atac$name[adj_p_values < .05]
 ## K-means clustering with k = 3 for patient 3
 
 
-```{r}
+```{r, fig.width=15, fig.height=20}
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
                                   orig.ident == "HIV3_CSF")
 # select only the cells of the activity matrix which are myeloid2 and the correct patient
@@ -1439,7 +1196,23 @@ length(adj_p_values[adj_p_values<0.05])
 # get the TFs that are differentially expressed
 hiv3_atac <- overlap_atac$name[adj_p_values < .05]
 ```
-## K-means clustering with k = 3 for patient 1
+
+
+## Which TFs show significantly different activity between the clusters across patients?
+
+Since the independent hierarchical clustering for all 3 patients yields 
+clusters which look more reasonable, we will compare the 3 clusters we obtain 
+across the 3 patients to see if there is a pattern between them. 
+
+We already saw that there are a few TFs which show significantly different
+activity between the clusters in each patient.
+
+Next, we want to see if the same group of TFs characterize the three 
+clusters in all three patients or if they are different. 
+We will test which TFs are significantly different between clusters and then
+use a pairswise Wilcox test to determine which clusters are different.
+
+### K-means clustering with k = 3 for all three patients
 
 ```{r, fig.width=15, fig.height=17}
 # patient 1
@@ -1470,14 +1243,14 @@ draw(ht_list, ht_gap= unit(2, "cm"),
 
 
 
-## Are TFs differentiating the 3 clusters similar across all 3 patients?
+### Are TFs differentiating the 3 clusters similar across all 3 patients?
 
 We can see that 11 of the TFs found to have differential binding scores between
 infection conditions in primary microglia show different activity between the 
 3 clusters across all patients.
 
 ```{r}
-ggVennDiagram(list(hiv1_diff, diff_hiv2, diff_hiv3),
+p1 <- ggVennDiagram(list(hiv1_diff, diff_hiv2, diff_hiv3),
               label_alpha = 0,
               category.names= c("HIV1", "HIV2", "HIV3"),
               #set.size = 20,
@@ -1488,7 +1261,7 @@ ggVennDiagram(list(hiv1_diff, diff_hiv2, diff_hiv3),
 ```
 
 ```{r}
-ggVennDiagram(list(hiv1_atac, hiv2_atac, hiv3_atac),
+p2 <- ggVennDiagram(list(hiv1_atac, hiv2_atac, hiv3_atac),
               label_alpha = 0,
               category.names= c("HIV1", "HIV2", "HIV3"),
               #set.size = 20,
@@ -1498,7 +1271,17 @@ ggVennDiagram(list(hiv1_atac, hiv2_atac, hiv3_atac),
   labs(title = "TF (ATAC-seq) significantly different between 3 clusters")
 ```
 
+```{r}
+ggarrange(p1, p2, ncol = 2, nrow = 1)
+```
+
+
 ## 11 TFs show different activity in one of the 3 clusters 
+
+```{r}
+intersect <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/intersect_TFs_different_across_patients_3_clusters")[["x"]]
+```
+
 
 ##### Patient 1
 
@@ -1508,87 +1291,23 @@ library(ggpubr)
 
 df <- k3_df
 
-p1 <- ggplot(df, aes(x = ht_cluster, y = NFIL3)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(NFIL3 ~ ht_cluster) %>% 
-                       add_xy_position())
 
-p2 <- ggplot(df, aes(x = ht_cluster, y = MXI1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MXI1 ~ ht_cluster) %>% 
-                       add_xy_position())
+boxplot_list <- map(intersect, function(tf) {
+  ggplot() +
+    geom_boxplot(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf),
+                     fill = df %>% pull("ht_cluster"))) +
+    stat_pvalue_manual(df %>% 
+                        pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>% 
+                         add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
 
+do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 4, nrow = 3))
 
-p3 <- ggplot(df, aes(x = ht_cluster, y = MEF2A)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MEF2A ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p4 <- ggplot(df, aes(x = ht_cluster, y = YY1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(YY1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p5 <- ggplot(df, aes(x = ht_cluster, y = ETS1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(ETS1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p6 <- ggplot(df, aes(x = ht_cluster, y = CEBPB)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(CEBPB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p7 <- ggplot(df, aes(x = ht_cluster, y = ETV6)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(ETV6 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p8 <- ggplot(df, aes(x = ht_cluster, y = KLF4)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(KLF4 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p9 <- ggplot(df, aes(x = ht_cluster, y = MEF2C)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MEF2C ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p10 <- ggplot(df, aes(x = ht_cluster, y = JUNB)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(JUNB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p11 <- ggplot(df, aes(x = ht_cluster, y = REST)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(REST ~ ht_cluster) %>% 
-                       add_xy_position())
-
-figure <- ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, ncol = 4, nrow = 3)
-annotate_figure(figure, top = text_grob("Patient 1 - CSF     k = 3 for k-means clustering (TFs from ATAC-seq)", 
-               color = "black", face = "bold", size = 25))
+#annotate_figure(figure, top = text_grob("Patient 1 - CSF     k = 3 for k-means clustering (TFs from ATAC-seq)", 
+ #              color = "black", face = "bold", size = 25))
 ```
 
 ```{r}
@@ -1608,87 +1327,22 @@ library(ggpubr)
 
 df <- pat2
 
-p1 <- ggplot(df, aes(x = ht_cluster, y = NFIL3)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(NFIL3 ~ ht_cluster) %>% 
-                       add_xy_position())
+boxplot_list <- map(intersect, function(tf) {
+  ggplot() +
+    geom_boxplot(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf),
+                     fill = df %>% pull("ht_cluster"))) +
+    stat_pvalue_manual(df %>% 
+                        pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>% 
+                         add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
 
-p2 <- ggplot(df, aes(x = ht_cluster, y = MXI1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MXI1 ~ ht_cluster) %>% 
-                       add_xy_position())
+do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 4, nrow = 3))
 
-
-p3 <- ggplot(df, aes(x = ht_cluster, y = MEF2A)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MEF2A ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p4 <- ggplot(df, aes(x = ht_cluster, y = YY1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(YY1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p5 <- ggplot(df, aes(x = ht_cluster, y = ETS1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(ETS1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p6 <- ggplot(df, aes(x = ht_cluster, y = CEBPB)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(CEBPB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p7 <- ggplot(df, aes(x = ht_cluster, y = ETV6)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(ETV6 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p8 <- ggplot(df, aes(x = ht_cluster, y = KLF4)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(KLF4 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p9 <- ggplot(df, aes(x = ht_cluster, y = MEF2C)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MEF2C ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p10 <- ggplot(df, aes(x = ht_cluster, y = JUNB)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(JUNB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p11 <- ggplot(df, aes(x = ht_cluster, y = REST)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(REST ~ ht_cluster) %>% 
-                       add_xy_position())
-
-figure <- ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, ncol = 4, nrow = 3)
-annotate_figure(figure, top = text_grob("Patient 2 - CSF     k = 3 for k-means clustering (TFs from ATAC-seq)", 
-               color = "black", face = "bold", size = 25))
+#annotate_figure(figure, top = text_grob("Patient 2 - CSF     k = 3 for k-means clustering (TFs from ATAC-seq)", 
+ #              color = "black", face = "bold", size = 25))
 ```
 
 ```{r}
@@ -1707,87 +1361,24 @@ library(rstatix)
 library(ggpubr)
 
 df <- pat3
-p1 <- ggplot(df, aes(x = ht_cluster, y = NFIL3)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(NFIL3 ~ ht_cluster) %>% 
-                       add_xy_position())
 
-p2 <- ggplot(df, aes(x = ht_cluster, y = MXI1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MXI1 ~ ht_cluster) %>% 
-                       add_xy_position())
+boxplot_list <- map(intersect, function(tf) {
+  ggplot() +
+    geom_boxplot(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf),
+                     fill = df %>% pull("ht_cluster"))) +
+    stat_pvalue_manual(df %>% 
+                        pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>% 
+                         add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
 
-
-p3 <- ggplot(df, aes(x = ht_cluster, y = MEF2A)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MEF2A ~ ht_cluster) %>% 
-                       add_xy_position())
+do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 4, nrow = 3))
 
 
-
-p4 <- ggplot(df, aes(x = ht_cluster, y = YY1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(YY1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p5 <- ggplot(df, aes(x = ht_cluster, y = ETS1)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(ETS1 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p6 <- ggplot(df, aes(x = ht_cluster, y = CEBPB)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(CEBPB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p7 <- ggplot(df, aes(x = ht_cluster, y = ETV6)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(ETV6 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-
-p8 <- ggplot(df, aes(x = ht_cluster, y = KLF4)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(KLF4 ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p9 <- ggplot(df, aes(x = ht_cluster, y = MEF2C)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(MEF2C ~ ht_cluster) %>% 
-                       add_xy_position())
-
-
-p10 <- ggplot(df, aes(x = ht_cluster, y = JUNB)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(JUNB ~ ht_cluster) %>% 
-                       add_xy_position())
-
-p11 <- ggplot(df, aes(x = ht_cluster, y = REST)) +
-  geom_boxplot(aes(fill = ht_cluster)) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(REST ~ ht_cluster) %>% 
-                       add_xy_position())
-
-figure <- ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, ncol = 4, nrow = 3)
-annotate_figure(figure, top = text_grob("Patient 3 - CSF     k = 3 for k-means clustering (TFs from ATAC-seq)", 
-               color = "black", face = "bold", size = 25))
+#annotate_figure(figure, top = text_grob("Patient 3 - CSF     k = 3 for k-means clustering (TFs from ATAC-seq)", 
+ #              color = "black", face = "bold", size = 25))
 ```
 
 ### CTCF expression across patients
@@ -1840,21 +1431,59 @@ cluster_anno <- c(hiv1_c1, hiv1_c2, hiv1_c3, hiv2_c1, hiv2_c2, hiv2_c3, hiv3_c1,
 # add cluster information to TF activity
 auc_df <- as.data.frame(auc_mtx)
 
-auc_df <- auc_df %>% rownames_to_column("cell") %>% 
-  mutate(ht_cluster = ifelse(cell %in% hiv1_c1, "hiv1_c1", 
-         ifelse(cell %in% hiv1_c2, "hiv1_c2", 
-         ifelse(cell %in% hiv1_c3, "hiv1_c3",
-         ifelse(cell %in% hiv2_c1, "hiv2_c1",
-         ifelse(cell %in% hiv2_c2, "hiv2_c2",
-         ifelse(cell %in% hiv2_c3, "hiv2_c3",
-         ifelse(cell %in% hiv3_c1, "hiv3_c1",
-         ifelse(cell %in% hiv3_c2, "hiv3_c2", "hiv3_c3")))))))))
+auc_df <- auc_df %>% 
+  rownames_to_column("cell") %>% 
+  filter(cell %in% cluster_anno) %>% 
+  mutate(ht_cluster = case_when(cell %in% hiv1_c1 ~ "hiv1_c1", 
+         cell %in% hiv1_c2 ~ "hiv1_c2", 
+         cell %in% hiv1_c3 ~ "hiv1_c3",
+         cell %in% hiv2_c1 ~ "hiv2_c1",
+         cell %in% hiv2_c2 ~ "hiv2_c2",
+         cell %in% hiv2_c3 ~ "hiv2_c3",
+         cell %in% hiv3_c1 ~ "hiv3_c1",
+         cell %in% hiv3_c2 ~ "hiv3_c2",
+         cell %in% hiv3_c3 ~ "hiv3_c3"))
 ```
 
 ### Correlation between clusters based on all 125 TFs 
 
 For every cluster the correlation is calculated based on the TF activities of
 all 125 TFs  identified by SCENIC.
+
+Dataframe of average activity value for each TF in each patient and clusters.
+
+
+```{r, results = "asis"}
+# correlation matrix
+df <- auc_df %>%
+  group_by(ht_cluster) %>%
+  summarize_if(is.numeric, mean) %>% 
+  #column_to_rownames("ht_cluster") %>% 
+  #add_rownames() %>% 
+  gather(TF, value, -ht_cluster) %>% 
+  spread(ht_cluster, value) %>% 
+  column_to_rownames("TF")
+
+df %>% 
+  head %>% 
+  kable ()
+```
+
+Correlation matrix: 
+
+```{r, results = "asis"}
+df %>% cor %>% kable()
+
+cor_mtx <- df %>% cor()
+
+# calculate confidence intervals and p_values
+# function produces p-values and confidence intervals for each pair of input features
+# returns a matrix each
+# of p_values, upper confidence interval, lower confidence interval
+testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
+```
+
+
 
 **Conclusions:**
 
@@ -1864,23 +1493,6 @@ all 125 TFs  identified by SCENIC.
 correlation of cluster1 of patient two with all other clusters are not significant
 * Clusters 2 and 3 of patient 1 and 2 seem highly correlated
 
-```{r}
-# correlation matrix
-cor_mtx <- auc_df %>%
-  group_by(ht_cluster) %>%
-  summarize_if(is.numeric, mean) %>% 
-  column_to_rownames("ht_cluster") %>% 
-  add_rownames() %>% 
-  gather(TF, value, -rowname) %>% 
-  spread(rowname, value) %>% 
-  column_to_rownames("TF") %>% cor()
-
-# calculate confidence intervals and p_values
-# function produces p-values and confidence intervals for each pair of input features
-# returns a matrix each
-# of p_values, upper confidence interval, lower confidence interval
-testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
-```
 
 ```{r}
 # plot correlations
@@ -1891,7 +1503,7 @@ corrplot(cor_mtx,method = "color", order = "hclust",
          insig = "p-value")
 ```
 
-### Correlation between clusters based on 24 TFs with differential binding scores in different infection states in primary microglia
+### Correlation between clusters based on all TFs with differential activity between clusters
 
 ```{r}
 intersect_total <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_intersect_TFs_different_across_patients_3_clusters"))[["x"]]
@@ -1900,13 +1512,13 @@ intersect_total <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microg
 ```{r}
 # correlation matrix
 cor_mtx <- auc_df %>%
-  select(ht_cluster,intersect_total) %>% 
+  select(ht_cluster, intersect_total) %>% 
   group_by(ht_cluster) %>%
   summarize_if(is.numeric, mean) %>% 
-  column_to_rownames("ht_cluster") %>% 
-  add_rownames() %>% 
-  gather(TF, value, -rowname) %>% 
-  spread(rowname, value) %>% 
+  #column_to_rownames("ht_cluster") %>% 
+  #add_rownames() %>% 
+  gather(TF, value, -ht_cluster) %>% 
+  spread(ht_cluster, value) %>% 
   column_to_rownames("TF") %>% cor()
 
 # calculate confidence intervals and p_values
@@ -1925,53 +1537,52 @@ corrplot(cor_mtx,method = "color", order = "hclust",
          insig = "p-value")
 ```
 
-# Correlation between clusters for 11 differently active TFs
+
+# TF correlation across clusters
+
+11 TFs which differentiate the clusters seem to correlate between the clusters.
+
+For these 11 TFs whith different activity between the clusters the activity 
+correlates between across all 3 patients. This means, that the three TFs
+YY1, REST, MXI1 are positively correlated, but negatively correlated with the 
+rest of the TFs.
+
+The fact that these TF activities correlate across all patients indicates that 
+there might be a biological meaning behind it. 
+
+Dataframe used as input for the correlation:
 
 ```{r}
 intersect_atac <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_intersect_TFs_different_across_patients_3_clusters"))[["x"]]
 ```
 
+
 ```{r}
-# correlation matrix
 cor_mtx <- auc_df %>%
-  select(ht_cluster,intersect_atac) %>% 
-  group_by(ht_cluster) %>%
-  summarize_if(is.numeric, mean) %>% 
-  column_to_rownames("ht_cluster") %>% 
-  add_rownames() %>% 
-  gather(TF, value, -rowname) %>% 
-  spread(rowname, value) %>% 
-  column_to_rownames("TF") %>% cor()
-
-# calculate confidence intervals and p_values
-# function produces p-values and confidence intervals for each pair of input features
-# returns a matrix each
-# of p_values, upper confidence interval, lower confidence interval
-testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
-```
-
-```{r}
-corrplot(cor_mtx,method = "color", order = "hclust", 
-         addrect = 3, # add boxes 
-         p.mat = testCor$p, 
-         #sig.level = .05,
-         insig = "p-value")
-```
-
-
-# TF correlation across clusters
-
-11 TFs which differentiate the clusters seem to correlate between the clusters
-
-
-```{r}
-# correlation matrix
-cor_mtx <- auc_df %>%
-  select(ht_cluster,intersect_atac) %>% 
+  select(ht_cluster, intersect_atac) %>% 
   group_by(ht_cluster) %>%
   summarize_if(is.numeric, mean) %>% 
   column_to_rownames("ht_cluster") %>% cor()
+```
 
+
+```{r, results = "asis"}
+# correlation matrix
+df <- auc_df %>%
+  select(ht_cluster,intersect_atac) %>% 
+  group_by(ht_cluster) %>%
+  summarize_if(is.numeric, mean) %>% 
+  column_to_rownames("ht_cluster") 
+
+df %>% head %>% kable()
+
+```
+
+Correlation matrix for TFs:
+
+```{r, results = "asis"}
+cor_mtx <- df %>% cor()
+cor_mtx %>% kable
 
 # calculate confidence intervals and p_values
 # function produces p-values and confidence intervals for each pair of input features
@@ -1983,13 +1594,12 @@ testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 ```{r}
 # plot correlations
 # p.mat = matrix of p_values
-corrplot(cor_mtx,method = "color", order = "hclust", 
+p1 <- corrplot(cor_mtx,method = "color", order = "hclust", 
          addrect = 2, # add boxes 
          p.mat = testCor$p, 
-         sig.level = .05)
+         insig = "p-value")
          #insig = "p-value")
          #title = "Correlations between 9 clusters of 3 patients")
-
 
 ```
 
@@ -2005,6 +1615,7 @@ clusters.
 
 ```{r}
 # 3 Clusters for each of the 3 HIV+ patients
+wss
 
 
 # HIV1_CSF
@@ -2036,7 +1647,9 @@ hivmy2 <- subset(hiv7, cell_type == "Myeloid2" & orig.ident %in% c("HIV1_CSF", "
 ht_cluster <- (
   hivmy2@meta.data %>% 
   rownames_to_column("cell") %>% 
-  mutate(ht_cluster = ifelse(cell %in% c(hiv1_c1, hiv2_c1, hiv3_c3), "c1", "c2")) %>% 
+  mutate(ht_cluster = ifelse(cell %in% c(hiv1_c1, hiv2_c1, hiv3_c3),
+                             "c1", 
+                             "c2")) %>% 
   column_to_rownames("cell"))["ht_cluster"]
 
 hivmy2 <- AddMetaData(hivmy2, metadata = ht_cluster, col.name = "ht_cluster")
@@ -2149,7 +1762,7 @@ top10 %>%
 
 ### Glass Paper
 
-```{r, fig.width=15, fig.height=40}
+```{r}
 Idents(hiv4) <- "cell_type"
 # Find Markers that distinguish My2 from the other Myeloid clusters
 my2_markers <- FindMarkers(hiv4, ident.1  = "Myeloid2",
@@ -2157,7 +1770,7 @@ my2_markers <- FindMarkers(hiv4, ident.1  = "Myeloid2",
 my2_markers <- my2_markers %>% rownames_to_column(var = "gene")
 ```
 
-```{r}
+```{r, fig.width=15, fig.height=40}
 microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
 m1 <- my2_markers %>% filter(gene %in% microglia_genes [["gene_name"]] & avg_log2FC >0)
 # remove the genes that were already used by the Farhadian paper
