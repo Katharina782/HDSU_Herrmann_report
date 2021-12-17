@@ -11,6 +11,7 @@ bibliography: references.bib
 link-citations: yes
 ---
 
+<div style="text-align: justify"> 
 
 
 ```{r setup, include = FALSE}
@@ -586,3 +587,5 @@ FeaturePlot(hiv_new, features = "Cluster1") +
 
 
 # References
+
+</div>
