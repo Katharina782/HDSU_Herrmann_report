@@ -1,0 +1,2794 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="kmikulik" />
+
+
+<title>Triculture dataset</title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">report</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Introduction.html">Introduction</a>
+</li>
+<li>
+  <a href="HIV_CSF_dataset_analysis.html">CSF</a>
+</li>
+<li>
+  <a href="TF_activity_analysis_of_myeloid2_cluster.html">TF activity Myeloid2</a>
+</li>
+<li>
+  <a href="Independent_cell_type_identification_Farhadian_dataset.html">Myeloid2 are a microglia-like</a>
+</li>
+<li>
+  <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">Integration CSF &amp; triculture</a>
+</li>
+<li>
+  <a href="Triculture_dataset_GRN_with_Scenic.html">TF activity iMg</a>
+</li>
+<li>
+  <a href="Discussion.html">Discussion</a>
+</li>
+<li>
+  <a href="Methods.html">Methods</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/Katharina782/report">
+    <span class="fas fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Triculture dataset</h1>
+<h4 class="author">kmikulik</h4>
+<h4 class="date">9 11 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-12-17
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211203code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211203)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20211203code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20211203)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+</p>
+</div>
+<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div class="panel-body">
+The following chunks had caches available:
+<ul>
+<li>
+session-info-chunk-inserted-by-workflowr
+</li>
+<li>
+unnamed-chunk-1
+</li>
+<li>
+unnamed-chunk-10
+</li>
+<li>
+unnamed-chunk-11
+</li>
+<li>
+unnamed-chunk-12
+</li>
+<li>
+unnamed-chunk-13
+</li>
+<li>
+unnamed-chunk-14
+</li>
+<li>
+unnamed-chunk-15
+</li>
+<li>
+unnamed-chunk-16
+</li>
+<li>
+unnamed-chunk-17
+</li>
+<li>
+unnamed-chunk-18
+</li>
+<li>
+unnamed-chunk-19
+</li>
+<li>
+unnamed-chunk-2
+</li>
+<li>
+unnamed-chunk-20
+</li>
+<li>
+unnamed-chunk-21
+</li>
+<li>
+unnamed-chunk-22
+</li>
+<li>
+unnamed-chunk-23
+</li>
+<li>
+unnamed-chunk-24
+</li>
+<li>
+unnamed-chunk-25
+</li>
+<li>
+unnamed-chunk-26
+</li>
+<li>
+unnamed-chunk-27
+</li>
+<li>
+unnamed-chunk-28
+</li>
+<li>
+unnamed-chunk-29
+</li>
+<li>
+unnamed-chunk-3
+</li>
+<li>
+unnamed-chunk-30
+</li>
+<li>
+unnamed-chunk-31
+</li>
+<li>
+unnamed-chunk-32
+</li>
+<li>
+unnamed-chunk-33
+</li>
+<li>
+unnamed-chunk-34
+</li>
+<li>
+unnamed-chunk-35
+</li>
+<li>
+unnamed-chunk-36
+</li>
+<li>
+unnamed-chunk-37
+</li>
+<li>
+unnamed-chunk-38
+</li>
+<li>
+unnamed-chunk-39
+</li>
+<li>
+unnamed-chunk-4
+</li>
+<li>
+unnamed-chunk-40
+</li>
+<li>
+unnamed-chunk-41
+</li>
+<li>
+unnamed-chunk-42
+</li>
+<li>
+unnamed-chunk-43
+</li>
+<li>
+unnamed-chunk-44
+</li>
+<li>
+unnamed-chunk-47
+</li>
+<li>
+unnamed-chunk-5
+</li>
+<li>
+unnamed-chunk-6
+</li>
+<li>
+unnamed-chunk-7
+</li>
+<li>
+unnamed-chunk-8
+</li>
+<li>
+unnamed-chunk-9
+</li>
+</ul>
+<p>To ensure reproducibility of the results, delete the cache directory <code>Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreecfbba705d93776f304478e5a62d9bbd6d4aaf007targetblankcfbba70a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/cfbba705d93776f304478e5a62d9bbd6d4aaf007" target="_blank">cfbba70</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreecfbba705d93776f304478e5a62d9bbd6d4aaf007targetblankcfbba70a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/cfbba705d93776f304478e5a62d9bbd6d4aaf007" target="_blank">cfbba70</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/HIV_CSF_dataset_analysis_cache/
+    Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
+    Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
+    Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/references.bib
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd</code>) and HTML (<code>docs/Triculture_dataset_analysis_and_integration_Farhadian_dataset.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/cfbba705d93776f304478e5a62d9bbd6d4aaf007/analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd" target="_blank">cfbba70</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-17
+</td>
+<td>
+wflow_publish(files = rmd)
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/e87fa963caeed78821ac7f482359072ce58b8529/analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd" target="_blank">e87fa96</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-16
+</td>
+<td>
+new files
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd" target="_blank">dde1097</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-10
+</td>
+<td>
+recent updates
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<script>
+function myFunction() {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+</script>
+<div style="text-align: justify">
+
+
+<pre class="r"><code>knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
+                      cache = TRUE, cache.lazy = FALSE, autodep = TRUE)
+set.seed(42) # TODO: check with default seed</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(Seurat)
+library(edgeR)
+library(Matrix)
+library(data.table)
+library(ggrepel)
+#library(harmony)
+library(RColorBrewer)
+library(pheatmap)
+library(ggcorrplot)
+library(ComplexHeatmap)
+library(circlize)
+library(ggpubr)
+library(gridExtra)
+library(corrplot)
+library(rstatix)
+library(knitr)
+library(metap)
+library(multtest)
+library(readxl)</code></pre>
+<div id="triculture-dataset" class="section level1">
+<h1>Triculture Dataset</h1>
+<p>The triculture dataset comes from the following paper <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span>. rThey used a Triculture system with induced neurons, induced astrocytes and induced microglia. For the induced microglia they used CX3CR1, IBA1, TMEM119, P2RY12 as markers. Induced microglia also express CCR5 which is a co-receptor necessary for HIV infection. These cells lacked expression of myeloid-progenitor markers.</p>
+<p>iMg were infected with HIV for 15 days (resulting in 94% of cells infected, positive for HIV capsid protein P24 and exhibiting multinucleation). EFZ was used for ART. EFZ blocks HIV reverse transcription. This way it was possible to study non-productively infected cells. EFZ reduced infection by 2/3.</p>
+<p>There was decreased expression of pro-imflammatory genes IL1b, Il8 and TNFalpha in inf+EFZ vs inf. This suggests a reduced inflmmatory reaction.</p>
+<p>Inf + EFZ had an attenuated inflammatory response compared to Inf.</p>
+<p>There was a change in signaling pathways caused by EFZ treatment in Uninf + EFZ vs Uninf. The EFZ treatment alone was very different from the EFZ treatment with infection.</p>
+<p>????</p>
+<p><strong>Inf vs Inf + EFZ:</strong></p>
+<ul>
+<li>inflammatory pathways were significantly activated in Inf iMg compared with Uinf iMg: IL-8, NFkB, EIF2</li>
+<li>EIF2 is involved in the UPR and ISR (increased in iMg, iAst, iN)</li>
+<li>only in iMg ATF4 mRNA expression was increased (TF downstream of ISR activation)</li>
+<li>it has previously been shown that ISR is activated in neurons and astrocytes from human brain samples with HAND</li>
+</ul>
+<p><strong>Uninf vs Inf + EFZ:</strong></p>
+<p>We would expect to see a dampened immune response compared with Inf</p>
+<ul>
+<li>Inf + EFZ had a much milder inflammatory reaction
+<ul>
+<li>RhoGDI, CD40 signaling where the only upregulated pathways compared with Uninf iMg</li>
+</ul></li>
+<li>RhoGDI negaitvely regulates Rac -&gt; functions in inflammatory pathways</li>
+<li>CD40 activates NFkB signaling</li>
+<li>milder inflammatory response is in line with lower disease severity in HAND + ART</li>
+</ul>
+<p>Debaisieux et a., 2015 and Mazzolini et a., 2010 -&gt; HIV-infected macrophages and uninfected macrophages exposed to HIV display decreased phagocytic capabilities</p>
+<button onclick="myFunction()">
+<em>Click here for details on files and data structure</em>
+</button>
+<div id="myDIV">
+<p><strong>Read in Files:</strong></p>
+<ul>
+<li><p>ia/2 = infected with HIV + treated with ART</p></li>
+<li><p>ca = uninfected + ART</p></li>
+<li><p>ctl = uninfected</p></li>
+<li><p>inf = infected</p></li>
+<li><p>the “.mtx” files contains a sparse matrix of class dgTMatrix</p></li>
+<li><p>the “barcodes.tsv” files contain the cell barcodes</p></li>
+<li><p>the “features.tsv” files contain the feature names as well as ensemble gene ids and “gene expression” strings in a third column</p></li>
+</ul>
+<p>There are duplicated features in the data. How do you deal with this problem? (probably, because there are multiple ensemble gene IDs mapping to the same gene symbol -&gt; the same gene symbol has multiple expression values)</p>
+<ul>
+<li>You could make them unique with the function <code>make.unique()</code></li>
+<li>You could remove the duplicated features -&gt; this is what I did</li>
+</ul>
+<pre class="r"><code>path &lt;- &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/&quot; #&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/&quot;
+all_files &lt;- list.files(path)
+
+all_cond_list &lt;- map(seq.int(3,7), function(n){
+  file &lt;- all_files[grepl(paste0(&quot;GSM427258&quot;, n), all_files)]
+  name &lt;- str_extract(file[[1]],&quot;ca|ctl|ia2|ia|inf&quot;)
+  barcodes &lt;- read.table(paste0(path,file[[1]]), sep = &quot;\t&quot;) 
+  features &lt;- read.table(paste0(path, file[[2]]), sep = &quot;\t&quot;)
+  matrix &lt;- readMM(paste0(path, file[[3]]))
+  colnames(matrix) &lt;- barcodes$V1
+  rownames(matrix) &lt;- features$V2
+  matrix &lt;- matrix[!duplicated(rownames(matrix)),]
+  seurat_ob &lt;- CreateSeuratObject(matrix, project = name,
+                                  assay = &quot;RNA&quot;, min.cells = 1, min.features = 1)
+  list(name = name, count = matrix, seurat_ob = seurat_ob)
+})
+Warning: The following arguments are not used: row.names
+
+Warning: The following arguments are not used: row.names
+
+Warning: The following arguments are not used: row.names
+
+Warning: The following arguments are not used: row.names
+
+Warning: The following arguments are not used: row.names</code></pre>
+</div>
+<button onclick="myFunction()">
+<em>Click here for details on Quality Control</em>
+</button>
+<div id="myDIV">
+<div id="quality-control" class="section level2">
+<h2>Quality control</h2>
+<p>For each sample separately</p>
+<ul>
+<li>remove genes expressing less than 200 genes or more than 5000</li>
+<li>remove cells expressing &gt; 20% mitochondrial genes</li>
+</ul>
+<pre class="r"><code># add percentage of mitochondiral genes to metadata
+all_cond &lt;- map(seq.int(1,5), function(n){
+  seurat_ob &lt;- all_cond_list[[n]]$seurat_ob
+  seurat_ob[[&quot;percent_mt&quot;]] &lt;- PercentageFeatureSet(seurat_ob, pattern = &quot;^MT-&quot;)
+  plot &lt;- VlnPlot(seurat_ob, features = c(&quot;nFeature_RNA&quot;, &quot;percent_mt&quot;, &quot;nCount_RNA&quot;), ncol = 3)
+  seurat_ob &lt;- subset(seurat_ob, nFeature_RNA &gt; 200 &amp; nFeature_RNA &lt; 5000 &amp; percent_mt &lt; 20)
+  list(name = all_cond_list[[n]]$name, seurat_ob = seurat_ob, plot = plot)
+})</code></pre>
+<pre class="r"><code>ggarrange(all_cond[[1]]$plot, 
+             all_cond[[2]]$plot,
+             all_cond[[3]]$plot,
+             all_cond[[4]]$plot, 
+             all_cond[[5]]$plot, ncol = 2, nrow = 3)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-4-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<div id="merge-seurat-objects-after-quality-control" class="section level3">
+<h3>Merge Seurat objects after Quality Control</h3>
+<pre class="r"><code>triculture &lt;- merge(all_cond[[1]]$seurat_ob,
+                    c(all_cond[[2]]$seurat_ob,
+                      all_cond[[3]]$seurat_ob,
+                      all_cond[[4]]$seurat_ob,
+                      all_cond[[5]]$seurat_ob),
+                    project = &quot;triculture_all_conditions&quot;,
+                    add.cell.ids = c(paste0(all_cond[[1]]$name),
+                                     paste0(all_cond[[2]]$name),
+                                     paste0(all_cond[[3]]$name),
+                                     paste0(all_cond[[4]]$name),
+                                     paste0(all_cond[[5]]$name)))
+p1 &lt;- triculture@meta.data %&gt;% ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nFeature_RNA))
+
+p2 &lt;- triculture@meta.data %&gt;% ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = nCount_RNA))
+
+p3 &lt;- triculture@meta.data %&gt;% ggplot() +
+  geom_boxplot(aes(x = orig.ident, y = percent_mt))
+  
+p4 &lt;- triculture@meta.data %&gt;% ggplot() +
+  geom_violin(aes(x = orig.ident, y = nFeature_RNA))
+
+p5 &lt;- triculture@meta.data %&gt;% ggplot() +
+  geom_violin(aes(x = orig.ident, y = nCount_RNA))
+
+p6 &lt;- triculture@meta.data %&gt;% ggplot() +
+  geom_violin(aes(x = orig.ident, y = percent_mt))
+figure &lt;- ggarrange(p1, p2, p3, p4, p5, p6, ncol = 3, nrow = 2)
+annotate_figure(figure, top = text_grob(&quot;Qualtiy Control&quot;))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-5-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="normalization-scaling-find-variable-features" class="section level3">
+<h3>Normalization, Scaling, Find Variable Features</h3>
+<ul>
+<li>log normalization</li>
+<li>scale data so that we have mean = 0 and variance = 1</li>
+<li>Find the 2000 most highly variable features</li>
+</ul>
+<button onclick="myFunction()">
+<em>Click here for details on these 3 steps</em>
+</button>
+<div id="myDIV">
+<pre><code>triculture &lt;- NormalizeData(triculture, verbose = FALSE)
+triculture &lt;- ScaleData(triculture, verbose = FALSE)
+triculture &lt;- FindVariableFeatures(triculture, verbose = FALSE)</code></pre>
+</div>
+</div>
+<div id="dimensionality-reduction" class="section level2">
+<h2>Dimensionality reduction</h2>
+<ul>
+<li>compute PCA</li>
+<li>use elbow plot to determine dimensions that contribute to variability</li>
+<li>find the k-nearest neighbors</li>
+<li>find Clusters based on KNN-graph</li>
+<li>calculate TSNE embedding</li>
+</ul>
+<button onclick="myFunction()">
+<em>Click here for details on these steps</em>
+</button>
+<div id="myDIV">
+
+<pre><code>triculture &lt;- RunPCA(triculture, features = VariableFeatures(triculture), verbose = FALSE)
+ElbowPlot(triculture)
+
+triculture &lt;- FindNeighbors(triculture, verbose = FALSE)
+triculture &lt;- FindClusters(triculture, verbose = FALSE)
+
+triculture &lt;- RunTSNE(triculture, dims = 1:10, verbose = FALSE)</code></pre>
+<pre class="r"><code>triculture &lt;- readRDS(&quot;seurat_objects/triculture_seurat_object&quot;)
+
+
+DimPlot(triculture, reduction = &quot;tsne&quot;, pt.size = .01, label = TRUE,
+        group.by = &quot;seurat_clusters&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cell-type-annotation" class="section level2">
+<h2>Cell type annotation</h2>
+<p>For annotating the different clusters the same markers as in <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span> were used:</p>
+<ul>
+<li><em>Microglia:</em> AIF1, SPI1, CD4</li>
+<li><em>Astrocytes:</em> SOX9, THBS1</li>
+<li><em>Neurons:</em> SYN1, MAP2</li>
+</ul>
+<pre class="r"><code>#markers &lt;- FindAllMarkers(triculture)
+
+#triculture &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object&quot;)
+markers &lt;- read.table(&quot;data_files/marker_genes_triculture_dataset&quot;)
+
+top_2 &lt;- markers %&gt;% group_by(&quot;seurat_cluster&quot;) %&gt;% top_n(n = 2, wt = avg_log2FC)
+
+p1 &lt;- FeaturePlot(triculture, features = &quot;AIF1&quot;)
+p2 &lt;- FeaturePlot(triculture, features = &quot;SPI1&quot;)
+p3 &lt;- FeaturePlot(triculture, features = &quot;CD4&quot;)
+p4 &lt;- FeaturePlot(triculture, features = &quot;MAP2&quot;)
+p5 &lt;- FeaturePlot(triculture, features = &quot;SYN1&quot;)
+p6 &lt;- FeaturePlot(triculture, features = &quot;THBS1&quot;)
+p7 &lt;- FeaturePlot(triculture, features = &quot;SOX9&quot;)
+
+ggarrange(p1,p2,p3,p4,p5,p6,p7, ncol = 2, nrow =4 )</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<button onclick="myFunction()">
+<em>Click here for details on cell tpye annotation</em>
+</button>
+<div id="myDIV">
+<div id="gene-expression" class="section level3">
+<h3>Gene expression</h3>
+<p>Different clusters were annotated according to the gene expression of marker genes mentioned above.</p>
+<pre class="r"><code>
+VlnPlot(triculture, features = c(&quot;CD4&quot;, &quot;SPI1&quot;, &quot;AIF1&quot;), group.by = &quot;seurat_clusters&quot;)#, group.by = seurat_cluster)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-8-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>VlnPlot(triculture, features = c(&quot;MAP2&quot;, &quot;SYN1&quot;), group.by = &quot;seurat_clusters&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-8-2.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>VlnPlot(triculture, features = c(&quot;THBS1&quot;, &quot;SOX9&quot;), group.by = &quot;seurat_clusters&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-8-3.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># 4, 9, 11, 18 = Microglia
+# 0, 1, 2, 3,8, 10, 13, 15, 18, 19 = Neurons 
+# 6, 7, 12, 14, 16 = Astrocytes
+# 5, 17 are undesginated
+cell_types &lt;- (triculture@meta.data %&gt;% 
+  mutate(cell_type = ifelse(seurat_clusters %in% c(4,9,11), &quot;iMg&quot;, 
+                            ifelse(seurat_clusters %in% c(6,7,12,14,16), &quot;iAst&quot;, 
+                                   ifelse(seurat_clusters %in% 
+                                            c(0,1,2,3,8,10,13,15,18,19), 
+                                          &quot;iNeurons&quot;, &quot;Undesignated&quot;)))))[[&quot;cell_type&quot;]]
+  
+triculture &lt;- AddMetaData(triculture, cell_types, col.name = &quot;cell_type&quot;)</code></pre>
+</div>
+</div>
+<div id="remove-undesignated-cells" class="section level3">
+<h3>Remove undesignated cells</h3>
+<p>There is one group of cells where it is not clear which cell state they represent (Undesignated), we will exclude them from further analysis as <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span> did.</p>
+<pre class="r"><code>p1 &lt;- DimPlot(triculture, reduction = &quot;tsne&quot;, pt.size = .01, label = TRUE,
+        group.by = &quot;cell_type&quot;)</code></pre>
+<pre class="r"><code>triculture_clean &lt;- subset(triculture, cell_type %in% c(&quot;iMg&quot;, &quot;iNeurons&quot;, &quot;iAst&quot;)) </code></pre>
+<pre class="r"><code>p2 &lt;- DimPlot(triculture_clean, reduction = &quot;tsne&quot;, pt.size = .01, label = TRUE,
+        group.by = &quot;cell_type&quot;)</code></pre>
+<pre class="r"><code>p1+p2</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<button onclick="myFunction()">
+<em>Heatmap of top 20 marker genes for each cell type</em>
+</button>
+<div id="myDIV">
+<p>Top20 marker genes for each cell cell type:</p>
+<pre class="r"><code>Idents(triculture_clean) &lt;- &quot;cell_type&quot;
+top_n &lt;- markers %&gt;% group_by (cluster) %&gt;% top_n(n = 20, wt = avg_log2FC)
+DoHeatmap(triculture_clean, features = top_n$gene)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-14-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<button onclick="myFunction()">
+<em>Number of cells per condition and cell type</em>
+</button>
+<div id="myDIV">
+<p>How many cells of each cell type and condition are present in the dataset?</p>
+<pre class="r"><code>triculture_clean@meta.data %&gt;% group_by(cell_type, orig.ident) %&gt;% 
+  summarize(n = n()) %&gt;% 
+  pivot_wider(names_from = orig.ident, values_from = n) %&gt;% 
+  kable() # to make table look nice in Rmarkdown</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">cell_type</th>
+<th align="right">ca</th>
+<th align="right">ctl</th>
+<th align="right">ia</th>
+<th align="right">ia2</th>
+<th align="right">inf</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">iAst</td>
+<td align="right">1481</td>
+<td align="right">686</td>
+<td align="right">878</td>
+<td align="right">944</td>
+<td align="right">1269</td>
+</tr>
+<tr class="even">
+<td align="left">iMg</td>
+<td align="right">1163</td>
+<td align="right">722</td>
+<td align="right">632</td>
+<td align="right">750</td>
+<td align="right">1166</td>
+</tr>
+<tr class="odd">
+<td align="left">iNeurons</td>
+<td align="right">6733</td>
+<td align="right">4899</td>
+<td align="right">747</td>
+<td align="right">2250</td>
+<td align="right">3964</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="different-infection-and-treatment-conditions" class="section level2">
+<h2>Different infection and treatment conditions</h2>
+<p>Interestingly, the infected cells treated with EFZ (Inf+EFZ) clearly separate from the infected, but untreated cells (Inf) and the the uninfected cells (Uninf, Uninf+EFZ) in the microglia cluster as can be seen in the figure below.</p>
+<pre class="r"><code># rename origin of ident for easier interpretation
+origin_vector &lt;- (triculture_clean@meta.data %&gt;% mutate(orig.ident = ifelse(orig.ident %in%
+                                                 c(&quot;ia&quot;, &quot;ia2&quot;), &quot;Inf+EFZ&quot;, 
+                                                 ifelse(orig.ident == &quot;ca&quot;,
+                                                        &quot;Uninf&quot;, ifelse(
+                                               orig.ident == &quot;ctl&quot;, &quot;Uninf+EFZ&quot;,
+                                               &quot;Inf&quot;)))))[[&quot;orig.ident&quot;]]
+
+triculture_clean &lt;- AddMetaData(triculture_clean, origin_vector, col.name = &quot;orig.ident&quot;)</code></pre>
+<pre class="r"><code>DimPlot(triculture_clean, reduction = &quot;tsne&quot;, group.by = &quot;orig.ident&quot;, pt.size = .01, )</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="inflammatory-gene-expression-in-img" class="section level2">
+<h2>Inflammatory gene expression in iMg</h2>
+<p>The largest change in gene expression related to inflammation was found in iMg among the 3 cell types <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span>. Shown are only inflammatory genes.</p>
+<pre class="r"><code>inflamm_genes &lt;- c(&quot;TNF&quot;, &quot;ACSL1&quot;, &quot;MGST3&quot;, &quot;B2M&quot;, &quot;IFNGR2&quot;, &quot;GRINA&quot;, &quot;TLR2&quot;, 
+                   &quot;SOD2&quot;, &quot;GLUL&quot;, &quot;CFLAR&quot;, &quot;CTNNB1&quot;, &quot;CXCL8&quot;, &quot;CCL4&quot;, &quot;IL1B&quot;,
+                   &quot;ATF4&quot;, &quot;CXCL8&quot;, &quot;CCL4&quot;, &quot;CCL2&quot;, &quot;IL1B&quot;, &quot;ATF4&quot;, &quot;CXCL1&quot;, 
+                   &quot;NFKB1&quot;, &quot;TANK&quot;, &quot;APOE&quot;, &quot;TREM2&quot;, &quot;LY96&quot;, &quot;SRC&quot;, &quot;NCF1&quot;, 
+                   &quot;HCK&quot;, &quot;LYN&quot;, &quot;VASP&quot;, &quot;C3&quot;, &quot;C5&quot;, &quot;RAP1B&quot;, &quot;RAP2B&quot;, &quot;MAF&quot;,
+                   &quot;JUND&quot;, &quot;SQSTM1&quot;, &quot;FTH1&quot;, &quot;RHOQ&quot;, &quot;CD36&quot;, &quot;FOS&quot;, &quot;NFKBIA&quot;,
+                   &quot;ICAM1&quot;, &quot;TNFAIP3&quot;, &quot;LYZ&quot;, &quot;PPP1R12A&quot;, &quot;RND3&quot;, &quot;CYBA&quot;, &quot;IRF8&quot;,
+                   &quot;SLC25A6&quot;)
+
+DoHeatmap(triculture_clean, features = inflamm_genes)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<button onclick="myFunction()">
+<em>Differences of inflammatory gene expression between conditions</em>
+</button>
+<div id="myDIV">
+<p>The gene expression of inflammatory genes in microglia was not very different between the conditions. The Inf+EFZ cells show a slightly different pattern of gene expression.</p>
+<pre class="r"><code>DoHeatmap(subset(triculture_clean, cell_type == &quot;iMg&quot;), 
+          features = inflamm_genes, group.by = &quot;orig.ident&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="integration-of-triculture-dataset-with-dataset-of-blood-csf-samples-from-hiv-infected-patients" class="section level1">
+<h1>Integration of triculture dataset with dataset of blood &amp; CSF samples from HIV-infected patients</h1>
+<p>The HIV Blood &amp; CSF dataset <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> used before was integrated with the triculture dataset <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span>.</p>
+<p>Integration of two datasets is based on Seurat <span class="citation">(<a href="#ref-Stuart" role="doc-biblioref">Stuart T 2019</a>)</span>. It first identifies anchors between datasets, calculates scores for all anchors and then calculates an integrated expression matrix which can be used for downstream analysis.</p>
+<ol style="list-style-type: decimal">
+<li>Identify features which are variable across datasets</li>
+<li>Identify anchors between the two datasets and create an integrated data assay</li>
+<li>Run a single integrated analysis on all cells</li>
+</ol>
+<button onclick="myFunction()">
+<em>Details on integration</em>
+</button>
+<div id="myDIV">
+<p>For more details see: <span class="citation">(<a href="#ref-Stuart" role="doc-biblioref">Stuart T 2019</a>)</span></p>
+<ol style="list-style-type: decimal">
+<li>Identify features which are variable across datasets</li>
+<li>Identify anchors between the two datasets and create an integrated data assay</li>
+<li>Run a single integrated analysis on all cells</li>
+</ol>
+<pre><code>hiv7 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds&quot;)
+hiv7 &lt;- NormalizeData(hiv7, verbose = FALSE)
+hiv7 &lt;- FindVariableFeatures(hiv7, verbose = FALSE)
+
+# add both datasets to a lits
+data_list &lt;- list(hiv = hiv7, triculture = triculture_clean)
+
+# select features that are repeatedly variable across datasets for integration
+features &lt;- SelectIntegrationFeatures(object.list = data_list, verbose = FALSE)
+
+# identify integration anchors and perform integration
+anchors &lt;- FindIntegrationAnchors(object.list = data_list, 
+                                  anchor.features = features, verbose = FALSE) 
+combined &lt;- IntegrateData(anchorset = anchors, verbose = FALSE)
+
+# run analysis on integrated dataset
+combined &lt;- ScaleData(combined, verbose = FALSE)
+combined &lt;- RunPCA(combined, verbose = FALSE)
+#ElbowPlot(combined)
+combined &lt;- RunTSNE(combined, reduction = &quot;pca&quot;, dims = 1:10, verbose = FALSE)
+combined &lt;- FindNeighbors(combined, reduction = &quot;pca&quot;, dims = 1:10, verbose = FALSE)
+combined &lt;- FindClusters(combined, resolution = .3, verbose = FALSE)
+
+# add annotations from which dataset the sample came from
+dataset_vector &lt;- (combined@meta.data %&gt;% mutate(dataset = ifelse(orig.ident %in%
+                                                 c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;,
+                                                   &quot;HIV3_CSF&quot;, &quot;HIV1_Bld&quot;, 
+                                                   &quot;HIV2_Bld&quot;, &quot;Uninfected1_CSF&quot;,
+                                                   &quot;Uninfected2_CSF&quot;),
+                                               &quot;csf&quot;, &quot;triculture&quot;)))[[&quot;dataset&quot;]]
+
+combined &lt;- AddMetaData(combined, dataset_vector, col.name = &quot;dataset&quot;)
+
+# add information on the cell groups in the combined datasets
+combined_clusters &lt;- (combined@meta.data %&gt;% 
+  mutate(combined_clusters = ifelse(seurat_clusters %in% c(2,10), &quot;Microglia&quot;, 
+                            ifelse(seurat_clusters %in% c(3,9), &quot;iAst&quot;, 
+                                   ifelse(seurat_clusters %in% c(0,1,7,11),
+                                          &quot;iNeurons&quot;, 
+                                          ifelse(seurat_clusters %in% c(8,5,6), &quot;Immune Cells&quot;, &quot;Undesignated&quot;))))))[[&quot;combined_clusters&quot;]]
+  
+combined &lt;- AddMetaData(combined, combined_clusters, col.name = &quot;combined_clusters&quot;)
+
+#saveRDS(combined,&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_hiv_combined_seurat_object&quot;)
+</code></pre>
+</div>
+<div id="integrated-clusters" class="section level2">
+<h2>Integrated clusters</h2>
+<p>When integrating the CSF dataset and the Triculture dataset the iMg cells clustered together with the Myeloid cells from the CSF and Blood samples from the HIV-1 infected/uninfected patients. This was expected since they are both myeloid-lineage cells. However, this makes it more difficult to draw conclusions on which of the five Myeloid clusters is the most microglia-like. Therefore, we had a closer look at this myeloid-lineage cluster consisting of iMg from triculture and Myeloid cells from CSF and Blood samples.</p>
+<div id="visualization-of-the-integrated-dataset" class="section level4">
+<h4>Visualization of the integrated dataset</h4>
+<pre class="r"><code>combined = readRDS(&quot;seurat_objects/triculture_hiv_combined_seurat_object_2&quot;)
+
+p1 &lt;- DimPlot(combined, reduction = &quot;tsne&quot;, group.by  = &quot;dataset&quot;,
+              label = TRUE) + NoLegend()
+p2 &lt;- DimPlot(combined, reduction = &quot;tsne&quot;, group.by = &quot;cell_type&quot;,
+              label = TRUE, repel = TRUE) + NoLegend()
+p3 &lt;- DimPlot(combined, reduction = &quot;tsne&quot;, group.by = &quot;cell_type&quot;,
+              split.by = &quot;dataset&quot;, label = TRUE, repel = TRUE) + NoLegend()
+p4 &lt;- DimPlot(combined, reduction = &quot;tsne&quot;, group.by = &quot;seurat_clusters&quot;,
+              label = TRUE) + NoLegend()
+
+ggarrange(p1, p2, p3,p4, ncol = 2, nrow = 2)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-20-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
+a1 &lt;- DimPlot(combined, reduction = &quot;tsne&quot;, split.by = &quot;dataset&quot;, 
+        group.by = &quot;seurat_clusters&quot;, label = TRUE, repel =TRUE)
+
+a2 &lt;- DimPlot(combined, reduction = &quot;tsne&quot;, split.by = &quot;dataset&quot;, 
+              group.by = &quot;orig.ident&quot;)#, label = TRUE, repel =TRUE)
+ggarrange(a1, a2, ncol = 2, nrow = 1)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-21-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="myeloid-lineage-cluster" class="section level2">
+<h2>Myeloid lineage cluster</h2>
+<div id="visualization-of-myeloid-lineage-cluster-img-myeloid12345" class="section level4">
+<h4>Visualization of Myeloid lineage cluster (iMg, Myeloid1/2/3/4/5)</h4>
+<p>The plot below visualizes that iMg and CSF/Blood Myeloid cells cluster together, independent of their infection status.</p>
+<pre class="r"><code>subset_monocytes &lt;- subset(combined, cell_type %in% c(&quot;Myeloid1&quot;, 
+                                                            &quot;Myeloid2&quot;, 
+                                                            &quot;Myeloid3&quot;, 
+                                                            &quot;Myeloid4&quot;, 
+                                                            &quot;Myeloid5&quot;, 
+                                                            &quot;iMg&quot;))
+
+p1 &lt;- DimPlot(subset_monocytes, group.by = &quot;cell_type&quot;)
+p2 &lt;- DimPlot(subset_monocytes, group.by = &quot;orig.ident&quot;)
+p3 &lt;- DimPlot(subset_monocytes, group.by = &quot;seurat_clusters&quot;)
+fig &lt;- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
+annotate_figure(fig, top = text_grob(&quot;Myeloid-lineage cells&quot;))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-22-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>The plot below shows only CSF/Blood Myeloid cells and the Inf+EFZ iMg:</p>
+<ul>
+<li>The CSF/Blood Myeloid cells cluster together with Inf+EFZ iMG as expected and mainly contribute to the same subcluster.</li>
+<li>Blood Myeloid 4 is an exception and belongs to a different subcluster.</li>
+</ul>
+<pre class="r"><code>
+subset_infected &lt;- subset(combined, orig.ident %in% c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV3_CSF&quot;,
+                                             &quot;HIV1_Bld&quot;, &quot;HIV2_Bld&quot;,&quot;Inf+EFZ&quot;) &amp;
+                            cell_type %in% c(&quot;Myeloid1&quot;, 
+                                                            &quot;Myeloid2&quot;, 
+                                                            &quot;Myeloid3&quot;, 
+                                                            &quot;Myeloid4&quot;, 
+                                                            &quot;Myeloid5&quot;, 
+                                                            &quot;iMg&quot;))
+
+
+p1 &lt;- DimPlot(subset_infected, group.by = &quot;orig.ident&quot;)
+p2 &lt;- DimPlot(subset_infected, group.by = &quot;orig.ident&quot;)
+p3 &lt;- DimPlot(subset_infected, group.by = &quot;seurat_clusters&quot;)
+fig &lt;- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
+annotate_figure(fig, top = text_grob(&quot;Infected CSF/Blood Myeloid cells &amp; Inf+EFZ iMg&quot;))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-23-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cell-types-and-conditions-partially-separate-according-to-the-two-img-clusters" class="section level4">
+<h4>cell types and conditions partially separate according to the two iMg clusters</h4>
+<p>The myeloid-lineage cluster separated into two distinct subclusters. Interestingly, the infected + EFZ iMg separeted clearly from the infected iMg. The separation was not so clear for the uninfected cells, which contributed to both subclusters. Another observations is that the infected Myeloid1/2/3/5 cells belong<br />
+to the same subcluster as the infected + EFZ iMg. Conversely, the Myeloid4 cells cluster with the infected iMg. Since the infected CSF/Blood Myeloid cells originate from HIV infected and treated patients we would expect them to cluster togehter with the infected + EFZ iMg. However, there might also be infected CSF/Blood Myeloid cells which are not affected by the treatment. The Myeloid4 cells which are from Blood samples might consitute an infected cell population unaffected by the ART treatment.</p>
+<pre class="r"><code>
+DimPlot(subset_monocytes, group.by = &quot;seurat_clusters&quot;, 
+        split.by = &quot;orig.ident&quot;, ncol = 4)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-24-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>DimPlot(subset_monocytes, group.by = &quot;seurat_clusters&quot;, 
+        split.by = &quot;cell_type&quot;, ncol = 4)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-24-2.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="subcluster-the-myeloid-lineage-cluster-of-the-integrated-dataset" class="section level2">
+<h2>Subcluster the Myeloid-Lineage Cluster of the integrated dataset</h2>
+<p>Isolating the iMg and all Myeloid cell clusters from the integrated dataset and normalizing, scaling and re-clustering these isolated cells might give us additional insights.</p>
+<button onclick="myFunction()">
+<em>Details on de-novo clustering</em>
+</button>
+<div id="myDIV">
+<pre><code>
+microglia &lt;- subset(combined, cell_type %in% c(&quot;iMg&quot;,
+                                                &quot;Myeloid1&quot;,
+                                                &quot;Myeloid2&quot;,
+                                                &quot;Myeloid3&quot;,
+                                                &quot;Myeloid4&quot;,
+                                                &quot;Myeloid5&quot;))
+microglia_recluster &lt;- SCTransform(microglia, verbose = FALSE)
+microglia_recluster &lt;- ScaleData(microglia_recluster, verbose = FALSE)
+microglia_recluster &lt;- RunPCA(microglia_recluster, verbose = FALSE)
+ElbowPlot(microglia_recluster)
+microglia_recluster &lt;- RunTSNE(microglia_recluster, reduction = &quot;pca&quot;, dims = 1:10)
+microglia_recluster &lt;- FindNeighbors(microglia_recluster)
+microglia_recluster &lt;- FindClusters(microglia_recluster, resolution = 0.5)</code></pre>
+</div>
+<p>It is no surprise that cells from the triculture dataset separate from the CSF/Blood-derived cells. When we recluster the myeloid lineage derived cells, we obtain five subclusters for the iMg and three subclusters for the five<br />
+CSF/Blood Myeloid clusters as can be seen in the plots below.</p>
+<p>We can also observe that the Myeloid2 and Myeloid5 separate from Myeloid1/2/3 which is expected, since Myeloid2/5 originate from CSF samples and Myeloid1/3/4 originate from blood samples.</p>
+<pre class="r"><code>microglia_recluster &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/microglia_myeloid_seurat_object_reclustering&quot;)
+a1 &lt;- DimPlot(microglia_recluster, reduction = &quot;tsne&quot;,
+              group.by = &quot;seurat_clusters&quot;, pt.size = .4) +
+  labs(title = &quot;Clustering&quot;)
+a2 &lt;- DimPlot(microglia_recluster, reduction =&quot;tsne&quot;, 
+              group.by = &quot;cell_type&quot;, pt.size = .4) +
+  labs(title = &quot;Cell type&quot;)
+a3 &lt;- DimPlot(microglia_recluster, reduction =&quot;tsne&quot;,
+              group.by = &quot;dataset&quot;, pt.size = .4) +
+    labs(title = &quot;Dataset&quot;)
+a4 &lt;- DimPlot(microglia_recluster, reduction = &quot;tsne&quot;,
+              group.by = &quot;orig.ident&quot;, pt.size = .4) +
+  labs(title = &quot;Sample origin&quot;)
+
+ggarrange(a1, a2, a3, a4, ncol = 2, nrow = 2)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-25-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>Interestingly, both the Myeloid5 cells and the Myeloid2 cells are split between the cluster six (blue) and seven (purple). In the following we will have a closer look at this segregation.<br />
+When performing GRN inference with Scenic we also identified two potentially biologically relevant subclusters of the Myeloid2 cells. It could be that these independently found clusters correlate.</p>
+<pre class="r"><code>a5 &lt;- DimPlot(microglia_recluster, reduction =&quot;tsne&quot;, 
+              split.by = &quot;cell_type&quot;, pt.size = .4, ncol=3)
+a5</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-26-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>It looks like the two clusters identified this way correspond to different sample origins. CSF cells from patient1 (HIV1_CSF) and patient2 (HIV2_CSF) belong to cluster six,while CSF cells from patient3 (HIV3_CSF) and the two uninfected patients (Uninfected1_CSF, Uninfected2_CSF) belong to cluster seven. The separation of patient3 (HIV3_CSF) from patient1 (HIV1_CSF) and patient2 (HIV2_CSF) might correspond to a batch effect, or it might be a biological effect, because the infection affected the cells differently.</p>
+<pre class="r"><code>#a1 &lt;- DimPlot(subset(microglia_recluster, cell_type == &quot;iMg&quot;), reduction = &quot;tsne&quot;,
+           #   group.by = &quot;orig.ident&quot;, pt.size = .4)
+a2 &lt;- DimPlot(subset(microglia_recluster, cell_type != &quot;iMg&quot;), reduction = &quot;tsne&quot;,
+              group.by = &quot;orig.ident&quot;, pt.size = .4) +
+  labs(title = &quot;Sample origin&quot;)
+#a3 &lt;- DimPlot(subset(microglia_recluster, cell_type == &quot;iMg&quot;), reduction = &quot;tsne&quot;,
+              #group.by = &quot;seurat_clusters&quot;, pt.size = .4)
+a4 &lt;- DimPlot(subset(microglia_recluster, cell_type != &quot;iMg&quot;), reduction = &quot;tsne&quot;,
+              group.by = &quot;seurat_clusters&quot;, pt.size = .4) +
+  labs(title = &quot;Cluster&quot;)
+fig &lt;- ggarrange(a2, a4, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob(&quot;CSF/Blood Myeloid cells&quot;))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-27-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>Since the segregation into two clusters seems to be related to the sample origin rather than to the infection status, we would not expect the clusters to overlap with the clusters identified after GRN inference with SCENIC. In the figure below this is visualized for only the Myeloid2 cells from infected CSF samples (HIV1_CSF, HIV2_CSF, HIV3_CSF).</p>
+<pre class="r"><code># read in Myeloid2 cells
+hivmy2 &lt;- readRDS(&quot;data_files/hiv_myeloid2_subclusters&quot;)
+
+my2 &lt;- subset(microglia_recluster, cell_type == &quot;Myeloid2&quot; &amp; 
+                orig.ident %in% c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV3_CSF&quot;))
+
+my2 &lt;- AddMetaData(my2, hivmy2@meta.data[&quot;ht_cluster&quot;], 
+                   col.name = &quot;TF_activity_clusters&quot;)
+p1 &lt;- DimPlot(my2, group.by = &quot;seurat_clusters&quot;) +
+  labs(title=&quot;Clusters&quot;)
+p2 &lt;- DimPlot(my2, group.by = &quot;TF_activity_clusters&quot;) +
+  labs(&quot;TF activity&quot;)
+p3 &lt;- DimPlot(my2, group.by = &quot;orig.ident&quot;) +
+  labs(title = &quot;Sample origin&quot;)
+figure &lt;- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
+annotate_figure(figure, 
+                top = text_grob(&quot;Comparison with two clusters with different TF acitivty&quot;, 
+               color = &quot;black&quot;, face = &quot;bold&quot;, size = 20))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-28-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#my25 &lt;- subset(microglia, seurat_clusters %in% c(6,7) &amp;cell_type %in% c(&quot;Myeloid2&quot;, &quot;Myeloid5&quot;))</code></pre>
+<p>For this reason the reclustering did not lead to any useful insights and will not be analyzed further.</p>
+</div>
+</div>
+<div id="marker-genes-between-different-conditions" class="section level1">
+<h1>Marker genes between different conditions</h1>
+<p>In the following I will compare gene expression between infected cells and uninfected cells, both treated with EFZ. I will use the uninfected cells as a baseline to find genes which are upregulated or downregulated in infected cells compared to uninfected cells. Since we have both cells treated with EFZ and cells not treated with EFZ, we can define a signature for both treatment conditions separately and then see if there is an overlap between the gene signatures of infected cells (+/- EFZ)</p>
+<div id="features-upregulated-in-infefz-vs-uninfefz" class="section level4">
+<h4>Features upregulated in Inf+EFZ vs Uninf+EFZ</h4>
+<ul>
+<li><strong>APOE</strong>
+<ul>
+<li>expressed by miroglia and astrocytes</li>
+<li>major carrier protein mediating transport and delivery of cholesterol, lipids in the brain</li>
+<li>HIV1 Tat (viral protein) can bind to LRP1 (controls APOE uptake in the brain) (Khan N., J Neuroinflammation, 2018)</li>
+</ul></li>
+<li><strong>LPAR6</strong>
+<ul>
+<li>expressed in macrophages</li>
+</ul></li>
+<li><strong>RAB32</strong>
+<ul>
+<li>ER stress is a hallmark of neurodegenerative diseases</li>
+<li>Rab GTPases are essential for cytokine production in neuroinflammation (Liang Y., Neuroscience Letters, 2012)</li>
+<li>involved in formation of autophagosomes, upregulated in brain inflammation, (Prashar A., Front. Cell. Infect. Microbiol., 2017)</li>
+</ul></li>
+<li><strong>TXNIP</strong>
+<ul>
+<li>sequesters TRX (reduced thioredoxin), inhibiting its function -&gt; increased oxidative stress</li>
+<li>cellular stress factors regulate TXNIP expression</li>
+<li>expressed by microglia, neurons and astrocytes</li>
+<li>TXNIP expression promotes inflammatory activation (Tsubaki H., Int J Mol Sci., 2020)</li>
+<li>aggravates brain injury by activating NLRP3 inflammasomes (Liu Y., Lab Invest, 2021)</li>
+</ul></li>
+<li><strong>PDK4</strong>
+<ul>
+<li>metabolic checkpoint of M1 polarization of macrophages (Min B.k., Frontiers in Immunology, 2019)</li>
+</ul></li>
+<li><strong>NEAT1</strong> (expression is changed by HIV1 infection)
+<ul>
+<li>NEAT1 inhibits microglial polarization towards the pro-inflammatory M1 phenotype in ischemia (cell culture) (Ni X. Scientific Reports, 2020)</li>
+<li>in CD4 T Cells downregulation of NEAT1 leads to higher HIV replication</li>
+<li>critical for the substructural integrity of the nuclear paraspeckle, which is important for HIV replication</li>
+<li>potential biomarker of HIV infection (Shen Li, IJID, 2019)</li>
+<li>HIV seems to exploit the fact that activated CD4 T cells have decreased NEAT1 expression</li>
+<li>higher replication if NEAT1 is repressed (Liu H., Virology, 2018) This might make sense since we also want to reduce viral replication with EFZ, so in these cells NEAT1 might be upregulated reducing HIV1 replication</li>
+</ul></li>
+<li><strong>DAB2</strong>
+<ul>
+<li>DAB2 is a marker of microglia activation (Bell-Temin H., Mol Cell Proteomics, 2015)</li>
+<li>expressed in early microglia more than at later stages (Matcovitch-Natan O., Science, 2016)</li>
+</ul></li>
+<li><strong>APOC1</strong> After HVI1 enters the brain int can exist in CSF, perivascular macrophages, microglia and astrocytes. With ART you can supress HIV1 replication in plasma and CSF, but some HIV1 resrevoirs and neuroinflammation persist. This results in the 50% prevalence of HAND. Tat enhances HIV infectivity. (Khan N., J Neuroinflammation, 2018)</li>
+</ul>
+<pre class="r"><code># isolate iMg cells
+microglia &lt;- subset(combined, cell_type == &quot;iMg&quot;)
+# only iMg cells to identify potential signatures between infected vs uninfected
+Idents(microglia) =  &quot;orig.ident&quot;
+# find marker genes between Uninf+EFZ and Inf+EFZ
+inf_uninf_art_marker &lt;- FindMarkers(microglia, ident.1 = &quot;Inf+EFZ&quot;, 
+                                    ident.2 = &quot;Uninf+EFZ&quot;, verbose = FALSE)
+up_inf_art &lt;- inf_uninf_art_marker %&gt;% 
+  arrange(desc(avg_log2FC)) %&gt;%
+  head(20) %&gt;% 
+  rownames_to_column(&quot;gene&quot;)
+up_inf_art  %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">RAB32</td>
+<td align="right">0</td>
+<td align="right">1.2840817</td>
+<td align="right">0.656</td>
+<td align="right">0.291</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">NUPR1</td>
+<td align="right">0</td>
+<td align="right">1.0569999</td>
+<td align="right">0.680</td>
+<td align="right">0.460</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">HMOX1</td>
+<td align="right">0</td>
+<td align="right">0.9031207</td>
+<td align="right">0.597</td>
+<td align="right">0.309</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">PDK4</td>
+<td align="right">0</td>
+<td align="right">0.8673561</td>
+<td align="right">0.204</td>
+<td align="right">0.019</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">SLC38A2</td>
+<td align="right">0</td>
+<td align="right">0.8452040</td>
+<td align="right">0.288</td>
+<td align="right">0.079</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">LPAR6</td>
+<td align="right">0</td>
+<td align="right">0.8045929</td>
+<td align="right">0.579</td>
+<td align="right">0.289</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">ID3</td>
+<td align="right">0</td>
+<td align="right">0.7434776</td>
+<td align="right">0.258</td>
+<td align="right">0.102</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">CYP1B1</td>
+<td align="right">0</td>
+<td align="right">0.7204238</td>
+<td align="right">0.911</td>
+<td align="right">0.776</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">ID2</td>
+<td align="right">0</td>
+<td align="right">0.7083962</td>
+<td align="right">0.501</td>
+<td align="right">0.259</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">NEAT1</td>
+<td align="right">0</td>
+<td align="right">0.6849097</td>
+<td align="right">0.784</td>
+<td align="right">0.579</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">ZFP36L2</td>
+<td align="right">0</td>
+<td align="right">0.6665581</td>
+<td align="right">0.323</td>
+<td align="right">0.140</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">PTPRE</td>
+<td align="right">0</td>
+<td align="right">0.5783929</td>
+<td align="right">0.305</td>
+<td align="right">0.147</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">ATP1B1</td>
+<td align="right">0</td>
+<td align="right">0.5778028</td>
+<td align="right">0.554</td>
+<td align="right">0.418</td>
+<td align="right">1.9e-06</td>
+</tr>
+<tr class="even">
+<td align="left">FOS</td>
+<td align="right">0</td>
+<td align="right">0.5719556</td>
+<td align="right">0.293</td>
+<td align="right">0.139</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">VMP1</td>
+<td align="right">0</td>
+<td align="right">0.5710388</td>
+<td align="right">0.664</td>
+<td align="right">0.429</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">DAB2</td>
+<td align="right">0</td>
+<td align="right">0.5509657</td>
+<td align="right">0.585</td>
+<td align="right">0.356</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">TXNIP</td>
+<td align="right">0</td>
+<td align="right">0.5238871</td>
+<td align="right">0.466</td>
+<td align="right">0.283</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">EEF1D</td>
+<td align="right">0</td>
+<td align="right">0.5233945</td>
+<td align="right">0.631</td>
+<td align="right">0.424</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">SAT1</td>
+<td align="right">0</td>
+<td align="right">0.5223996</td>
+<td align="right">0.982</td>
+<td align="right">0.940</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">SOCS6</td>
+<td align="right">0</td>
+<td align="right">0.4893932</td>
+<td align="right">0.197</td>
+<td align="right">0.080</td>
+<td align="right">0.0e+00</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>CCL3</strong>, <strong>CCL4</strong> = cehmoattractants produced by macrophages, primary ligands for the HIV-1 virus coreceptor CCR5 (<a href="https://pubmed.ncbi.nlm.nih.gov/16773571/" class="uri">https://pubmed.ncbi.nlm.nih.gov/16773571/</a>)</li>
+<li><strong>Il1B</strong>
+<ul>
+<li>is produced by activated macrophages -&gt; mediator of the inflammatory response #### Features downregulated in Inf+EFZ vs. Uninf+EFZ:</li>
+<li>involved in neurodegeneration (<a href="https://pubmed.ncbi.nlm.nih.gov/12794045/" class="uri">https://pubmed.ncbi.nlm.nih.gov/12794045/</a>)</li>
+<li>HIV-1 infection induces interleukin-1beta production, so why is it more highly expressed in uninfected than in infected cells? (<a href="https://pubmed.ncbi.nlm.nih.gov/24939850/" class="uri">https://pubmed.ncbi.nlm.nih.gov/24939850/</a>) One explanation might be trained immunity of these monocytes which is associated with HIV. Pro-inflammatory pathways are upregulated in monocytes of HIV patients on ART. Il-b expression was hihger in HIV patients compared with controls. (van der Heijden W. A. et al., JCL Insight, 2021 –&gt; study on circulating immune cells)</li>
+</ul></li>
+<li><strong>IL6</strong> is also more highly expressed in monocytes from HIV patients (van der Heijden W. A. et al., JCL Insight, 2021 –&gt; study on circulating immune cells)</li>
+<li><strong>TNF</strong>, <strong>IL1b</strong> and <strong>IL6</strong> are monocyte-derived pro-inflammatory cytokines, expressed by <em>activated microglia</em>. IL13, and IL10 would be expressed by alternatively activated macrophages (M2) -&gt; anti-inflammatory. (van der Heijden W. A. et al., JCL Insight, 2021)</li>
+<li><strong>TNFAIP2</strong> is a primary response gene of TNFalpha (expression is regulated by NFkB) -&gt; mediator of inflammation (Jia L., Journal of Moleuclar Medicine, 2018)</li>
+<li><strong>CCL20</strong>:
+<ul>
+<li>CCL20 is constitutively expressed in lymphoid tissue and upregulated in inflammation -&gt; homeostatic and inflammatory role. CCR6/CCL20 axis may be involved in HIV pathogenesis and immunity. CCL20 was able to facilitate HIV-1 integration in T cells. It leads to propagation of the virus, because it recruits T cells and DC which then migrate and spread the virus. Anti-HIV activity of CCR6 by interfering with reverse transcription. -&gt; *CCR6 seems to be a double-edged sword in HIV infection which contributes to immunity and spread of HIV. <strong>Since CCL20 is found at epithelial and mucosal sites the chemokine may contribute to the innate defense against HIV entry.</strong> (Lee A. Y. S., Journal of General Virology, 2017)</li>
+<li>chemokine interacting with CCR6 receptors, anti_HIV activity in combination with human beta defensins (Aziz N. et al., J AIDS Clin Res, 2016)</li>
+</ul></li>
+<li><strong>NFkB</strong> is an inducible transcription factor and a mediator of inflammatory response in innate and adaptive immunity. It induces the expression of various pro-inflammatory genes including those encoding cytokines and chemokines. It participates in inflammasome regulation. <strong>NFKB1</strong> = <strong>p50</strong>. <em>Inappropriate activation of NFKB is associated with inflammatory diseases</em> (Liu T. et al., Signal Transduction and Targeted therapy, 2017)</li>
+</ul>
+<pre class="r"><code>down_inf_art &lt;- inf_uninf_art_marker %&gt;% 
+  arrange(avg_log2FC) %&gt;% 
+  head(20) %&gt;%
+  rownames_to_column(&quot;gene&quot;)
+down_inf_art %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MT1X</td>
+<td align="right">0</td>
+<td align="right">-3.413896</td>
+<td align="right">0.147</td>
+<td align="right">0.735</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">MT2A</td>
+<td align="right">0</td>
+<td align="right">-3.113559</td>
+<td align="right">0.167</td>
+<td align="right">0.695</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL4</td>
+<td align="right">0</td>
+<td align="right">-3.102918</td>
+<td align="right">0.321</td>
+<td align="right">0.910</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CCL4L2</td>
+<td align="right">0</td>
+<td align="right">-2.676517</td>
+<td align="right">0.235</td>
+<td align="right">0.816</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL3L1</td>
+<td align="right">0</td>
+<td align="right">-2.579091</td>
+<td align="right">0.290</td>
+<td align="right">0.807</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CCL3</td>
+<td align="right">0</td>
+<td align="right">-2.560332</td>
+<td align="right">0.611</td>
+<td align="right">0.982</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">IL1B</td>
+<td align="right">0</td>
+<td align="right">-2.405276</td>
+<td align="right">0.090</td>
+<td align="right">0.530</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CXCL1</td>
+<td align="right">0</td>
+<td align="right">-2.335406</td>
+<td align="right">0.244</td>
+<td align="right">0.734</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">MT1G</td>
+<td align="right">0</td>
+<td align="right">-1.926247</td>
+<td align="right">0.025</td>
+<td align="right">0.177</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">MT1E</td>
+<td align="right">0</td>
+<td align="right">-1.822557</td>
+<td align="right">0.016</td>
+<td align="right">0.234</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">RND3</td>
+<td align="right">0</td>
+<td align="right">-1.663546</td>
+<td align="right">0.045</td>
+<td align="right">0.386</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CXCL3</td>
+<td align="right">0</td>
+<td align="right">-1.642259</td>
+<td align="right">0.119</td>
+<td align="right">0.416</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">H1F0</td>
+<td align="right">0</td>
+<td align="right">-1.520974</td>
+<td align="right">0.209</td>
+<td align="right">0.555</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CCL20</td>
+<td align="right">0</td>
+<td align="right">-1.499514</td>
+<td align="right">0.017</td>
+<td align="right">0.197</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">ICAM1</td>
+<td align="right">0</td>
+<td align="right">-1.364986</td>
+<td align="right">0.169</td>
+<td align="right">0.496</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">TNFAIP3</td>
+<td align="right">0</td>
+<td align="right">-1.323281</td>
+<td align="right">0.158</td>
+<td align="right">0.465</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">NFKBIZ</td>
+<td align="right">0</td>
+<td align="right">-1.314996</td>
+<td align="right">0.079</td>
+<td align="right">0.348</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CXCL2</td>
+<td align="right">0</td>
+<td align="right">-1.311186</td>
+<td align="right">0.169</td>
+<td align="right">0.438</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">IER3</td>
+<td align="right">0</td>
+<td align="right">-1.305024</td>
+<td align="right">0.249</td>
+<td align="right">0.539</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CCL8</td>
+<td align="right">0</td>
+<td align="right">-1.205254</td>
+<td align="right">0.379</td>
+<td align="right">0.557</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<div id="differential-gene-expression-between-inf-and-uninf-no-treatment" class="section level5">
+<h5>Differential gene expression between Inf and Uninf (no treatment)</h5>
+<pre class="r"><code>inf_uninf_marker &lt;- FindMarkers(microglia, ident.1 = &quot;Inf&quot;, 
+                                ident.2 = &quot;Uninf&quot;, verbose = FALSE)
+
+# upregulated in Inf vs Uninf, no treatment
+up_inf_no &lt;- inf_uninf_marker %&gt;% 
+  arrange(desc(avg_log2FC)) %&gt;%
+  head(20) %&gt;% 
+  rownames_to_column(&quot;gene&quot;)
+#up_inf_no  %&gt;% kable()
+
+
+down_inf_no&lt;- inf_uninf_marker %&gt;% 
+  arrange(avg_log2FC) %&gt;% 
+  head(20) %&gt;%
+  rownames_to_column(&quot;gene&quot;)
+#down_inf_no%&gt;% kable()</code></pre>
+<p>Only 3% of genes which are upregulated and only 14% of genes which are downregulated in infected vs. uninfected cells overlap between the treatment conditions. This means, that the genes defining the infection might differ between cells with and without treatment. This reflects the findings of <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span> that the EFZ treatment lead to a distinct immune response of iMg and distinct activation of two inflammatory pathways, RhoGDI and CD40 pathways as will be describe later on.</p>
+<pre class="r"><code>up_inf &lt;- intersect(up_inf_art$gene, up_inf_no$gene)
+down_inf &lt;- intersect(down_inf_art$gene, down_inf_no$gene)
+print(c(up_inf, down_inf))
+[1] &quot;HMOX1&quot;  &quot;MT1X&quot;   &quot;MT2A&quot;   &quot;CCL4L2&quot; &quot;RND3&quot;   &quot;H1F0&quot;  </code></pre>
+<pre class="r"><code>p1 &lt;- ggVennDiagram::ggVennDiagram(list(up_inf_art$gene, up_inf_no$gene),
+              label_alpha = 0,
+              category.names= c(&quot;Inf+EFZ&quot;, &quot;Inf&quot;),
+              #set.size = 20,
+              label = &quot;percent&quot;,
+              label_size = 6) +
+   scale_fill_distiller(palette = &quot;RdBu&quot;) +
+  labs(title = &quot;Genes upregulated in infected cells&quot;)
+
+p2 &lt;- ggVennDiagram::ggVennDiagram(list(down_inf_art$gene, down_inf_no$gene),
+              label_alpha = 0,
+              category.names= c(&quot;Inf+EFZ&quot;, &quot;Uninf+EFZ&quot;),
+              #set.size = 20,
+              label = &quot;percent&quot;,
+              label_size = 6,
+              set_color = c(&quot;red&quot;, &quot;blue&quot;)) +
+  scale_fill_distiller(palette = &quot;RdBu&quot;) +
+  labs(title = &quot;Genes downregulated in infected cells&quot;)
+
+ggarrange(p1, p2, ncol = 2)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-33-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<div id="volcano-plot-of-infection-efz-signature" class="section level5">
+<h5>Volcano Plot of Infection (+ EFZ) signature</h5>
+<p>Interestingly, the genes downregulatd in Inf+EFZ vs. Uninfected cells show a higher average log fold change with higher significance (p-values).</p>
+<pre class="r"><code>inf_uninf_art_marker %&gt;% 
+  rownames_to_column(&quot;gene&quot;) %&gt;%
+  filter(gene %in% c(up_inf_art$gene, down_inf_art$gene)) %&gt;% 
+  # add a column containing information in which condition the corresponding TF 
+  # is upregulated
+  mutate(condition = case_when(gene %in% up_inf_art$gene ~ &quot;upregulated&quot;,
+                               gene %in% down_inf_art$gene ~ &quot;downregulated&quot;,
+                               TRUE ~ &quot;NA&quot;)) %&gt;%
+  # add a column conaining the labels for the plot
+  # I only want to label cells which are also found by Scenic
+  mutate(label = ifelse(gene %in% c(up_inf_art$gene, down_inf_art$gene), gene, NA)) %&gt;% 
+  ggplot(aes(x = avg_log2FC,
+             y = -log10(p_val_adj),
+             col = condition, 
+             label = label)) +
+  geom_point() +
+  geom_hline(yintercept = -log10(1e-10), col = &quot;red&quot;) +
+  geom_text(nudge_x = .05, nudge_y = 2) +
+  labs(title = &quot;Genes which are up- or downregulated in Inf+EFZ vs Uninf+EFZ&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-34-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="features-differentially-expressed-between-treatment-conditions" class="section level4">
+<h4>Features differentially expressed between treatment conditions</h4>
+<p>Comparing Uninf+EFZ with Uninf and Inf+EFZ with Inf iMg one might be able to identify genes which are different after treatment of cells with EFZ. Finding overlapping genes between the two infection states increases the confidence of the results, because the identified genes are associated with treatment independently of infection status.</p>
+<p>The diagram below shows, that 36% of genes are upregulated both in Inf and Inf+EFZ iMg compared to Uninf and Uninf+EFZ iMg. These genes are probably associated with the EFZ treatment. It is expected that the drug would affect the iMg and change their gene expression. This signature might be used to identify Myeloid2 CSF cells which are affected by the treatment. Since ART drugs are found at lower concentrations in CSF than in blood, one would expect that only a subgroup of Myeloid2 are affected by the ART drugs. However, this comparison might be far fetched, since the patients from which the CSF samples have been derived have not been treated with EFZ, but with a combination of other ART drugs which probably have a slightly different effect on cells.</p>
+<pre class="r"><code>treatment_marker_uninf &lt;- FindMarkers(microglia, ident.1 = &quot;Uninf+EFZ&quot;, 
+                                ident.2 = &quot;Uninf&quot;)
+
+# find marker genes between Inf+EFZ and Inf
+treatment_marker_inf &lt;- FindMarkers(microglia, ident.1 = &quot;Inf+EFZ&quot;, ident.2 = &quot;Inf&quot;)
+
+# overlap between upregulated genes
+treatment_up &lt;- intersect((treatment_marker_inf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &gt; 0))$gene, 
+           (treatment_marker_uninf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &gt; 0))$gene)
+
+treatment_down &lt;- intersect((treatment_marker_inf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &lt; 0))$gene, 
+           (treatment_marker_uninf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &lt; 0))$gene)
+treatment_marker &lt;- c(treatment_up, treatment_down)</code></pre>
+<pre class="r"><code>p1 &lt;- ggVennDiagram::ggVennDiagram(list((treatment_marker_inf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &gt; 0))$gene, 
+             (treatment_marker_uninf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &gt; 0))$gene),
+              label_alpha = 0,
+              category.names= c(&quot;Inf+EFZ&quot;, &quot;Uninf+EFZ&quot;),
+              #set.size = 20,
+              label = &quot;percent&quot;,
+              label_size = 6) +
+   scale_fill_distiller(palette = &quot;RdBu&quot;) +
+  labs(title = &quot;Genes upregulated in cells treated with EFZ&quot;)
+
+p2 &lt;- ggVennDiagram::ggVennDiagram(list((treatment_marker_inf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &lt; 0))$gene, 
+             (treatment_marker_uninf %&gt;% 
+             rownames_to_column(&quot;gene&quot;) %&gt;% 
+             filter(avg_log2FC &lt; 0))$gene),
+              label_alpha = 0,
+              category.names= c(&quot;Inf+EFZ&quot;, &quot;Uninf+EFZ&quot;),
+              #set.size = 20,
+              label = &quot;percent&quot;,
+              label_size = 6,
+              set_color = c(&quot;red&quot;, &quot;blue&quot;)) +
+  scale_fill_distiller(palette = &quot;RdBu&quot;) +
+  labs(title = &quot;Genes downregulated in cells treated with EFZ&quot;)
+
+ggarrange(p1, p2, ncol = 2)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-36-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<div id="volcano-plot-of-treatment-signature" class="section level5">
+<h5>Volcano Plot of Treatment signature</h5>
+<pre class="r"><code>treatment_marker_uninf %&gt;% 
+  rownames_to_column(&quot;gene&quot;) %&gt;%
+  filter(gene %in% treatment_marker) %&gt;% 
+  # add a column containing information in which condition the corresponding TF 
+  # is upregulated
+  mutate(condition = case_when(gene %in% treatment_up ~ &quot;upregulated&quot;,
+                               gene %in% treatment_down ~ &quot;downregulated&quot;,
+                               TRUE ~ &quot;NA&quot;)) %&gt;%
+  # add a column conaining the labels for the plot
+  # I only want to label cells which are also found by Scenic
+  #mutate(label = ifelse(gene %in% c(up_inf$gene, down_inf$gene), gene, NA)) %&gt;% 
+  ggplot(aes(x = avg_log2FC,
+             y = -log10(p_val_adj),
+             col = condition, 
+             label = gene)) +
+  geom_point() +
+  geom_hline(yintercept = -log10(1e-10), col = &quot;red&quot;) +
+  geom_text(nudge_x = .05, nudge_y = 2) +
+  labs(title = &quot;Top 20 Genes which are up/downregulated in treatment vs. no treatment, Uninf cells&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-37-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="infected-vs-uninfected-gene-signatures" class="section level1">
+<h1>Infected vs Uninfected gene signatures</h1>
+<div id="investigate-gene-signatures-in-myeloid-cells-from-csf" class="section level3">
+<h3>Investigate gene signatures in Myeloid cells from CSF</h3>
+<p>Checking the differentially expressed genes and trying to identify a signature through literature search turned out to be very difficult. Therefore, a different approach was used. The top twenty up- and downregulated genes in Inf+EFZ vs Uninf+EFZ were computed. Using these genes as an “infection signature” we will check if some of the Myeloid2 cells from the CSF samples show a similar signature.</p>
+<pre class="r"><code># select only genes which are also found in the sc-RNAseq dataset
+up_inf_filt &lt;- up_inf_art$gene[up_inf_art$gene %in% rownames(hivmy2@assays$RNA@counts)]
+down_inf_filt &lt;- down_inf_art$gene[down_inf_art$gene %in% rownames(hivmy2@assays$RNA@counts)]</code></pre>
+</div>
+</div>
+<div id="gene-signature-scoring" class="section level1">
+<h1>Gene signature scoring</h1>
+<p>Using the signature genes from differential gene expression analysis between Inf+EFZ and Uninf+EFZ we can compute a score of activity of these gene sets in the Myeloid2 cluster of CSF samples. We can plot these scores in a TSNE representation, but we can also get the scores from the metadata and use them elsewhere.</p>
+<p>Below, for simplicity, one plot is shown for upregulated genes.</p>
+<p>How can I represent downregulated genes? and one plot for downregulated genes.</p>
+<p>If the Inf+EFZ signature can be found in the Myeloid2 cells from the CSF samples this migth provide additional insights into the infection status of these microglia-like cells.</p>
+<p>```#{r, fig.width=15} up_sign &lt;- AddModuleScore(hivmy2, features = up_inf_filt)</p>
+<p>p1 &lt;- FeaturePlot(up_sign, features = “Cluster1,” pt.size = .7) +#, split.by = “ht_cluster”) + scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = “RdBu”))) + labs(title = “Signature score of genes upregulated in Inf+EFZ iMg applied to CSF Myeloid2 cells”)</p>
+<p>down_sign &lt;- AddModuleScore(hivmy2, features = down_inf_filt)</p>
+<p>p2 &lt;- FeaturePlot(down_sign, features = “Cluster1,” pt.size = .7) + scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = “RdBu”))) + labs(title = “Signature score of genes downregulated in Inf+EFZ iMg applied to CSF Myeloid2 cells”)</p>
+<p>ggarrange(p1, p2, ncol = 2)</p>
+<pre><code>
+#### Scores of Inf+EFZ signature in Myeloid2 cells
+
+There are some cells which have a high score for signature composed of genes 
+upregulated in Inf+EFZ microglia, but they do not
+correspond to the two clusters (c1, c2) obtained from analysis of 
+TF activity (SCENIC).
+
+Interestingly, there are hardly any cells which show a high score for the
+Uninf+EFZ gene signature. For this reason it might be interesting to see if 
+some cells show a high score for a Uninf (without EFZ treatment) score. ?????
+
+
+
+```r
+up_sign &lt;- AddModuleScore(hivmy2,
+                           features = up_inf_filt)
+
+p1 &lt;- FeaturePlot(subset(up_sign, ht_cluster == &quot;c1&quot;),
+                  features = &quot;Cluster1&quot;, pt.size = 1) +#, split.by = &quot;ht_cluster&quot;) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c1&quot;)
+
+p2 &lt;- FeaturePlot(subset(up_sign, ht_cluster == &quot;c2&quot;),
+                  features = &quot;Cluster1&quot;, pt.size = 1) +#, split.by = &quot;ht_cluster&quot;) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c2&quot;)
+
+figure &lt;- ggarrange(p1, p2, ncol = 2)#, nrow = 2) 
+annotate_figure(figure, top = text_grob(&quot;Signature score of genes upregulated in Inf+EFZ iMg applied to CSF Myeloid2 cells&quot;, 
+               color = &quot;black&quot;, face = &quot;bold&quot;, size = 20))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-39-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<div id="percentage-of-cells-with-positive-infefz-gene-signature-score" class="section level4">
+<h4>Percentage of cells with positive Inf+EFZ gene signature score</h4>
+<p>11% of the Myeloid2 cells have a positive score for the Inf+EFZ gene signature (17 out of 145 cells).</p>
+<p>On the other hand, only 4% of the Myeloid2 cells have a positive score for the Uninf+EFZ gene signature. ???</p>
+<button onclick="myFunction()">
+<em>Exact scores for each cell</em>
+</button>
+<div id="myDIV">
+<pre class="r"><code># divide the number of rows(cells) with positive ccores by the number of total 
+# rows(cells) to get the percentage of cells with positive scores.
+percentage_inf &lt;- dim((up_sign@meta.data[&quot;Cluster1&quot;] %&gt;% 
+                         filter(Cluster1 &gt; 0)))[1] / 
+  dim(up_sign@meta.data[&quot;Cluster1&quot;])[1]
+
+# show the positive scores.
+up_sign@meta.data[&quot;Cluster1&quot;] %&gt;% 
+  filter(Cluster1 &gt; 0) %&gt;% 
+  rename(&quot;Score&quot; = &quot;Cluster1&quot;) %&gt;% 
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">3C_GTAGTTGACTCA</td>
+<td align="right">1.4410307</td>
+</tr>
+<tr class="even">
+<td align="left">3C_ATCTATTATGTG</td>
+<td align="right">1.4998133</td>
+</tr>
+<tr class="odd">
+<td align="left">3C_GGGTTCACCTGC</td>
+<td align="right">1.8181493</td>
+</tr>
+<tr class="even">
+<td align="left">3C_TGCTGAACGTCC</td>
+<td align="right">1.4618718</td>
+</tr>
+<tr class="odd">
+<td align="left">1C_TGGATCTAATTA</td>
+<td align="right">0.8425356</td>
+</tr>
+<tr class="even">
+<td align="left">1C_CCACAGTCCTCC</td>
+<td align="right">1.0406455</td>
+</tr>
+<tr class="odd">
+<td align="left">1C_TTATACTCAGAT</td>
+<td align="right">0.8008646</td>
+</tr>
+<tr class="even">
+<td align="left">1C_CCGCCACGGAAC</td>
+<td align="right">0.8290332</td>
+</tr>
+<tr class="odd">
+<td align="left">1C_GTGCTGGACGTT</td>
+<td align="right">0.9487856</td>
+</tr>
+<tr class="even">
+<td align="left">1C_GTTTCCGTCGCT</td>
+<td align="right">0.8474260</td>
+</tr>
+<tr class="odd">
+<td align="left">1C_TGCTTATCAGCT</td>
+<td align="right">1.0056428</td>
+</tr>
+<tr class="even">
+<td align="left">1C_ACTGGCCTCCTC</td>
+<td align="right">1.8245069</td>
+</tr>
+<tr class="odd">
+<td align="left">1C_TTGTAATTGAAT</td>
+<td align="right">1.3877296</td>
+</tr>
+<tr class="even">
+<td align="left">1C_GCACGACGGCGC</td>
+<td align="right">1.8305736</td>
+</tr>
+<tr class="odd">
+<td align="left">1C_CGTCCGTGTGGT</td>
+<td align="right">1.6682062</td>
+</tr>
+<tr class="even">
+<td align="left">2C_TAGCAGAGTAGT</td>
+<td align="right">1.0958695</td>
+</tr>
+<tr class="odd">
+<td align="left">2C_CTTTTCCCAGCT</td>
+<td align="right">1.6833139</td>
+</tr>
+</tbody>
+</table>
+<div id="bimodal-distribution" class="section level4">
+<h4>Bimodal Distribution</h4>
+<p>If we assume that this gene signature is upregulated in some cells we would expect to see a bimodal distribution of gene expression. To visualize this I first log-normalized the count matrix and then computed the sum over all counts for the gene signature.</p>
+<p><strong>Genes upregulated in Inf+EFZ compared to Uninf+EFZ:</strong></p>
+<p>In the histogram below there is no evident bimodal distribution. One cannot draw a conclusion from this.</p>
+<pre class="r"><code>#normalize counts of upregulated genes
+counts_up &lt;- (hivmy2@assays$RNA@data)
+counts_up &lt;- t(t(counts_up)) / colSums(counts_up)
+counts_up &lt;- log1p(counts_up)
+counts_up &lt;- counts_up[up_inf_filt, ]
+
+# compute average expression of the 20 signature genes
+as.data.frame(rowSums(t(counts_up))) %&gt;% 
+  rownames_to_column(&quot;cell&quot;) %&gt;% 
+  rename(&quot;count&quot; = &quot;rowSums(t(counts_up))&quot;) %&gt;% 
+  arrange(desc(count)) %&gt;% 
+  ggplot(aes(x  = count)) +
+  geom_histogram(bins = 70, color = &quot;olivedrab4&quot;, fill = &quot;olivedrab4&quot;) +
+  xlab(&quot;normalized feature counts&quot;) +
+  ylab(&quot;number of cells&quot;) +
+  labs(title = &quot;Sum of feature count of genes upregulated in Inf+EFZ vs. Uninf+EFZ&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><strong>Genes downregulated in Inf+EFZ compared to Uninf+EFZ:</strong></p>
+<p>For the downregulated genes there seem to be a large number of cells which do not express these genes at all. This group of cells could include infected cells, however this is a dangerous assumption, since in general there might be cells with low or none expression of these genes. How can we know if these cells are actually infected cells?</p>
+<pre class="r"><code>#normalize counts of downregulated genes
+counts_down &lt;- (hivmy2@assays$RNA@data)
+counts_down &lt;- t(t(counts_down)) / colSums(counts_down)
+counts_down &lt;- log1p(counts_down)
+counts_down &lt;- counts_down[down_inf_filt, ]
+
+# compute average expression of the 20 signature genes
+as.data.frame(rowSums(t(counts_down))) %&gt;% 
+  rownames_to_column(&quot;cell&quot;) %&gt;% 
+  rename(&quot;count&quot; = &quot;rowSums(t(counts_down))&quot;) %&gt;% 
+  arrange(desc(count)) %&gt;% 
+  ggplot(aes(x  = count)) +
+  geom_histogram(bins = 70, color = &quot;red4&quot;, fill = &quot;red4&quot;) +
+  xlab(&quot;normalized feature counts&quot;) +
+  ylab(&quot;number of cells&quot;) +
+  labs(title = &quot;Sum of feature count of genes downregulated in Inf+EFZ vs. Uninf+EFZ&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-42-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>hivmy2_uninf_efz_sign &lt;- AddModuleScore(hivmy2,
+                           features = uninf_art_signature_filt)
+
+p3 &lt;- FeaturePlot(subset(hivmy2_uninf_efz_sign, ht_cluster == &quot;c1&quot;), 
+                  features = &quot;Cluster1&quot;, pt.size = 1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c1&quot;)
+  
+p4 &lt;- FeaturePlot(subset(hivmy2_uninf_efz_sign, ht_cluster == &quot;c2&quot;),
+                  features = &quot;Cluster1&quot;, pt.size = 1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c1&quot;)
+
+figure &lt;- ggarrange(p3, p4, ncol = 2)#, nrow = 2)
+annotate_figure(figure, top = text_grob(&quot;Uninf+EFZ gene signature from iMg applied to CSF Myeloid2 cells&quot;, 
+               color = &quot;black&quot;, face = &quot;bold&quot;, size = 20))
+  </code></pre>
+<p>There are a few more cells with high scores for the Uninf gene signature (without EFZ treatment) than for the Uninf+EFZ, but stil very few cells.</p>
+<pre><code>hivmy2_uninf_sign &lt;- AddModuleScore(hivmy2,
+                           features = uninf_signature_filt)
+
+p3 &lt;- FeaturePlot(subset(hivmy2_uninf_sign, ht_cluster == &quot;c1&quot;), 
+                  features = &quot;Cluster1&quot;, pt.size = 1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c1&quot;)
+  
+p4 &lt;- FeaturePlot(subset(hivmy2_uninf_sign, ht_cluster == &quot;c2&quot;),
+                  features = &quot;Cluster1&quot;, pt.size = 1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c1&quot;)
+
+figure &lt;- ggarrange(p3, p4, ncol = 2)#, nrow = 2)
+annotate_figure(figure, top = text_grob(&quot;Uninf gene signature from iMg applied to CSF Myeloid2 cells&quot;, 
+               color = &quot;black&quot;, face = &quot;bold&quot;, size = 20))
+  </code></pre>
+</div>
+<div id="percentage-of-cells-with-positive-inf-gene-signature-score-no-treatment" class="section level4">
+<h4>Percentage of cells with positive Inf gene signature score (no treatment)</h4>
+<pre class="r"><code>inf_sign &lt;- AddModuleScore(hivmy2,
+                           features = up_inf_no$gene)
+
+
+p3 &lt;- FeaturePlot(subset(inf_sign, ht_cluster == &quot;c1&quot;), 
+                  features = &quot;Cluster1&quot;, pt.size = 1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c1&quot;)
+Warning in FeaturePlot(subset(inf_sign, ht_cluster == &quot;c1&quot;), features =
+&quot;Cluster1&quot;, : All cells have the same value (0) of Cluster1.
+  
+p4 &lt;- FeaturePlot(subset(inf_sign, ht_cluster == &quot;c2&quot;),
+                  features = &quot;Cluster1&quot;, pt.size = 1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Myeloid2 Cluster c1&quot;)
+Warning in FeaturePlot(subset(inf_sign, ht_cluster == &quot;c2&quot;), features =
+&quot;Cluster1&quot;, : All cells have the same value (0) of Cluster1.
+
+figure &lt;- ggarrange(p3, p4, ncol = 2)#, nrow = 2)
+annotate_figure(figure, top = text_grob(&quot;Signature score of genes upregulated in Inf+EFZ iMg applied to CSF Myeloid2 cells&quot;, 
+               color = &quot;black&quot;, face = &quot;bold&quot;, size = 20))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-43-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>11% of the Myeloid2 cells have a positive score for the Inf+EFZ gene signature (17 out of 145 cells have a positive score).</p>
+<p>On the other hand, only 4% of the Myeloid2 cells have a positive score for the Uninf+EFZ gene signature, while 10% of the Myeloid2 cells have a positive score for the Uninf gene signature (without EFZ treamtent).</p>
+<pre><code># calculate percentage for the Uninf+EFZ signature
+percentage_uninf_art &lt;- dim((@meta.data[&quot;Cluster1&quot;] %&gt;% 
+                         filter(Cluster1 &gt; 0)))[1] / 
+  dim(hivmy2_uninf_efz_sign@meta.data[&quot;Cluster1&quot;])[1]
+
+# calculate percentage for the Uninf signature
+percentage_uninf &lt;- dim((hivmy2_uninf_sign@meta.data[&quot;Cluster1&quot;] %&gt;% 
+                         filter(Cluster1 &gt; 0)))[1] / 
+  dim(hivmy2_uninf_sign@meta.data[&quot;Cluster1&quot;])[1]</code></pre>
+<p>```#{r, fig.width=15} # read in Seurat object contianing alls samples and conditions #hiv7 &lt;- readRDS(“/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds”)</p>
+</div>
+<div id="isolate-the-myeloid5-cluster" class="section level1">
+<h1>isolate the Myeloid5 cluster</h1>
+<p>#hivmy5 &lt;- subset(hiv7, cell_type == “Myeloid5”)</p>
+</div>
+<div id="process-myeloid-5-seurat-object" class="section level1">
+<h1>process Myeloid 5 Seurat object</h1>
+<p>#hivmy5 &lt;- ScaleData(hivmy5) #hivmy5 &lt;- NormalizeData(hivmy5) #hivmy5 &lt;- ScaleData(hivmy5) #hivmy5 &lt;- FindVariableFeatures(hivmy5) #hivmy5 &lt;- RunPCA(hivmy5, features = VariableFeatures(hivmy5)) #ElbowPlot(hivmy5) #hivmy5 &lt;- RunTSNE(hivmy5, dims= 1:10)</p>
+<p>hivmy5_sign &lt;- AddModuleScore(hivmy5, features = inf_art_signature_filt)</p>
+<p>p1 &lt;- FeaturePlot(hivmy5_sign, features = “Cluster1,” pt.size = 1) + scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = “RdBu”))) + labs(title = “Inf+EFZ gene signature from iMg applied to CSF Myeloid5 cells”)</p>
+<p>hivmy5_sign &lt;- AddModuleScore(hivmy5, features = uninf_art_signature_filt)</p>
+<p>p2 &lt;- FeaturePlot(hivmy5_sign, features = “Cluster1,” pt.size = 1) + scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = “RdBu”))) + labs(title = “Uninf+EFZ gene signature from iMg applied to CSF Myeloid5 cells”)</p>
+<p>figure &lt;- ggarrange(p1, p2, ncol = 2)#, nrow = 2) annotate_figure(figure, top = text_grob(“Myeloid5,” color = “black,” face = “bold,” size = 20))</p>
+<pre><code>
+## Overlay Inf+EFZ signature with the TF activity heatmap
+
+
+```r
+# calculate scores for genes upregualted in Inf+EFZ iMg
+up_sign &lt;- AddModuleScore(hivmy2,
+                           features = up_inf_filt)
+
+# extract the Myeloid2 cells which have a positive score for the Inf+EFZ signature
+inf_efz_cells &lt;- rownames(up_sign@meta.data %&gt;% filter(Cluster1 &gt; 0))
+#uninf_efz_cells &lt;- rownames(hivmy2_uninf_efz_sign@meta.data %&gt;% filter(Cluster1 &gt; 0))
+#uninf_cells &lt;- rownames(hivmy2_uninf_sign@meta.data %&gt;% filter(Cluster1 &gt; 0))</code></pre>
+<pre class="r"><code># read in Seurat object contianing alls samples and conditions
+hiv7 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds&quot;)
+# import TF activity matrix of  Myeloid2 cells
+auc_mtx &lt;- read.table(&quot;data_files/aucell_matrix_10k_hvg.tsv&quot;, sep = &quot;\t&quot;)
+
+
+# 3 heatmaps with all Scenic TFs
+ht_list &lt;- map(seq.int(1:3), function(n) {
+  patients &lt;- c (&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV3_CSF&quot;) # 3 different patients
+  # filter the dataset for only Myeloid2 cells and iteratively one of the patients
+  df &lt;- hiv7@meta.data %&gt;% filter(cell_type == &quot;Myeloid2&quot;, 
+                                  orig.ident == patients[n])
+  # select only the cells of the activity matrix which are myeloid2 and the correct patient
+  mtx &lt;- auc_mtx[rownames(auc_mtx) %in% rownames(df),]
+  # heatmap
+  ht &lt;- Heatmap(t(mtx), 
+               column_title = paste0(&quot;patient: &quot;, patients[n]), 
+               top_annotation = HeatmapAnnotation(signature = case_when(
+                 rownames(mtx) %in% inf_efz_cells ~ &quot;Inf_EFZ_signature&quot;,
+                 #rownames(mtx) %in% uninf_efz_cells ~ &quot;Uninf_EFZ_signature&quot;,
+                 #rownames(mtx) %in% uninf_cells ~ &quot;Uninf_signature&quot;,
+                 TRUE ~ &quot;no_signature&quot;),
+                 name = &quot;signature&quot;,
+                 col = list(signature = c(&quot;Inf_EFZ_signature&quot; = &quot;orange2&quot;,
+                                          #&quot;Uninf_EFZ_signature&quot; = &quot;lightblue&quot;,
+                                          #&quot;Uninf_signature&quot; = &quot;orange&quot;,
+                                          &quot;no_signature&quot; = &quot;navy&quot;))),
+               column_km = 3,
+               #row_km = n, 
+               show_column_names = FALSE,
+               col =colorRampPalette(rev(brewer.pal(n = 7, name = &quot;RdYlBu&quot;)))(100),
+               show_row_names = TRUE
+               ) 
+               #top_annotation = column_annotation) 
+  list(name = patients[n], heatmap = ht)
+})
+
+ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap </code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-45-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>When you group the cells according to their different gene signatures they express, you do not really see a difference between the groups.</p>
+<pre class="r"><code># filter the dataset for only Myeloid2 cells 
+df &lt;- hiv7@meta.data %&gt;% filter(cell_type == &quot;Myeloid2&quot;, 
+                                orig.ident %in% c (&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV3_CSF&quot;))
+# select only the cells of the activity matrix which are myeloid2 and the correct patient
+mtx &lt;- auc_mtx[rownames(auc_mtx) %in% rownames(df),]
+
+# add signature column to dataframe
+signature &lt;- df %&gt;%
+  rownames_to_column(&quot;cell&quot;) %&gt;% 
+  mutate(signature = case_when(cell %in% inf_efz_cells ~ &quot;Inf_signature&quot;,
+                                #cell %in% uninf_efz_cells ~&quot;Uninf_EFZ_signature&quot;,
+                                #cell %in% uninf_cells ~ &quot;Uninf_signature&quot;,
+                               TRUE ~ &quot;no_signature&quot;))
+
+
+ht &lt;- draw(Heatmap(t(mtx), 
+             column_title = &quot;All patients split according to gene signature scores&quot;, 
+             top_annotation = HeatmapAnnotation(signature = case_when(
+               rownames(mtx) %in% inf_efz_cells ~ &quot;Inf_signature&quot;,
+               #rownames(mtx) %in% uninf_efz_cells ~ &quot;Uninf_EFZ_signature&quot;,
+               #rownames(mtx) %in% uninf_cells ~ &quot;Uninf_signature&quot;,
+               TRUE ~ &quot;no_signature&quot;),
+               name = &quot;signature&quot;,
+               col = list(signature = c(&quot;Inf_signature&quot; = &quot;orange2&quot;,
+                                        #&quot;Uninf_EFZ_signature&quot; = &quot;lightblue&quot;,
+                                        #&quot;Uninf_signature&quot; = &quot;orange&quot;,
+                                        &quot;no_signature&quot; = &quot;navy&quot;))),       
+             column_split = signature$signature,
+             show_column_names = FALSE,
+             col =colorRampPalette(rev(brewer.pal(n = 7, name = &quot;RdYlBu&quot;)))(100),
+             show_row_names = TRUE
+             ))</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-46-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<div id="are-some-tfs-differentially-active-between-the-infection-conditions" class="section level2">
+<h2>Are some TFs differentially active between the infection conditions?</h2>
+<p>Using a Kruskal-Wallis Test to see if there was a significant different in TF activity between the 3 signatures Inf+EFZ, Uninf+EFZ, Uninf I was not able to find any TF which showed differential activity in any of the clusters.</p>
+<pre class="#{r}"><code>hivmy2_scenic &lt;- AddMetaData(hivmy2, 
+                    metadata = auc_mtx, 
+                    col.name = colnames(auc_mtx))
+
+df &lt;- hivmy2_scenic@meta.data %&gt;% 
+  rownames_to_column(&quot;cell&quot;) %&gt;% 
+         filter(cell %in% c(inf_efz_cells, uninf_efz_cells, uninf_cells)) %&gt;% 
+  mutate(signature = case_when(cell %in% inf_efz_cells ~ &quot;Inf_efz_signature&quot;,
+                                cell %in% uninf_efz_cells ~ &quot;Uninf_efz_signature&quot;,
+                                cell %in% uninf_cells ~ &quot;Uninf_signature&quot;))
+
+# check all TFs 
+p_values &lt;- map(seq.int(1:125), function(n){
+  tf &lt;- colnames(auc_mtx)[n]
+  p_values &lt;- unlist(kruskal.test(pull(df[tf]) ~ signature, df))[&quot;p.value&quot;]
+  #list(tf = tf, p_value = p_values)
+})
+
+# adjust for multiple testing with FDR
+adj_p_values &lt;- p.adjust(as.numeric(unname(unlist(p_values))), method = &quot;fdr&quot;)
+
+# how many transcription factors are significantly different between the clusters?
+sign &lt;- adj_p_values[adj_p_values &lt; 0.05]</code></pre>
+</div>
+</div>
+<div id="inflammatory-pathways" class="section level1">
+<h1>Inflammatory Pathways</h1>
+<p><span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span> showed that two pathways are specifically activated in the Inf+EFZ condition.</p>
+<div id="myeloid2-cells" class="section level5">
+<h5>Myeloid2 cells</h5>
+<p>The Inf+EFZ iMg had a milder immune response than the Inf iMg. The RhoGDI and CD40 inflammatory signaling pathway were the only two upregulated compared with Uninf iMg. This effect was not seen in Uninf+EFZ, so it does not seem to be caused by EFZ alone, but rather a combination of infection and EFZ treatment <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span>.</p>
+<p>Compared to Uninf iMg they show in the paper that two inflammatory pathways are upregulated:</p>
+<ul>
+<li>RhoGDI signaling:
+<ul>
+<li>We expect PP1R12A to be upregulated</li>
+<li>We expect RND3, CD44, ACTG1 to be downregulated</li>
+</ul></li>
+<li>CD40 signaling:
+<ul>
+<li>We expect FOS to be upregulated</li>
+<li>we expect NFKBIA, ICAM1, TFNAIP3 to be downregulated</li>
+</ul></li>
+</ul>
+<p><strong>Can we see a similar pattern in the Myeloid2 clusters identified by Scenic?</strong></p>
+<p><strong>RhoGDI signaing:</strong></p>
+<pre class="r"><code>inf_uninf_art_marker %&gt;% 
+  rownames_to_column(&quot;gene&quot;) %&gt;%
+  filter(gene %in% c(&quot;RND3&quot;, &quot;CD44&quot;, &quot;ACTG1&quot;, &quot;PPP1R12A&quot;)) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">RND3</td>
+<td align="right">0</td>
+<td align="right">-1.6635458</td>
+<td align="right">0.045</td>
+<td align="right">0.386</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CD44</td>
+<td align="right">0</td>
+<td align="right">-0.5883562</td>
+<td align="right">0.396</td>
+<td align="right">0.539</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>inf_uninf_art_marker %&gt;% 
+  rownames_to_column(var = &quot;gene&quot;) %&gt;%
+  filter(gene %in% c(&quot;FOS&quot;, &quot;NFKBIA&quot;, &quot;ICAM1&quot;, &quot;TNFAIP3&quot;)) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="right">p_val</th>
+<th align="right">avg_log2FC</th>
+<th align="right">pct.1</th>
+<th align="right">pct.2</th>
+<th align="right">p_val_adj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ICAM1</td>
+<td align="right">0</td>
+<td align="right">-1.3649862</td>
+<td align="right">0.169</td>
+<td align="right">0.496</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">NFKBIA</td>
+<td align="right">0</td>
+<td align="right">-1.0940764</td>
+<td align="right">0.527</td>
+<td align="right">0.784</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">TNFAIP3</td>
+<td align="right">0</td>
+<td align="right">-1.3232813</td>
+<td align="right">0.158</td>
+<td align="right">0.465</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">FOS</td>
+<td align="right">0</td>
+<td align="right">0.5719556</td>
+<td align="right">0.293</td>
+<td align="right">0.139</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># isolate microglia cells
+microglia &lt;- subset(combined, cell_type == &quot;iMg&quot;)
+
+# read in Seurat object containing Myeloid2 cells
+hivmy2 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv_myeloid2_subclusters&quot;)
+
+
+p1 &lt;- VlnPlot(hivmy2, features = c(&quot;RND3&quot;, &quot;CD44&quot;, &quot;ACTG1&quot;, &quot;PPP1R12A&quot;), 
+              group.by = &quot;ht_cluster&quot;, ncol = 2)
+
+p2 &lt;- VlnPlot(hivmy2, features =c(&quot;NFKBIA&quot;, &quot;ICAM1&quot;, &quot;TNFAIP3&quot;, &quot;FOS&quot;), 
+              group.by = &quot;ht_cluster&quot;, ncol = 2)
+
+p3 &lt;- VlnPlot(microglia, features = c(&quot;RND3&quot;, &quot;CD44&quot;, &quot;ACTG1&quot;, &quot;PPP1R12A&quot;), 
+        ncol = 2, pt.size = 0, group.by = &quot;orig.ident&quot;)
+Warning: Could not find ACTG1 in the default search locations, found in RNA
+assay instead
+Warning: Could not find PPP1R12A in the default search locations, found in RNA
+assay instead
+
+p4 &lt;- VlnPlot(microglia, features = c(&quot;NFKBIA&quot;, &quot;ICAM1&quot;, &quot;TNFAIP3&quot;, &quot;FOS&quot;), 
+        ncol = 2, pt.size = 0, group.by = &quot;orig.ident&quot;)
+
+ggarrange(p2, p4, p1, p3, ncol = 2, nrow = 2)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-49-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<div id="myeloid5-cells" class="section level5">
+<h5>Myeloid5 cells</h5>
+<pre class="r"><code>
+# isolate the Myeloid5 cluster
+hivmy5 &lt;- subset(hiv7, cell_type == &quot;Myeloid5&quot; &amp; orig.ident %in% c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV3_CSF&quot;))
+
+# process Myeloid 5 Seurat object
+hivmy5 &lt;- ScaleData(hivmy5, verbose = FALSE)
+hivmy5 &lt;- NormalizeData(hivmy5, verbose = FALSE)
+hivmy5 &lt;- ScaleData(hivmy5, verbose = FALSE)
+hivmy5 &lt;- FindVariableFeatures(hivmy5, verbose = FALSE)
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : pseudoinverse used at -2.0668
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : neighborhood radius 0.49858
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : reciprocal condition number 3.7892e-16
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : There are other near singularities as well. 0.090619
+hivmy5 &lt;- RunPCA(hivmy5, features = VariableFeatures(hivmy5), verbose = FALSE)
+#ElbowPlot(hivmy5)
+hivmy5 &lt;- RunTSNE(hivmy5, dims= 1:10, verbose = FALSE)</code></pre>
+<pre class="r"><code>
+p1 &lt;- VlnPlot(hivmy5, features = c(&quot;RND3&quot;, &quot;CD44&quot;, &quot;ACTG1&quot;, &quot;PPP1R12A&quot;), 
+              group.by = &quot;orig.ident&quot;,ncol = 2)
+Warning in SingleExIPlot(type = type, data = data[, x, drop = FALSE], idents =
+idents, : All cells have the same value of RND3.
+
+p2 &lt;- VlnPlot(hivmy5, features =c(&quot;NFKBIA&quot;, &quot;ICAM1&quot;, &quot;TNFAIP3&quot;, &quot;FOS&quot;), 
+              group.by = &quot;orig.ident&quot;, ncol = 2)
+
+p3 &lt;- VlnPlot(microglia, features = c(&quot;RND3&quot;, &quot;CD44&quot;, &quot;ACTG1&quot;, &quot;PPP1R12A&quot;), 
+        ncol = 2, pt.size = 0, group.by = &quot;orig.ident&quot;)
+Warning: Could not find ACTG1 in the default search locations, found in RNA
+assay instead
+Warning: Could not find PPP1R12A in the default search locations, found in RNA
+assay instead
+
+p4 &lt;- VlnPlot(microglia, features = c(&quot;NFKBIA&quot;, &quot;ICAM1&quot;, &quot;TNFAIP3&quot;, &quot;FOS&quot;), 
+        ncol = 2, pt.size = 0, group.by = &quot;orig.ident&quot;)
+
+ggarrange(p2, p4, p1, p3, ncol = 2, nrow = 2)</code></pre>
+<p><img src="figure/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd/unnamed-chunk-51-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+</div>
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Ryan" class="csl-entry">
+Ryan SK, Garifallou JP, Gonzalez MV. 2020. <em>Neuroinflammation and Eif2 Signaling Persist Despite Antiretroviral Treatment in an hiPSC Tri-Culture Model of HIV Infection</em>. <em>#SStem Cell Reports</em>. Vol. 14(4). <a href="https://doi: 10.1016/j.stemcr.2020.02.010">doi: 10.1016/j.stemcr.2020.02.010</a>.
+</div>
+<div id="ref-Farhadian" class="csl-entry">
+Shelli F. Farhadian, Chrysoula Zografou, Sameet S. Mehta, and Serena S. Spudich. 2018. <em>Single-Cell RNA Sequencing Reveals Microglia-Like Cells in Cerebrospinal Fluid During Virologically Suppressed HIV</em>. <em>JCI Insight</em>. Vol. 3(18):e121718. <a href="https://doi.org/10.1172/jci.insight.121718">https://doi.org/10.1172/jci.insight.121718</a>.
+</div>
+<div id="ref-Stuart" class="csl-entry">
+Stuart T, Hoffman P, Butler A. 2019. <em>Comprehensive Integration of Single-Cell Data</em>. <em>Cell</em>. Vol. 177(7). <a href="https://doi: 10.1016/j.cell.2019.05.031">doi: 10.1016/j.cell.2019.05.031</a>.
+</div>
+</div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()
+R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/libopenblasp-r0.3.3.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] parallel  grid      stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] workflowr_1.6.2      readxl_1.3.1         multtest_2.46.0     
+ [4] Biobase_2.50.0       BiocGenerics_0.36.1  metap_1.6           
+ [7] knitr_1.30           rstatix_0.6.0        corrplot_0.92       
+[10] gridExtra_2.3        ggpubr_0.4.0         circlize_0.4.13     
+[13] ComplexHeatmap_2.9.4 ggcorrplot_0.1.3     pheatmap_1.0.12     
+[16] RColorBrewer_1.1-2   ggrepel_0.9.1        data.table_1.14.2   
+[19] Matrix_1.3-4         edgeR_3.32.0         limma_3.46.0        
+[22] SeuratObject_4.0.3   Seurat_4.0.5         forcats_0.5.0       
+[25] stringr_1.4.0        dplyr_1.0.7          purrr_0.3.4         
+[28] readr_1.4.0          tidyr_1.1.2          tibble_3.1.6        
+[31] ggplot2_3.3.5        tidyverse_1.3.0     
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2            reticulate_1.22       tidyselect_1.1.1     
+  [4] htmlwidgets_1.5.4     Rtsne_0.15            munsell_0.5.0        
+  [7] units_0.6-7           mutoss_0.1-12         codetools_0.2-18     
+ [10] ica_1.0-2             future_1.23.0         miniUI_0.1.1.1       
+ [13] withr_2.4.3           colorspace_2.0-2      highr_0.8            
+ [16] rstudioapi_0.13       stats4_4.0.2          ROCR_1.0-11          
+ [19] ggsignif_0.6.0        tensor_1.5            listenv_0.8.0        
+ [22] labeling_0.4.2        Rdpack_2.1.2          git2r_0.27.1         
+ [25] mnormt_2.0.2          polyclip_1.10-0       farver_2.1.0         
+ [28] rprojroot_2.0.2       TH.data_1.0-10        parallelly_1.29.0    
+ [31] vctrs_0.3.8           generics_0.1.1        xfun_0.19            
+ [34] R6_2.5.1              doParallel_1.0.16     clue_0.3-60          
+ [37] RVenn_1.1.0           locfit_1.5-9.4        spatstat.utils_2.2-0 
+ [40] assertthat_0.2.1      promises_1.2.0.1      scales_1.1.1         
+ [43] multcomp_1.4-15       gtable_0.3.0          globals_0.14.0       
+ [46] goftest_1.2-3         sandwich_3.0-0        rlang_0.4.12         
+ [49] GlobalOptions_0.1.2   splines_4.0.2         lazyeval_0.2.2       
+ [52] spatstat.geom_2.3-0   broom_0.7.2           yaml_2.2.1           
+ [55] reshape2_1.4.4        abind_1.4-5           modelr_0.1.8         
+ [58] backports_1.2.0       httpuv_1.6.3          tools_4.0.2          
+ [61] ellipsis_0.3.2        spatstat.core_2.3-1   ggridges_0.5.2       
+ [64] TFisher_0.2.0         Rcpp_1.0.7            plyr_1.8.6           
+ [67] classInt_0.4-3        rpart_4.1-15          deldir_1.0-6         
+ [70] pbapply_1.5-0         GetoptLong_1.0.5      cowplot_1.1.1        
+ [73] S4Vectors_0.28.1      zoo_1.8-9             haven_2.3.1          
+ [76] cluster_2.1.0         fs_1.5.1              magrittr_2.0.1       
+ [79] scattermore_0.7       openxlsx_4.2.3        lmtest_0.9-39        
+ [82] reprex_0.3.0          RANN_2.6.1            tmvnsim_1.0-2        
+ [85] mvtnorm_1.1-1         whisker_0.4           fitdistrplus_1.1-6   
+ [88] matrixStats_0.61.0    hms_1.1.1             patchwork_1.1.1      
+ [91] mime_0.12             evaluate_0.14         xtable_1.8-4         
+ [94] rio_0.5.16            IRanges_2.24.1        shape_1.4.6          
+ [97] compiler_4.0.2        KernSmooth_2.23-18    crayon_1.4.2         
+[100] htmltools_0.5.2       mgcv_1.8-33           later_1.3.0          
+[103] ggVennDiagram_1.2.0   lubridate_1.7.9.2     DBI_1.1.1            
+[106] dbplyr_2.0.0          MASS_7.3-53           sf_0.9-6             
+[109] car_3.0-10            cli_3.1.0             rbibutils_2.2.4      
+[112] igraph_1.2.9          pkgconfig_2.0.3       sn_2.0.1             
+[115] numDeriv_2016.8-1.1   foreign_0.8-80        plotly_4.9.2.1       
+[118] spatstat.sparse_2.0-0 xml2_1.3.2            foreach_1.5.1        
+[121] rvest_0.3.6           digest_0.6.29         sctransform_0.3.2    
+[124] RcppAnnoy_0.0.19      spatstat.data_2.1-0   rmarkdown_2.6        
+[127] cellranger_1.1.0      leiden_0.3.5          uwot_0.1.10          
+[130] curl_4.3.2            shiny_1.7.1           rjson_0.2.20         
+[133] lifecycle_1.0.1       nlme_3.1-150          jsonlite_1.7.2       
+[136] carData_3.0-4         viridisLite_0.4.0     fansi_0.5.0          
+[139] pillar_1.6.4          lattice_0.20-41       plotrix_3.8-2        
+[142] fastmap_1.1.0         httr_1.4.2            survival_3.2-7       
+[145] glue_1.5.1            zip_2.1.1             png_0.1-7            
+[148] iterators_1.0.13      class_7.3-17          stringi_1.7.6        
+[151] mathjaxr_1.4-0        e1071_1.7-4           irlba_2.3.3          
+[154] future.apply_1.8.1   </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
