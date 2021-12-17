@@ -7,8 +7,11 @@ output:
     code_folding: hide
     toc: true
     toc_depth: 5
+bibliography: references.bib
+link-citations: yes
 ---
 
+<div style="text-align: justify"> 
 
 ```
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
@@ -25,7 +28,7 @@ set.seed(42)
 ```
 
 
-The aim was to reproduce the analysis done by Farhadian et al., JCL Insight, 2018.
+The aim was to reproduce the analysis done by [@Farhadian].
 Some additional analysis was performed on the Microlglia-like clusters identified
 in this dataset. 
 
@@ -35,7 +38,7 @@ The dataset contains:
 * 2 Blood samples from HIV1-infected patients
 * 2 CSF samples from uninfected patients
 
-For more details see: Farhadian et al., JCL Insight, 2018 (https://doi.org/10.1172/jci.insight.121718)
+For more details see [@Farhadian].
 
 * Import libraries
 
@@ -773,10 +776,10 @@ ggarrange(p1,p2,p3,p4, ncol = 2, nrow = 2)
 #p1 + p2 + p3 + p4
 ```
 
-Blood and CSF were processed separately for scRNAseq using SeqWell. 
-The 4 samples were sequenced separately. 
-One SeqWell array per CSF or PBMC samples.
-Farhadian et al., JCL Insight, 2018
+* Blood and CSF were processed separately for scRNAseq using SeqWell. 
+* The 4 samples were sequenced separately. 
+* One SeqWell array per CSF or PBMC samples.
+[@Farhadian]
 
 # Relative contributions of CSF and blood cells to each cluster 
 
@@ -996,7 +999,7 @@ wilcox.test(percentage_my2_transcripts[[1]], # blood samples
 
 # Label Transfer
 
-After reproducing the results from Farhadian et al., JCSL Insight, 2018 the next 
+After reproducing the results from [@Farhadian] the next 
 step was to transfer the labels from the four HIV+ Blood and CSF samples to 
 the remaining samples:
 
@@ -1239,6 +1242,7 @@ p1 + p2
 How are cell types distributed across samples, considering also the additional
 HIV+ CSF sample and the two uninfected samples which were annotated using label 
 transfer.
+
 ```{r, fig.width = 15}
 hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds")
 
@@ -1265,3 +1269,556 @@ p1 <- ggplot(hiv4@meta.data) +
 ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 ```
+
+
+
+# Independent annotation of Myeloid2 and Myeloid5 clusters as Microglia-like cells
+
+Can we identify the microglia-like myeloid2/myeloid5 cluster they found in the 
+paper by [@Farhadian] when using independent genes for annotations?
+
+
+Here, I will first use the 881 Microglia marker genes and then also try the list
+of TFs provided by [@Gosselin].
+
+#### Function Add Module Score
+
+This Function Caluclate the average expression levels of each cluster on single cell level, 
+subtracted by the aggregated expression of control feature sets. The analyzed
+features are binned based on averaged expression and the control features are 
+randomly selected from each bin. 
+
+
+#### read in Seurat object
+
+
+```{r}
+hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
+```
+
+
+
+
+
+## Gene signature defined by [@Farhadian]
+
+Do we find the 60 signature genes from [@Farhadian] for 
+myeloid2 among the signature defined by @[Gossselin]?
+
+##### Read in list of microglia signature genes found in the Gosselin paper
+which are also found in the HIV1 and HIV2 samples:
+
+```{r}
+microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
+```
+
+28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
+found in the 881 microglia signature genes defined by [@Gosselin].
+
+```{r, results = "asis"}
+# Are there any genes overlapping between Farhadian and Glass paper?
+#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
+paper <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv", sep = "\t", header = FALSE, skipNul = TRUE)#, n_max = 60)
+paper[1,] <- "APOC1"
+colnames(paper) <- ""
+paper <- as.vector(paper[,1])
+
+# Are there any genes overlapping between Farhadian and Glass paper?
+#paper %in% as.vector(microglia_genes[["gene_name"]])
+
+overlap <- as.vector(microglia_genes[["gene_name"]]) [as.vector(microglia_genes[["gene_name"]]) %in% paper]
+length(overlap)
+overlap %>% kable()
+```
+
+
+#### 60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type
+
+```{r}
+# get only genes present in the HIV1 and HIV2 samples!
+paper <- paper[paper %in% rownames(hiv4@assays$RNA@counts)]
+
+
+hiv_farhadian <- AddModuleScore(hiv4, 
+                           features = paper)
+
+Idents(hiv_farhadian) <- "cell_type"
+FeaturePlot(hiv_farhadian, features = "Cluster1" , pt.size = .5, label = TRUE, repel = TRUE) +
+    scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+  labs(title = "Farhadian et al., 2018: Microglia signature genes")
+
+```
+
+## Gene signature defined by @[Gosselin]
+
+The Transcription Factors mentioned in the paper do not seem to be 
+specific for the Myeloid2 cluster. Interestingly, there is a very low score  
+of these microglia genes in Myeloid5, while there is a higher score in Myeloid1 
+and Myeloid4 cells. 
+
+```{r}
+gosselin_tfs <- read.table( "/media/ag-cherrmann/kmikulik/HIV_microglia/data/TFs_microglia_Glass_paper.txt")
+
+
+hiv4_glass <- AddModuleScore(hiv4, 
+                           features = as.vector(gosselin_tfs))
+
+Idents(hiv4_glass) <- "cell_type"
+FeaturePlot(hiv4_glass, features = "Cluster1", label = TRUE, repel = TRUE, pt.size = .7) +
+    scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+  labs(title = "Gosselin D. et al., 2017: Microglia Transcription Factors") 
+
+```
+
+### signature of HAND (HIV-associated neurodegenerative disease)
+
+[@Gosselin] defined a group of genes upregulated
+in microglia from patients with HAND. 
+
+This gene signature can, however not be detected in any of the Myeloid clusters.
+
+```{r}
+hand_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/HAND_upregulated_microglia_signature_genes")
+hand_genes <- as.vector(hand_genes[["genes"]])
+
+hiv_hand <- AddModuleScore(hiv4,
+                           features = hand_genes)
+
+Idents(hiv_hand) <- "cell_type"
+FeaturePlot(hiv_hand, features = "Cluster1", pt.size = .01) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+  labs(title = "microglia signature genes upregulated in HAND")
+
+
+```
+
+##### TFs downregulated in in vitro microglia
+
+The list of TFs is derived from [@Gosselin]:
+
+**Comparison between microglia and primitive yolk sac macrphages:**
+
+In this paper they found:
+
+* a subset of mRNAs was expressed in primitive yolk sac macrophages and 
+maintained expression levels in brain microglia
+* a second subset were preferentially expressed in adult mouse/human microglia
+-> increase in expression from ebryonic to adult stage of brain development
+* a majority of the TFs that showed reduced expression after transfer to in 
+*in vitro* environment were induced following migration of primitive macrophages
+into the developing brain -> induction by local **environment factors**
+
+
+```{r}
+# TFs downregulated in in vitro microglia
+tfs_down <- c( "IRF1", "IRF2", "IRF3", "IRF8", "IRF9", "CTCF", "MEF2A", "MEF2C", "MEF2D","MAF", "MAF1", "MAFB", "MAFF","MAFG", "MAFK", "RUNX1", "RUNX2", "SMAD3", "CEBPB", "CEBPA", "CEBPG", "JUND", "JUNB", "JUN", "FOS", "FOSB", "ARID3A", "ARID5A", "BHLHE41", "BTG2", "DBP", "EGR1", "EGR2", "EGR3", "ERF", "ELF1", "ELMSAN1", "ETV6", "FLI1", "KLF2", "KLF4", "KLF6", "MLXIPL", "MNT", "MYCL", "NFATC2", "NFE2L2","NR4A1", "RELA", "RREB1", "STAT3", "TAL1", "TCF4", "TFEB", "USF2", "ZEB2", "ZFHX3", "ZNF217", "ZNF691")
+
+#map(seq.int(1:59), function(n){
+ # VlnPlot(hiv4, features = tfs_down[n], group.by = "cell_type")
+#})
+
+tfs_down %in% rownames(hiv4@assays$RNA@counts)
+
+hiv_down <- AddModuleScore(hiv4,
+                           features = tfs_down)
+hiv_hand@meta.data %>% head
+
+FeaturePlot(hiv_down, features = "Cluster1",
+            label = TRUE, 
+            repel = TRUE, pt.size = .1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+  labs(title = "TFs downregulated in in vitro microglia")
+
+```
+
+
+
+## Features identified in a paper on convergence of microglia and macrophages [@Grassivaro]
+
+They identified 14 genes that are conserved in microglia throughout development,
+but not expressed in myeloid-derived monocytes
+MDM. Only in the context of neuroinflammation are the
+14 genes expressed in macrophages.
+
+```{r}
+tfs <- c("CRYBB1", "GARNL3", "GPR34", "LAG3", "NUAK1", "OLFML3", "RTN1",  "SALL3",  "SLC1A3", "SPARC", "TNFRSF17")
+
+tfs %in% rownames(hiv4@assays$RNA@counts)
+
+
+hivt <- AddModuleScore(hiv4,
+                           features = tfs)
+
+Idents(hivt) <- "cell_type"
+FeaturePlot(hivt, features = "Cluster2",
+            label = TRUE, 
+            repel = TRUE, pt.size = .1) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+  labs(title = "14 genes expressed in microglia & macrophages in neuroinfl.")
+
+
+```
+
+
+## Marker genes referred to by [@Farhadian] 
+
+References:
+
+* [@Keren-Shaul]
+* [@Kraseman]
+
+Neither of these signatures shows a high score for the Myeloid2 clusters.
+
+```{r}
+# upregulated in disease associated microglia (Keren-Shaul)
+disease <- c("SPP1", "ITGAX", "AXL", "LILRB4", "CLEC7A", "CCL2", "CSF1") 
+
+#28 inflammatory molecules upregulated in disease associated microglia (Krasemann)
+mgnd <- c("APOE", "AXL", "CCL2", "TLR2", "SPP1", "CYBB", "MSR1", "ITGAX",
+          "CLEC7A", "CHI3L3", "ARG1", "SIGLEC1", "CFP", "CXCL10", "ALCAM", 
+          "FER1L3", "LILRB4", "GPX3", "GAS7", "CCRL2","CXCL16", "CXCR4",
+          "GPNMB", "LGALS3", "IFI202B", "CSF1", "LIRB4", "LAG3")
+# only APOE, AXL and MSR1 overlap, but these are the most important genes
+
+# remove the genes that are also used by the Farhadian Paper
+mgnd <- c("CCL2", "TLR2", "SPP1", "CYBB",  "ITGAX",
+          "CLEC7A", "CHI3L3", "ARG1", "SIGLEC1", "CFP", "CXCL10", "ALCAM", 
+          "FER1L3", "LILRB4", "GPX3", "GAS7", "CCRL2","CXCL16", "CXCR4",
+          "GPNMB", "LGALS3", "IFI202B", "CSF1", "LIRB4", "LAG3")
+
+#hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
+
+#get genes also present in the HIV samples
+mgnd <- mgnd[mgnd %in% rownames(hiv4@assays$RNA@counts)]
+
+
+hiv_disease <- AddModuleScore(hiv4,
+                           features = disease)
+
+FeaturePlot(hiv_disease, features = "Cluster1", pt.size = .01) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+  labs(title = "Keren-Shaul et al., Genes upregulated in disease-associated microglia")
+
+
+
+hiv_mgnd <- AddModuleScore(hiv4,
+                           features = mgnd)
+
+FeaturePlot(hiv_mgnd, features = "Cluster1", pt.size = .01) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+  labs(title = "Kraseman et al., 28 inflammatory genes upregulated in 
+       disease associated microglia")
+```
+
+Neither of the signature genes are very specific for the Myeloid2/5 cluster.
+
+* The signature genes defined by [@Keren-Shaul] are expressed to some level 
+in all myeloid clusters
+* The signature defined by [@Kraseman] is also mainly expressed in the 
+Myeloid clusters
+* CD9 and SPP1 might be added to the list of microglia marker genes expressed
+in Myeloid2 cluster
+
+```{r}
+# Keren Shaul et al. signature
+DotPlot(hiv4, features = disease, group.by = "cell_type") + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+    labs(title = "Keren-Shaul et al., Genes upregulated in disease-associated microglia")
+
+# Kraseman et al. signature
+DotPlot(hiv4, features = mgnd, group.by = "cell_type") + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+    labs(title = "Kraseman et al., 28 inflammatory genes upregulated in 
+       disease associated microglia")
+
+
+# some genes that might be markers for Myeloid2
+DotPlot(hiv4, features = c("CD9", "APOE", "AXL", "CTSL", "SPP1"), group.by = "cell_type") + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  labs(title = "Genes that might be used as markers for Myeloid2")
+
+
+```
+
+
+## Gene signature defined by [@Esaulova]
+
+
+##### Homeostatic genes
+
+* the homeostatic microglia gene signature is found in all myeloid clusters, 
+not only in the Myeloid 2 (except for SLC2A5 which was also included in the 
+Farhadian paper)
+* NK cell cluster also exhibits high scores for this gene signature
+
+```{r, fig.width=15}
+#homeostatic microglia gene signature
+microglia <- c("CX3CR1","CSF1R", "SLC2A5", "MARCKS", "P2RY13")
+FeaturePlot(hiv4, features = microglia, ncol = 3)
+```
+
+
+
+```{r}
+DotPlot(hiv4, features = microglia, group.by = "cell_type") + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+
+hivt <- AddModuleScore(hiv4, features = microglia)
+Idents(hivt) <- "cell_type"
+FeaturePlot(hivt, features = "Cluster1", label =TRUE, repel = TRUE, pt.size = .7) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+    labs(title = "Homeostatic microglia signature from Esaulova paper")
+```
+
+##### Microglia-specific genes
+
+* **GPR34**, **TMEM119** supports the hypothesis that myeloid2 are microglia-like,
+since they are expressed at higher levels in the myeloid2 cluster
+* they use 10 genes to discriminate microglia, four of which have not been 
+inlcude in the Farhadian Paper: **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12**
+* the genes **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12** are not included in
+the 60 genes used by Farhadian et al., but they do not show specific expression
+for myeloid2 cells
+
+
+
+```{r, fig.width=15}
+# 10 genes that discriminate microglia
+microglia <- c("C1QC", "C1QB", "C1QA", "TREM2", "TIMD4", "APOC1", 
+               "APOE", "TNFSF18", "CLEC9A", "CXCL12")
+#FeaturePlot(hiv4, features = microglia, ncol = 3)
+
+#microglia %in% paper
+
+Idents(hiv4) <- "cell_type"
+
+#  two genes whcih might support that myeloid2 cluster contains microglia-like cells
+FeaturePlot(hiv4, features = c("GPR34", "TMEM119"), label = TRUE, pt.size = .7,
+            repel = TRUE)
+DotPlot(hiv4, features = c("TMEM119", "GPR34"), group.by = "cell_type") + 
+     coord_flip() +
+     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+
+# these are not inlcuded in the Farhadian gene signature
+FeaturePlot(hiv4, features = c("CLEC9A", "TIMD4", "TNFSF18", "CXCL12"),
+            pt.size = .7, label = TRUE, repel = TRUE, ncol= 2)
+
+
+
+```
+
+## Microglia in human brain
+
+Reference:
+Sankowski R. et al. 2019. Mapping microglia states in the human brain through the
+integration of high-dimensional techniques. Nature Neuroscience. Vol 22
+https://www.nature.com/articles/s41593-019-0532-y#Sec29
+
+In the paper microglia cells were obtained through brain surgery.
+Microglia were defined by the core signature called "microglia signature" below.
+Sankowski et al. performed unsupervised clustering using Race ID3 which resulted
+in 9 major sublcusters of the microglia cells. The authors suggested that these
+subclusters represent the wide spectrum of transcriptional states in human 
+microglia.
+
+**RaceID:**
+RaceID is a clustering algorithm for the identification of cell types from 
+scRNA-seq data. It was designed to work particularly well for the detection of
+rare cells. 
+https://github.com/dgrun/RaceID3_StemID2_package
+
+
+* The microglia signature is most pronounced in Myeloid2 cluster
+* The monocyte signature is less pronounced in Myeloid2 cluster and more 
+pronounced in the other Myeloid clsuters
+* Homeostatic microglia (core signature genes expressed by all clusters in the 
+paper) gene signature is found in all Myeloid cluster as well 
+as NK cells, with high expression also in Myeloid2 
+  + **CSF1R** and **MARCKS** are most highly expressed in Myeloid2
+
+```{r}
+# microglia gene signature from supplementary table 3a
+microglia <- c("P2RY12", "CX3CR1", "CSF1R", "TMEM119", "SLC2A5" )
+
+# monocyte gene signature from supplementary table 3a 
+monocyte <- c("CCR2", "CLEC12A", "PLAC8", "FCN1", "S100A9")
+
+# homeostatic microlgia gene siganture
+homeostatic <- c("CX3CR1", "TMEM119", "CSF1R", "P2RY12",
+                 "P2RY13","SELPLG", "MARCKS")
+
+
+map(seq.int(1:3), function(n){
+  names <- c("microglia", "monocyte", "homeostatic")
+  feature_list <- list(microglia, monocyte, homeostatic)
+  features = feature_list[[n]]
+  hiv <- AddModuleScore(hiv4, features = features)
+  # feature plot
+  Idents(hiv) <- "cell_type"
+  FeaturePlot(hiv, features = "Cluster1", pt.size = .5, label = TRUE, repel=TRUE)+
+    scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+    labs(title = paste0(names[n]," microglia gene signature"))
+})
+  
+map(seq.int(1:3), function(n){
+  names <- c("microglia", "monocyte", "homeostatic")
+  feature_list <- list(microglia, monocyte, homeostatic)
+  features = feature_list[[n]] 
+  # dot plot
+  DotPlot(hiv4, features = features, group.by = "cell_type") +
+    coord_flip() +
+        theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  labs(title = paste0(names[n]," gene signature"))
+})
+  
+```
+
+Check the clusters across the transcriptional spectrum of microglia:
+
+Sankowski R. et al., Nature Neuroscience, 2019 defined 9 subclusters within the 
+microglia cell population. Can we find these gene signatures in the CSF-derived
+Myeloid cells? This could further confirm that Myeloid2 and Myeloid5 are 
+microglia-like cells. 
+
+* **homeostatic clusters**
+  + C2: strong expresssion of MCH-II and antiviral immunity genes 
+(HLA-DRA, CD74, IFI44L)
+  + C3: high expression of microglial core genes CX3CR1, TMEM119   
+* **antigen processing and peptide antigen presentation**
+C6 and C7 were characterized by low expression of CX3CR1 and high expression
+of integrin-receptor binding protein and metabolism genes (SPP1, APOE, LPL)
+* ** proinflammatory clusters:** 
+C1, C5, C8, C9 were characterized by expression of chemokine and cytokine 
+genes (CCL2, IL1B)
+
+Since Cluster C2 was characterized as a homeostati microglia cluster and showed
+expression of MHC-II and antivrial immunity genes like IFI44L, HLA-DRA, CD74, 
+this supports the microglia-like identity of Myeloid2 and Myeloid5. However, 
+there is also some expression of this signature in Meloid1 and Myeloid3 which
+mainly originate from Blood samples and also in B cells. 
+
+There is also a high score for C5 and C8 signature genes, which are both 
+proinflammatory gene signatures.
+
+```{r}
+# get differentially expressed genes per cluster across the transcriptional 
+# spectrum of microglia 
+excel_sheets("/media/ag-cherrmann/kmikulik/HIV_microglia/data/2019_Sankowski_Mapping_microgliastates_in_the_human_brain_Supplementary_tables.xlsx")
+cluster_genes <- read_excel("/media/ag-cherrmann/kmikulik/HIV_microglia/data/2019_Sankowski_Mapping_microgliastates_in_the_human_brain_Supplementary_tables.xlsx", sheet = "Suppl. table 3")
+#names(microglia_sign_df) [1] <- "gene_name"
+#microglia_sign <- microglia_sign_df[,"gene_name"]
+
+# C3
+
+cluster_list <- map(seq.int(1:8), function(n) {
+  names <- c("c1", "c2", "c3", "c5", "c6", "c7", "c8", "c9")
+  name <- names[n]
+  cluster <- c(1,2,3,5,6,7,8,9)
+  cluster_number <- cluster[n]
+  c <- pull(cluster_genes %>% filter(Cluster == cluster_number), GENEID)
+  c <- c[c %in% rownames(hiv4@assays$RNA@counts)]
+  cluster_list <- list(name = name, cluster = c)
+})
+
+
+map(seq.int(1:8), function(n){
+  c <- cluster_list[[n]]$cluster
+  name <- cluster_list[[n]]$name
+  hivc <- AddModuleScore(hiv4, features = c)
+  Idents(hivc) <- "cell_type"
+  FeaturePlot(hivc, features = "Cluster1", pt.size = .5, label = TRUE,
+              repel = TRUE) +
+      scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+    labs(title = paste0("Differentially expressed genes of cluster ", name))
+})
+
+
+
+#map(seq.int(1:8), function(n){
+ # c <- cluster_list[[n]]$cluster
+  #name <- cluster_list[[n]]$name
+  #DotPlot(hiv4, features = c, group.by = "cell_type") +
+  #coord_flip() +
+  #      theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  #labs(title = paste0("Differentially expressed genes of cluster ", name))
+#})
+```
+
+
+## Look for genes which are upregulated in Myeloid2 compared to all other Myeloid
+clusters
+
+* overlap of 5 genes with Kraseman microglia -> inflammatory molecules 
+upregulated in disease associated microglia (Krasemann)
+* overlap of 3 genes with disease-associated microglia (Keren-Shaul)
+* Sankowski signature
+
+  + 4 genes overlap with microglia signature
+  + **zero overlap with monocyte gene signature**
+  + 4 genes overlap with homeostatic microglia signature
+  
+* Esaulova paper -> 8 of 10 genes that discriminate microglia are found upregulated
+in Myeloid2 cluster
+* Glass paper -> 132 of the microglia signature are found in the genes 
+upregulated in Myeloid2, 28 of these are also included in the Farhadian Paper 
+signature, 104 are new marekr genes 
+
+```{r}
+Idents(hiv4) <- "cell_type"
+# Find Markers that distinguish My2 from the other Myeloid clusters
+my2_markers <- FindMarkers(hiv4, ident.1  = "Myeloid2",
+            ident.2  = c("Myeloid1", "Myeloid3", "Myeloid4", "Myeloid5"))
+my2_markers <- my2_markers %>% rownames_to_column(var = "gene")
+# Can we find mgnd genes? (Krasemann)
+my2_markers %>% filter(gene %in% mgnd & avg_log2FC > 0)
+# genes in disease-assocaited microglia (Keren-Shaul)
+my2_markers %>% filter(gene %in% disease & avg_log2FC > 0)
+
+# Sankowski
+# microglia gene signature
+microglia <- c("P2RY12", "CX3CR1", "CSF1R", "TMEM119", "SLC2A5" )
+
+# monocyte gene signature
+monocyte <- c("CCR2", "CLEC12A", "PLAC8", "FCN1", "S100A9")
+
+# homeostatic microlgia gene siganture
+homeostatic <- c("CX3CR1", "TMEM119", "CSF1R", "P2RY12",
+                 "P2RY13","SELPLG", "MARCKS")
+
+
+my2_markers %>% filter(gene %in% microglia & avg_log2FC > 0)
+my2_markers %>% filter(gene %in% monocyte & avg_log2FC > 0)
+my2_markers %>% filter(gene %in% homeostatic & avg_log2FC > 0)
+
+
+# Esaulova
+# 10 genes that discriminate microglia
+microglia <- c("C1QC", "C1QB", "C1QA", "TREM2", "TIMD4", "APOC1", 
+               "APOE", "TNFSF18", "CLEC9A", "CXCL12")
+# Can we find these 10 genes in the Myeloid2 upregulated genes?
+my2_markers %>% filter(gene %in% microglia & avg_log2FC > 0)
+
+
+# Glass
+# 84 of the microglia signature genes are more highly expressed in the 
+microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
+m1 <- my2_markers %>% filter(gene %in% microglia_genes [["gene_name"]] & avg_log2FC >0)
+# remove the genes that were already used by the Farhadian paper
+m1 <- m1[["gene"]][m1[["gene"]] %in% paper == FALSE]
+
+hiv_new <- AddModuleScore(hiv4, features = m1)
+FeaturePlot(hiv_new, features = "Cluster1") +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
+    labs(title = "Selected signature genes from the Glass paper")
+
+```
+
+
+
+# References
+
+</div>
