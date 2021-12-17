@@ -6,6 +6,18 @@ output: html_document
 ---
 
 
+<script>
+function myFunction() {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+</script>
+
 ```{r setup}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
                       cache = TRUE, autodep = TRUE)
@@ -58,8 +70,6 @@ might correspond to the binding scores between infection states in primary
 microglia?
 
 
-
-
 * read in Seurat object
 
 ```{r}
@@ -86,7 +96,7 @@ hiv7_scenic <- AddMetaData(hiv7,
 
 
 
-# bulk ATACseq footprinting results
+# Bulk ATACseq footprinting results
 
 Using bulk ATACseq data from primary microglia at three different conditions,
 active infection, latent infection, uninfected, differential binding scores were
@@ -183,8 +193,6 @@ correlations between clusters across patients?
 1. Determine k for k-means hierarchical clustering
 2. Transfer the cluster identities to patient2 and patient3
 3. Hierarchical Clustering for all 3 patients separately
-
-
 
 
 ```{r}
@@ -868,11 +876,17 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 # 2. Transfer the 3 cluster identitites to patient2 and patient3
 
-## Cluster annotation using an integrated reference
+The cluster identities from patient 1 were transferred to patient 2 and patient 3
+to assign each cell to one of the 3 clusters. 
 
-* We want to annotate the cells from patient 2 and patient 3 and assign them one 
-of the three heatmap cluster identities
-* Here we do not integrate the datasets beforehand, we do not modify the query
+
+<button onclick="myFunction()">*Click here for details on label transfer*</button>
+ 
+<div id="myDIV">
+
+### Cluster annotation using an integrated reference
+
+Here we do not integrate the datasets beforehand, we do not modify the query
 expression data.
 
 ```{
@@ -936,7 +950,6 @@ hiv3 <- subset(query, orig.ident == "HIV3_CSF")
 #saveRDS(hiv2,"/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv2_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
 #saveRDS(hiv3, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv3_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
 ```
-
 Now that we have transferred the cluster identitities to patient2 and patient3
 and saved the results in two separate Seurat objects, we can add the TF activity 
 score to the metadata of each patient.
@@ -951,13 +964,15 @@ hiv3_scenic <- AddMetaData(hiv3, metadata = auc_mtx,
                            col.name = colnames(auc_mtx))
 ```
 
+</div>
+
 
 ## Predicted clusters from Label Transfer for patient 2 and patient 3
 
-The clusters you get when transferring the cluster identities from patient 1 to
+The clusters obatined after transferring the cluster identities from patient 1 to
 patient2 do not seem to be very good at separating cells according to TF activity.
 
-When you transfer the cluster identities from patient1 to patient3 all cells but
+When you transfer the cluster identities from patient1 to patient3 all cells, but
 one are assigned to cluster1. This shows that the label transfer did not work 
 very well. This is probably due to the low number of Myeloid2 cells in each sample.
 
@@ -1023,10 +1038,13 @@ to work very well, we next tried to perform hierarchical clustering using k = 3
 for all 3 patients separately. This way we might be able to see if the TF
 activities in the 3 clusters show similar patterns across the different patients.
 
+In the two heatmaps below the clusters look more sensible than the clusters
+observed after cluster label transfer.
+
 ## K-means clustering with k = 3 for patient 2
 
-When you perform hierarchical clustering of the cells in patient2 the clusters
-look better than the clusters we saw after cluster identity transfer.
+#### 1. Draw Heatmap for Patient 3
+
 
 ```{r, fig.width=15, fig.height=20}
 #map(seq.int(1:5), function(k){
@@ -1054,7 +1072,7 @@ ht_pat2 <- draw(ht2)
 
 
 
-#### Kruskal_Wallis Test Patient2 
+#### 2. Kruskal_Wallis Test Patient2 
 
 ```{r}
 # extract the cells from the 3 clusters 
@@ -1115,6 +1133,7 @@ hiv2_atac <- overlap_atac$name[adj_p_values < .05]
 
 ## K-means clustering with k = 3 for patient 3
 
+#### 1. Draw Heatmap for Patient 3
 
 ```{r, fig.width=15, fig.height=20}
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
@@ -1139,7 +1158,7 @@ ht_pat3 <- draw(ht3)
 ```
 
 
-#### Kruskal-Wallis test Patient 3
+#### 2. Kruskal-Wallis test Patient 3
 
 ```{r}
 # extract the cells from the 3 clusters 
@@ -1200,19 +1219,19 @@ hiv3_atac <- overlap_atac$name[adj_p_values < .05]
 
 ## Which TFs show significantly different activity between the clusters across patients?
 
-Since the independent hierarchical clustering for all 3 patients yields 
-clusters which look more reasonable, we will compare the 3 clusters we obtain 
-across the 3 patients to see if there is a pattern between them. 
+Since the independent hierarchical clustering for all three patients yields 
+clusters which look more reasonable, we will compare the three clusters we obtain 
+across the three patients to see if there is a pattern between them. 
 
 We already saw that there are a few TFs which show significantly different
-activity between the clusters in each patient.
+activity between the clusters in patient1.
 
 Next, we want to see if the same group of TFs characterize the three 
 clusters in all three patients or if they are different. 
 We will test which TFs are significantly different between clusters and then
-use a pairswise Wilcox test to determine which clusters are different.
+use a pairwise Wilcox test to determine which clusters are different.
 
-### K-means clustering with k = 3 for all three patients
+#### Heatmaps of k-means clustering with k = 3 for all three patients
 
 ```{r, fig.width=15, fig.height=17}
 # patient 1
@@ -1243,11 +1262,16 @@ draw(ht_list, ht_gap= unit(2, "cm"),
 
 
 
-### Are TFs differentiating the 3 clusters similar across all 3 patients?
+### Are TFs differentiating the three clusters similar across all three patients?
 
-We can see that 11 of the TFs found to have differential binding scores between
-infection conditions in primary microglia show different activity between the 
-3 clusters across all patients.
+In the Venn diagram below it can be seen that 46 with significantly different
+activities between clusters overlap across patients.
+
+Additionally, eleven of the TFs found to have differential binding scores between
+infection conditions in C20 microglia cell line show different activity between the 
+three clusters across all patients. These are the TFs we are most interested in,
+since we want to see if we can find patterns that correlate with the binding 
+scores in C20 microglia.
 
 ```{r}
 p1 <- ggVennDiagram(list(hiv1_diff, diff_hiv2, diff_hiv3),
@@ -1276,7 +1300,10 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 ```
 
 
-## 11 TFs show different activity in one of the 3 clusters 
+## 11 TFs show different activity in one of the three clusters 
+
+In the boxplots below it can be seen that in all three patients there seems to
+be one cluster which is different from two other clusters. 
 
 ```{r}
 intersect <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/intersect_TFs_different_across_patients_3_clusters")[["x"]]
@@ -1383,7 +1410,12 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 4, nrow = 3))
 
 ### CTCF expression across patients
 
-* CTCF has been implicated to regualte HIV latency (Jefferys S. R., PLOS Pathogens, 2021)
+CTCF has been implicated to regulate HIV latency [@Jeffereys]. In the boxplots 
+below it can be seen that there is a significant difference between the first 
+cluster and the other two clusters in patient1 and patient2. Similarly in 
+patient3 there is a difference, however the difference is not as significant.
+This might imply that cluster contains a group of cells which are latently 
+infected and therefore CTCF is more active.
 
 ```{r}
 ctcf3 <- ggplot(df, aes(x = ht_cluster, y = CTCF)) +
@@ -1450,6 +1482,11 @@ auc_df <- auc_df %>%
 For every cluster the correlation is calculated based on the TF activities of
 all 125 TFs  identified by SCENIC.
 
+
+<button onclick="myFunction()">*Click here for details on how I computed the correlation*</button>
+ 
+<div id="myDIV">
+
 Dataframe of average activity value for each TF in each patient and clusters.
 
 
@@ -1482,7 +1519,7 @@ cor_mtx <- df %>% cor()
 # of p_values, upper confidence interval, lower confidence interval
 testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 ```
-
+</div>
 
 
 **Conclusions:**
@@ -1502,6 +1539,11 @@ corrplot(cor_mtx,method = "color", order = "hclust",
          #sig.level = .05,
          insig = "p-value")
 ```
+
+
+<button onclick="myFunction()">*Click here for some additional correlation plots which do not aid the interpretation much.*</button>
+ 
+<div id="myDIV">
 
 ### Correlation between clusters based on all TFs with differential activity between clusters
 
@@ -1537,18 +1579,24 @@ corrplot(cor_mtx,method = "color", order = "hclust",
          insig = "p-value")
 ```
 
+</div>
 
-# TF correlation across clusters
+### TF correlation across clusters
 
-11 TFs which differentiate the clusters seem to correlate between the clusters.
+Eleven TFs which differentiate the clusters seem to correlate between the clusters.
 
-For these 11 TFs whith different activity between the clusters the activity 
-correlates between across all 3 patients. This means, that the three TFs
+For these eleven TFs with different activity between the clusters the activity 
+correlates between across all three patients. This means, that the three TFs
 YY1, REST, MXI1 are positively correlated, but negatively correlated with the 
 rest of the TFs.
 
 The fact that these TF activities correlate across all patients indicates that 
-there might be a biological meaning behind it. 
+there might be a biological meaning behind the pattern of activity. 
+
+
+<button onclick="myFunction()">*Click here for details on how I computed the correlation*</button>
+ 
+<div id="myDIV">
 
 Dataframe used as input for the correlation:
 
@@ -1577,6 +1625,8 @@ df <- auc_df %>%
 df %>% head %>% kable()
 
 ```
+</div> 
+
 
 Correlation matrix for TFs:
 
@@ -1606,17 +1656,15 @@ p1 <- corrplot(cor_mtx,method = "color", order = "hclust",
 
 # Gene expression analysis
 
-Using the information on the three clusters from above we will pool the two clusters
-which are significantly different from the third cluster. Consequently, in the 
-following analysis we will compare Cluster1 to Cluster2 (pool of two similar 
-clusters). Gene expression might give a hint of the identity of these two Myeloid2
-clusters. 
+Using the information of the three clusters from above we will pool the two clusters
+which are significantly different from the third cluster in all patients.
+Consequently, in the following analysis we will compare Cluster1 to Cluster2 (pool of two similar 
+clusters). The gene expression might give a hint about the identity of these 
+two Myeloid2 clusters. 
 
 
 ```{r}
 # 3 Clusters for each of the 3 HIV+ patients
-wss
-
 
 # HIV1_CSF
 hiv1_c1 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster1.tsv", sep = "\t"))[["x"]]
@@ -1659,16 +1707,22 @@ hivmy2 <- AddMetaData(hivmy2, metadata = ht_cluster, col.name = "ht_cluster")
 ## Quality of the Myeloid 2 clusters
 
 There is an evident difference in library size and number of features between
-the two clusters. Does this mean that there is a technical difference between
-the two clusters or is this a biological difference? For example, if cells of 
-clsuter1 represent a latently infected group of Myeloid2 cells one might assume
-that gene expression is reduced overall due to the infection.
+the two clusters. This could mean that there is a technical difference between
+the two clusters. Conversely, it could also mean that there is this a biological
+difference. For example, if cells of cluster1 represent a latently infected group 
+of Myeloid2 cells it could be that gene expression is reduced overall due to the
+infection compared to healthy uninfected cells from cluster2.
 
 One way to investigate this further would be to have a look at the housekeeping 
-genes in both clusters. 
+genes in both clusters. If housekeeping genes were more highly expressed in 
+one cluster than in the other this would indicate that the difference is not 
+biological, but a technical artefact.
 
 Since there is one cluster which has lower number of counts and features 
-anyways, further qualitative analysis of gene expression might be skewed as well.
+to start with, further qualitative analysis of gene expression might be skewed 
+as well. For this reason the following analysis on the difference between these
+two clusters will be mainly qualitative. Due to the low number of cells it 
+is not possible to get significant results for the differential gene expression.
 
 
 ```{r}
@@ -1687,13 +1741,18 @@ annotate_figure(fig, top = text_grob("Quality of Clsuters"))
 
 ## Housekeeping genes
 
-List of 3804 houseekping genes from: https://www.cell.com/trends/genetics/fulltext/S0168-9525(13)00089-9
+A list of 3804 houseekping genes were used from [@Eisenberg].
 
 A quantitative analysis might be difficult, because due to the small sample
 size and large feature number, we get very high p_values for all genes in 
 differential gene expression analysis. Visualization of the
 housekeeping gene expression, unfortunately does not help either with the 
 interpretation.
+
+
+<button onclick="myFunction()">*Click here for boxplots of housekeeping gene expression*</button>
+ 
+<div id="myDIV">
 
 ```{r}
 hk_genes <- (read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/HK_genes.txt"))[["V1"]]
@@ -1719,12 +1778,20 @@ test <- hk_genes_filt[1:30]
 VlnPlot(hivmy2, features = test, group.by = "ht_cluster", ncol = 4)
 ```
 
+</div>
 
-### TF from Farhadian paper
+
+### TF from the [@Farhadian] paper
 
 These TFs were used as marker genes for the microlgia like Myeloid2 cell cluster.
 Is there a group of cells which has a higher expression of these markers?
-Not really
+No clear difference in gene expression can be seen.
+
+
+<button onclick="myFunction()">*Click here for boxplots of microglia marker genes*</button>
+ 
+<div id="myDIV">
+
 
 ```{r, fig.width = 15, fig.height=40}
 #import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
@@ -1738,9 +1805,15 @@ paper <- as.vector(paper[,1])
 VlnPlot(hivmy2, features = paper, group.by = "ht_cluster")
 ```
 
+</div>
+
 
 # Differential gene expression analyisis
 
+
+<button onclick="myFunction()">*Click here for details on differential gene expression analysis*</button>
+ 
+<div id="myDIV">
 
 ```{r, results="asis"}
 hivmy2 <- NormalizeData(hivmy2, verbose = FALSE)
@@ -1758,9 +1831,16 @@ top10 %>%
   kable()
 ```
 
+</div>
 
 
-### Glass Paper
+### TF from the [@Gosselin] paper
+
+
+<button onclick="myFunction()">*Click here for details on microglia TF gene expression*</button>
+ 
+<div id="myDIV">
+
 
 ```{r}
 Idents(hiv4) <- "cell_type"
@@ -1780,7 +1860,7 @@ VlnPlot(hivmy2, features = m1, group.by = "ht_cluster", ncol = 5)
 
 ```
 
-# Which of the 11 TFs are the same as in the Gosselin paper?
+# Which of the 11 TFs are the same as in the [@Gosselin] paper?
 
 ```{r, fig.width=15, fig.height=12}
 tfs_microglia <- (read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/TFs_microglia_Glass_paper.txt"))[["V1"]]
@@ -1790,10 +1870,10 @@ gosselin <- tfs_microglia[tfs_microglia %in% overlap_atac$name]
 VlnPlot(hivmy2, features = gosselin, group.by = "ht_cluster", ncol = 4)
 ```
 
+</div>
 
 
-
-
+# References
 
 
 
