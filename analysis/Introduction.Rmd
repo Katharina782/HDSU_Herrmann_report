@@ -7,8 +7,8 @@ output: html_document
 
 <div style="text-align: justify"> 
 
-The World Health Organization (WHO) reports the number of people living with 
-HIV to be approximately ... . The use of antiretroviral therapy(ART) has 
+The World Health Organization (WHO) reported the number of people living with 
+HIV in 2020 to be approximately  37.7 million. The use of antiretroviral therapy(ART) has 
 increased the life expectancy in the past years. One of the most prevalent 
 comborbidities that persist even during ART is HIV-associated 
 neurocognitive disorder (HAND).
@@ -38,23 +38,34 @@ continued as a lifelong treatment [@Wallet].
 
 
 
-### Antiretroviral therapy
+### Antiretroviral therapy (ART)
 
-ART
+ART drugs target viral enzymes, like reverse transcriptases, proteases or 
+integrases. Due to the availability of combinations ART mortality resulting from HIV infection
+has been reduced in the past years. Nevertheless, the drugs are not able to 
+cure the disease, but only suppress it. The virus persists in latently infected 
+cells. One advantage of the viral suppression is that drug resistance mutations
+do not occur [@Bandera].
+
 
 ### Microglia & Macrophages
 
 Microglia arise early during development form the yolk sac and they enter the
 CNS even before the blood-brain barrier is formed. They form the tissue-resident 
 immune cells of the brain and maintain their ability to proliferate [@Réu]. 
-Conversely, bone marrow derived monocytes differentiate into macrophages, which are peripheral blood-circulating immune cells which do not proliferate [@DePaula-Silva]. 
+Conversely, bone marrow derived monocytes differentiate into macrophages, which 
+are peripheral blood-circulating immune cells which do not proliferate anymore
+[@DePaula-Silva]. 
 
-Macrophages can adopt to distinct states, pro-inflammatory (M1) or anti-inflammatory (M2). Similarly, homeostatic microglia can become pro-inflammtory or anti-inflammatory
-in response to neuronal injury [@DePaula-Silva]. During neuroinflammation 
-macrophages also enter the brain, contribute to the inflammatory response and 
-might acquire microglia markers and microglial function
+Macrophages can adopt two distinct states, pro-inflammatory (M1) or 
+anti-inflammatory (M2). Similarly, homeostatic microglia can become 
+pro-inflammtory or anti-inflammatory in response to neuronal injury 
+[@DePaula-Silva]. During neuroinflammation macrophages also enter the brain, 
+contribute to the inflammatory response and 
+might acquire microglia markers and microglia function
 [@DePaula-Silva; @Grassivaro]. Whether macrophages keep this microglia-like 
-signature after they leave the brain is not understood. 
+signature after they leave the brain is not understood. If they do, there might
+be microglia-like macrophages in the CSF. 
 
 ### HIV infection in the central nervous system
 
@@ -76,9 +87,13 @@ receiving ART the HIV virus is usually not detectable in blood
 fluid (CSF), but in the brain this is difficult to test and investigate and, 
 therefore, largely unknown [@Asahchop, @Osborne].
 
-Among patients receiving ART there is a high prevalence of HAND, caused by the persistent infection in the brain and the related immune response [@Saylor]. 
+Among patients receiving ART there is a high prevalence of HAND, caused by the
+persistent infection in the brain and the related immune response [@Saylor]. 
 It has even been suggested that ART might dysregulate tight junction proteins 
-necessary for the function of BBB and, therefore, contributes to HAND [@Rahimy, @Osborne]. According to a meta-analysis HAND has an overall prevalence of 43.9% in HIV-infected patients and is categorized into three stages [@Wei]:
+necessary for the function of BBB and, therefore, contributes to HAND 
+[@Rahimy, @Osborne]. According to a meta-analysis HAND has an overall 
+prevalence of 43.9% in HIV-infected patients and is categorized into three 
+stages [@Wei]:
 
 * asymptomatic neurocognitive impairment (ANI) - 26.2% prevalence
 * mild neurocognitive impairment (MND) - 8.5% prevalence
@@ -91,7 +106,9 @@ cerebrospinal fluid reflect the immune cells in the brain, CSF might be used as
 a diagnostic tool for neurocognitive disorder [@Farhadian]. Single cell RNA
 sequencing (sc-RNAseq) on CSF and blood from HIV-infected patients and healthy 
 controls identified a microglia-like subtype of myeloid cells in CSF which were 
-not present in blood samples from the same patient [@Farhadian]. The gene
+not present in blood samples from the same patient [@Farhadian]. HAND strongly
+correlates with microglia activation, therefore, understanding the role of 
+microglia in HAND might provide interesting insights. 
 expression signature of these cells resembles that of disease-associated 
 microglia cells and, therefore was proposed to be a microglia-like cell type 
 which might be used for diagnosis of HAND from CSF samples [@Farhadian]. 
@@ -103,7 +120,7 @@ microglia-like nature of these cells by performing additional analysis on the
 sc-RNAseq dataset and integrating it with additional datasets from, on the one 
 hand a microglia cell line derived from an HIV patient (C20 cell) and, on the 
 other hand, a triculture system of induced neurons, astrocytes and microglia, 
-infected with HIV and treated with ART **C20 reference missing** [@Ryan; ]. 
+infected with HIV and treated with ART [@Ryan; @Garcia-Mesa]. 
 
 The triculture dataset used in the following analysis originates from a 
 human-induced pluripotent stem cell model, including induced neurons (iNs),
@@ -131,9 +148,9 @@ infected iMg treated with EFZ. Levels of IL-1b, IL-1a, IL-8 and TNF-α were
 increased in infected +/- EFZ, compared to uninfected conditions, while IL-10
 and IL-6 did not change in any condition [@Ryan].  
 Since the infection states of the cells in this dataset are known, we might be 
-able to extract a gene signature of infection, infection + ART compared to 
+able to extract a gene signature of infected cells, infected cells treated with ART compared to 
 uninfected cells or uninfected cells treated with ART. This gene signature 
-can then be compared to the microglia-like cells of the CSF samples. This way
+could then be compared to the microglia-like cells of the CSF samples. This way
 we might be able to identify infected cells vs uninfected cells in the CSF 
 microglia-like cells. This is interesting, because even though the CSF samples
 stem from HIV-infected patients, there will be some cells which are infected 
