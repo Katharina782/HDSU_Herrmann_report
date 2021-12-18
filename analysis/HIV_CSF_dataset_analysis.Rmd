@@ -11,36 +11,25 @@ bibliography: references.bib
 link-citations: yes
 ---
 
-<div style="text-align: justify"> 
+<style>
+body {
+text-align: justify}
+</style>
 
-```
+```#{r setup}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
-                      cache = TRUE, cache.lazy = FALSE, autodep = TRUE)
+                      cache = TRUE, autodep = TRUE)
 set.seed(42)
 ```
-
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE, autodep = TRUE, 
-                      collapse = TRUE)
+                      collapse = TRUE, message = FALSE)
 
 set.seed(42)
 ```
 
 
-The aim was to reproduce the analysis done by [@Farhadian].
-Some additional analysis was performed on the Microlglia-like clusters identified
-in this dataset. 
-
-The dataset contains:
-
-* 3 CSF samples from HIV1-infected patients
-* 2 Blood samples from HIV1-infected patients
-* 2 CSF samples from uninfected patients
-
-For more details see [@Farhadian].
-
-* Import libraries
 
 ```{r}
 library(tidyverse)
@@ -69,7 +58,30 @@ library(SeuratDisk)
 library(patchwork)
 ```
 
-* Read in count matrices
+First, the analysis done by [@Farhadian] was reproduced and then more extended
+analysis of the dataset was performed. The microglia-like cell cluster identified
+by [@Farhadian] was of particular interest.
+
+To give a quick overview of the dataset. 
+
+* 3 CSF samples from HIV1-infected patients
+* 2 Blood samples from HIV1-infected patients
+* 2 CSF samples from uninfected patients
+
+For more details see [@Farhadian].
+
+First, the following analysis steps were performed similar as in the paper:
+
+* import files
+* create Seurat objects
+* Quality Control
+* Normalization & Scaling
+* Clustering
+* Dimensionality reduction
+
+
+
+* Read in data(count matrices)
 
 The data is available under https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397
 There is one count matrix for each of the 7 samples.
@@ -117,7 +129,7 @@ uninfected_list <- map(seq.int(7,8), function(n) {
   #          sep = "\t")
 ```
 
-* Create a Seurat object with all samples
+* Create one Seurat object with all samples
 
 ```{r}
 hiv <- merge(hiv_object_list[[1]]$seurat_ob, 
@@ -134,17 +146,22 @@ hiv <- merge(hiv_object_list[[1]]$seurat_ob,
 hiv[["percent_mt"]] <- PercentageFeatureSet(hiv, pattern = "^MT-")
 ```
 
+* Quality control was performed on every individual object. 
 
+* removing the 10% of cells with the highest percentage of mitochdonrial genes
+* remove features that are expressed in less than 3 cells
+* remove cells with 500 < nFeature_RNA > 2500
 
-# Quality Control
+Quality control was done for each sample separately and then the samples were
+combined again before normalization.
 
-(on every individual object)
+**Function to remove features that are expressed in less than three cells:**
 
+```{r} 
+# FUNCTION:
+# to remove features that are expressed in less than three cells
+# returns a list of feature names to keep
 
-* Function to remove features that are expressed in less than three cells:
-
-```{r}
-#returns a list of feature names to keep
 remove_features <- function(seurat_ob) {
   count_matrix <- seurat_ob@assays$RNA@counts 
   ncells <- rowSums(count_matrix != 0) # how many cells are expressing a 
@@ -152,11 +169,10 @@ remove_features <- function(seurat_ob) {
   names(ncells[ncells > 3]) #extract gene names of genes expressed in more 
   #than 3 cells
 }
-```
 
-* Function to remove 10% of cell with highest mitochondrial gene expression
-```{r}
-# remove 10% of cells with the highest mitochondrial percentage
+
+# FUNCTION:
+# to remove 10% of cell with highest mitochondrial gene expression:
 #returns a list of cell names to keep
 remove_mt_genes <- function(seurat_ob){
   thr <- quantile(seurat_ob@meta.data$percent_mt, .9)
@@ -165,21 +181,14 @@ remove_mt_genes <- function(seurat_ob){
     rownames()
 }
 
-```
 
 
+# SOME THOUGHTS:
 
-*  Perform Quality Control 
+# When doing the quality control how important is the order of the operations?
+# If you first remove nFeatures > 500 and then the features exppressed in more than
+# 3 cells, then the nFeatures might be below 500.
 
-  + I do the quality control for each sample separately and then combine them again.
-  + Question: Does it make sense to scale the data separately? Not really, 
-  because when you merge them you have to scale them anyways. 
-
-  + When doing the quality control how important is the order of the operations?
-  If you first remove nFeatures > 500 and then features exppressed in more than
-  3 cells -> then the nFeatures might be below 500.
-
-```{r}
 separate_objects <- SplitObject(hiv, split.by = "orig.ident")#[-c(5,6,7)] 
 # only keep two blood samples and two csf samples
 
@@ -208,9 +217,10 @@ hiv_filt <- merge(qc[[1]],
 ```
 
 
-# Have a look at the quality of the different samples.
 
-#### Number of Features
+## Quality of different samples before quality control {.tabset}
+
+### Number of Features
 
 ```{r, results="asis", fig.width=15, figh.height = 12}
 
@@ -255,7 +265,7 @@ hiv@meta.data %>%
 ```
 
 
-#### Library Size
+### Library Size
 
 ```{r, results = "asis", fig.width=15, fig.height=12}
 # have a look at the library size
@@ -297,7 +307,7 @@ hiv@meta.data %>%
 ```
 
 
-#### Percentage of Mitochondrial genes
+### Percentage of Mitochondrial genes
 
 ```{r, results = "asis", fig.width=15, fig.height=12}
 # have a look at the percentage of mitochondrial genes
@@ -339,17 +349,16 @@ hiv@meta.data %>%
 
 ```
 
-# Quality of the different samples after quality control
+## {-}
 
-* removing the 10% of cells with the highest percentage of mitochdonrial genes
-* remove features that are expressed in less than 3 cells
-* remove cells with 500 < nFeature_RNA > 2500
+## Quality of the different samples after quality control {.tabset}
+
 
 It seems that the CSF1 samples, as well as the two uninfected samples have very
 few cells with nFeature_RNA > 500, so we are left with less cells from these
 samples
 
-#### Number of features after Quality Control
+### Number of features 
 
 ```{r, results = "asis", fig.width=15, fig.height=12}
 
@@ -382,7 +391,7 @@ hiv_filt@meta.data %>% group_by(orig.ident) %>%
             mean = mean(nFeature_RNA)) %>% kable
 ```
 
-#### Library size after Quality Control
+### Library size 
 
 ```{r, results = "asis", fig.width=15, fig.height=12}
 p1 <- hiv_filt@meta.data %>%
@@ -413,7 +422,7 @@ hiv_filt@meta.data %>% group_by(orig.ident) %>%
             mean = mean(nCount_RNA)) %>% kable
 ```
 
-#### Percentage of Mitochondrial genes after Quality Conrol
+### Percentage of Mitochondrial genes 
 
 ```{r, results = "asis", fig.width=15, fig.height=12}
 p1 <- hiv_filt@meta.data %>%
@@ -444,11 +453,17 @@ hiv_filt@meta.data %>% group_by(orig.ident) %>%
             mean = mean(percent_mt)) %>% kable
 ```
 
+## {-}
 
-# Subset Seurat object
+</details>
+
+<details> 
+*<summary>Code for Dimensionality reduction & Clustering</summary>*
+
+**Subset Seurat object**
 
 Use 4 samples (2 blood, 2 csf) from two patients for further analysis like 
-in the paper:
+in the paper
 
 ```{r}
 hiv4 <- subset(hiv_filt, orig.ident %in% c("HIV1_CSF", "HIV2_CSF", "HIV1_Bld", "HIV2_Bld"))
@@ -462,39 +477,10 @@ hiv4 <- ScaleData(hiv4, verbose = FALSE)
 hiv4 <- FindVariableFeatures(hiv4, verbose = FALSE)
 ```
 
-* Save the log-normalized count matrix as a tsv file for Scenic Workflow
 
-```
-# use only the infected samples, but not the uninfected samples
-scenic_samples <- subset(hiv_filt, orig.ident %in% c("HIV1_CSF", "HIV2_CSF",
-                                                     "HIV1_Bld", "HIV2_Bld", "HIV3_CSF"))
+**Dimensionality reduction**
 
-# because the snakemake pipeline of Carlos pySCENIC_pipeline: https://github.com/hdsu-bioquant/pySCENIC_pipeline/blob/master/input/gene_exp_mtx_example.tsv
-# requires an input matrix which has genes as columns and cells as rows
-# I will transpose the matrix
-
-## Try with SCTTransform 
-# select only the 3000 most highly variable features
-# this might solve the problem with the snakemake file, because then you do not have genes with very low expression...
-scenic_samples <- SCTransform(scenic_samples, verbose = FALSE)
-#hvg <- scenic_samples@assays$SCT@var.features
-sct_test_seurat <- subset(scenic_samples, 
-                          features = scenic_samples@assays$SCT@var.features)
-
-sct_test_mtx <- sct_test_seurat@assays$SCT@scale.data
-
-# full matrix for Scenic workflow
-sct_hiv_mtx <- t(sct_test_mtx)
-#write.table(x = sct_hiv_mtx,
-#           file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/pySCENIC_pipeline/input/sct_hi#v_mtx.tsv", sep = "\t")
-
-```
-
-
-
-### Dimensionality reduction
-
-#### PCA
+**PCA**
 
 Compute PCA for highly variable genes:
 The first 10 dimensions seem to account for most of the variance (see elbow plot).
@@ -514,7 +500,7 @@ do.call(gridExtra::grid.arrange, c(pca_plots, ncol=3, nrow = 5))
 
 ```
 
-### Clustering & tSNE embedding
+**Clustering & tSNE embedding**
 
 * compute KNN-graph 
 * find clusters based on KNN-graph with Louvian algorithm
@@ -526,15 +512,17 @@ hiv4 <- FindClusters(hiv4, verbose = FALSE)
 table(hiv4$seurat_clusters)
 ```
 
-Questions:
-
-When looking at the nFeatureRNA, percent_mt should some clustes be removed?
-
-Is there a batch effect?
-
 ```{r}
 hiv4 <- RunTSNE(hiv4, dims = 1:10, verbose = FALSE)
 ```
+
+</details>
+
+
+# Visualization of Quality in tSNE plot
+
+It does not seem that there is any batch effect, but rather the samples separate 
+according to their origing (CSF or Blood).
 
 ```{r, fig.height=12, fig.width=15}
 tsne_coord <- Embeddings(hiv4[["tsne"]]) # tsne coordinates
@@ -566,11 +554,15 @@ p4 <- cbind(meta, tsne_coord) %>%
 ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
 ```
 
-### Find Marker genes
+# Marker genes & Cell type annotation
 
 ```
 marker_genes <- FindAllMarkers(hiv4, logfc.threshold = .01, min.pct = .01)
 ```
+## Top marker genes
+
+The table below lists the two most highly expressed genes for each clusters. 
+
 ```{r, results = "asis"}
 # filter for significant marker genes
 #sign_marker_genes <- marker_genes %>% filter(p_val_adj <= .1)
@@ -578,13 +570,15 @@ marker_genes <- FindAllMarkers(hiv4, logfc.threshold = .01, min.pct = .01)
 sign_marker_genes <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/sign_marker_genes.tsv")
 
 #show the top 10 differentially expressed genes for each cluster
-sign_marker_genes %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC ) %>% kable
+sign_marker_genes %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC ) %>%
+  kable(caption = "An example table caption.")#, digits = c(3, format.args = list(scientific = TRUE)) #= TRUE))
 ```
 
 
-## Cell type annotation with canonical marker genes:
+## Cell type annotation with canonical marker genes {.tabset}
 
-#### B cell markers
+
+### B cell markers
 Are found primarily in cluster 7.
 
 ```{r, fig.width=15, fig.height=12}
@@ -593,7 +587,7 @@ p2 <- RidgePlot(hiv4, features =  c("MS4A1", "CD79A", "TCL1A"), sort = "decreasi
 ggarrange(p1,p2, nrow = 2, ncol = 1)
 ```
 
-#### NK cells
+### NK cells
 In cluster 5 and 9. 
 GZMB is also foudn in cluster 14.
 
@@ -605,7 +599,7 @@ p2 <- RidgePlot(hiv4, features = c("NKG7", "GNLY", "GZMB"), sort = "decreasing")
 ggarrange(p1,p2, nrow = 2, ncol = 1)
 ```
 
-#### Tcells 
+### Tcells 
 
 * A general T cell marker CD3E is expressed in cluster 0,1,3,4,5,6.
 * IL7R in clusters 0-6
@@ -642,7 +636,7 @@ p8 <- RidgePlot(hiv4, features = c("LDHB", "CCR7"), sort = "decreasing")
 ggarrange(p1, p2,p3, p4, p5, p6, p7,p8, ncol = 2, nrow = 4)
 ```
 
-#### plasma cells
+### plasma cells
 
 in cluster 14
 
@@ -652,7 +646,7 @@ p2 <- RidgePlot(hiv4, features = c("IGJ"), sort = "decreasing")
 ggarrange(p1,p2, nrow = 1, ncol = 2)
 ```
 
-#### Myeloid cells
+### Myeloid cells
 
 * granulocytes
 * monocytes
@@ -679,7 +673,7 @@ p3 <- RidgePlot(hiv4, features = c("CD14", "FCGR3A"),
 ggarrange(p1,p2,p3, nrow = 3, ncol = 1)
 ```
 
-##### Myeloid 5 
+### Myeloid 5 
 
   + (from paper) 
   + was characterized by: FCER1A, CD1C 
@@ -693,7 +687,7 @@ p2 <- RidgePlot(hiv4, features = c("FCER1A", "CD1C"), sort = "decreasing", ncol 
 ggarrange(p1, p2, nrow = 2, ncol = 1)
 ```
 
-##### Myeloid 2 
+### Myeloid 2 
   + (from paper) -> cluster 11
   + AXL, APOE, TREM2 (these genes are enriched in neurodegenerative 
   disease-associated microglia)
@@ -713,6 +707,7 @@ ggarrange(p1, p2, p3, p4, ncol = 1, nrow = 4)
 
 ```
 
+## {-}
 
 ## Annotate cells 
 
@@ -745,7 +740,7 @@ hiv4 <- AddMetaData(hiv4, col.name = "Condition", metadata = Idents(hiv4))
 
 ```
 
-Overview of some of the most important marker genes:
+**Overview of some of the most important marker genes:**
 
 ```{r}
 
@@ -757,12 +752,13 @@ DotPlot(object = hiv4, features = c("MS4A1", # B cells
                                     "CD14","FCGR3A", "LYZ", # myeloid cells
                                     "IGJ", # plasma cells
                                     "AXL", "APOE", "TREM2", # myeloid 2
-                                     "FCER1A", "CD1C" # myeloid 5
-)) + theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+                                     "FCER1A", "CD1C") , # myeloid 5
+        group.by = "cell_type") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
 
 ```
 
-Visualize the cell types, conditions, samples and nCountRNA:
+# Visualize the cell types, conditions, samples and nCountRNA:
 
 ```{r,  fig.height=12, fig.width=15}
 p1 <- DimPlot(hiv4, reduction = "tsne", label = TRUE, 
@@ -783,8 +779,9 @@ ggarrange(p1,p2,p3,p4, ncol = 2, nrow = 2)
 
 # Relative contributions of CSF and blood cells to each cluster 
 
-Plot a histogram in order to identify clusters that are predominantly
-composed of CSF cells. 
+
+In the histogram below Myeloid2 and Myeloid5 are predominantly composed of CSF
+cells. 
 
 ```{r}
 
@@ -795,7 +792,8 @@ ggplot(hiv4@meta.data) +
   geom_bar(aes(x = cell_type, fill = orig.ident)) +
   scale_fill_manual( values = custom_color) +
   ylab("Number of cells in each cluster") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  labs(title = "Relative contribution of CSF and blood samples to each cluster")
 ```
 
 
@@ -805,14 +803,15 @@ Myeloid-4 is only found in Blood cells from HIV1 patient. What does that mean?
 
 ## How big are Myeloid2 and Myeloid5 clusters and where do cells come from?
 
-Myeloid2 cells originate from the CSF samples of HIV-1-infected patients, while
-a few (13) cells classified as Myeloid5 cells originate from Blood samples. 
+Myeloid2 cells originate from the CSF samples of HIV infected patients, while
+a few cells (thirteen) classified as Myeloid5 cells originate from Blood samples. 
 
 ```{r, results = "asis"}
 hiv4@meta.data %>% 
   filter(cell_type %in% c("Myeloid2", "Myeloid5")) %>% 
   group_by(cell_type, orig.ident) %>% 
-  summarize(n = n()) %>% kable()
+  summarize(n = n()) %>%
+  kable(caption = "Number of Myeloid2 & Myeloid5 cells from different patients/samples")
 ```
 
 ## Which genes are upregulated in Myeloid-2 compared to the four other myeloid subsets?
@@ -1821,4 +1820,3 @@ FeaturePlot(hiv_new, features = "Cluster1") +
 
 # References
 
-</div>
