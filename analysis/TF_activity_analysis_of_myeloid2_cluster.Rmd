@@ -1590,10 +1590,9 @@ For every cluster the correlation is calculated based on the TF activities of
 all 125 TFs  identified by SCENIC.
 
 
-<button onclick="myFunction()">*Click here for details on how I computed the correlation*</button>
- 
-<div id="myDIV">
-
+<details>
+*<summary>Correlation computation</summary>*
+  
 Dataframe of average activity value for each TF in each patient and clusters.
 
 
@@ -1612,13 +1611,6 @@ df %>%
   head %>% 
   kable ()
 ```
-
-
-```{r, fig.widht = 15, fig.height=15}
-GGally::ggpairs(df) + theme_bw()
-```
-
-
 Correlation matrix: 
 
 ```{r, results = "asis"}
@@ -1632,7 +1624,16 @@ cor_mtx <- df %>% cor()
 # of p_values, upper confidence interval, lower confidence interval
 testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 ```
-</div>
+
+---
+</details>
+
+
+```{r, fig.widht = 15, fig.height=15}
+GGally::ggpairs(df) + theme_bw() +
+  labs(title = "Scatter matrix for all conditions")
+```
+
 
 
 **Conclusions:**
@@ -1709,9 +1710,8 @@ The fact that these TF activities correlate across all patients indicates that
 there might be a biological meaning behind the pattern of activity. 
 
 
-<button onclick="myFunction()">*Click here for details on how I computed the correlation*</button>
- 
-<div id="myDIV">
+<details>
+*<summary>Correlation computation</summary>*
 
 Dataframe used as input for the correlation:
 
@@ -1740,15 +1740,6 @@ df <- auc_df %>%
 df %>% head %>% kable()
 
 ```
-</div> 
-
-
-```{r, fig.width=15, fig.height=15}
-tf_df <- df
-GGally::ggpairs(tf_df) + theme_bw()
-
-```
-
 
 Correlation matrix for TFs:
 
@@ -1761,6 +1752,17 @@ cor_mtx %>% kable
 # returns a matrix each
 # of p_values, upper confidence interval, lower confidence interval
 testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
+```
+
+---
+</details>
+
+```{r, fig.width=15, fig.height=15}
+GGally::ggpairs(df) + theme_bw() +
+    labs(title = "Scatter matrix for all TFs with different activity between clusters")
+
+  
+
 ```
 
 ```{r}
@@ -1873,9 +1875,8 @@ housekeeping gene expression, unfortunately does not help either with the
 interpretation.
 
 
-<button onclick="myFunction()">*Click here for boxplots of housekeeping gene expression*</button>
- 
-<div id="myDIV">
+<details>
+*<summary>Boxplots of housekeeping gene expression</summary>*
 
 ```{r}
 hk_genes <- (read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/HK_genes.txt"))[["V1"]]
@@ -1901,7 +1902,7 @@ test <- hk_genes_filt[1:30]
 VlnPlot(hivmy2, features = test, group.by = "ht_cluster", ncol = 4)
 ```
 
-</div>
+</details>
 
 
 ### TF from the [@Farhadian] paper
@@ -1911,9 +1912,8 @@ Is there a group of cells which has a higher expression of these markers?
 No clear difference in gene expression can be seen.
 
 
-<button onclick="myFunction()">*Click here for boxplots of microglia marker genes*</button>
- 
-<div id="myDIV">
+<details>
+*<summary>Boxplots of microglia marker genes</summary>*
 
 
 ```{r, fig.width = 15, fig.height=40}
@@ -1928,15 +1928,14 @@ paper <- as.vector(paper[,1])
 VlnPlot(hivmy2, features = paper, group.by = "ht_cluster")
 ```
 
-</div>
+</details>
 
 
 # Differential gene expression analyisis
 
+<details>
+*<summary>Differential gene expression analysis</summary>*
 
-<button onclick="myFunction()">*Click here for details on differential gene expression analysis*</button>
- 
-<div id="myDIV">
 
 ```{r, results="asis"}
 hivmy2 <- NormalizeData(hivmy2, verbose = FALSE)
@@ -1954,15 +1953,13 @@ top10 %>%
   kable()
 ```
 
-</div>
+</details>
 
 
 ### TF from the [@Gosselin] paper
 
-
-<button onclick="myFunction()">*Click here for details on microglia TF gene expression*</button>
- 
-<div id="myDIV">
+<details>
+*<summary>Microglia TF gene expression</summary>*
 
 
 ```{r}
@@ -1992,6 +1989,8 @@ gosselin <- tfs_microglia[tfs_microglia %in% overlap_atac$name]
 
 VlnPlot(hivmy2, features = gosselin, group.by = "ht_cluster", ncol = 4)
 ```
+
+</details>
 
 
 # References
