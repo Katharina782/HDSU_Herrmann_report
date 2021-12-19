@@ -383,7 +383,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Main Part
+    Results
      
     <span class="caret"></span>
   </a>
@@ -461,7 +461,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-12-18
+<strong>Last updated:</strong> 2021-12-19
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -789,16 +789,16 @@ unnamed-chunk-9
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2be0932ddfed52b8d9f4a4086763fe9eeb4602b0targetblank2be0932a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0" target="_blank">2be0932</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree91e34e269b1382b79f47740d549c4f68abc4cd46targetblank91e34e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/91e34e269b1382b79f47740d549c4f68abc4cd46" target="_blank">91e34e2</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2be0932ddfed52b8d9f4a4086763fe9eeb4602b0targetblank2be0932a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree91e34e269b1382b79f47740d549c4f68abc4cd46targetblank91e34e2a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0" target="_blank">2be0932</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/91e34e269b1382b79f47740d549c4f68abc4cd46" target="_blank">91e34e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -810,8 +810,10 @@ Ignored files:
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_GRN_with_Scenic_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
+    Ignored:    analysis/figure/
 
 Unstaged changes:
+    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
     Modified:   analysis/Independent_cell_type_identification_Farhadian_dataset.Rmd
     Modified:   analysis/Introduction.Rmd
     Modified:   analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd
@@ -856,6 +858,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/91e34e269b1382b79f47740d549c4f68abc4cd46/analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd" target="_blank">91e34e2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-19
+</td>
+<td>
+wflow_publish(“analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/TF_activity_analysis_of_myeloid2_cluster.html" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1016,17 +1052,10 @@ recent updates
 </div>
 </div>
 </div>
-<script>
-function myFunction() {
-    var x = document.getElementById("myDIV");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-
-</script>
+<style>
+body {
+text-align: justify}
+</style>
 <pre class="r"><code>knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
                       cache = TRUE, autodep = TRUE)
 set.seed(42)</code></pre>
@@ -1116,7 +1145,9 @@ top_tfs %&gt;%
   geom_point() +
   geom_hline(yintercept = -log10(1e-50), col = &quot;red&quot;) +
   geom_text(nudge_x = .05, nudge_y = 2) +
-  labs(title = &quot;TFs with differential binding scores between latent infection and uninfected primary microglia&quot;)
+  labs(title = &quot;TFs with differential binding scores between latent infection and uninfected primary microglia&quot;) +
+  ylab(&quot;-log10(p_value)&quot;) +
+  xlab(&quot;differential binding score&quot;)
 Warning: Removed 51 rows containing missing values (geom_text).</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -1141,6 +1172,28 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-6-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-6-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5bb41240b1a4dff64e2b5fded39e9d88dc15805b/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-6-1.png" target="_blank">5bb4124</a>
@@ -1358,11 +1411,10 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="determine-k-for-k-means-hierarchical-clustering" class="section level1">
-<h1>1. Determine k for k-means hierarchical clustering</h1>
-<ul>
-<li>I will try k = 3/4/5 for clustering and see which yields the best results</li>
-</ul>
+<div id="determine-k-for-k-means-hierarchical-clustering" class="section level1 tabset">
+<h1 class="tabset">1. Determine k for k-means hierarchical clustering</h1>
+<p>The plot of within-cluster som of squares shows that the sweet spot for the value of k is somewhere between 3 and 5. To determine the best k for k-means clustering k = 3, k = 4 and k = 5 were tried and the different outcomes compared. Since k = 4 and k = 5 does not yield an increased number of TFs which differntiate the different clusters, and therefore do not add any insights we proceeded with k = 3 in the following analysis.</p>
+<p>The results of each k can be seen below. Click on the tabs to see heatmaps of the hierarchical clustering, as well as statistical test on different TF acitivity between clusters.</p>
 <pre class="r"><code>df &lt;- hiv7@meta.data %&gt;% filter(cell_type == &quot;Myeloid2&quot;, 
                                     orig.ident == &quot;HIV1_CSF&quot;)
 mtx &lt;- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
@@ -1559,9 +1611,8 @@ hiv7_scenic@meta.data %&gt;%
 </table>
 </div>
 </div>
-</div>
-<div id="tf-activity-per-cluster" class="section level2">
-<h2>TF activity per cluster</h2>
+<div id="tf-activity-per-cluster" class="section level3">
+<h3>TF activity per cluster</h3>
 <p>Plot TF activity for all TFs which showed differential binding scores in primary microglia. For some TFs it appears that there are differences in activity between the clusters. The next step will be to quantitate these differences.</p>
 <p>From the violin plots below it becomes evident, that the acitivity is not normally distributed. Therefore, we will use Kruskal-Wallis test (non-parametric) instead of ANOVA (parametric).</p>
 <pre class="r"><code># make boxplots  and violin plots for all TFs
@@ -1633,16 +1684,19 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="are-there-significant-differences-in-tf-activity-between-the-three-clusters" class="section level2">
-<h2>Are there significant differences in TF activity between the three clusters?</h2>
-<ul>
-<li><strong>ANOVA</strong> test is parametric and assumes normally distributed data</li>
-<li><strong>Kruskal-Wallis-Test</strong> compares the mean of one or more groups, but is non-parametric. This seems more appropriate in this case.</li>
-<li>In both cases the Null-Hypothesis is that there is no difference between the groups.</li>
-</ul>
+<div id="are-there-significant-differences-in-tf-activity-between-the-three-clusters" class="section level3">
+<h3>Are there significant differences in TF activity between the three clusters?</h3>
+<p>ANOVA test is parametric and assumes normally distributed data, while Kruskal-Wallis-Test compares the mean of one or more groups, but is non-parametric. As can be seen in the boxplots above the data is not normally distributed, therefore Kruskal-Wallis-Test is more appropriate in this case. In both cases the Null-Hypothesis is that there is no difference between the groups.</p>
 <p>Since I am repeating the test 125 times, I adjust the p-values with the FDR method. This methods is more powerful than more conservative methdos, like bonferroni, Holm or Hochberg.</p>
-<div id="kruskal-wallis-test-and-p-value-adjustments-for-all-125-tfs" class="section level3">
-<h3>Kruskal-Wallis Test and p-value adjustments for all 125 TFs</h3>
+<p>Performing Kruskal-Wallis-Test to find differences between the three clusters in patient1 yields 54 TFs of all 125 TFs which are differentially active between the three clusters (p-value &lt; 0.05). Of the 24 TFs with differential binding scores in the C20 cell line, sixteen have significantly different activity between the clusters.</p>
+<p>Now that we know that there are significant differences between clusters, we want to identify which cluster/s are different from which other cluster/s.</p>
+<p>Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because we repeat the test we will correct for multiple hypothesis testing using the FDR method. The results are shown in boxplots below.</p>
+</details>
+<details>
+<summary>
+Kruskal-Wallis-Test, p-value adjustment, posthoc tests
+</summary>
+<p><strong>Kruskal-Wallis Test and p-value adjustments for all 125 TFs</strong></p>
 <pre class="r"><code># non-parametric alternative to ANOVA -&gt; Kruskal_wallis test
 k3_df &lt;- hiv7_scenic@meta.data %&gt;% 
   rownames_to_column(&quot;cell&quot;) %&gt;% 
@@ -1658,13 +1712,21 @@ p_values &lt;- map(seq.int(1:125), function(n){
 })
 
 # plot distribution of p_values
-#hist(as.numeric(unname(unlist(p_values))), 
- #    main = &quot;distribution of p_values&quot;,
-  #   xlab = &quot;p_values&quot;,
-   #  breaks = 20)
-
+hist(as.numeric(unname(unlist(p_values))), 
+     main = &quot;distribution of p_values&quot;,
+     xlab = &quot;p_values&quot;,
+     breaks = 20)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
 # adjust for multiple testing with FDR
 adj_p_values &lt;- p.adjust(as.numeric(unname(unlist(p_values))), method = &quot;fdr&quot;)
+
+hist((adj_p_values), 
+     main = &quot;distribution of p_values&quot;,
+     xlab = &quot;p_values&quot;,
+     breaks = 20)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-15-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>
 
 # how many transcription factors are significantly different between the clusters?
 sign3 &lt;- adj_p_values[adj_p_values&lt;.05]
@@ -1675,9 +1737,9 @@ length(adj_p_values[adj_p_values&lt;0.05])
 hiv1_diff &lt;- colnames(auc_mtx)[adj_p_values &lt; .05]
 
 #write.table(diff3, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1&quot;)</code></pre>
-</div>
-<div id="kruskal-wallis-test-and-p-value-adjustment-for-24-tfs-also-identified-by-atac-seq" class="section level3">
-<h3>Kruskal-Wallis test and p-value adjustment for 24 TFs also identified by ATAC-seq</h3>
+<ul>
+<li><strong>Kruskal-Wallis test and p-value adjustment for 24 TFs also identified by ATAC-seq</strong></li>
+</ul>
 <pre class="r"><code># check 24 TFs with Kruskal Wallis test
 p_values &lt;- map(seq.int(1:24), function(n){
   tf &lt;- overlap_atac$name[n]
@@ -1697,15 +1759,9 @@ length(adj_p_values[adj_p_values&lt;0.05])
 hiv1_atac &lt;- overlap_atac$name[adj_p_values &lt; .05]
 #write.table(diff3_atac, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1&quot;)</code></pre>
 <ul>
-<li>54 of the 125 TFs are differentially active between the three clusters</li>
-<li>16 of the 24 TFs with differential binding scores in primary microglia are differentially active between the three clusters.</li>
+<li><strong>Posthoc tests for k = 3</strong></li>
 </ul>
-</div>
-<div id="posthoc-tests-for-k-3" class="section level3">
-<h3>Posthoc tests for k = 3</h3>
-<p>Now that we know that there are significant differences between clusters, we want to identify which cluster/s are different from which other cluster/s.</p>
-<p>** Pairwise Wilcox Test** is a non-parameteric pariwise test. Again, because we repeat the test we will correct for multiple hypothesis testin using the FDR method.</p>
-<p><strong>For the 16 TFs with significantly different activity between the 3 clusters:</strong></p>
+<p>For the 16 TFs with significantly different activity between the 3 clusters:</p>
 <pre class="r"><code># We perform a posthoc test
 #wilcox_list = list()
 wilcox_list &lt;- map(seq.int(1:length(hiv1_atac)), function(i){
@@ -1718,6 +1774,8 @@ wilcox_list &lt;- map(seq.int(1:length(hiv1_atac)), function(i){
   
 #length(wilcox_list)
 #wilcox_list</code></pre>
+<hr />
+</details>
 </div>
 </div>
 <div id="k-4-hierarchical-clustering" class="section level2">
@@ -1758,10 +1816,20 @@ cl3 &lt;- colnames(t(mtx[column_order(ht)[[3]],]))
 
 cl4 &lt;- colnames(t(mtx[column_order(ht)[[4]],]))</code></pre>
 </div>
-<div id="kruskal-wallis-test-for-k-4" class="section level3">
-<h3>Kruskal-Wallis Test for k = 4</h3>
+<div id="are-there-significant-differences-in-tf-activity-between-the-four-clusters" class="section level3">
+<h3>Are there significant differences in TF activity between the four clusters?</h3>
+<p>ANOVA test is parametric and assumes normally distributed data, while Kruskal-Wallis-Test compares the mean of one or more groups, but is non-parametric. As can be seen in the boxplots above the data is not normally distributed, therefore Kruskal-Wallis-Test is more appropriate in this case. In both cases the Null-Hypothesis is that there is no difference between the groups.</p>
+<p>Since I am repeating the test 125 times, I adjust the p-values with the FDR method. This methods is more powerful than more conservative methdos, like bonferroni, Holm or Hochberg.</p>
+<p>Performing Kruskal-Wallis-Test to find differences between the four clusters in patient1 yields 51 TFs of all 125 TFs which are differentially active between the three clusters (p-value &lt; 0.05). Of the 24 TFs with differential binding scores in the C20 cell line, fourteen have significantly different activity between the clusters.</p>
+<p>Now that we know that there are significant differences between clusters, we want to identify which cluster/s are different from which other cluster/s.</p>
+<p>Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because we repeat the test we will correct for multiple hypothesis testing using the FDR method. The results are shown in boxplots below.</p>
+</details>
+<details>
+<summary>
+Kruskal-Wallis-Test, p-value adjustment, posthoc tests
+</summary>
 <ul>
-<li>For all 125 TFs, we find 51 that are significantly different between the clusters.</li>
+<li><strong>Kruskal-Wallis Test and p-value adjustments for all 125 TFs</strong></li>
 </ul>
 <pre class="r"><code>
 k4_df &lt;- hiv7_scenic@meta.data %&gt;% 
@@ -1794,7 +1862,7 @@ diff4 &lt;- colnames(auc_mtx)[adj_p_values &lt; 0.05]
 
 #write.table(diff4, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=4&quot;)</code></pre>
 <ul>
-<li>For the 24 TFs from ATAC-seq footprintin in primary microglia there are 14 differentially expressed between clusters.</li>
+<li><strong>Kruskal-Wallis Test and p-value adjustments for 14 TFs with differential binding scores</strong></li>
 </ul>
 <pre class="r"><code># check 24 TFs with Kruskal Wallis test
 p_values &lt;- map(seq.int(1:24), function(n){
@@ -1815,10 +1883,10 @@ length(adj_p_values[adj_p_values&lt;0.05])
 diff4_atac &lt;- overlap_atac$name[adj_p_values &lt; .05]
 
 #write.table(diff4_atac, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=4&quot;)</code></pre>
-</div>
-<div id="posthoc-tests-for-k-4" class="section level3">
-<h3>Posthoc tests for k = 4</h3>
-<p><strong>Pairwise Wilcox Test</strong></p>
+<ul>
+<li><strong>Pairwise-Wilcox_Test for k = 4</strong></li>
+</ul>
+<p>For the 16 TFs with significantly different activity between the four clusters:</p>
 <pre class="r"><code># We perform a posthoc test
 #wilcox_list = list()
 wilcox_list &lt;- map(seq.int(1:length(diff4_atac)), function(i){
@@ -1846,6 +1914,8 @@ wilcox_list &lt;- map(seq.int(1:length(diff4_atac)), function(i){
   
 #length(wilcox_list)
 #wilcox_list</code></pre>
+<hr />
+</details>
 </div>
 </div>
 <div id="k-5-hierarchical-clustering" class="section level2">
@@ -1886,10 +1956,20 @@ clu4 &lt;- colnames(t(mtx[column_order(ht)[[4]],]))
 
 clu5 &lt;- colnames(t(mtx[column_order(ht)[[5]], ]))</code></pre>
 </div>
-<div id="kruskal-wallis-test-for-k-5" class="section level3">
-<h3>Kruskal-Wallis Test for k = 5</h3>
+<div id="are-there-significant-differences-in-tf-activity-between-the-four-clusters-1" class="section level3">
+<h3>Are there significant differences in TF activity between the four clusters?</h3>
+<p>ANOVA test is parametric and assumes normally distributed data, while Kruskal-Wallis-Test compares the mean of one or more groups, but is non-parametric. As can be seen in the boxplots above the data is not normally distributed, therefore Kruskal-Wallis-Test is more appropriate in this case. In both cases the Null-Hypothesis is that there is no difference between the groups.</p>
+<p>Since I am repeating the test 125 times, I adjust the p-values with the FDR method. This methods is more powerful than more conservative methdos, like bonferroni, Holm or Hochberg.</p>
+<p>Performing Kruskal-Wallis-Test to find differences between the five clusters in patient1 yields 59 TFs of all 125 TFs which are differentially active between the three clusters (p-value &lt; 0.05). Of the 24 TFs with differential binding scores in the C20 cell line, fifteen have significantly different activity between the clusters.</p>
+<p>Now that we know that there are significant differences between clusters, we want to identify which cluster/s are different from which other cluster/s.</p>
+<p>Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because we repeat the test we will correct for multiple hypothesis testing using the FDR method. The results are shown in boxplots below.</p>
+</details>
+<details>
+<summary>
+Kruskal-Wallis-Test, p-value adjustment, posthoc tests
+</summary>
 <ul>
-<li>For all 125 TFs, we find 51 that are significantly different between the clusters</li>
+<li><strong>Kruskal-Wallis Test and p-value adjustments for all 125 TFs</strong></li>
 </ul>
 <pre class="r"><code># all TFs
 k5_df &lt;- hiv7_scenic@meta.data %&gt;% 
@@ -1923,7 +2003,7 @@ diff5 &lt;- colnames(auc_mtx)[adj_p_values &lt; 0.05]
 
 #write.table(diff5, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=5&quot;)</code></pre>
 <ul>
-<li>For the 24 TFs from ATAC-seq footprinting in primary microglia there are 14 differentially expressed between clusters</li>
+<li><strong>Kruskal-Wallis Test and p-value adjustments for all 125 TFs</strong></li>
 </ul>
 <pre class="r"><code># check 24 TFs with Kruskal Wallis test
 p_values &lt;- map(seq.int(1:24), function(n){
@@ -1944,10 +2024,10 @@ length(adj_p_values[adj_p_values&lt;0.05])
 diff5_atac &lt;- overlap_atac$name[adj_p_values &lt; .05]
 
 #write.table(diff5_atac, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=5&quot;)</code></pre>
-</div>
-<div id="posthoc-tests-for-k-4-1" class="section level3">
-<h3>Posthoc tests for k = 4</h3>
-<p><strong>Pairwise Wilcox Test</strong></p>
+<ul>
+<li><strong>Pairwise-Wilcox_Test for k = 5</strong></li>
+</ul>
+<p>For the 15 TFs with significantly different activity between the four clusters:</p>
 <pre class="r"><code># We perform a posthoc test
 #wilcox_list = list()
 wilcox_list &lt;- map(seq.int(1:length(diff5_atac)), function(i){
@@ -1975,12 +2055,17 @@ wilcox_list &lt;- map(seq.int(1:length(diff5_atac)), function(i){
   
 #length(wilcox_list)
 #wilcox_list</code></pre>
+</details>
 </div>
 </div>
-<div id="which-clusters-are-sifnificantly-different-for-differen-k" class="section level2">
-<h2>Which Clusters are sifnificantly different for differen k?</h2>
-<div id="which-clusters-are-significantly-different-for-k-3" class="section level3">
-<h3>Which Clusters are significantly different for k = 3?</h3>
+</div>
+<div id="section" class="section level1 unnumbered">
+<h1 class="unnumbered"></h1>
+<div id="which-clusters-are-sifnificantly-different-for-different-k" class="section level2 tabset">
+<h2 class="tabset">Which Clusters are sifnificantly different for different k?</h2>
+<p>The results from the statistical tests on difference in TF activity between clusters can be seen in the boxplots below. Sixteen, fourteen and twelve TFs were found to be differentially active between the clusters for k equal three, four and five respectively.</p>
+<div id="k-3" class="section level3">
+<h3>k = 3?</h3>
 <pre class="r"><code>library(rstatix)
 library(ggpubr)
 
@@ -2025,6 +2110,28 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-28-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-28-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-28-1.png" target="_blank">183077b</a>
 </td>
 <td>
@@ -2050,9 +2157,8 @@ Katharina782
 </div>
 </div>
 </div>
-</div>
-<div id="which-clusters-are-significantly-different-for-k-4" class="section level2">
-<h2>Which Clusters are significantly different for k = 4?</h2>
+<div id="k-4" class="section level3">
+<h3>k = 4</h3>
 <pre class="r"><code>library(rstatix)
 library(ggpubr)
 
@@ -2121,8 +2227,8 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="which-clusters-are-significantly-different-for-k-5" class="section level2">
-<h2>Which clusters are significantly different for k = 5</h2>
+<div id="k-5" class="section level3">
+<h3>k = 5</h3>
 <pre class="r"><code>library(rstatix)
 library(ggpubr)
 
@@ -2190,10 +2296,14 @@ Katharina782
 </table>
 </div>
 </div>
+<p>{-}</p>
+</div>
 </div>
 <div id="conclusion-on-how-many-ks-to-use-for-hierarchical-clustering" class="section level2">
 <h2>Conclusion on how many k’s to use for hierarchical clustering</h2>
-<p>Across all k (k=3/4/5) that I tested, a similar group of TFs showed significantly different activity between the clusters. Therefore, I decided to proceed with k = 3 for the following analysis. This overlap of significantly different TFs is visualized in the Venn Diagrams below.</p>
+<p>As mentioned, k = 3 was used for the subsequent analysis, since more clusters did not add additional insights.</p>
+<p>The Venn diagram below shows very nicely, that out of all TFs with different activity between clusters, 68% overlap for all k (k=3/4/5) that I tested (right plot). 75% of the TF with differential binding scores in the C20 cell line overlapped for all k (left plot).</p>
+<p>Therefore, I decided to proceed with k = 3 for the following analysis.</p>
 <pre class="r"><code>diff5_atac &lt;- as.vector(read.table( &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=5&quot;))[[&quot;x&quot;]]
 diff5 &lt;- as.vector(read.table( &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=5&quot;))[[&quot;x&quot;]]
 
@@ -2211,21 +2321,22 @@ diff3 &lt;- as.vector(read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microgli
               label_alpha = 0,
               category.names= c(&quot;k = 3&quot;, &quot;k = 4&quot;, &quot;k = 5&quot;),
               #set.size = 20,
-              label = &quot;count&quot;,
+              label = &quot;percent&quot;,
               label_size = 6) +
    scale_fill_distiller(palette = &quot;RdBu&quot;) +
-  labs(title = &quot;TFs (ATAC-seq) significantly different between clusters for different k&#39;s&quot;)
+  labs(title = &quot;TFs with differential binding scores in C20 cell line&quot;)
   #scale_fill_gradient (low = &quot;lightblue&quot;, high = &quot;darkblue&quot;)
 
 p2 &lt;- ggVennDiagram(list(diff3, diff4, diff5),
               label_alpha = 0,
               category.names= c(&quot;k = 3&quot;, &quot;k = 4&quot;, &quot;k = 5&quot;),
-              label = &quot;count&quot;,
+              label = &quot;percent&quot;,
               label_size = 6) +
    scale_fill_distiller(palette = &quot;RdBu&quot;) +
-  labs(title = &quot;all 125 TFs significantly different between clustersfor different k&#39;s&quot;)
+  labs(title = &quot;all TFs with different activity&quot;)
 
-ggarrange(p1, p2, ncol = 2, nrow = 1)</code></pre>
+fig &lt;- ggarrange(p1, p2, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob(&quot;TFs with significantly different activity  between clusters for different k&quot;, size = 20))</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-32-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-32-1">
@@ -2249,6 +2360,28 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-32-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-32-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-32-1.png" target="_blank">183077b</a>
@@ -2277,16 +2410,13 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="transfer-the-3-cluster-identitites-to-patient2-and-patient3" class="section level1">
-<h1>2. Transfer the 3 cluster identitites to patient2 and patient3</h1>
+<div id="transfer-the-3-cluster-identitites-to-patient2-and-patient3-tabset" class="section level1">
+<h1>2. Transfer the 3 cluster identitites to patient2 and patient3 {tabset}</h1>
 <p>The cluster identities from patient 1 were transferred to patient 2 and patient 3 to assign each cell to one of the 3 clusters.</p>
-<button onclick="myFunction()">
-<em>Click here for details on label transfer</em>
-</button>
-<div id="myDIV">
-<div id="cluster-annotation-using-an-integrated-reference" class="section level3">
-<h3>Cluster annotation using an integrated reference</h3>
-<p>Here we do not integrate the datasets beforehand, we do not modify the query expression data.</p>
+<div id="label-transfer" class="section level2">
+<h2>Label Transfer</h2>
+<p><strong>Cluster annotation using an integrated reference</strong></p>
+<p>Here we do not integrate the datasets beforehand and we do not modify the query expression data.</p>
 <pre class="{"><code>Idents(hiv7) &lt;- &quot;cell_type&quot;
 hiv &lt;- subset(hiv7, idents = &quot;Myeloid2&quot;)
 
@@ -2355,11 +2485,11 @@ hiv2_scenic &lt;- AddMetaData(hiv2, metadata = auc_mtx,
 hiv3_scenic &lt;- AddMetaData(hiv3, metadata = auc_mtx,
                            col.name = colnames(auc_mtx))</code></pre>
 </div>
-</div>
-<div id="predicted-clusters-from-label-transfer-for-patient-2-and-patient-3" class="section level2">
-<h2>Predicted clusters from Label Transfer for patient 2 and patient 3</h2>
-<p>The clusters obatined after transferring the cluster identities from patient 1 to patient2 do not seem to be very good at separating cells according to TF activity.</p>
-<p>When you transfer the cluster identities from patient1 to patient3 all cells, but one are assigned to cluster1. This shows that the label transfer did not work very well. This is probably due to the low number of Myeloid2 cells in each sample.</p>
+<div id="predicted-cluster-labels" class="section level2">
+<h2>Predicted cluster labels</h2>
+<p>The heatmaps below show the predicted clusters from label transfer for patient 2 and patient 3</p>
+<p>The clusters obtained after transferring the cluster identities from patient 1 to patient2 do not seem to be very good at separating cells according to TF activity.</p>
+<p>When you transfer the cluster identities from patient1 to patient3 all cells, but one, are assigned to cluster1. This shows that the label transfer did not work very well. This is probably due to the low number of Myeloid2 cells in each sample.</p>
 <pre class="r"><code>cluster_anno &lt;- as.data.frame(hiv2$predicted.id)
 
 #map(seq.int(1:5), function(k){
@@ -2455,12 +2585,13 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="hierarchical-clustering-for-all-3-patients-separately" class="section level1">
-<h1>3. Hierarchical clustering for all 3 patients separately</h1>
+<div id="hierarchical-clustering-for-all-3-patients-separately" class="section level1 tabset">
+<h1 class="tabset">3. Hierarchical clustering for all 3 patients separately</h1>
 <p>Since the label transfer of the 3 cluster identities from patient1 did not seem to work very well, we next tried to perform hierarchical clustering using k = 3 for all 3 patients separately. This way we might be able to see if the TF activities in the 3 clusters show similar patterns across the different patients.</p>
 <p>In the two heatmaps below the clusters look more sensible than the clusters observed after cluster label transfer.</p>
-<div id="k-means-clustering-with-k-3-for-patient-2" class="section level2">
-<h2>K-means clustering with k = 3 for patient 2</h2>
+<div id="patient2" class="section level2">
+<h2>patient2</h2>
+<p><strong>K-means clustering with k = 3 for patient 2</strong></p>
 <div id="draw-heatmap-for-patient-3" class="section level4">
 <h4>1. Draw Heatmap for Patient 3</h4>
 <pre class="r"><code>#map(seq.int(1:5), function(k){
@@ -2592,8 +2723,9 @@ length(adj_p_values[adj_p_values&lt;0.05])
 hiv2_atac &lt;- overlap_atac$name[adj_p_values &lt; .05]</code></pre>
 </div>
 </div>
-<div id="k-means-clustering-with-k-3-for-patient-3" class="section level2">
-<h2>K-means clustering with k = 3 for patient 3</h2>
+<div id="patient-3" class="section level2">
+<h2>patient 3</h2>
+<p><strong>K-means clustering with k = 3 for patient 3</strong></p>
 <div id="draw-heatmap-for-patient-3-1" class="section level4">
 <h4>1. Draw Heatmap for Patient 3</h4>
 <pre class="r"><code>df &lt;- hiv7@meta.data %&gt;% filter(cell_type == &quot;Myeloid2&quot;, 
@@ -2724,11 +2856,8 @@ length(adj_p_values[adj_p_values&lt;0.05])
 hiv3_atac &lt;- overlap_atac$name[adj_p_values &lt; .05]</code></pre>
 </div>
 </div>
-<div id="which-tfs-show-significantly-different-activity-between-the-clusters-across-patients" class="section level2">
-<h2>Which TFs show significantly different activity between the clusters across patients?</h2>
-<p>Since the independent hierarchical clustering for all three patients yields clusters which look more reasonable, we will compare the three clusters we obtain across the three patients to see if there is a pattern between them.</p>
-<p>We already saw that there are a few TFs which show significantly different activity between the clusters in patient1.</p>
-<p>Next, we want to see if the same group of TFs characterize the three clusters in all three patients or if they are different. We will test which TFs are significantly different between clusters and then use a pairwise Wilcox test to determine which clusters are different.</p>
+<div id="comparison-between-all-3-patients" class="section level2">
+<h2>comparison between all 3 patients</h2>
 <div id="heatmaps-of-k-means-clustering-with-k-3-for-all-three-patients" class="section level4">
 <h4>Heatmaps of k-means clustering with k = 3 for all three patients</h4>
 <pre class="r"><code># patient 1
@@ -2802,6 +2931,15 @@ Katharina782
 </div>
 </div>
 </div>
+</div>
+</div>
+<div id="section-1" class="section level1 unnumbered">
+<h1 class="unnumbered"></h1>
+<div id="which-tfs-show-significantly-different-activity-between-the-clusters-across-patients" class="section level2">
+<h2>Which TFs show significantly different activity between the clusters across patients?</h2>
+<p>Since the independent hierarchical clustering for all three patients yields clusters which look more reasonable, we will compare the three clusters we obtain across the three patients to see if there is a pattern between them.</p>
+<p>We already saw that there are a few TFs which show significantly different activity between the clusters in patient1.</p>
+<p>Next, we want to see if the same group of TFs characterize the three clusters in all three patients or if they are different. We will test which TFs are significantly different between clusters and then use a pairwise Wilcox test to determine which clusters are different.</p>
 <div id="are-tfs-differentiating-the-three-clusters-similar-across-all-three-patients" class="section level3">
 <h3>Are TFs differentiating the three clusters similar across all three patients?</h3>
 <p>In the Venn diagram below it can be seen that 46 with significantly different activities between clusters overlap across patients.</p>
@@ -2848,6 +2986,28 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-45-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-45-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-45-1.png" target="_blank">183077b</a>
 </td>
 <td>
@@ -2874,12 +3034,12 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="tfs-show-different-activity-in-one-of-the-three-clusters" class="section level2">
-<h2>11 TFs show different activity in one of the three clusters</h2>
+<div id="tfs-show-different-activity-in-one-of-the-three-clusters" class="section level2 tabset">
+<h2 class="tabset">11 TFs show different activity in one of the three clusters</h2>
 <p>In the boxplots below it can be seen that in all three patients there seems to be one cluster which is different from two other clusters.</p>
 <pre class="r"><code>intersect &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/intersect_TFs_different_across_patients_3_clusters&quot;)[[&quot;x&quot;]]</code></pre>
-<div id="patient-1" class="section level5">
-<h5>Patient 1</h5>
+<div id="patient-1" class="section level3">
+<h3>Patient 1</h3>
 <pre class="r"><code>library(rstatix)
 library(ggpubr)
 
@@ -2924,6 +3084,28 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-47-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-47-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-47-1.png" target="_blank">183077b</a>
 </td>
 <td>
@@ -2958,8 +3140,8 @@ Katharina782
                        add_xy_position())
 ctcf1 &lt;- ctcf1 + labs(title = &quot;CTCF activity in patient 1&quot;)</code></pre>
 </div>
-<div id="patient-2" class="section level5">
-<h5>Patient 2</h5>
+<div id="patient-2" class="section level3">
+<h3>Patient 2</h3>
 <pre class="r"><code>library(rstatix)
 library(ggpubr)
 
@@ -3037,8 +3219,8 @@ Katharina782
                        add_xy_position())
 ctcf2 &lt;- ctcf2 + labs(title = &quot;CTCF activity in patient 2&quot;)</code></pre>
 </div>
-<div id="patient-3" class="section level5">
-<h5>Patient 3</h5>
+<div id="patient-3-1" class="section level3">
+<h3>Patient 3</h3>
 <pre class="r"><code>library(rstatix)
 library(ggpubr)
 
@@ -3111,6 +3293,9 @@ Katharina782
 #annotate_figure(figure, top = text_grob(&quot;Patient 3 - CSF     k = 3 for k-means clustering (TFs from ATAC-seq)&quot;, 
  #              color = &quot;black&quot;, face = &quot;bold&quot;, size = 25))</code></pre>
 </div>
+</div>
+<div id="section-2" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
 <div id="ctcf-expression-across-patients" class="section level3">
 <h3>CTCF expression across patients</h3>
 <p>CTCF has been implicated to regulate HIV latency <span class="citation">[@Jeffereys]</span>. In the boxplots below it can be seen that there is a significant difference between the first cluster and the other two clusters in patient1 and patient2. Similarly in patient3 there is a difference, however the difference is not as significant. This might imply that cluster contains a group of cells which are latently infected and therefore CTCF is more active.</p>
@@ -3122,6 +3307,54 @@ Katharina782
 ctcf3 &lt;- ctcf3 + labs(title = &quot;CTCF activity in patient 3&quot;)</code></pre>
 <pre class="r"><code>ggarrange(ctcf1, ctcf2, ctcf3, ncol = 3, nrow = 1)</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-53-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-53-1">
+Past versions of unnamed-chunk-53-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-53-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-53-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-53-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="correlations-between-clusters-across-patients" class="section level2">
@@ -3283,6 +3516,8 @@ df %&gt;%
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>GGally::ggpairs(df) + theme_bw()</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-57-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Correlation matrix:</p>
 <pre class="r"><code>df %&gt;% cor %&gt;% kable()</code></pre>
 <table>
@@ -3444,56 +3679,9 @@ corrplot(cor_mtx,method = &quot;color&quot;, order = &quot;hclust&quot;,
          addrect = 4, # add boxes 
          p.mat = testCor$p, 
          #sig.level = .05,
-         insig = &quot;p-value&quot;)</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-58-1">
-Past versions of unnamed-chunk-58-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-58-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" target="_blank">183077b</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+         insig = &quot;p-value&quot;, 
+         tl.col = &quot;black&quot;)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
 <button onclick="myFunction()">
 <em>Click here for some additional correlation plots which do not aid the interpretation much.</em>
 </button>
@@ -3522,56 +3710,9 @@ testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)</code></pre>
          addrect = 4, # add boxes 
          p.mat = testCor$p, 
          #sig.level = .05,
-         insig = &quot;p-value&quot;)</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-61-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-61-1">
-Past versions of unnamed-chunk-61-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-61-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-61-1.png" target="_blank">183077b</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-61-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+         insig = &quot;p-value&quot;, 
+         tl.col = &quot;black&quot;)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-62-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="tf-correlation-across-clusters" class="section level3">
@@ -3716,6 +3857,79 @@ df %&gt;% head %&gt;% kable()</code></pre>
 </tr>
 </tbody>
 </table>
+</div>
+<pre class="r"><code>tf_df &lt;- df
+GGally::ggpairs(tf_df) + theme_bw()</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-66-1">
+Past versions of unnamed-chunk-66-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-66-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">183077b</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-16
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">dde1097</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p>Correlation matrix for TFs:</p>
 <pre class="r"><code>cor_mtx &lt;- df %&gt;% cor()
@@ -3919,56 +4133,9 @@ testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)</code></pre>
 p1 &lt;- corrplot(cor_mtx,method = &quot;color&quot;, order = &quot;hclust&quot;, 
          addrect = 2, # add boxes 
          p.mat = testCor$p, 
-         insig = &quot;p-value&quot;)</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-66-1">
-Past versions of unnamed-chunk-66-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-66-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">183077b</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+         insig = &quot;p-value&quot;,
+         tl.col = &quot;black&quot;)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-68-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>         #insig = &quot;p-value&quot;)
          #title = &quot;Correlations between 9 clusters of 3 patients&quot;)</code></pre>
 </div>
@@ -4027,13 +4194,13 @@ p2 &lt;- hivmy2@meta.data %&gt;%
 
 fig &lt;- ggarrange(p1, p2, ncol = 2, nrow = 1)
 annotate_figure(fig, top = text_grob(&quot;Quality of Clsuters&quot;))</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-69-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-71-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-69-1">
-Past versions of unnamed-chunk-69-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-71-1">
+Past versions of unnamed-chunk-71-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-69-1" class="collapse">
+<div id="fig-unnamed-chunk-71-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -4052,7 +4219,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-69-1.png" target="_blank">183077b</a>
+<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-71-1.png" target="_blank">183077b</a>
 </td>
 <td>
 Katharina782
@@ -4063,7 +4230,7 @@ Katharina782
 </tr>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-69-1.png" target="_blank">dde1097</a>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-71-1.png" target="_blank">dde1097</a>
 </td>
 <td>
 Katharina782
@@ -4110,99 +4277,7 @@ DDX21  0.003060688  -1.0742719 0.088 0.330         1</code></pre>
 VlnPlot(hivmy2, features = test, group.by = &quot;ht_cluster&quot;, ncol = 4)
 Warning in SingleExIPlot(type = type, data = data[, x, drop = FALSE], idents =
 idents, : All cells have the same value of ABHD8.</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-72-1.png" width="1440" style="display: block; margin: auto;" /></p>
-</div>
-<div id="tf-from-the-farhadian-paper" class="section level3">
-<h3>TF from the <span class="citation">[@Farhadian]</span> paper</h3>
-<p>These TFs were used as marker genes for the microlgia like Myeloid2 cell cluster. Is there a group of cells which has a higher expression of these markers? No clear difference in gene expression can be seen.</p>
-<button onclick="myFunction()">
-<em>Click here for boxplots of microglia marker genes</em>
-</button>
-<div id="myDIV">
-<pre class="r"><code>#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
-paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;,
-                    sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
-paper[1,] &lt;- &quot;APOC1&quot;
-colnames(paper) &lt;- &quot;&quot;
-paper &lt;- as.vector(paper[,1])
-
-
-VlnPlot(hivmy2, features = paper, group.by = &quot;ht_cluster&quot;)
-Warning in FetchData(object = object, vars = features, slot = slot): The
-following requested variables were not found: SELENOP</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-73-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-73-1">
-Past versions of unnamed-chunk-73-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-73-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-73-1.png" target="_blank">183077b</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-73-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="differential-gene-expression-analyisis" class="section level1">
-<h1>Differential gene expression analyisis</h1>
-<button onclick="myFunction()">
-<em>Click here for details on differential gene expression analysis</em>
-</button>
-<div id="myDIV">
-<pre class="r"><code>hivmy2 &lt;- NormalizeData(hivmy2, verbose = FALSE)
-hivmy2 &lt;- ScaleData(hivmy2, verbose = FALSE)
-hivmy2 &lt;- FindVariableFeatures(hivmy2, verbose = FALSE)
-Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : pseudoinverse used at -2.1857
-Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : neighborhood radius 0.49845
-Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : reciprocal condition number 7.6527e-16
-Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-parametric, : There are other near singularities as well. 0.090619
-hivmy2 &lt;- RunPCA(hivmy2, features = VariableFeatures(hivmy2), verbose = FALSE)
-ElbowPlot(hivmy2)</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-74-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-74-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-74-1">
 Past versions of unnamed-chunk-74-1.png
@@ -4227,6 +4302,28 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-74-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-74-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-74-1.png" target="_blank">183077b</a>
 </td>
 <td>
@@ -4245,6 +4342,98 @@ Katharina782
 </td>
 <td>
 2021-12-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tf-from-the-farhadian-paper" class="section level3">
+<h3>TF from the <span class="citation">[@Farhadian]</span> paper</h3>
+<p>These TFs were used as marker genes for the microlgia like Myeloid2 cell cluster. Is there a group of cells which has a higher expression of these markers? No clear difference in gene expression can be seen.</p>
+<button onclick="myFunction()">
+<em>Click here for boxplots of microglia marker genes</em>
+</button>
+<div id="myDIV">
+<pre class="r"><code>#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
+paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;,
+                    sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
+paper[1,] &lt;- &quot;APOC1&quot;
+colnames(paper) &lt;- &quot;&quot;
+paper &lt;- as.vector(paper[,1])
+
+
+VlnPlot(hivmy2, features = paper, group.by = &quot;ht_cluster&quot;)
+Warning in FetchData(object = object, vars = features, slot = slot): The
+following requested variables were not found: SELENOP</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-75-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="differential-gene-expression-analyisis" class="section level1">
+<h1>Differential gene expression analyisis</h1>
+<button onclick="myFunction()">
+<em>Click here for details on differential gene expression analysis</em>
+</button>
+<div id="myDIV">
+<pre class="r"><code>hivmy2 &lt;- NormalizeData(hivmy2, verbose = FALSE)
+hivmy2 &lt;- ScaleData(hivmy2, verbose = FALSE)
+hivmy2 &lt;- FindVariableFeatures(hivmy2, verbose = FALSE)
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : pseudoinverse used at -2.1857
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : neighborhood radius 0.49845
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : reciprocal condition number 7.6527e-16
+Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
+parametric, : There are other near singularities as well. 0.090619
+hivmy2 &lt;- RunPCA(hivmy2, features = VariableFeatures(hivmy2), verbose = FALSE)
+ElbowPlot(hivmy2)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-76-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-76-1">
+Past versions of unnamed-chunk-76-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-76-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-76-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-76-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
 </td>
 </tr>
 </tbody>
@@ -4371,6 +4560,9 @@ top10 %&gt;%
 <em>Click here for details on microglia TF gene expression</em>
 </button>
 <div id="myDIV">
+
+
+
 <pre class="r"><code>Idents(hiv4) &lt;- &quot;cell_type&quot;
 # Find Markers that distinguish My2 from the other Myeloid clusters
 my2_markers &lt;- FindMarkers(hiv4, ident.1  = &quot;Myeloid2&quot;,
@@ -4382,7 +4574,9 @@ m1 &lt;- my2_markers %&gt;% filter(gene %in% microglia_genes [[&quot;gene_name&q
 m1 &lt;- m1[[&quot;gene&quot;]][m1[[&quot;gene&quot;]] %in% paper == FALSE]
 
 VlnPlot(hivmy2, features = m1, group.by = &quot;ht_cluster&quot;, ncol = 5)</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-76-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-78-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+</div>
 <div id="which-of-the-11-tfs-are-the-same-as-in-the-gosselin-paper" class="section level1">
 <h1>Which of the 11 TFs are the same as in the <span class="citation">[@Gosselin]</span> paper?</h1>
 <pre class="r"><code>tfs_microglia &lt;- (read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/TFs_microglia_Glass_paper.txt&quot;))[[&quot;V1&quot;]]
@@ -4390,10 +4584,7 @@ VlnPlot(hivmy2, features = m1, group.by = &quot;ht_cluster&quot;, ncol = 5)</cod
 gosselin &lt;- tfs_microglia[tfs_microglia %in% overlap_atac$name]
 
 VlnPlot(hivmy2, features = gosselin, group.by = &quot;ht_cluster&quot;, ncol = 4)</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-77-1.png" width="1440" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-</div>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-79-1.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
