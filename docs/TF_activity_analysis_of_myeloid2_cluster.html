@@ -764,6 +764,12 @@ unnamed-chunk-76
 unnamed-chunk-77
 </li>
 <li>
+unnamed-chunk-78
+</li>
+<li>
+unnamed-chunk-79
+</li>
+<li>
 unnamed-chunk-8
 </li>
 <li>
@@ -789,16 +795,16 @@ unnamed-chunk-9
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree91e34e269b1382b79f47740d549c4f68abc4cd46targetblank91e34e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/91e34e269b1382b79f47740d549c4f68abc4cd46" target="_blank">91e34e2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreebb965a8fe71e28af44fba8f3042204001cddaa0ctargetblankbb965a8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/bb965a8fe71e28af44fba8f3042204001cddaa0c" target="_blank">bb965a8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree91e34e269b1382b79f47740d549c4f68abc4cd46targetblank91e34e2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreebb965a8fe71e28af44fba8f3042204001cddaa0ctargetblankbb965a8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/91e34e269b1382b79f47740d549c4f68abc4cd46" target="_blank">91e34e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/bb965a8fe71e28af44fba8f3042204001cddaa0c" target="_blank">bb965a8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -858,6 +864,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/bb965a8fe71e28af44fba8f3042204001cddaa0c/analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd" target="_blank">bb965a8</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-19
+</td>
+<td>
+wflow_publish(“analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/eb137dda9188951b1859c2ac57e84de1ab238fd9/docs/TF_activity_analysis_of_myeloid2_cluster.html" target="_blank">eb137dd</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-19
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -3396,10 +3436,14 @@ auc_df &lt;- auc_df %&gt;%
 <div id="correlation-between-clusters-based-on-all-125-tfs" class="section level3">
 <h3>Correlation between clusters based on all 125 TFs</h3>
 <p>For every cluster the correlation is calculated based on the TF activities of all 125 TFs identified by SCENIC.</p>
-<button onclick="myFunction()">
-<em>Click here for details on how I computed the correlation</em>
-</button>
-<div id="myDIV">
+<details>
+*
+<summary>
+Correlation computation
+</summary>
+<ul>
+<li></li>
+</ul>
 <p>Dataframe of average activity value for each TF in each patient and clusters.</p>
 <pre class="r"><code># correlation matrix
 df &lt;- auc_df %&gt;%
@@ -3516,8 +3560,6 @@ df %&gt;%
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>GGally::ggpairs(df) + theme_bw()</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-57-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Correlation matrix:</p>
 <pre class="r"><code>df %&gt;% cor %&gt;% kable()</code></pre>
 <table>
@@ -3666,6 +3708,80 @@ cor_mtx &lt;- df %&gt;% cor()
 # returns a matrix each
 # of p_values, upper confidence interval, lower confidence interval
 testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)</code></pre>
+<hr />
+</details>
+<pre class="r"><code>GGally::ggpairs(df) + theme_bw() +
+  labs(title = &quot;Scatter matrix for all conditions&quot;)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-58-1">
+Past versions of unnamed-chunk-58-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-58-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" target="_blank">2a95e92</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" target="_blank">183077b</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-16
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-58-1.png" target="_blank">dde1097</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <p><strong>Conclusions:</strong></p>
 <ul>
@@ -3682,6 +3798,43 @@ corrplot(cor_mtx,method = &quot;color&quot;, order = &quot;hclust&quot;,
          insig = &quot;p-value&quot;, 
          tl.col = &quot;black&quot;)</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-59-1">
+Past versions of unnamed-chunk-59-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-59-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/eb137dda9188951b1859c2ac57e84de1ab238fd9/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-59-1.png" target="_blank">eb137dd</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <button onclick="myFunction()">
 <em>Click here for some additional correlation plots which do not aid the interpretation much.</em>
 </button>
@@ -3713,6 +3866,43 @@ testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)</code></pre>
          insig = &quot;p-value&quot;, 
          tl.col = &quot;black&quot;)</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-62-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-62-1">
+Past versions of unnamed-chunk-62-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-62-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/eb137dda9188951b1859c2ac57e84de1ab238fd9/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-62-1.png" target="_blank">eb137dd</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="tf-correlation-across-clusters" class="section level3">
@@ -3720,10 +3910,14 @@ testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)</code></pre>
 <p>Eleven TFs which differentiate the clusters seem to correlate between the clusters.</p>
 <p>For these eleven TFs with different activity between the clusters the activity correlates between across all three patients. This means, that the three TFs YY1, REST, MXI1 are positively correlated, but negatively correlated with the rest of the TFs.</p>
 <p>The fact that these TF activities correlate across all patients indicates that there might be a biological meaning behind the pattern of activity.</p>
-<button onclick="myFunction()">
-<em>Click here for details on how I computed the correlation</em>
-</button>
-<div id="myDIV">
+<details>
+*
+<summary>
+Correlation computation
+</summary>
+<ul>
+<li></li>
+</ul>
 <p>Dataframe used as input for the correlation:</p>
 <pre class="r"><code>intersect_atac &lt;- as.vector(read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_intersect_TFs_different_across_patients_3_clusters&quot;))[[&quot;x&quot;]]</code></pre>
 <pre class="r"><code>cor_mtx &lt;- auc_df %&gt;%
@@ -3857,80 +4051,6 @@ df %&gt;% head %&gt;% kable()</code></pre>
 </tr>
 </tbody>
 </table>
-</div>
-<pre class="r"><code>tf_df &lt;- df
-GGally::ggpairs(tf_df) + theme_bw()</code></pre>
-<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-66-1">
-Past versions of unnamed-chunk-66-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-66-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">fce26d5</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/2a95e927f953c093f2e48cb2b6551d152f735267/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">2a95e92</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/183077b696fa2df6e887d589e7a30c7193ad5e04/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">183077b</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-66-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <p>Correlation matrix for TFs:</p>
 <pre class="r"><code>cor_mtx &lt;- df %&gt;% cor()
 cor_mtx %&gt;% kable</code></pre>
@@ -4128,6 +4248,11 @@ cor_mtx %&gt;% kable</code></pre>
 # returns a matrix each
 # of p_values, upper confidence interval, lower confidence interval
 testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)</code></pre>
+<hr />
+</details>
+<pre class="r"><code>GGally::ggpairs(df) + theme_bw() +
+    labs(title = &quot;Scatter matrix for all TFs with different activity between clusters&quot;)</code></pre>
+<p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-67-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># plot correlations
 # p.mat = matrix of p_values
 p1 &lt;- corrplot(cor_mtx,method = &quot;color&quot;, order = &quot;hclust&quot;, 
@@ -4136,6 +4261,43 @@ p1 &lt;- corrplot(cor_mtx,method = &quot;color&quot;, order = &quot;hclust&quot;
          insig = &quot;p-value&quot;,
          tl.col = &quot;black&quot;)</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-68-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-68-1">
+Past versions of unnamed-chunk-68-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-68-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/eb137dda9188951b1859c2ac57e84de1ab238fd9/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-68-1.png" target="_blank">eb137dd</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>         #insig = &quot;p-value&quot;)
          #title = &quot;Correlations between 9 clusters of 3 patients&quot;)</code></pre>
 </div>
@@ -4248,10 +4410,14 @@ Katharina782
 <h2>Housekeeping genes</h2>
 <p>A list of 3804 houseekping genes were used from <span class="citation">[@Eisenberg]</span>.</p>
 <p>A quantitative analysis might be difficult, because due to the small sample size and large feature number, we get very high p_values for all genes in differential gene expression analysis. Visualization of the housekeeping gene expression, unfortunately does not help either with the interpretation.</p>
-<button onclick="myFunction()">
-<em>Click here for boxplots of housekeeping gene expression</em>
-</button>
-<div id="myDIV">
+<details>
+*
+<summary>
+Boxplots of housekeeping gene expression
+</summary>
+<ul>
+<li></li>
+</ul>
 <pre class="r"><code>hk_genes &lt;- (read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/HK_genes.txt&quot;))[[&quot;V1&quot;]]</code></pre>
 <pre class="r"><code># filter only genes present in the scRNAseq count matrix
 hk_genes_filt &lt;- hk_genes[hk_genes %in% rownames(hivmy2@assays$RNA@counts)]
@@ -4348,14 +4514,18 @@ Katharina782
 </table>
 </div>
 </div>
-</div>
+</details>
 <div id="tf-from-the-farhadian-paper" class="section level3">
 <h3>TF from the <span class="citation">[@Farhadian]</span> paper</h3>
 <p>These TFs were used as marker genes for the microlgia like Myeloid2 cell cluster. Is there a group of cells which has a higher expression of these markers? No clear difference in gene expression can be seen.</p>
-<button onclick="myFunction()">
-<em>Click here for boxplots of microglia marker genes</em>
-</button>
-<div id="myDIV">
+<details>
+*
+<summary>
+Boxplots of microglia marker genes
+</summary>
+<ul>
+<li></li>
+</ul>
 <pre class="r"><code>#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
 paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;,
                     sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
@@ -4368,16 +4538,20 @@ VlnPlot(hivmy2, features = paper, group.by = &quot;ht_cluster&quot;)
 Warning in FetchData(object = object, vars = features, slot = slot): The
 following requested variables were not found: SELENOP</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-75-1.png" width="1440" style="display: block; margin: auto;" /></p>
-</div>
+</details>
 </div>
 </div>
 </div>
 <div id="differential-gene-expression-analyisis" class="section level1">
 <h1>Differential gene expression analyisis</h1>
-<button onclick="myFunction()">
-<em>Click here for details on differential gene expression analysis</em>
-</button>
-<div id="myDIV">
+<details>
+*
+<summary>
+Differential gene expression analysis
+</summary>
+<ul>
+<li></li>
+</ul>
 <pre class="r"><code>hivmy2 &lt;- NormalizeData(hivmy2, verbose = FALSE)
 hivmy2 &lt;- ScaleData(hivmy2, verbose = FALSE)
 hivmy2 &lt;- FindVariableFeatures(hivmy2, verbose = FALSE)
@@ -4553,16 +4727,17 @@ top10 %&gt;%
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <div id="tf-from-the-gosselin-paper" class="section level3">
 <h3>TF from the <span class="citation">[@Gosselin]</span> paper</h3>
-<button onclick="myFunction()">
-<em>Click here for details on microglia TF gene expression</em>
-</button>
-<div id="myDIV">
-
-
-
+<details>
+*
+<summary>
+Microglia TF gene expression
+</summary>
+<ul>
+<li></li>
+</ul>
 <pre class="r"><code>Idents(hiv4) &lt;- &quot;cell_type&quot;
 # Find Markers that distinguish My2 from the other Myeloid clusters
 my2_markers &lt;- FindMarkers(hiv4, ident.1  = &quot;Myeloid2&quot;,
@@ -4585,6 +4760,7 @@ gosselin &lt;- tfs_microglia[tfs_microglia %in% overlap_atac$name]
 
 VlnPlot(hivmy2, features = gosselin, group.by = &quot;ht_cluster&quot;, ncol = 4)</code></pre>
 <p><img src="figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-79-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</details>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
