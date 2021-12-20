@@ -95,6 +95,28 @@ h6 {
 }
 </style>
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 
 
@@ -371,7 +393,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">report</a>
+      <a class="navbar-brand" href="index.html">Report</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -381,20 +403,26 @@ div.tocify {
 <li>
   <a href="Introduction.html">Introduction</a>
 </li>
-<li>
-  <a href="HIV_CSF_dataset_analysis.html">CSF</a>
-</li>
-<li>
-  <a href="TF_activity_analysis_of_myeloid2_cluster.html">TF activity Myeloid2</a>
-</li>
-<li>
-  <a href="Independent_cell_type_identification_Farhadian_dataset.html">Myeloid2 are a microglia-like</a>
-</li>
-<li>
-  <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">Integration CSF &amp; triculture</a>
-</li>
-<li>
-  <a href="Triculture_dataset_GRN_with_Scenic.html">TF activity iMg</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Results
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="HIV_CSF_dataset_analysis.html">1. CSF</a>
+    </li>
+    <li>
+      <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
+    </li>
+    <li>
+      <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF &amp; triculture</a>
+    </li>
+    <li>
+      <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="Discussion.html">Discussion</a>
@@ -437,7 +465,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -446,7 +474,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -455,10 +483,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-12-18
+<strong>Last updated:</strong> 2021-12-20
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -474,44 +502,37 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2a95e927f953c093f2e48cb2b6551d152f735267targetblank2a95e92a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/2a95e927f953c093f2e48cb2b6551d152f735267" target="_blank">2a95e92</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7243f8882ef1868800d5f0e420f83d5e4ba39bbtargetblankf7243f8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f7243f8882ef1868800d5f0e420f83d5e4ba39bb" target="_blank">f7243f8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2a95e927f953c093f2e48cb2b6551d152f735267targetblank2a95e92a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7243f8882ef1868800d5f0e420f83d5e4ba39bbtargetblankf7243f8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/2a95e927f953c093f2e48cb2b6551d152f735267" target="_blank">2a95e92</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f7243f8882ef1868800d5f0e420f83d5e4ba39bb" target="_blank">f7243f8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    analysis/HIV_CSF_dataset_analysis_cache/
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
-    Ignored:    analysis/Triculture_dataset_GRN_with_Scenic_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
-
-Unstaged changes:
-    Modified:   analysis/Introduction.Rmd
-    Modified:   analysis/_site.yml
-    Modified:   analysis/references.bib
 
 </code></pre>
 <p>
@@ -550,6 +571,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/f7243f8882ef1868800d5f0e420f83d5e4ba39bb/analysis/Introduction.Rmd" target="_blank">f7243f8</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+wflow_publish(all = TRUE, republish = TRUE, delete_cache = TRUE)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/f7243f8882ef1868800d5f0e420f83d5e4ba39bb/docs/Introduction.html" target="_blank">f7243f8</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+wflow_publish(all = TRUE, republish = TRUE, delete_cache = TRUE)
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -714,8 +769,8 @@ new files
 <p>The World Health Organization (WHO) reported the number of people living with HIV in 2020 to be approximately 37.7 million. The use of antiretroviral therapy(ART) has increased the life expectancy in the past years. One of the most prevalent comborbidities that persist even during ART is HIV-associated neurocognitive disorder (HAND).</p>
 <div id="human-immunodeficiency-virus-hiv" class="section level3">
 <h3>Human Immunodeficiency Virus (HIV)</h3>
-<p>HIV is a lentivirus consisting of two single stranded RNA molecules, encoding fifteen different viral proteins which are essential for viral replication <span class="citation">[@Osborne]</span>. At the same time these proteins are potential targets for ART drugs. The RNA molecules are enclosed in a capsid of p24 protein and the capsid is surrounded by a lipid membrane <span class="citation">[@Osborne]</span>. The viral envelope glycoprotein (Env) is responsible for recognizing the host cells and the subsequent fusion of the vius with the host cell plasma membrane <span class="citation">[@Huarte]</span>. The glycoprotein gp120 binds to the cluster of differentiation 4 (CD4) receptors on CD4+ T cells, macrophages and microglia cells <span class="citation">[@Osborne]</span>. A structure of the virus particle is shown in figure 1 from <span class="citation">[@Osborne]</span>.</p>
-<p>ART drugs circulate the blood and suppress HIV replication of peripheral immune cells. However, long-lived cells (eg. CD4+ T cells, macrophages, microglia) can become persistent HIV reservoirs. This is called latent infection. Latent infection means that cells host replication competent HIV in their genome, without virus production <span class="citation">[@Bandera]</span>. These reservoirs would cause the increase in HIV replication as soon as the treatment was interrupted, which is why ART is continued as a lifelong treatment <span class="citation">[@Wallet]</span>.</p>
+<p>HIV is a lentivirus consisting of two single stranded RNA molecules, encoding fifteen different viral proteins which are essential for viral replication <span class="citation">(<a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne 2017</a>)</span>. At the same time these proteins are potential targets for ART drugs. The RNA molecules are enclosed in a capsid of p24 protein and the capsid is surrounded by a lipid membrane <span class="citation">(<a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne 2017</a>)</span>. The viral envelope glycoprotein (Env) is responsible for recognizing the host cells and the subsequent fusion of the vius with the host cell plasma membrane <span class="citation">(<a href="#ref-Huarte" role="doc-biblioref">Nerea Huarte 2016</a>)</span>. The glycoprotein gp120 binds to the cluster of differentiation 4 (CD4) receptors on CD4+ T cells, macrophages and microglia cells <span class="citation">(<a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne 2017</a>)</span>. A structure of the virus particle is shown in figure 1 from <span class="citation">(<a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne 2017</a>)</span>.</p>
+<p>ART drugs circulate the blood and suppress HIV replication of peripheral immune cells. However, long-lived cells (eg. CD4+ T cells, macrophages, microglia) can become persistent HIV reservoirs. This is called latent infection. Latent infection means that cells host replication competent HIV in their genome, without virus production <span class="citation">(<a href="#ref-Bandera" role="doc-biblioref">Alessandra Bandera 2019</a>)</span>. These reservoirs would cause the increase in HIV replication as soon as the treatment was interrupted, which is why ART is continued as a lifelong treatment <span class="citation">(<a href="#ref-Wallet" role="doc-biblioref">Clementine Wallet 2019</a>)</span>.</p>
 <p><img src="images/HIV_virus.jpg" /></p>
 <details>
 <summary>
@@ -730,36 +785,77 @@ Click to Expand
 </div>
 <div id="antiretroviral-therapy-art" class="section level3">
 <h3>Antiretroviral therapy (ART)</h3>
-<p>ART drugs target viral enzymes, like reverse transcriptases, proteases or integrases. Due to the availability of combinations ART mortality resulting from HIV infection has been reduced in the past years. Nevertheless, the drugs are not able to cure the disease, but only suppress it. The virus persists in latently infected cells. One advantage of the viral suppression is that drug resistance mutations do not occur <span class="citation">[@Bandera]</span>.</p>
+<p>ART drugs target viral enzymes, like reverse transcriptases, proteases or integrases. Due to the availability of combinations ART mortality resulting from HIV infection has been reduced in the past years. Nevertheless, the drugs are not able to cure the disease, but only suppress it. The virus persists in latently infected cells. One advantage of the viral suppression is that drug resistance mutations do not occur <span class="citation">(<a href="#ref-Bandera" role="doc-biblioref">Alessandra Bandera 2019</a>)</span>.</p>
 </details>
 </div>
 <div id="microglia-macrophages" class="section level3">
 <h3>Microglia &amp; Macrophages</h3>
-<p>Microglia arise early during development form the yolk sac and they enter the CNS even before the blood-brain barrier is formed. They form the tissue-resident immune cells of the brain and maintain their ability to proliferate <span class="citation">[@Réu]</span>. Conversely, bone marrow derived monocytes differentiate into macrophages, which are peripheral blood-circulating immune cells which do not proliferate anymore <span class="citation">[@DePaula-Silva]</span>.</p>
-<p>Macrophages can adopt two distinct states, pro-inflammatory (M1) or anti-inflammatory (M2). Similarly, homeostatic microglia can become pro-inflammtory or anti-inflammatory in response to neuronal injury <span class="citation">[@DePaula-Silva]</span>. During neuroinflammation macrophages also enter the brain, contribute to the inflammatory response and might acquire microglia markers and microglia function <span class="citation">[@DePaula-Silva; @Grassivaro]</span>. Whether macrophages keep this microglia-like signature after they leave the brain is not understood. If they do, there might be microglia-like macrophages in the CSF.</p>
+<p>Microglia arise early during development form the yolk sac and they enter the CNS even before the blood-brain barrier is formed. They form the tissue-resident immune cells of the brain and maintain their ability to proliferate <span class="citation">(<a href="#ref-Réu" role="doc-biblioref">Réu P 2017</a>)</span>. Conversely, bone marrow derived monocytes differentiate into macrophages, which are peripheral blood-circulating immune cells which do not proliferate anymore <span class="citation">(<a href="#ref-DePaula-Silva" role="doc-biblioref">DePaula-Silva AB 2019</a>)</span>.</p>
+<p>Macrophages can adopt two distinct states, pro-inflammatory (M1) or anti-inflammatory (M2). Similarly, homeostatic microglia can become pro-inflammtory or anti-inflammatory in response to neuronal injury <span class="citation">(<a href="#ref-DePaula-Silva" role="doc-biblioref">DePaula-Silva AB 2019</a>)</span>. During neuroinflammation macrophages also enter the brain, contribute to the inflammatory response and might acquire microglia markers and microglia function <span class="citation">(<a href="#ref-DePaula-Silva" role="doc-biblioref">DePaula-Silva AB 2019</a>; <a href="#ref-Grassivaro" role="doc-biblioref">Francesca Grassivaro and Martino 2018</a>)</span>. Whether macrophages keep this microglia-like signature after they leave the brain is not understood. If they do, there might be microglia-like macrophages in the CSF.</p>
 </div>
 <div id="hiv-infection-in-the-central-nervous-system" class="section level3">
 <h3>HIV infection in the central nervous system</h3>
-<p>The blood-brain barrier (BBB) is supposed to prevent pathogens from entering the CNS. Among the few cells which can pass this barrier are immune cells. Since HIV primarily infects immune cells it can circumvent the blood brain barrier and enter the central nervous system (CNS). Once HIV has entered the CNS it can infect microglia which live for several years and are therefore an ideal reservoir for the virus [<span class="citation">[@Osborne; @Asahchop; @Farhadian; @Wallet; @Réu]</span>. One of the major problems that arises from the HIV invasion of the brain is that antiretroviral drugs are either not able to cross the BBB or they are removed from the brain by ATP-binding efflux pumps <span class="citation">[@Osborne]</span>. Consequently, even thought drugs can enter the brain, their concentrations are largely reduced in the CSF compared to blood plasma, for example efavirenz in the plasma reaches concentrations of 9.2–16.6 μmol/ml, but in the CSF it only reaches 0.006–0.09 μmol/ml <span class="citation">[@Osborne]</span>. In patients receiving ART the HIV virus is usually not detectable in blood (undetectable HIV RNA viral load means &lt;50 copies/ml) or cerebrospinal fluid (CSF), but in the brain this is difficult to test and investigate and, therefore, largely unknown <span class="citation">[@Asahchop, @Osborne]</span>.</p>
-<p>Among patients receiving ART there is a high prevalence of HAND, caused by the persistent infection in the brain and the related immune response <span class="citation">[@Saylor]</span>. It has even been suggested that ART might dysregulate tight junction proteins necessary for the function of BBB and, therefore, contributes to HAND <span class="citation">[@Rahimy, @Osborne]</span>. According to a meta-analysis HAND has an overall prevalence of 43.9% in HIV-infected patients and is categorized into three stages <span class="citation">[@Wei]</span>:</p>
+<p>The blood-brain barrier (BBB) is supposed to prevent pathogens from entering the CNS. Among the few cells which can pass this barrier are immune cells. Since HIV primarily infects immune cells it can circumvent the blood brain barrier and enter the central nervous system (CNS). Once HIV has entered the CNS it can infect microglia which live for several years and are therefore an ideal reservoir for the virus [<span class="citation">(<a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne 2017</a>; <a href="#ref-Asahchop" role="doc-biblioref">Saylor D 2016</a>; <a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>; <a href="#ref-Wallet" role="doc-biblioref">Clementine Wallet 2019</a>; <a href="#ref-Réu" role="doc-biblioref">Réu P 2017</a>)</span>. One of the major problems that arises from the HIV invasion of the brain is that antiretroviral drugs are either not able to cross the BBB or they are removed from the brain by ATP-binding efflux pumps <span class="citation">(<a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne 2017</a>)</span>. Consequently, even thought drugs can enter the brain, their concentrations are largely reduced in the CSF compared to blood plasma, for example efavirenz in the plasma reaches concentrations of 9.2–16.6 μmol/ml, but in the CSF it only reaches 0.006–0.09 μmol/ml <span class="citation">(<a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne 2017</a>)</span>. In patients receiving ART the HIV virus is usually not detectable in blood (undetectable HIV RNA viral load means &lt;50 copies/ml) or cerebrospinal fluid (CSF), but in the brain this is difficult to test and investigate and, therefore, largely unknown <span class="citation"><a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne</a> (<a href="#ref-Osborne" role="doc-biblioref">2017</a>)</span>.</p>
+<p>Among patients receiving ART there is a high prevalence of HAND, caused by the persistent infection in the brain and the related immune response <span class="citation">(<a href="#ref-Saylor" role="doc-biblioref"><strong>Saylor?</strong></a>)</span>. It has even been suggested that ART might dysregulate tight junction proteins necessary for the function of BBB and, therefore, contributes to HAND <span class="citation"><a href="#ref-Osborne" role="doc-biblioref">Olivia Osborne</a> (<a href="#ref-Osborne" role="doc-biblioref">2017</a>)</span>. According to a meta-analysis HAND has an overall prevalence of 43.9% in HIV-infected patients and is categorized into three stages <span class="citation">(<a href="#ref-Wei" role="doc-biblioref">Wei J 2020</a>)</span>:</p>
 <ul>
 <li>asymptomatic neurocognitive impairment (ANI) - 26.2% prevalence</li>
 <li>mild neurocognitive impairment (MND) - 8.5% prevalence</li>
 <li>HIV-associated dementia (HAD) - 2.1 % prevalence</li>
 </ul>
-<p>Even thought the severity of HAND has declined due to ART treatment in the past years, there is a large need for deeper understanding of the molecular mechanisms behind the disease as well as better diagnostic tools. Since immune cells in the cerebrospinal fluid reflect the immune cells in the brain, CSF might be used as a diagnostic tool for neurocognitive disorder <span class="citation">[@Farhadian]</span>. Single cell RNA sequencing (sc-RNAseq) on CSF and blood from HIV-infected patients and healthy controls identified a microglia-like subtype of myeloid cells in CSF which were not present in blood samples from the same patient <span class="citation">[@Farhadian]</span>. HAND strongly correlates with microglia activation, therefore, understanding the role of microglia in HAND might provide interesting insights. expression signature of these cells resembles that of disease-associated microglia cells and, therefore was proposed to be a microglia-like cell type which might be used for diagnosis of HAND from CSF samples <span class="citation">[@Farhadian]</span>.</p>
+<p>Even thought the severity of HAND has declined due to ART treatment in the past years, there is a large need for deeper understanding of the molecular mechanisms behind the disease as well as better diagnostic tools. Since immune cells in the cerebrospinal fluid reflect the immune cells in the brain, CSF might be used as a diagnostic tool for neurocognitive disorder <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>. Single cell RNA sequencing (sc-RNAseq) on CSF and blood from HIV-infected patients and healthy controls identified a microglia-like subtype of myeloid cells in CSF which were not present in blood samples from the same patient <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>. HAND strongly correlates with microglia activation, therefore, understanding the role of microglia in HAND might provide interesting insights. expression signature of these cells resembles that of disease-associated microglia cells and, therefore was proposed to be a microglia-like cell type which might be used for diagnosis of HAND from CSF samples <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>.</p>
 </div>
 <div id="hiv-infection-in-microglia" class="section level3">
 <h3>HIV infection in microglia</h3>
-<p>In the following analysis the aim was to provide further evidence for the microglia-like nature of these cells by performing additional analysis on the sc-RNAseq dataset and integrating it with additional datasets from, on the one hand a microglia cell line derived from an HIV patient (C20 cell) and, on the other hand, a triculture system of induced neurons, astrocytes and microglia, infected with HIV and treated with ART <span class="citation">[@Ryan; @Garcia-Mesa]</span>.</p>
-<p>The triculture dataset used in the following analysis originates from a human-induced pluripotent stem cell model, including induced neurons (iNs), inuced astrocytes (iAst) and induced microglia (iMg) co-cultured with or without HIV infection and antiretroviral therapy (ART) with efavirenz (EFZ) <span class="citation">[@Ryan]</span>.</p>
-<p>The infected iMg exhibited a higher production of proinflammatory cytokines than infected iMg treated with EFZ. Levels of IL-1b, IL-1a, IL-8 and TNF-α were increased in infected +/- EFZ, compared to uninfected conditions, while IL-10 and IL-6 did not change in any condition <span class="citation">[@Ryan]</span>.</p>
+<p>In the following analysis the aim was to provide further evidence for the microglia-like nature of these cells by performing additional analysis on the sc-RNAseq dataset and integrating it with additional datasets from, on the one hand a microglia cell line derived from an HIV patient (C20 cell) and, on the other hand, a triculture system of induced neurons, astrocytes and microglia, infected with HIV and treated with ART <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>; <a href="#ref-Garcia-Mesa" role="doc-biblioref">Garcia-Mesa Y 2017</a>)</span>.</p>
+<p>The triculture dataset used in the following analysis originates from a human-induced pluripotent stem cell model, including induced neurons (iNs), inuced astrocytes (iAst) and induced microglia (iMg) co-cultured with or without HIV infection and antiretroviral therapy (ART) with efavirenz (EFZ) <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span>.</p>
+<p>The infected iMg exhibited a higher production of proinflammatory cytokines than infected iMg treated with EFZ. Levels of IL-1b, IL-1a, IL-8 and TNF-α were increased in infected +/- EFZ, compared to uninfected conditions, while IL-10 and IL-6 did not change in any condition <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span>.</p>
 <p>Since the infection states of the cells in this dataset are known, we might be able to extract a gene signature of infection, infection + ART compared to uninfected cells or uninfected cells treated with ART. This gene signature can then be compared to the microglia-like cells of the CSF samples. This way we might be able to identify infected cells vs uninfected cells in the CSF microglia-like cells. This is interesting, because even though the CSF samples stem from HIV-infected patients, there will be some cells which are infected with the virus, while others are not infected. Being able to differentiate between infected and uninfected cells would allow additional inferences about the effect of HIV infection on microglia.</p>
-<p>The infected iMg exhibited a higher production of proinflammatory cytokines than infected iMg treated with EFZ. Levels of IL-1b, IL-1a, IL-8 and TNF-α were increased in infected +/- EFZ, compared to uninfected conditions, while IL-10 and IL-6 did not change in any condition <span class="citation">[@Ryan]</span>.<br />
+<p>The infected iMg exhibited a higher production of proinflammatory cytokines than infected iMg treated with EFZ. Levels of IL-1b, IL-1a, IL-8 and TNF-α were increased in infected +/- EFZ, compared to uninfected conditions, while IL-10 and IL-6 did not change in any condition <span class="citation">(<a href="#ref-Ryan" role="doc-biblioref">Ryan SK 2020</a>)</span>.<br />
 Since the infection states of the cells in this dataset are known, we might be able to extract a gene signature of infected cells, infected cells treated with ART compared to uninfected cells or uninfected cells treated with ART. This gene signature could then be compared to the microglia-like cells of the CSF samples. This way we might be able to identify infected cells vs uninfected cells in the CSF microglia-like cells. This is interesting, because even though the CSF samples stem from HIV-infected patients, there will be some cells which are infected with the virus, while others are not infected. Being able to differentiate between infected and uninfected cells would allow additional inferences about the effect of HIV infection on microglia.</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
+</div>
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bandera" class="csl-entry">
+Alessandra Bandera, Mario Clerici, Andrea Gori. 2019. <em>Phylogenies in ART: HIV Reservoirs, HIV Latency and Drug Resistance</em>. <em>COPHAR</em>. Vol. 48. <a href="https://doi.org/10.1016/j.coph.2019.03.003">https://doi.org/10.1016/j.coph.2019.03.003</a>.
+</div>
+<div id="ref-Wallet" class="csl-entry">
+Clementine Wallet, Jeanne Van Assche, Marco De Rovere. 2019. <em>Microglial Cells: The Main HIV-1 Reservoir in the Brain</em>. <em>Front. Cell. Infect. Microbiol.</em> Vol. 9, 362. <a href="https://doi.org/10.3389/fcimb.2019.00362">https://doi.org/10.3389/fcimb.2019.00362</a>.
+</div>
+<div id="ref-DePaula-Silva" class="csl-entry">
+DePaula-Silva AB, Doty DJ, Gorbea C. 2019. <em>Differential Transcriptional Profiles Identify Microglial- and Macrophage-Specific Gene Markers Expressed During Virus-Induced Neuroinflammation</em>. <em>J Neuroinflammation</em>. Vol. 16, 152. <a href="https://doi.org/10.1186/s12974-019-1545-x">https://doi.org/10.1186/s12974-019-1545-x</a>.
+</div>
+<div id="ref-Grassivaro" class="csl-entry">
+Francesca Grassivaro, Massimo Acquaviva, Ramesh Menon, and Gianvito Martino. 2018. <em>Convergence Between Microglia and Peripheral Macrophages Phenotype During Development and Neuroinflammation</em>. <em>JCI Insight</em>. Vol. 40 (4). <a href="https://doi.org/10.1523/JNEUROSCI.1523-19.2019">https://doi.org/10.1523/JNEUROSCI.1523-19.2019</a>.
+</div>
+<div id="ref-Garcia-Mesa" class="csl-entry">
+Garcia-Mesa Y, Checkley MA, Jay TR. 2017. <em>Immortalization of Primary Microglia: A New Platform to Study HIV Regulation in the Central Nervous System</em>. <em>J Neurovirol</em>. Vol. 23(1). <a href="https://doi: 10.1007/s13365-016-0499-3">doi: 10.1007/s13365-016-0499-3</a>.
+</div>
+<div id="ref-Huarte" class="csl-entry">
+Nerea Huarte, Antonio Cruz, Pablo Carravilla. 2016. <em>Functional Organization of the HIV Lipid Envelope</em>. <em>Sci Rep</em>. Vol. 6, 34190. <a href="https://doi.org/10.1038/srep34190">https://doi.org/10.1038/srep34190</a>.
+</div>
+<div id="ref-Osborne" class="csl-entry">
+Olivia Osborne, Madhavan Nair, Nadia Peyravian. 2017. <em>The Paradox of HIV Blood-Brain Barrier Penetrance and Antiretroviral Drug Delivery Deficiencies</em>. <em>Trends Neurosci.</em> Vol. 43(9). <a href="https://DOI: 10.1016/j.tins.2020.06.007">DOI: 10.1016/j.tins.2020.06.007</a>.
+</div>
+<div id="ref-Rahimy" class="csl-entry">
+Rahimy E, Hagberg L, Li FY. 2017. <em>Blood-Brain Barrier Disruption Is Initiated During Primary HIV Infection and Not Rapidly Altered by Antiretroviral Therapy</em>. <em>J Infect Dis</em>. Vol. 215(7). <a href="https://doi: 10.1093/infdis/jix013">doi: 10.1093/infdis/jix013</a>.
+</div>
+<div id="ref-Réu" class="csl-entry">
+Réu P, Bernard S, Khosravi A. 2017. <em>The Lifespan and Turnover of Microglia in the Human Brain</em>. <em>Cell Rep</em>. Vol. 20(4). <a href="https://doi: 10.1016/j.celrep.2017.07.004">doi: 10.1016/j.celrep.2017.07.004</a>.
+</div>
+<div id="ref-Ryan" class="csl-entry">
+Ryan SK, Garifallou JP, Gonzalez MV. 2020. <em>Neuroinflammation and Eif2 Signaling Persist Despite Antiretroviral Treatment in an hiPSC Tri-Culture Model of HIV Infection</em>. <em>#SStem Cell Reports</em>. Vol. 14(4). <a href="https://doi: 10.1016/j.stemcr.2020.02.010">doi: 10.1016/j.stemcr.2020.02.010</a>.
+</div>
+<div id="ref-Asahchop" class="csl-entry">
+Saylor D, Sacktor N, Dickens AM. 2016. <em>HIV-Associated Neurocognitive Disorder–Pathogenesis and Prospects for Treatment</em>. <em>Nat Rev Neurol</em>. Vol. 12(4). <a href="https://doi: 10.1038/nrneurol.2016.27">doi: 10.1038/nrneurol.2016.27</a>.
+</div>
+<div id="ref-Farhadian" class="csl-entry">
+Shelli F. Farhadian, Chrysoula Zografou, Sameet S. Mehta, and Serena S. Spudich. 2018. <em>Single-Cell RNA Sequencing Reveals Microglia-Like Cells in Cerebrospinal Fluid During Virologically Suppressed HIV</em>. <em>JCI Insight</em>. Vol. 3(18):e121718. <a href="https://doi.org/10.1172/jci.insight.121718">https://doi.org/10.1172/jci.insight.121718</a>.
+</div>
+<div id="ref-Wei" class="csl-entry">
+Wei J, Su B, Hou J. 2020. <em>The Prevalence of Frascati-Criteria-Based HIV-Associated Neurocognitive Disorder (HAND) in HIV-Infected Adults: A Systematic Review and Meta-Analysis</em>. <em>Front Neurol</em>. Vol. 11:581346. <a href="https://doi: 10.3389/fneur.2020.581346">doi: 10.3389/fneur.2020.581346</a>.
 </div>
 </div>
 
