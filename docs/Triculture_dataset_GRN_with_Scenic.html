@@ -443,7 +443,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -452,7 +452,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -464,7 +464,7 @@ div.tocify {
 <strong>Last updated:</strong> 2021-12-20
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -480,12 +480,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -552,16 +552,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7243f8882ef1868800d5f0e420f83d5e4ba39bbtargetblankf7243f8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f7243f8882ef1868800d5f0e420f83d5e4ba39bb" target="_blank">f7243f8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7243f8882ef1868800d5f0e420f83d5e4ba39bbtargetblankf7243f8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f7243f8882ef1868800d5f0e420f83d5e4ba39bb" target="_blank">f7243f8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -571,6 +571,11 @@ Ignored files:
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
+
+Unstaged changes:
+    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
+    Modified:   analysis/Methods.Rmd
+    Modified:   analysis/Triculture_dataset_GRN_with_Scenic.Rmd
 
 </code></pre>
 <p>
@@ -609,6 +614,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/Triculture_dataset_GRN_with_Scenic.html" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -789,15 +811,19 @@ write.table(x = scenic_mtx, file = &quot;/media/ag-cherrmann/kmikulik/HIV_microg
 #scenic_matrix &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/pySCENIC_pipeline/input/triculture_mtx.tsv&quot;, sep = &quot;\t&quot;)</code></pre>
 <hr />
 </details>
-<p><strong>AuCell matrix - output from Scenic</strong></p>
+<details>
+<summary>
+<strong>AuCell matrix - output from Scenic</strong>
+</summary>
 <p>The output from SCENIC is a matrix containing cells as rows and 232 TFs as columns. Five exemplary rows and columns are shown below. The TF activity for each cell can be used to draw conclusions about different cell states.</p>
 <pre class="r"><code>auc_mtx &lt;- read.csv(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/pySCENIC_output/aucell_img_10k.csv&quot;)
 auc_mtx &lt;- auc_mtx %&gt;% column_to_rownames(&quot;Cell&quot;)
 auc_mtx &lt;- auc_mtx %&gt;% setnames( old = colnames(auc_mtx), new = sapply(strsplit(
   colnames(auc_mtx), &quot;[...]&quot;), `[`, 1))
 
-auc_mtx[1:5, 1:5] %&gt;% kable()</code></pre>
+auc_mtx[1:5, 1:5] %&gt;% kable(caption = &quot;Layout of TF activity matrix&quot;)</code></pre>
 <table>
+<caption>Layout of TF activity matrix</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -851,6 +877,12 @@ auc_mtx[1:5, 1:5] %&gt;% kable()</code></pre>
 </tr>
 </tbody>
 </table>
+<hr />
+</details>
+<details>
+<summary>
+<strong>Number of iMg in each condition</strong>
+</summary>
 <pre class="r"><code># add auc matrix to metadata of hiv4 seurat object
 tri_mg &lt;- AddMetaData(imicroglia, 
                     metadata = auc_mtx, 
@@ -887,16 +919,19 @@ tri_mg &lt;- AddMetaData(imicroglia,
 </tr>
 </tbody>
 </table>
+<hr />
+</details>
 </div>
-<div id="atacseq-binding-scores-of-tfs-between-infection-conditions-in-primary-microglia" class="section level2">
-<h2>ATACseq binding scores of TFs between infection conditions in primary microglia</h2>
+<div id="footprinting-binding-scores-from-c20-cell-line" class="section level2">
+<h2>Footprinting binding scores from C20 cell line</h2>
 <p>The C20 cell line was derived from an HIV+ patient treated with ART (Antiretroviral Therapy). Since the access of ART to the brain is limited due to the blood-brain barrier, the effects of ART on these cells are probably negligible. Only the 75 TFs with p-values for differential binding scores below 1e-50 were used. We will focus on TFs which show differential binding scores between latent infection and uninfected conditions in primary microglia. For 25 of these 75 TFs there is a TF activity score for the iMg. Focusing on these 25 TFs we might be able to find activity patterns that correlate with the TF binding scores. Five TFs are more bound in latent infection and twenty TFs are more bound in uninfected cells</p>
 <p>The reason why we find more of the TFs more bound in uninfected cells in the TF activity score matrix from SCENIC is unclear.</p>
 <pre class="r"><code>tfs_ana &lt;- read.table(&quot;/media/ag-cherrmann/projects/06_HIV_Microglia/data/atacseq/data-2020-11-06/tobias/TOBIAS_snakemake/footprint_mglia2_GlassTF_17-03/TFBS/bindetect_results.txt&quot;, sep = &quot;\t&quot;, header = TRUE)
 
 top_tfs &lt;- tfs_ana %&gt;% filter(uninf_red_pvalue &lt; 1e-50)
 
-#atac_tfs &lt;- colnames(auc_mtx)[colnames(auc_mtx) %in% top_tfs$name]
+# keep only the TFs in the dataframe which overlap between the two datasets.
+overlap_atac &lt;- top_tfs %&gt;% filter(name %in% colnames(auc_mtx))
 
 # dataframe containing only the 25 Tfs whcih overlap with TF activity matrix from SCENIC 
 # adding a column with information in which infection condition the TF is more bound
@@ -907,6 +942,71 @@ atac_tfs_df &lt;- top_tfs %&gt;% filter(name %in% colnames(auc_mtx)) %&gt;%
 up_latent &lt;- atac_tfs_df$name[atac_tfs_df$condition == &quot;up_latent&quot;]
 # list of 25 TFs more bound in uninfected cells
 up_uninf &lt;- atac_tfs_df$name[atac_tfs_df$condition == &quot;up_uninf&quot;]</code></pre>
+<details>
+<summary>
+<strong>Volcano Plot</strong>
+</summary>
+<pre class="r"><code>top_tfs %&gt;% 
+  # add a column containing information in which condition the corresponding TF 
+  # is upregulated
+  mutate(condition = ifelse(uninf_red_change &lt; 0, &quot;up_latent&quot;, &quot;up_uninf&quot;)) %&gt;%
+  # add a column conaining the labels for the plot
+  # I only want to label cells which are also found by Scenic
+  mutate(label = ifelse(name %in% overlap_atac$name, name, NA)) %&gt;% 
+  ggplot(aes(x = uninf_red_change,
+             y = -log10(uninf_red_pvalue),
+             col = condition, 
+             label = label)) +
+  geom_point() +
+  geom_hline(yintercept = -log10(1e-50), col = &quot;red&quot;) +
+  geom_text(nudge_x = .05, nudge_y = 2) +
+  labs(title = &quot;TFs with differential binding scores&quot;) +
+  ylab(&quot;-log10(p_value)&quot;) +
+  xlab(&quot;differential binding score&quot;)
+Warning: Removed 50 rows containing missing values (geom_text).</code></pre>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-7-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr />
+</details>
+</div>
+<div id="tf-activity-in-img" class="section level2">
+<h2>TF activity in iMg</h2>
 <div id="heatmap-for-all-tfs" class="section level3">
 <h3>Heatmap for all TFs</h3>
 <p>In the heatmap of TF activities below you can already see a trend towards a separation of cells treated with EFZ (blue and green) from untreated cells (red and orange).</p>
@@ -927,7 +1027,44 @@ ht &lt;- Heatmap(t(auc_mtx),
                                                             &quot;Uninf+EFZ&quot; = &quot;blue&quot;)))
 )
 ht</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-7-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-8-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-8-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="heatmap-of-25-tfs-with-differential-binding-score" class="section level3">
 <h3>Heatmap of 25 TFs with differential binding score</h3>
@@ -964,32 +1101,7 @@ wss = sapply(2:15, function(k) {
 plot(2:15, wss, type = &quot;b&quot;, 
      xlab = &quot;Number of clusters k&quot;, 
      ylab = &quot;Total within-clusters sum of square&quot;)</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="different-k" class="section level5">
-<h5>different k</h5>
-<pre class="r"><code>
-ht_list &lt;- map(seq.int(2,6), function(n){
-  ht &lt;- Heatmap(t(auc_mtx[, atac_tfs_df$name]), 
-        col =  colorRampPalette(rev(brewer.pal(n = 7, name = &quot;RdYlBu&quot;)))(100),
-        column_title = paste0(&quot;k = &quot;, n),
-        show_column_names = FALSE,
-        row_names_side = &quot;left&quot;,
-        top_annotation = HeatmapAnnotation(condition = conditions$orig.ident, 
-                                           name = &quot;condition&quot;,
-                                           col = list(condition = 
-                                                        c(&quot;Uninf&quot; = &quot;orange&quot;, 
-                                                          &quot;Inf+EFZ&quot; = &quot;green&quot;,
-                                                          &quot;Inf&quot; = &quot;red&quot;, 
-                                                          &quot;Uninf+EFZ&quot; = &quot;blue&quot;))),
-        column_km = n,
-         )
-  
-})
-
-ht_list &lt;- ht_list[[1]] + ht_list[[2]] + ht_list[[3]] + ht_list[[4]] + ht_list[[5]]
-draw(ht_list, column_title = &quot;Hierarchical clustering with different k&quot;, ht_gap = unit(2, &quot;cm&quot;))</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
 Past versions of unnamed-chunk-9-1.png
@@ -1014,6 +1126,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-9-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-9-1.png" target="_blank">114a941</a>
 </td>
 <td>
@@ -1026,6 +1149,90 @@ Katharina782
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-9-1.png" target="_blank">9ee3086</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="different-k" class="section level5">
+<h5>different k</h5>
+<pre class="r"><code>
+ht_list &lt;- map(seq.int(2,6), function(n){
+  ht &lt;- Heatmap(t(auc_mtx[, atac_tfs_df$name]), 
+        col =  colorRampPalette(rev(brewer.pal(n = 7, name = &quot;RdYlBu&quot;)))(100),
+        column_title = paste0(&quot;k = &quot;, n),
+        show_column_names = FALSE,
+        row_names_side = &quot;left&quot;,
+        top_annotation = HeatmapAnnotation(condition = conditions$orig.ident, 
+                                           name = &quot;condition&quot;,
+                                           col = list(condition = 
+                                                        c(&quot;Uninf&quot; = &quot;orange&quot;, 
+                                                          &quot;Inf+EFZ&quot; = &quot;green&quot;,
+                                                          &quot;Inf&quot; = &quot;red&quot;, 
+                                                          &quot;Uninf+EFZ&quot; = &quot;blue&quot;))),
+        column_km = n,
+         )
+  
+})
+
+ht_list &lt;- ht_list[[1]] + ht_list[[2]] + ht_list[[3]] + ht_list[[4]] + ht_list[[5]]
+draw(ht_list, column_title = &quot;Hierarchical clustering with different k&quot;, ht_gap = unit(2, &quot;cm&quot;))</code></pre>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-10-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-10-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-10-1.png" target="_blank">114a941</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-10-1.png" target="_blank">9ee3086</a>
 </td>
 <td>
 Katharina782
@@ -1055,13 +1262,13 @@ Katharina782
                                                         &quot;Uninf+EFZ&quot; = &quot;blue&quot;))),
       column_km = 4,
        ))</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-10-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-11-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
-Past versions of unnamed-chunk-10-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div id="fig-unnamed-chunk-11-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -1080,7 +1287,18 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-10-1.png" target="_blank">114a941</a>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-11-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-11-1.png" target="_blank">114a941</a>
 </td>
 <td>
 Katharina782
@@ -1091,7 +1309,7 @@ Katharina782
 </tr>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-10-1.png" target="_blank">9ee3086</a>
+<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-11-1.png" target="_blank">9ee3086</a>
 </td>
 <td>
 Katharina782
@@ -1147,13 +1365,13 @@ Katharina782
         )
 
 ht_conditions </code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-11-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-12-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
-Past versions of unnamed-chunk-11-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div id="fig-unnamed-chunk-12-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -1172,7 +1390,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-11-1.png" target="_blank">114a941</a>
+<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-12-1.png" target="_blank">114a941</a>
 </td>
 <td>
 Katharina782
@@ -1183,7 +1401,7 @@ Katharina782
 </tr>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-11-1.png" target="_blank">9ee3086</a>
+<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-12-1.png" target="_blank">9ee3086</a>
 </td>
 <td>
 Katharina782
@@ -1257,9 +1475,60 @@ Katharina782
         )</code></pre>
 <pre class="r"><code>ht_list &lt;- ht_tfs1 + ht_tfs2
 draw(ht_list, ht_gap = unit(2, &quot;cm&quot;))</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-14-1.png" width="1440" style="display: block; margin: auto;" /> ### {-}</p>
-<hr />
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-15-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-15-1.png" target="_blank">114a941</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-15-1.png" target="_blank">9ee3086</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+</tbody>
+</table>
 </div>
+</div>
+</div>
+</div>
+<div id="section-1" class="section level3 unnumbered">
+<h3 class="unnumbered"></h3>
+<hr />
 </div>
 <div id="statistical-tests-to-find-tf-activity-differences-between-clusters" class="section level3">
 <h3>Statistical Tests to find TF activity differences between clusters</h3>
@@ -1303,31 +1572,7 @@ boxplot_list &lt;- map(up_latent, function(tf) {
 })
 
 do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 3, nrow = 2))</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-16-1.png" width="1440" style="display: block; margin: auto;" /></p>
-</div>
-<div id="more-bound-in-uninfected" class="section level4">
-<h4>more bound in uninfected</h4>
-<p><strong>Boxplots of TFs activity across conditions of TFs more bound in uninfected primary microglia</strong></p>
-<p>In the plots below the trend of TF activity being negatively correlated between treated and untreated cells, independent of the infection status can be seen for some TFs, for example CEBPB and MEF2C. For other TFs there is no difference between either infection status or treatment, for example CREB1 and ETS1.</p>
-<p>Yet, even though the effect of treatment is most prominent, some TFs are additionally following the pattern of the footprinting. For example, MEF2C is more bound in the uninfected iMg than in infected iMg.</p>
-<p>One assumption is that TFs which are markers of microglia cells might be more or less active depending on whether the cells were treated with EFZ or not. An argument against this assumption is that both CEBPB and MEF2C are typically expressed in microglia, yet we observe an opposite trend. CEBPB is more active in Inf and Uninf cells than in Inf+EFZ and Uninf+EFZ cells, while MEF2C is more active in Inf+EFZ and Uninf+EFZ cells than in Inf and Uninf cells.</p>
-<pre class="r"><code>
-
-boxplot_list &lt;- map(up_uninf, function(tf) {
-  ggplot() +
-    geom_boxplot(aes(x = tri_mg@meta.data %&gt;% pull(&quot;orig.ident&quot;),
-                     y = tri_mg@meta.data %&gt;% pull(tf), 
-                 fill = tri_mg@meta.data %&gt;% pull(&quot;orig.ident&quot;))) +
-    stat_pvalue_manual(tri_mg@meta.data %&gt;% 
-                         pairwise_wilcox_test(as.formula(paste0(tf, &quot; ~ orig.ident&quot;))) %&gt;% 
-                         add_xy_position()) +
-    xlab(&quot;Condition&quot;) +
-    ylab(paste0(tf)) +
-    guides(fill = guide_legend(title = &quot;condition&quot;))
-})
-
-do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-17-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-17-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
 Past versions of unnamed-chunk-17-1.png
@@ -1350,6 +1595,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-17-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-17-1.png" target="_blank">114a941</a>
@@ -1376,12 +1632,95 @@ Katharina782
 </table>
 </div>
 </div>
+</div>
+<div id="more-bound-in-uninfected" class="section level4">
+<h4>more bound in uninfected</h4>
+<p><strong>Boxplots of TFs activity across conditions of TFs more bound in uninfected primary microglia</strong></p>
+<p>In the plots below the trend of TF activity being negatively correlated between treated and untreated cells, independent of the infection status can be seen for some TFs, for example CEBPB and MEF2C. For other TFs there is no difference between either infection status or treatment, for example CREB1 and ETS1.</p>
+<p>Yet, even though the effect of treatment is most prominent, some TFs are additionally following the pattern of the footprinting. For example, MEF2C is more bound in the uninfected iMg than in infected iMg.</p>
+<p>One assumption is that TFs which are markers of microglia cells might be more or less active depending on whether the cells were treated with EFZ or not. An argument against this assumption is that both CEBPB and MEF2C are typically expressed in microglia, yet we observe an opposite trend. CEBPB is more active in Inf and Uninf cells than in Inf+EFZ and Uninf+EFZ cells, while MEF2C is more active in Inf+EFZ and Uninf+EFZ cells than in Inf and Uninf cells.</p>
+<pre class="r"><code>
+
+boxplot_list &lt;- map(up_uninf, function(tf) {
+  ggplot() +
+    geom_boxplot(aes(x = tri_mg@meta.data %&gt;% pull(&quot;orig.ident&quot;),
+                     y = tri_mg@meta.data %&gt;% pull(tf), 
+                 fill = tri_mg@meta.data %&gt;% pull(&quot;orig.ident&quot;))) +
+    stat_pvalue_manual(tri_mg@meta.data %&gt;% 
+                         pairwise_wilcox_test(as.formula(paste0(tf, &quot; ~ orig.ident&quot;))) %&gt;% 
+                         add_xy_position()) +
+    xlab(&quot;Condition&quot;) +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = &quot;condition&quot;))
+})
+
+do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))</code></pre>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-18-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-18-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-18-1.png" target="_blank">114a941</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-18-1.png" target="_blank">9ee3086</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>
 #annotate_figure(figure,
  #               top = text_grob(&quot;TFs activity across conditions for TFs more bound in uninfected primary microglia&quot;, size = 20))</code></pre>
 </div>
 </div>
-<div id="section-1" class="section level3 unnumbered">
+<div id="section-2" class="section level3 unnumbered">
 <h3 class="unnumbered"></h3>
 <hr />
 </div>
@@ -1411,65 +1750,7 @@ corrplot(cor_mtx,
          #sig.level = .05,
          insig = &quot;p-value&quot;, 
          tl.col = &quot;black&quot;)</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
-Past versions of unnamed-chunk-18-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-18-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/114a941064f12efce14ce5eb1f7cc94e6a004074/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-18-1.png" target="_blank">114a941</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-18-1.png" target="_blank">9ee3086</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>tri_mg@meta.data %&gt;% 
-  rownames_to_column(&quot;cell&quot;) %&gt;%
-  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, colnames(auc_mtx))) %&gt;%
-  group_by(orig.ident) %&gt;%
-  summarize_if(is.numeric, mean) %&gt;% 
-  gather(TF, value, -orig.ident) %&gt;% 
-  spread(orig.ident, value) %&gt;% 
-  column_to_rownames(&quot;TF&quot;) %&gt;% GGally::ggpairs() +
-    labs(title = &quot;Scatter matrix for different conditions&quot;)</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-19-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
 Past versions of unnamed-chunk-19-1.png
@@ -1492,6 +1773,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-19-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-19-1.png" target="_blank">fce26d5</a>
@@ -1518,23 +1810,15 @@ Katharina782
 </table>
 </div>
 </div>
-<p>Correlations between Tfs</p>
-<pre class="r"><code>cor_mtx &lt;- tri_mg@meta.data %&gt;% 
-  rownames_to_column(&quot;cell&quot;) %&gt;% 
-  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, atac_tfs_df$name)) %&gt;% # only TFs with differential binding scores from ATACseq
+<pre class="r"><code>tri_mg@meta.data %&gt;% 
+  rownames_to_column(&quot;cell&quot;) %&gt;%
+  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, colnames(auc_mtx))) %&gt;%
   group_by(orig.ident) %&gt;%
   summarize_if(is.numeric, mean) %&gt;% 
-  column_to_rownames(&quot;orig.ident&quot;) %&gt;% cor()
-
-testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)
-
-corrplot(cor_mtx,
-         #method = &quot;color&quot;,
-         order = &quot;hclust&quot;, 
-         addrect = 4, # add boxes 
-         p.mat = testCor$p,
-         insig = &quot;p-value&quot;, 
-         tl.col = &quot;black&quot;)</code></pre>
+  gather(TF, value, -orig.ident) %&gt;% 
+  spread(orig.ident, value) %&gt;% 
+  column_to_rownames(&quot;TF&quot;) %&gt;% GGally::ggpairs() +
+    labs(title = &quot;Scatter matrix for different conditions&quot;)</code></pre>
 <p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-20-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-1">
@@ -1558,6 +1842,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-20-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-20-1.png" target="_blank">fce26d5</a>
@@ -1584,11 +1879,15 @@ Katharina782
 </table>
 </div>
 </div>
-<div id="tfs-more-bound-in-uninfected-primary-microglia" class="section level3">
-<h3>TFs more bound in uninfected primary microglia</h3>
-<pre class="r"><code>cor_mtx &lt;- tri_mg@meta.data %&gt;% 
+<div id="tfs-differntiating-myeloid2-clusters" class="section level3">
+<h3>TFs differntiating Myeloid2 clusters</h3>
+<p>These TFs were differntially active between the three hierarchical clusters in Myeloid2 cells from HIV-infected patients. Across three different patients they showed correlated changes in activity. YY1, ETS1 and REST were positively correlated with each other and negatively correlated with MEF2A, ETV6, JUNB, MEF2C, MXI1 and CEBPB. The pattern observed for the iMg from the triculture dataset does not resemble the pattern observed in Myeloid2 cells.</p>
+<pre class="r"><code>intersect_csf &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_intersect_TFs_different_across_patients_3_clusters&quot;)
+
+
+cor_mtx &lt;- tri_mg@meta.data %&gt;% 
   rownames_to_column(&quot;cell&quot;) %&gt;% 
-  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, up_uninf, &quot;REST&quot;)) %&gt;% # only TFs with differential binding scores from ATACseq
+  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, intersect_csf$x[intersect_csf$x %in% colnames(auc_mtx)])) %&gt;% # only TFs with differential binding scores from ATACseq
   group_by(orig.ident) %&gt;%
   summarize_if(is.numeric, mean) %&gt;% 
   column_to_rownames(&quot;orig.ident&quot;) %&gt;% cor()
@@ -1596,13 +1895,12 @@ Katharina782
 testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)
 
 corrplot(cor_mtx,
-         #method = &quot;color&quot;, 
+         #method = &quot;color&quot;,
          order = &quot;hclust&quot;, 
          addrect = 4, # add boxes 
          p.mat = testCor$p,
-         insig = &quot;p-value&quot;,
-         tl.col = &quot;black&quot;)</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-21-1.png" width="1152" style="display: block; margin: auto;" /></p>
+         insig = &quot;p-value&quot;)</code></pre>
+<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-21-1">
 Past versions of unnamed-chunk-21-1.png
@@ -1625,6 +1923,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-21-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-21-1.png" target="_blank">fce26d5</a>
@@ -1653,12 +1962,12 @@ Katharina782
 </div>
 <pre class="r"><code>tri_mg@meta.data %&gt;% 
   rownames_to_column(&quot;cell&quot;) %&gt;% 
-  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, up_uninf, &quot;REST&quot;)) %&gt;% # only TFs with differential binding scores from ATACseq
+  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, intersect_csf$x[intersect_csf$x %in% colnames(auc_mtx)])) %&gt;% # only TFs with differential binding scores from ATACseq
   group_by(orig.ident) %&gt;%
   summarize_if(is.numeric, mean) %&gt;% 
   column_to_rownames(&quot;orig.ident&quot;) %&gt;%
   GGally::ggpairs() +
-  labs(&quot;Scatter matrix for different conditions&quot;)</code></pre>
+  labs(title = &quot;Scatter Matrix for different TFs&quot;)</code></pre>
 <p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-22-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-1">
@@ -1682,6 +1991,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-22-1.png" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-22-1.png" target="_blank">fce26d5</a>
@@ -1708,109 +2028,6 @@ Katharina782
 </table>
 </div>
 </div>
-</div>
-<div id="tfs-more-bound-in-latent-infection" class="section level3">
-<h3>TFs more bound in latent infection</h3>
-<pre class="r"><code>cor_mtx &lt;- tri_mg@meta.data %&gt;% 
-  rownames_to_column(&quot;cell&quot;) %&gt;% 
-  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, up_latent, &quot;REST&quot;)) %&gt;% # only TFs with differential binding scores from ATACseq
-  group_by(orig.ident) %&gt;%
-  summarize_if(is.numeric, mean) %&gt;% 
-  column_to_rownames(&quot;orig.ident&quot;) %&gt;% cor()
-
-testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)
-
-corrplot(cor_mtx,
-         #method = &quot;color&quot;,
-         order = &quot;hclust&quot;, 
-         addrect = 4, # add boxes 
-         p.mat = testCor$p,
-         insig = &quot;p-value&quot;)</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-23-1">
-Past versions of unnamed-chunk-23-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-23-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-23-1.png" target="_blank">fce26d5</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/9ee308625fb863ad709edf2660babe4de93ced91/docs/figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-23-1.png" target="_blank">9ee3086</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="tfs-differntiating-myeloid2-clusters" class="section level3">
-<h3>TFs differntiating Myeloid2 clusters</h3>
-<p>These TFs were differntially active between the three hierarchical clusters in Myeloid2 cells from HIV-infected patients. Across three different patients they showed correlated changes in activity.</p>
-<ul>
-<li>YY1, ETS1 and REST were positively correlated with each other and negatively correlated with MEF2A, ETV6, JUNB, MEF2C, MXI1 and CEBPB.</li>
-<li>The pattern observed for the iMg from the triculture dataset does not resemble the pattern observed in Myeloid2 cells.</li>
-</ul>
-<pre class="r"><code>intersect_csf &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_intersect_TFs_different_across_patients_3_clusters&quot;)
-
-
-cor_mtx &lt;- tri_mg@meta.data %&gt;% 
-  rownames_to_column(&quot;cell&quot;) %&gt;% 
-  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, intersect_csf$x[intersect_csf$x %in% colnames(auc_mtx)])) %&gt;% # only TFs with differential binding scores from ATACseq
-  group_by(orig.ident) %&gt;%
-  summarize_if(is.numeric, mean) %&gt;% 
-  column_to_rownames(&quot;orig.ident&quot;) %&gt;% cor()
-
-testCor &lt;- cor.mtest(cor_mtx, conf.level = 0.95)
-
-corrplot(cor_mtx,
-         #method = &quot;color&quot;,
-         order = &quot;hclust&quot;, 
-         addrect = 4, # add boxes 
-         p.mat = testCor$p,
-         insig = &quot;p-value&quot;)</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>tri_mg@meta.data %&gt;% 
-  rownames_to_column(&quot;cell&quot;) %&gt;% 
-  select(c(&quot;cell&quot;, &quot;orig.ident&quot;, intersect_csf$x[intersect_csf$x %in% colnames(auc_mtx)])) %&gt;% # only TFs with differential binding scores from ATACseq
-  group_by(orig.ident) %&gt;%
-  summarize_if(is.numeric, mean) %&gt;% 
-  column_to_rownames(&quot;orig.ident&quot;) %&gt;%
-  GGally::ggpairs() +
-  labs(title = &quot;Scatter Matrix for different TFs&quot;)</code></pre>
-<p><img src="figure/Triculture_dataset_GRN_with_Scenic.Rmd/unnamed-chunk-25-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
