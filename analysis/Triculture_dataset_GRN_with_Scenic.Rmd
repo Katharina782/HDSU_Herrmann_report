@@ -141,7 +141,7 @@ tri_mg@meta.data %>%
 </details>
 
 
-## Footprinting binding scores from C20 cell line
+# Bulk ATACseq footprinting, C20 cell line
 
 The C20 cell line was derived from 
 an HIV+ patient  treated with ART (Antiretroviral Therapy). Since the access 
@@ -175,9 +175,9 @@ up_uninf <- atac_tfs_df$name[atac_tfs_df$condition == "up_uninf"]
 ```
 
 <details>
-<summary>**Volcano Plot**</summary>
+<summary>**Volcano Plot ATAC-seq footprinting**</summary>
 
-```{r, fig.height=8, fig.width=10}
+```{r, fig.height=8, fig.width=12}
 top_tfs %>% 
   # add a column containing information in which condition the corresponding TF 
   # is upregulated
@@ -264,7 +264,7 @@ Two TFs seem to be more active in Inf+EFZ and Uninf+EFZ (compared to Inf and Uni
 
 Three TFs seem to be more active in Inf and Uninf (compared to Inf+EFZ and Uninf+EFZ):
 
-* NFAT%
+* NFAT5
 * TCF7L2
 * CEBPB
 

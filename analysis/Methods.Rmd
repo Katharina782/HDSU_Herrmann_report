@@ -5,26 +5,82 @@ date: "16 12 2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-## R Markdown
+## sc-RNAseq analysis workflow
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### Quality Control
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+For Quality Control I used the publications from which the datasets were obtained
+as an orientation, in order to be able to reproduce the results and findings.
 
-```{r cars}
-summary(cars)
-```
+### Normalization
 
-## Including Plots
+Log normalization was used to normalize count matrices, using the function `NormalizeData()`from the Seurat package. The counts of a particular
+features for a particular cell are divided by the total counts for that cell and
+multiplied by a scaling factor of 10,000. Then the result is natural-log 
+transformed. 
 
-You can also embed plots, for example:
+For GRN inference with SCENIC the function `SCTransform()` from the Seurat 
+package was used, so that the data structure would work with the SCENIC pipeline.
+This method uses regularized negative binomial regression to normalize the
+count matrix. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
++ normalization
+  + PCA
+  + Clustering
+  
+## Integration & Label Transfer
+
+See here for more details on the method and implementation:
+[@Stuart]
+
+See here for a vignette:
+https://satijalab.org/seurat/articles/integration_mapping.html
+
+### Integration
+
+First, canonical correlation analysis is performed to reduce dimensionality of both
+datasets. This method can find shared biological markers, even if batch effects 
+are very large. Second, expression data is L2 normalized. After the 
+projection of distinct datasets into a shared subspace, pairs of MNN in this shared subspace are identified. These MNN correspond to cells which are biologically
+similar. The MNN serve as integration anchors for the integration, but 
+beforehand the anchors are scored. The score is a measure of how similar the two 
+anchor cells are. Using anchors and their corresponding scores 
+correction vectors are computed for each cell. The correction vectors contain 
+information on the difference between two anchor cells. Using the correction vectors 
+the expression values of each cell are transformed, so that they are part of an
+integrated dataset. [@Stuart] This integrated dataset can then be used for 
+further analysis.
+
+Finding anchors between datasets is not only required for integration of two 
+distinct datasets, but also for label transfer. 
+
+### Label Transfer
+
+After finding anchors between distinct datasets as described above, it 
+is also possible to transfer information on cell type annotations. This means 
+that instead of de-nove analysis of cell type markers the cell labels are learned 
+from a reference dataset. Instead of using canonical correlation analysis, the
+PCA computed for the reference dataset is projected onto the query dataset. 
+A binary classification matrix is build with rows corresponding to all possible 
+classes and columns corresponding to reference anchors of the anchor pairs. 
+If a reference anchor belongs to a certain class the entry will be one, otherwise
+it will be zero. The classification matrix is then multiplied with a weight matrix.
+This way we get prediction scores for each class and cell in the query dataset.
+[@Stuart]
+
+* correlation  
+  
+  + test for correlation
+  + Pearson vs Spearman?
+  
+* AddModuleScore
+
+* hierarchical clustering 
+  + wss plot
+  
+* test for differential TF activity
+  + Kruskal-Wallis
+  + pairwise wilcox
