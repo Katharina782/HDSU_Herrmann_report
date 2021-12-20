@@ -18,7 +18,11 @@ text-align: justify}
 
 
 ```{r setup, include = FALSE}
+<<<<<<< HEAD
 knitr::opts_chunk$set(cache = FALSE, autodep = TRUE, 
+=======
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE, 
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
                       collapse = TRUE, message = FALSE)
 
 set.seed(42)
@@ -611,7 +615,11 @@ each clusters.
 sign_marker_genes <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/sign_marker_genes.tsv")
 
 #show the top 10 differentially expressed genes for each cluster
+<<<<<<< HEAD
 #sign_marker_genes %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC ) #%>%
+=======
+sign_marker_genes %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC ) #%>%
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
   #kable(caption = "Top two differentially expressed genes for each cluster")#, digits = c(3, format.args = list(scientific = TRUE)) #= TRUE))
 ```
 
@@ -908,6 +916,15 @@ are a few genes, like FAU, TPT1, TMSB10 and MIR4426 which do not show expression
 specific to the Myeloid2 cluster. It is unclear why [@Farhadian] chose these 
 genes as signature genes.
 
+<<<<<<< HEAD
+=======
+The genes show the highest expression in Myeloid2 and for some genes like CD74 
+and genes of the HLA family are also highly expressed in Myeloid5 cells. However, there 
+are a few genes, like FAU, TPT1, TMSB10 and MIR4426 which do not show expression 
+specific to the Myeloid2 cluster. It is unclear why [@Farhadian] chose these 
+genes as signature genes.
+
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 ```{r, fig.height =15, fig.width=12}
 DotPlot(hiv4, features = c(paper)) + 
   coord_flip() +
@@ -940,8 +957,12 @@ number of cells in the uninfected conditions is so much smaller.
 hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds")
 
 hiv7@meta.data %>% group_by(orig.ident) %>% 
+<<<<<<< HEAD
   summarise(number_of_cells = n()) %>% 
   kable(caption = "Number of cells per sample")
+=======
+  summarise(number_of_cells = n()) %>% kable
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 ```
 
 
@@ -985,8 +1006,12 @@ a pairwise Wilcox test to see which condtions are different from each other.
 
 ```{r}
 percentage_my2_transcripts %>% 
+<<<<<<< HEAD
   rstatix::kruskal_test(percentage ~ condition) %>%
   kable(caption = "Kruskal Wallis Test")
+=======
+  rstatix::kruskal_test(percentage ~ condition)
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 ```
 
 **Pairwise Wilcox test:**
@@ -1034,7 +1059,15 @@ p2 <- percentage_my2_transcripts %>% ggplot() +
                outlier.shape = NA) +
   xlab("Sample origin") +
   ylab("Frequency of myeloid2 transcripts per cell") +
+<<<<<<< HEAD
   labs(title = "Remove outliers to see difference") +
+=======
+  labs(title = "Removed outliers to see difference") +
+  stat_pvalue_manual(percentage_my2_transcripts %>% 
+    rstatix::pairwise_wilcox_test(percentage ~ condition) %>% 
+      rstatix::add_xy_position()) +
+  ylim(0, 0.07) +
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
   NoLegend()
 
 ggarrange(p1, p2, ncol = 2, nrow = 1)
@@ -1143,7 +1176,11 @@ common cell type markers for the individual cell types.
 
 #### Myeloid2 marker genes
 
+<<<<<<< HEAD
 ```{r, fig.width=12, fig.height = 10}
+=======
+```{r, fig.width=12, fig.height = }
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 # ceck the Myeloid2 markers
 p1 <- VlnPlot(query,
               features =  c("AXL", "APOE", "TREM2"), 
@@ -1445,9 +1482,15 @@ FeaturePlot(hiv_hand, features = "Cluster1", pt.size = .01) +
 
 ```
 
+<<<<<<< HEAD
 
 ### Grassivaro et al.
 
+=======
+
+### Grassivaro et al.
+
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 [@Grassivaro] identified features related to convergence of microglia and 
 macrophages.
 They identified 14 genes that are conserved in microglia throughout development,
@@ -1482,6 +1525,7 @@ by [@Farhadian] and used as marker genes for microglia associated with
 neurodegenerative disease.
 
 Neither of these signatures show a high score for the Myeloid2/5 clusters. 
+<<<<<<< HEAD
 
 * The signature genes defined by [@Keren-Shaul] are expressed to some level 
 in all myeloid clusters
@@ -1490,6 +1534,16 @@ Myeloid clusters
 * CD9 and SPP1 might be added to the list of microglia marker genes expressed
 in Myeloid2 cluster
 
+=======
+
+* The signature genes defined by [@Keren-Shaul] are expressed to some level 
+in all myeloid clusters
+* The signature defined by [@Kraseman] is also mainly expressed in the 
+Myeloid clusters
+* CD9 and SPP1 might be added to the list of microglia marker genes expressed
+in Myeloid2 cluster
+
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 It is not clear why [@Farhadian] used these genes as marker genes.
 
 ```{r, fig.width=10}
@@ -1532,9 +1586,12 @@ kraseman <- FeaturePlot(hiv_mgnd, features = "Cluster1", pt.size = .01) +
   labs(title = "Kraseman et al., 28 inflammatory genes upregulated in 
        disease associated microglia")
 
+<<<<<<< HEAD
 ggarrange(keren, kraseman, ncol = 2, nrow = 1)
 ```
 
+=======
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 
 ```{r, fig.width=15}
 # Keren Shaul et al. signature
@@ -1774,8 +1831,11 @@ do.call(grid.arrange, c(cluster_plots, ncol = 4, nrow = 2))
 
 ## {-}
 
+<<<<<<< HEAD
 ---
 
+=======
+>>>>>>> 813ec51c3741eb1435e1daafde4dd0294bedd5e3
 ## Genes which are upregulated in Myeloid2 compared to all other Myeloid clusters
 
 * overlap of 5 genes with Kraseman microglia -> inflammatory molecules 
