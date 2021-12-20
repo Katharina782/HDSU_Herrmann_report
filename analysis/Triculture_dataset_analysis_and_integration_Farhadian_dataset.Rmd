@@ -6,19 +6,11 @@ bibliography: references.bib
 link-citations: yes
 ---
 
-<script>
-function myFunction() {
-    var x = document.getElementById("myDIV");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
+<style>
+body {
+text-align: justify}
+</style>
 
-</script>
-
-<div style="text-align: justify"> 
 
 ```{r setup}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
@@ -102,10 +94,9 @@ Debaisieux et a., 2015 and Mazzolini et a., 2010
  decreased phagocytic capabilities
  
  
-<button onclick="myFunction()">*Click here for details on files and data structure*</button>
- 
-<div id="myDIV">
-
+<details>
+*<summary>Files and data structure</summary>*
+  
 **Read in Files:**
 
 * ia/2 = infected with HIV + treated with ART
@@ -126,7 +117,7 @@ gene symbol -> the same gene symbol has multiple expression values)
 * You could make them unique with the function `make.unique()`
 * You could remove the duplicated features -> this is what I did
 
-```{r}
+```
 path <- "/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/" #"/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/"
 all_files <- list.files(path)
 
@@ -141,46 +132,80 @@ all_cond_list <- map(seq.int(3,7), function(n){
   matrix <- matrix[!duplicated(rownames(matrix)),]
   seurat_ob <- CreateSeuratObject(matrix, project = name,
                                   assay = "RNA", min.cells = 1, min.features = 1)
+  seurat_ob[["percent_mt"]] <- PercentageFeatureSet(seurat_ob, pattern = "^MT-")
   list(name = name, count = matrix, seurat_ob = seurat_ob)
 })
 
-
+#saveRDS(all_cond_list, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/seurat_list")
 ```
-</div>
+
+---
+</details>
+
+# Data processing {.tabset}
+
+## Before Quality Control:
 
 
-<button onclick="myFunction()">*Click here for details on Quality Control*</button>
- 
-<div id="myDIV">
+```{r, fig.width=15}
+all_cond_list <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/seurat_list")
 
-## Quality control
+before_qc <- merge(all_cond_list[[1]]$seurat_ob,
+                    c(all_cond_list[[2]]$seurat_ob,
+                      all_cond_list[[3]]$seurat_ob,
+                      all_cond_list[[4]]$seurat_ob,
+                      all_cond_list[[5]]$seurat_ob),
+                    project = "triculture_all_conditions",
+                    add.cell.ids = c(paste0(all_cond_list[[1]]$name),
+                                     paste0(all_cond_list[[2]]$name),
+                                     paste0(all_cond_list[[3]]$name),
+                                     paste0(all_cond_list[[4]]$name),
+                                     paste0(all_cond_list[[5]]$name)))
+```
+
+
+```{r, fig.width=15, fig.height=7}
+qual_metric <- c("nFeature_RNA", "nCount_RNA", "percent_mt")
+
+plots <- map(qual_metric, function(metric){
+  ggplot() +
+    geom_violin(aes(x = before_qc@meta.data %>% pull("orig.ident"),
+                 y = before_qc@meta.data %>% pull(metric), 
+                 fill = before_qc@meta.data %>% pull("orig.ident")), 
+                alpha = .5) +
+    geom_boxplot(aes(x = before_qc@meta.data %>% pull("orig.ident"),
+                     y = before_qc@meta.data %>% pull(metric)),
+                 alpha = 0) +
+    xlab("sample origin") +
+    ylab(paste0(metric)) +
+    NoLegend() 
+})
+
+do.call(grid.arrange, c(plots, ncol = 3, nrow = 1))
+```
+
+## After quality control
 
 For each sample separately
 
 * remove genes expressing less than 200 genes or more than 5000
 * remove cells expressing > 20% mitochondrial genes
+* erge Seurat objects after Quality Control
 
 ```{r}
 # add percentage of mitochondiral genes to metadata
 all_cond <- map(seq.int(1,5), function(n){
   seurat_ob <- all_cond_list[[n]]$seurat_ob
-  seurat_ob[["percent_mt"]] <- PercentageFeatureSet(seurat_ob, pattern = "^MT-")
-  plot <- VlnPlot(seurat_ob, features = c("nFeature_RNA", "percent_mt", "nCount_RNA"), ncol = 3)
+  #seurat_ob[["percent_mt"]] <- PercentageFeatureSet(seurat_ob, pattern = "^MT-")
+  #plot <- VlnPlot(seurat_ob,
+   #               features = c("nFeature_RNA", "percent_mt", "nCount_RNA"),
+    #              ncol = 3) +
+    #labs(title = paste0("condition ", all_cond_list[[n]]$name))
   seurat_ob <- subset(seurat_ob, nFeature_RNA > 200 & nFeature_RNA < 5000 & percent_mt < 20)
-  list(name = all_cond_list[[n]]$name, seurat_ob = seurat_ob, plot = plot)
+  list(name = all_cond_list[[n]]$name, seurat_ob = seurat_ob)#, plot = plot)
 })
 ```
 
-```{r, fig.width = 15, fig.height = 10}
-ggarrange(all_cond[[1]]$plot, 
-             all_cond[[2]]$plot,
-             all_cond[[3]]$plot,
-             all_cond[[4]]$plot, 
-             all_cond[[5]]$plot, ncol = 2, nrow = 3)
-
-```
-
-### Merge Seurat objects after Quality Control
 
 ```{r, fig.width=15}
 triculture <- merge(all_cond[[1]]$seurat_ob,
@@ -194,47 +219,40 @@ triculture <- merge(all_cond[[1]]$seurat_ob,
                                      paste0(all_cond[[3]]$name),
                                      paste0(all_cond[[4]]$name),
                                      paste0(all_cond[[5]]$name)))
-p1 <- triculture@meta.data %>% ggplot() +
-  geom_boxplot(aes(x = orig.ident, y = nFeature_RNA))
-
-p2 <- triculture@meta.data %>% ggplot() +
-  geom_boxplot(aes(x = orig.ident, y = nCount_RNA))
-
-p3 <- triculture@meta.data %>% ggplot() +
-  geom_boxplot(aes(x = orig.ident, y = percent_mt))
-  
-p4 <- triculture@meta.data %>% ggplot() +
-  geom_violin(aes(x = orig.ident, y = nFeature_RNA))
-
-p5 <- triculture@meta.data %>% ggplot() +
-  geom_violin(aes(x = orig.ident, y = nCount_RNA))
-
-p6 <- triculture@meta.data %>% ggplot() +
-  geom_violin(aes(x = orig.ident, y = percent_mt))
-figure <- ggarrange(p1, p2, p3, p4, p5, p6, ncol = 3, nrow = 2)
-annotate_figure(figure, top = text_grob("Qualtiy Control"))
 ```
-</div>
 
 
-### Normalization, Scaling, Find Variable Features
+```{r, fig.width=15, fig.height=7}
+qual_metric <- c("nFeature_RNA", "nCount_RNA", "percent_mt")
+
+plots <- map(qual_metric, function(metric){
+  ggplot() +
+    geom_violin(aes(x = triculture@meta.data %>% pull("orig.ident"),
+                 y = triculture@meta.data %>% pull(metric), 
+                 fill = triculture@meta.data %>% pull("orig.ident")), 
+                alpha = .5) +
+    geom_boxplot(aes(x = triculture@meta.data %>% pull("orig.ident"),
+                     y = triculture@meta.data %>% pull(metric)),
+                 alpha = 0) +
+    xlab("sample origin") +
+    ylab(paste0(metric)) +
+    NoLegend() 
+})
+
+do.call(grid.arrange, c(plots, ncol = 3, nrow = 1))
+```
+
+## Normalization, Scaling, Find Variable Features
 
 * log normalization
 * scale data so that we have mean = 0 and variance = 1
 * Find the 2000 most highly variable features
-
-
-<button onclick="myFunction()">*Click here for details on these 3 steps*</button>
- 
-<div id="myDIV">
 
 ```
 triculture <- NormalizeData(triculture, verbose = FALSE)
 triculture <- ScaleData(triculture, verbose = FALSE)
 triculture <- FindVariableFeatures(triculture, verbose = FALSE)
 ```
-</div>
-
 
 
 ## Dimensionality reduction
@@ -244,10 +262,6 @@ triculture <- FindVariableFeatures(triculture, verbose = FALSE)
 * find the k-nearest neighbors
 * find Clusters based on KNN-graph
 * calculate TSNE embedding
-
-<button onclick="myFunction()">*Click here for details on these steps*</button>
- 
-<div id="myDIV">
 
 ```
 triculture <- RunPCA(triculture, features = VariableFeatures(triculture), verbose = FALSE)
@@ -262,6 +276,7 @@ triculture <- RunTSNE(triculture, dims = 1:10, verbose = FALSE)
 ```{r}
 triculture <- readRDS("seurat_objects/triculture_seurat_object")
 
+#triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
 
 DimPlot(triculture, reduction = "tsne", pt.size = .01, label = TRUE,
         group.by = "seurat_clusters")
@@ -277,12 +292,13 @@ For annotating the different clusters the same markers as in [@Ryan] were used:
 
 ```{r, fig.widht = 15, fig.height=12}
 #markers <- FindAllMarkers(triculture)
-
 #triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
 markers <- read.table("data_files/marker_genes_triculture_dataset")
+#markers <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/marker_genes_triculture_dataset")
 
 top_2 <- markers %>% group_by("seurat_cluster") %>% top_n(n = 2, wt = avg_log2FC)
 
+marker_genes <- c("AIF1", "SPI1", "CD4", "MAP2", "SYN1", "THBS1", "SOX9")
 p1 <- FeaturePlot(triculture, features = "AIF1")
 p2 <- FeaturePlot(triculture, features = "SPI1")
 p3 <- FeaturePlot(triculture, features = "CD4")
@@ -296,9 +312,9 @@ ggarrange(p1,p2,p3,p4,p5,p6,p7, ncol = 2, nrow =4 )
 ```
 
 
-<button onclick="myFunction()">*Click here for details on cell tpye annotation*</button>
- 
-<div id="myDIV">
+
+<details>
+*<summary>Details on cell type annotation</summary>*
 
 ### Gene expression 
 
@@ -328,7 +344,10 @@ triculture <- AddMetaData(triculture, cell_types, col.name = "cell_type")
 
 ```
 
-</div>
+---
+</details>
+
+# {-}
 
 
 ### Remove undesignated cells
@@ -357,9 +376,10 @@ p2 <- DimPlot(triculture_clean, reduction = "tsne", pt.size = .01, label = TRUE,
 p1+p2
 ```
 
-<button onclick="myFunction()">*Heatmap of top 20 marker genes for each cell type*</button>
- 
-<div id="myDIV">
+
+<details>
+*<summary>Heatmap of top 20 marker genes for each cell type</summary>*
+
 
 Top20 marker genes for each cell cell type: 
  
@@ -369,12 +389,14 @@ top_n <- markers %>% group_by (cluster) %>% top_n(n = 20, wt = avg_log2FC)
 DoHeatmap(triculture_clean, features = top_n$gene)
 ```
 
-</div>
+
+---
+</details>
 
 
-<button onclick="myFunction()">*Number of cells per condition and cell type*</button>
- 
-<div id="myDIV">
+<details>
+*<summary>Number of cells per condition and cell type</summary>*
+
 
 How many cells of each cell type and condition are present in the dataset?
 
@@ -386,7 +408,9 @@ triculture_clean@meta.data %>% group_by(cell_type, orig.ident) %>%
   
 ```
 
-</div>
+
+---
+</details>
 
 
 ## Different infection and treatment conditions
@@ -432,10 +456,9 @@ DoHeatmap(triculture_clean, features = inflamm_genes)
 ```
 
 
+<details>
+*<summary>Differences of inflammatory gene expression between conditions</summary>*
 
-<button onclick="myFunction()">*Differences of inflammatory gene expression between conditions*</button>
- 
-<div id="myDIV">
 
 The gene expression of inflammatory genes in microglia was not very different
 between the conditions. The Inf+EFZ cells show a slightly different pattern of
@@ -446,7 +469,9 @@ DoHeatmap(subset(triculture_clean, cell_type == "iMg"),
           features = inflamm_genes, group.by = "orig.ident")
 ```
 
-</div>
+
+---
+</details>
 
 
 # Integration of triculture dataset with dataset of blood & CSF samples from HIV-infected patients
@@ -465,9 +490,8 @@ analysis.
 3. Run a single integrated analysis on all cells
 
 
-<button onclick="myFunction()">*Details on integration*</button>
- 
-<div id="myDIV">
+<details>
+*<summary>Details on integration</summary>*
 
 For more details see: [@Stuart]
 
@@ -522,7 +546,9 @@ combined <- AddMetaData(combined, combined_clusters, col.name = "combined_cluste
 #saveRDS(combined,"/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_hiv_combined_seurat_object")
 
 ```
-</div>
+
+---
+</details>
 
 ## Integrated clusters
 
@@ -644,9 +670,10 @@ normalizing, scaling and re-clustering these isolated cells might give us
 additional insights. 
 
 
-<button onclick="myFunction()">*Details on de-novo clustering*</button>
- 
-<div id="myDIV">
+
+<details>
+*<summary>Details on de-novo clusterin</summary>*
+
 
 ```
 
@@ -664,7 +691,9 @@ microglia_recluster <- RunTSNE(microglia_recluster, reduction = "pca", dims = 1:
 microglia_recluster <- FindNeighbors(microglia_recluster)
 microglia_recluster <- FindClusters(microglia_recluster, resolution = 0.5)
 ```
-</div> 
+
+---
+</details> 
 
 
 It is no surprise that cells from the triculture dataset separate from the 
@@ -980,7 +1009,7 @@ inf_uninf_art_marker %>%
              col = condition, 
              label = label)) +
   geom_point() +
-  geom_hline(yintercept = -log10(1e-10), col = "red") +
+  geom_hline(yintercept = -log10(1e-50), col = "red") +
   geom_text(nudge_x = .05, nudge_y = 2) +
   labs(title = "Genes which are up- or downregulated in Inf+EFZ vs Uninf+EFZ")
 
@@ -1184,10 +1213,8 @@ signature (17 out of 145 cells).
 On the other hand, only 4% of the Myeloid2 cells have a positive score 
 for the Uninf+EFZ gene signature. ???
 
-
-<button onclick="myFunction()">*Exact scores for each cell*</button>
- 
-<div id="myDIV">
+<details>
+*<summary>Exact scores for each cell</summary>*
 
 ```{r, results = "asis"}
 # divide the number of rows(cells) with positive ccores by the number of total 
@@ -1203,6 +1230,8 @@ up_sign@meta.data["Cluster1"] %>%
   kable()
 ```
 
+---
+</details>
 
 #### Bimodal Distribution
 
@@ -1619,4 +1648,3 @@ ggarrange(p2, p4, p1, p3, ncol = 2, nrow = 2)
 
 # References
 
-</div>
