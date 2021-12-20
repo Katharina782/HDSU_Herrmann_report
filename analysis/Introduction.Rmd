@@ -3,6 +3,8 @@ title: "Introduction"
 author: "kmikulik"
 date: "15 12 2021"
 output: html_document
+bibliography: references.bib
+link-citations: yes
 ---
 
 <div style="text-align: justify"> 
@@ -34,9 +36,20 @@ production [@Bandera]. These reservoirs would cause the increase in HIV
 replication as soon as the treatment was interrupted, which is why ART is 
 continued as a lifelong treatment [@Wallet].
 
-![Fig.1: [@Osborne], HIV structure.]("images/HIV_virus.jpg")
+
+![](images/HIV_virus.jpg)
 
 
+<details>
+  <summary>Click for Answer</summary>
+    ```{r, echo=FALSE, eval=TRUE}
+    hist(1:10)
+    ```
+</details> 
+
+
+<details> 
+<summary>Click to Expand</summary> 
 
 ### Antiretroviral therapy (ART)
 
@@ -47,7 +60,8 @@ cure the disease, but only suppress it. The virus persists in latently infected
 cells. One advantage of the viral suppression is that drug resistance mutations
 do not occur [@Bandera].
 
-
+</details>
+ 
 ### Microglia & Macrophages
 
 Microglia arise early during development form the yolk sac and they enter the

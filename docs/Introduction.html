@@ -437,7 +437,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -446,7 +446,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -458,7 +458,7 @@ div.tocify {
 <strong>Last updated:</strong> 2021-12-18
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -474,28 +474,28 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreecc01ecd22b69e2abe185745d43d6ae275807eb05targetblankcc01ecda"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/cc01ecd22b69e2abe185745d43d6ae275807eb05" target="_blank">cc01ecd</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2a95e927f953c093f2e48cb2b6551d152f735267targetblank2a95e92a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/2a95e927f953c093f2e48cb2b6551d152f735267" target="_blank">2a95e92</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreecc01ecd22b69e2abe185745d43d6ae275807eb05targetblankcc01ecda" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2a95e927f953c093f2e48cb2b6551d152f735267targetblank2a95e92a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/cc01ecd22b69e2abe185745d43d6ae275807eb05" target="_blank">cc01ecd</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/2a95e927f953c093f2e48cb2b6551d152f735267" target="_blank">2a95e92</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -509,6 +509,7 @@ Ignored files:
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
 
 Unstaged changes:
+    Modified:   analysis/Introduction.Rmd
     Modified:   analysis/_site.yml
     Modified:   analysis/references.bib
 
@@ -549,6 +550,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/40d3fef70b76ab4ea94071aec3a9c1dc729c3011/docs/Introduction.html" target="_blank">40d3fef</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -698,14 +716,22 @@ new files
 <h3>Human Immunodeficiency Virus (HIV)</h3>
 <p>HIV is a lentivirus consisting of two single stranded RNA molecules, encoding fifteen different viral proteins which are essential for viral replication <span class="citation">[@Osborne]</span>. At the same time these proteins are potential targets for ART drugs. The RNA molecules are enclosed in a capsid of p24 protein and the capsid is surrounded by a lipid membrane <span class="citation">[@Osborne]</span>. The viral envelope glycoprotein (Env) is responsible for recognizing the host cells and the subsequent fusion of the vius with the host cell plasma membrane <span class="citation">[@Huarte]</span>. The glycoprotein gp120 binds to the cluster of differentiation 4 (CD4) receptors on CD4+ T cells, macrophages and microglia cells <span class="citation">[@Osborne]</span>. A structure of the virus particle is shown in figure 1 from <span class="citation">[@Osborne]</span>.</p>
 <p>ART drugs circulate the blood and suppress HIV replication of peripheral immune cells. However, long-lived cells (eg. CD4+ T cells, macrophages, microglia) can become persistent HIV reservoirs. This is called latent infection. Latent infection means that cells host replication competent HIV in their genome, without virus production <span class="citation">[@Bandera]</span>. These reservoirs would cause the increase in HIV replication as soon as the treatment was interrupted, which is why ART is continued as a lifelong treatment <span class="citation">[@Wallet]</span>.</p>
-<div class="figure">
-<img src="%22images/HIV_virus.jpg%22" alt="" />
-<p class="caption">Fig.1: <span class="citation">[@Osborne]</span>, HIV structure.</p>
-</div>
+<p><img src="images/HIV_virus.jpg" /></p>
+<details>
+<summary>
+Click for Answer
+</summary>
+<img src="figure/Introduction.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" />
+</details>
+<details>
+<summary>
+Click to Expand
+</summary>
 </div>
 <div id="antiretroviral-therapy-art" class="section level3">
 <h3>Antiretroviral therapy (ART)</h3>
 <p>ART drugs target viral enzymes, like reverse transcriptases, proteases or integrases. Due to the availability of combinations ART mortality resulting from HIV infection has been reduced in the past years. Nevertheless, the drugs are not able to cure the disease, but only suppress it. The virus persists in latently infected cells. One advantage of the viral suppression is that drug resistance mutations do not occur <span class="citation">[@Bandera]</span>.</p>
+</details>
 </div>
 <div id="microglia-macrophages" class="section level3">
 <h3>Microglia &amp; Macrophages</h3>

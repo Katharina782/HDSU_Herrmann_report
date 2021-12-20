@@ -45,64 +45,45 @@ library(readxl)
 
 # Triculture Dataset
 
-The triculture dataset comes from the following paper [@Ryan]. 
-rThey used a Triculture system with induced neurons, induced astrocytes and 
+The triculture dataset used was published by [@Ryan]. 
+They used a Triculture system with induced neurons, induced astrocytes and 
 induced microglia.
-For the induced microglia they used CX3CR1, IBA1, TMEM119, P2RY12 as markers.
-Induced microglia also express CCR5 which is a co-receptor necessary for HIV 
-infection. These cells lacked expression of myeloid-progenitor markers.
+Induced microglia express marker genes CX3CR1, IBA1, TMEM119 and P2RY12.
+CCR5 which is a co-receptor necessary for HIV infection is also expressed by 
+these cells, but they lack expression of myeloid-progenitor markers [@Ryan].
 
 iMg were infected with HIV for 15 days (resulting in 94% of cells infected, 
-positive for HIV capsid protein P24 and exhibiting multinucleation). EFZ was used
-for ART. EFZ blocks HIV reverse transcription. This way it was possible to study 
-non-productively infected cells. EFZ reduced infection by 2/3.
+positive for HIV capsid protein p24 and exhibiting multinucleation). Some cells
+were treated with the ART EFZ. EFZ blocks HIV reverse transcription. This way it was possible to study non-productively infected cells. EFZ reduced infection by two 
+thirds [@Ryan].
 
+In the infected, but not treated iMg (Inf) inflammatory pathways were 
+significantly uperegulated compared to the uninfected condition(Uninf), including
+IL-8, NFkB and EIF2. 
 There was decreased expression of pro-imflammatory genes IL1b, Il8 and TNFalpha
-in inf+EFZ vs inf. This suggests a reduced inflmmatory reaction. 
+in the infected and treated (Inf+EFZ) vs Inf condition. This suggests a reduced inflammatory reaction [@Ryan]. Nevertheless, there were
+two distinct pathways which were upregulated in 
+Inf+EFZ iMg, namely RhoGDI signaling and CD40 signaling pathway. This will be 
+discussed in more detail later on [@Ryan].
 
-Inf + EFZ had an attenuated inflammatory response compared to Inf.  
+There was  a change in signaling pathways caused by EFZ treatment even in 
+the uninfected and treated (Uninf+EFZ) versus the uninfected, but not treated
+(Uninf) condition. The EFZ treatment alone was very different from the EFZ treatment with infection [@Ryan]. 
 
-
-There was  a change in signaling pathways caused by EFZ treatment in Uninf + EFZ
-vs Uninf. The EFZ treatment alone was very different from the EFZ treatment with 
-infection. 
-
-????
-
-**Inf vs Inf + EFZ:**
-
-* inflammatory pathways were significantly activated in Inf iMg compared
-with Uinf iMg: IL-8, NFkB, EIF2
-* EIF2 is involved in the UPR and ISR (increased in iMg, iAst, iN)
-* only in iMg ATF4 mRNA expression was increased (TF downstream of ISR activation)
-* it has previously been shown that ISR is activated in neurons and astrocytes 
-from human brain samples with HAND
-
-**Uninf vs Inf + EFZ:**
-
-We would expect to see a dampened immune response compared with Inf
-
-* Inf + EFZ had a much milder inflammatory reaction 
-  + RhoGDI, CD40 signaling where the only upregulated pathways compared with 
-  Uninf iMg
-* RhoGDI negaitvely regulates Rac -> functions in inflammatory pathways
-* CD40 activates NFkB signaling 
-* milder inflammatory response is in line with lower disease severity in HAND + ART
-
-Debaisieux et a., 2015 and Mazzolini et a., 2010
- -> HIV-infected macrophages and uninfected macrophages exposed to HIV display 
- decreased phagocytic capabilities
- 
  
 <details>
-*<summary>Files and data structure</summary>*
+<summary>**Files and data structure**</summary>
   
 **Read in Files:**
+
+abbreviations: 
 
 * ia/2 = infected with HIV + treated with ART
 * ca = uninfected + ART
 * ctl = uninfected
 * inf = infected 
+
+file structure: 
 
 * the ".mtx" files contains a sparse matrix of class dgTMatrix
 * the "barcodes.tsv" files contain the cell barcodes
@@ -189,8 +170,8 @@ do.call(grid.arrange, c(plots, ncol = 3, nrow = 1))
 For each sample separately
 
 * remove genes expressing less than 200 genes or more than 5000
-* remove cells expressing > 20% mitochondrial genes
-* erge Seurat objects after Quality Control
+* remove cells expressing more than 20% mitochondrial genes
+* merge Seurat objects after Quality Control
 
 ```{r}
 # add percentage of mitochondiral genes to metadata
@@ -314,9 +295,9 @@ ggarrange(p1,p2,p3,p4,p5,p6,p7, ncol = 2, nrow =4 )
 
 
 <details>
-*<summary>Details on cell type annotation</summary>*
+<summary>**Details on cell type annotation**</summary>
 
-### Gene expression 
+**Gene expression**
 
 Different clusters were annotated according to the gene expression of 
 marker genes mentioned above.
@@ -372,13 +353,13 @@ p2 <- DimPlot(triculture_clean, reduction = "tsne", pt.size = .01, label = TRUE,
         group.by = "cell_type")
 ```
 
-```{r}
+```{r, fig.width=15}
 p1+p2
 ```
 
 
 <details>
-*<summary>Heatmap of top 20 marker genes for each cell type</summary>*
+<summary>**Heatmap of top 20 marker genes for each cell type**</summary>
 
 
 Top20 marker genes for each cell cell type: 
@@ -395,7 +376,7 @@ DoHeatmap(triculture_clean, features = top_n$gene)
 
 
 <details>
-*<summary>Number of cells per condition and cell type</summary>*
+<summary>**Number of cells per condition and cell type**</summary>
 
 
 How many cells of each cell type and condition are present in the dataset?
@@ -403,8 +384,13 @@ How many cells of each cell type and condition are present in the dataset?
 ```{r, results = "asis"}
 triculture_clean@meta.data %>% group_by(cell_type, orig.ident) %>% 
   summarize(n = n()) %>% 
+  mutate(orig.ident = case_when(
+                      orig.ident %in% c("ia", "ia2") ~ "Inf+EFZ", 
+                      orig.ident == "ca" ~ "Uninf",
+                      orig.ident == "ctl" ~ "Uninf+EFZ",
+                      orig.ident == "inf" ~ "Inf")) %>% 
   pivot_wider(names_from = orig.ident, values_from = n) %>% 
-  kable() # to make table look nice in Rmarkdown
+  kable(caption = "Number of cells per condition and cell type") # to make table look nice in Rmarkdown
   
 ```
 
@@ -422,12 +408,12 @@ from the infected, but untreated cells (Inf) and the the uninfected cells
 
 ```{r}
 # rename origin of ident for easier interpretation
-origin_vector <- (triculture_clean@meta.data %>% mutate(orig.ident = ifelse(orig.ident %in%
-                                                 c("ia", "ia2"), "Inf+EFZ", 
-                                                 ifelse(orig.ident == "ca",
-                                                        "Uninf", ifelse(
-                                               orig.ident == "ctl", "Uninf+EFZ",
-                                               "Inf")))))[["orig.ident"]]
+origin_vector <- (triculture_clean@meta.data %>% 
+                    mutate(orig.ident = case_when(
+                      orig.ident %in% c("ia", "ia2") ~ "Inf+EFZ", 
+                      orig.ident == "ca" ~ "Uninf",
+                      orig.ident == "ctl" ~ "Uninf+EFZ",
+                      orig.ident == "inf" ~ "Inf")))[["orig.ident"]]
 
 triculture_clean <- AddMetaData(triculture_clean, origin_vector, col.name = "orig.ident")
 ```
@@ -457,7 +443,7 @@ DoHeatmap(triculture_clean, features = inflamm_genes)
 
 
 <details>
-*<summary>Differences of inflammatory gene expression between conditions</summary>*
+<summary>**Differences of inflammatory gene expression between conditions**</summary>
 
 
 The gene expression of inflammatory genes in microglia was not very different
@@ -477,7 +463,7 @@ DoHeatmap(subset(triculture_clean, cell_type == "iMg"),
 # Integration of triculture dataset with dataset of blood & CSF samples from HIV-infected patients
 
 The HIV Blood & CSF dataset [@Farhadian]
-used before was integrated with the triculture dataset [@Ryan].
+used in the previous analysis was integrated with the triculture dataset [@Ryan].
 
 Integration of two datasets is based on Seurat [@Stuart]. It first identifies 
 anchors between datasets, calculates scores for all anchors and 
@@ -491,7 +477,7 @@ analysis.
 
 
 <details>
-*<summary>Details on integration</summary>*
+<summary>**Details on integration**</summary>
 
 For more details see: [@Stuart]
 
@@ -563,29 +549,45 @@ triculture and Myeloid cells from CSF and Blood samples.
 
 #### Visualization of the integrated dataset
 
-```{r, fig.width=15, fig.height=10}
+```{r, fig.width=15, fig.height=15}
 combined = readRDS("seurat_objects/triculture_hiv_combined_seurat_object_2")
 
 p1 <- DimPlot(combined, reduction = "tsne", group.by  = "dataset",
-              label = TRUE) + NoLegend()
+              label = TRUE) + NoLegend() +
+  labs(title = "Dataset")
 p2 <- DimPlot(combined, reduction = "tsne", group.by = "cell_type",
-              label = TRUE, repel = TRUE) + NoLegend()
+              label = TRUE, repel = TRUE) + NoLegend() +
+  labs(title = "Cell types")
 p3 <- DimPlot(combined, reduction = "tsne", group.by = "cell_type",
-              split.by = "dataset", label = TRUE, repel = TRUE) + NoLegend()
+              split.by = "dataset", label = TRUE, repel = TRUE) + NoLegend() +
+  labs(title = "Cell types split into datasets")
 p4 <- DimPlot(combined, reduction = "tsne", group.by = "seurat_clusters",
-              label = TRUE) + NoLegend()
+              label = TRUE) + NoLegend() +
+  labs(title = "Clusters")
 
-ggarrange(p1, p2, p3,p4, ncol = 2, nrow = 2)
+a1 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
+        group.by = "seurat_clusters", label = TRUE, repel =TRUE) +
+  NoLegend() +
+  labs(title = "Clusters split into datasets")
+
+a2 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
+              group.by = "orig.ident") +
+  labs(title = "Sample origin split into datasets")
+
+ggarrange(p1, p2, p3,p4, a1, a2, ncol = 2, nrow = 3)
 
 ```
 
-```{r, fig.width=15, fig.height=5}
+```#{r, fig.width=15, fig.height=5}
 
 a1 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
-        group.by = "seurat_clusters", label = TRUE, repel =TRUE)
+        group.by = "seurat_clusters", label = TRUE, repel =TRUE) +
+  NoLegend() +
+  labs(title = "Clusters split into datasets")
 
 a2 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
-              group.by = "orig.ident")#, label = TRUE, repel =TRUE)
+              group.by = "orig.ident") +
+  labs(title = "Sample origin split into datasets")
 ggarrange(a1, a2, ncol = 2, nrow = 1)
 ```
 
@@ -605,18 +607,19 @@ subset_monocytes <- subset(combined, cell_type %in% c("Myeloid1",
                                                             "Myeloid5", 
                                                             "iMg"))
 
-p1 <- DimPlot(subset_monocytes, group.by = "cell_type")
-p2 <- DimPlot(subset_monocytes, group.by = "orig.ident")
-p3 <- DimPlot(subset_monocytes, group.by = "seurat_clusters")
+p1 <- DimPlot(subset_monocytes, group.by = "cell_type") +
+  labs(title = "Cell type")
+p2 <- DimPlot(subset_monocytes, group.by = "orig.ident") +
+  labs(title = "Sample origin")
+p3 <- DimPlot(subset_monocytes, group.by = "seurat_clusters") +
+  labs(title = "Cluster")
 fig <- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
-annotate_figure(fig, top = text_grob("Myeloid-lineage cells"))
+annotate_figure(fig, top = text_grob("Myeloid-lineage cells", size = 20))
 ```
 
-The plot below shows only CSF/Blood Myeloid cells and the Inf+EFZ iMg:
-
-* The CSF/Blood Myeloid cells cluster together with Inf+EFZ iMG as expected and 
-mainly contribute to the same subcluster.
-* Blood Myeloid 4 is an exception and belongs to a different subcluster.
+As expected the CSF/Blood Myeloid cells cluster together with Inf+EFZ and mainly contribute to the same subcluster, as can 
+be seen in the plot below, which shows only CSF/Blood Myeloid cells and the 
+Inf+EFZ iMg. Blood Myeloid 4 is an exception and belongs to a different subcluster.
 
 ```{r, fig.width=15, fig.height=7}
 
@@ -639,10 +642,10 @@ annotate_figure(fig, top = text_grob("Infected CSF/Blood Myeloid cells & Inf+EFZ
 
 
 
-#### cell types and conditions partially separate according to the two iMg clusters
+#### Cell types and conditions partially separate according to the two iMg clusters
 
 The myeloid-lineage cluster separated into two distinct subclusters. 
-Interestingly, the infected + EFZ iMg separeted clearly from the infected iMg. 
+Interestingly, the infected + EFZ iMg separated clearly from the infected iMg. 
 The separation was not so clear for the uninfected cells, which contributed to 
 both subclusters. Another observations is that the infected Myeloid1/2/3/5 cells belong  
 to the same subcluster as the infected + EFZ iMg. Conversely, the Myeloid4 cells
@@ -657,9 +660,11 @@ consitute an infected cell population unaffected by the ART treatment.
 ```{r,fig.width=15, fig.height=10}
 
 DimPlot(subset_monocytes, group.by = "seurat_clusters", 
-        split.by = "orig.ident", ncol = 4)
+        split.by = "orig.ident", ncol = 4) +
+  labs(title = "Contribution of different samples to different subclusters")
 DimPlot(subset_monocytes, group.by = "seurat_clusters", 
-        split.by = "cell_type", ncol = 4)
+        split.by = "cell_type", ncol = 3) +
+  labs(title = "Contribution of different cell types to different subclusters")
 ```
 
 
@@ -672,7 +677,7 @@ additional insights.
 
 
 <details>
-*<summary>Details on de-novo clusterin</summary>*
+<summary>**Details on de-novo clustering**</summary>
 
 
 ```
@@ -697,11 +702,8 @@ microglia_recluster <- FindClusters(microglia_recluster, resolution = 0.5)
 
 
 It is no surprise that cells from the triculture dataset separate from the 
-CSF/Blood-derived cells. When we recluster the myeloid lineage derived cells, we 
-obtain five subclusters for the iMg and three subclusters for the five  
-CSF/Blood Myeloid clusters as can be seen in the plots below. 
-
-We can also observe that the Myeloid2 and Myeloid5 separate from Myeloid1/2/3 
+CSF/Blood-derived cells which can be seen in the plot below. When we recluster the myeloid lineage derived cells, we 
+obtain five subclusters for the iMg and three subclusters for the five CSF/Blood Myeloid clusters as can be seen in the plots below. We can also observe that the Myeloid2 and Myeloid5 separate from Myeloid1/2/3 
 which is expected, since Myeloid2/5 originate from CSF samples and 
 Myeloid1/3/4 originate from blood samples.
 
@@ -725,7 +727,7 @@ ggarrange(a1, a2, a3, a4, ncol = 2, nrow = 2)
 
 
 Interestingly, both the Myeloid5 cells and the Myeloid2 cells are split between 
-the cluster six (blue) and seven (purple). In the following we will have a 
+the cluster six (blue) and seven (purple) in the figure below. In the following we will have a 
 closer look at this segregation.  
 When performing GRN inference with Scenic we also identified two potentially 
 biologically relevant subclusters of the Myeloid2 cells. It could be that these
@@ -764,8 +766,7 @@ annotate_figure(fig, top = text_grob("CSF/Blood Myeloid cells"))
 Since the segregation into two clusters seems to be related to the sample origin
 rather than to the infection status, we would not expect the clusters to overlap
 with the clusters identified after GRN inference with SCENIC. In the figure 
-below this is visualized for only the Myeloid2 cells from infected CSF samples
-(HIV1_CSF, HIV2_CSF, HIV3_CSF).
+below this is exactly what can be observed, only the Myeloid2 cells from infected CSF samples (HIV1_CSF, HIV2_CSF, HIV3_CSF) are shown. 
 
 ```{r, fig.width=15, figh.height = 5}
 # read in Myeloid2 cells
@@ -779,12 +780,12 @@ my2 <- AddMetaData(my2, hivmy2@meta.data["ht_cluster"],
 p1 <- DimPlot(my2, group.by = "seurat_clusters") +
   labs(title="Clusters")
 p2 <- DimPlot(my2, group.by = "TF_activity_clusters") +
-  labs("TF activity")
+  labs(title = "TF activity")
 p3 <- DimPlot(my2, group.by = "orig.ident") +
   labs(title = "Sample origin")
 figure <- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
 annotate_figure(figure, 
-                top = text_grob("Comparison with two clusters with different TF acitivty", 
+                top = text_grob("Comparison with clusters with different TF acitivty", 
                color = "black", face = "bold", size = 20))
 #my25 <- subset(microglia, seurat_clusters %in% c(6,7) &cell_type %in% c("Myeloid2", "Myeloid5"))
 
@@ -798,139 +799,47 @@ not be analyzed further.
 
 # Marker genes between different conditions
 
+### Differential gene expression between infected and uninfected +/- EFZ iMg
+
 In the following I will compare gene expression between infected cells and 
-uninfected cells, both treated with EFZ. I will use the uninfected cells as a 
+uninfected cells, both treated with EFZ and not treated. I will use the uninfected cells as a 
 baseline to find genes which are upregulated or downregulated in infected cells
 compared to uninfected cells. Since we have both cells treated with EFZ and 
 cells not treated with EFZ, we can define a signature for both treatment 
 conditions separately and then see if there is an overlap between the gene 
-signatures of infected cells (+/- EFZ)
-
-#### Features upregulated in Inf+EFZ vs Uninf+EFZ
-
-* **APOE**
-  + expressed by miroglia and astrocytes
-  + major carrier protein mediating transport and delivery of cholesterol,
-  lipids in the brain
-  + HIV1 Tat (viral protein) can bind to LRP1 (controls APOE uptake in the brain)
-  (Khan N., J Neuroinflammation, 2018)
-* **LPAR6**
-  + expressed in macrophages
-* **RAB32**
-  + ER stress is a hallmark of neurodegenerative diseases
-  + Rab GTPases are essential for cytokine production in neuroinflammation
-  (Liang Y., Neuroscience Letters, 2012)
-  + involved in formation of autophagosomes, upregulated in brain inflammation,
-  (Prashar A., Front. Cell. Infect. Microbiol., 2017)
-* **TXNIP**
-  + sequesters TRX (reduced thioredoxin), inhibiting its function -> 
-  increased oxidative stress
-  + cellular stress factors regulate TXNIP expression
-  + expressed by microglia, neurons and astrocytes
-  + TXNIP expression promotes inflammatory activation (Tsubaki H., Int J Mol Sci., 2020)
-  + aggravates brain injury by activating NLRP3 inflammasomes (Liu Y., Lab Invest, 2021)
-* **PDK4**
-  + metabolic checkpoint of M1 polarization of macrophages
-  (Min B.k., Frontiers in Immunology, 2019)
-* **NEAT1** (expression is changed by HIV1 infection)
-  + NEAT1 inhibits microglial polarization towards the pro-inflammatory M1 
-  phenotype in ischemia (cell culture) (Ni X. Scientific Reports, 2020)
-  + in CD4 T Cells downregulation of NEAT1 leads to higher HIV replication
-  + critical for the substructural integrity of the nuclear paraspeckle, which
-  is important for HIV replication
-  + potential biomarker of HIV infection (Shen Li, IJID, 2019)
-  + HIV seems to exploit the fact that activated CD4 T cells have decreased NEAT1 expression
-  + higher replication if NEAT1 is repressed (Liu H., Virology, 2018)
-  This might make sense since we also want to reduce viral replication with EFZ,
-  so in these cells NEAT1 might be upregulated reducing HIV1 replication
-* **DAB2**
-  + DAB2 is a marker of microglia activation (Bell-Temin H., Mol Cell Proteomics, 2015)
-  + expressed in early microglia more than at later stages
-  (Matcovitch-Natan O., Science, 2016)
-* **APOC1**
-After HVI1 enters the brain int can exist in CSF, perivascular macrophages, 
-microglia and astrocytes. With ART you can supress HIV1 replication in plasma
-and CSF, but some HIV1 resrevoirs and neuroinflammation persist. This results in
-the 50% prevalence of HAND. Tat enhances HIV infectivity. 
-(Khan N., J Neuroinflammation, 2018)
+signatures of infected cells +/- EFZ. Finding genes which overlap independently 
+of treamtent condition increases the confidence in the results
 
 ```{r, results = "asis"}
 # isolate iMg cells
 microglia <- subset(combined, cell_type == "iMg")
+
 # only iMg cells to identify potential signatures between infected vs uninfected
 Idents(microglia) =  "orig.ident"
+
 # find marker genes between Uninf+EFZ and Inf+EFZ
 inf_uninf_art_marker <- FindMarkers(microglia, ident.1 = "Inf+EFZ", 
                                     ident.2 = "Uninf+EFZ", verbose = FALSE)
+#upregulated genes
 up_inf_art <- inf_uninf_art_marker %>% 
   arrange(desc(avg_log2FC)) %>%
-  head(20) %>% 
+  head(10) %>% 
   rownames_to_column("gene")
-up_inf_art  %>% kable()
+up_inf_art  %>% kable(caption = "Genes upregulated in Inf+EFZ vs. Uninf+EFZ")
 ```
 
-
-
-
-* **CCL3**, **CCL4** = cehmoattractants produced by macrophages, primary ligands for the 
-HIV-1 virus coreceptor CCR5 (https://pubmed.ncbi.nlm.nih.gov/16773571/)
-* **Il1B**
-  + is produced by activated macrophages -> mediator of the inflammatory 
-  response
-#### Features downregulated in Inf+EFZ vs. Uninf+EFZ:
-  + involved in neurodegeneration (https://pubmed.ncbi.nlm.nih.gov/12794045/)
-  + HIV-1 infection induces interleukin-1beta production, so why is it more highly
-  expressed in uninfected than in infected cells? (https://pubmed.ncbi.nlm.nih.gov/24939850/)
-  One explanation might be trained immunity of these monocytes which is associated
-  with HIV. Pro-inflammatory pathways are upregulated in monocytes of HIV patients
-  on ART. Il-b expression was hihger in HIV patients compared with controls.
-  (van der Heijden W. A. et al., JCL Insight, 2021 --> study on circulating 
-  immune cells)
-* **IL6** is also more highly expressed in monocytes from HIV patients 
-  (van der Heijden W. A. et al., JCL Insight, 2021 --> study on circulating 
-  immune cells)
-* **TNF**, **IL1b** and **IL6** are monocyte-derived pro-inflammatory cytokines, expressed by 
-*activated microglia*. IL13, and IL10 would be expressed by alternatively activated 
-macrophages (M2) -> anti-inflammatory.
-(van der Heijden W. A. et al., JCL Insight, 2021)
-* **TNFAIP2** is a primary response gene of TNFalpha (expression is regulated by NFkB)
--> mediator of inflammation (Jia L., Journal of Moleuclar Medicine, 2018)
-* **CCL20**: 
-  + CCL20 is constitutively expressed in lymphoid tissue and upregulated in 
-  inflammation -> homeostatic and inflammatory role.  CCR6/CCL20 axis may be
-  involved in HIV pathogenesis and immunity. 
-  CCL20 was able to facilitate HIV-1 integration in T cells. It leads to 
-  propagation of the virus, because it recruits T cells and DC which then migrate 
-  and spread the virus. Anti-HIV activity of CCR6 by interfering with reverse 
-  transcription.
-  -> *CCR6 seems to be a double-edged sword in HIV infection which contributes 
-  to immunity and spread of HIV.
-  **Since CCL20 is found at epithelial and 
-  mucosal sites the chemokine may contribute to the innate defense against HIV 
-  entry.**
-  (Lee A. Y. S., Journal of General Virology, 2017)
-  + chemokine interacting with CCR6 receptors, anti_HIV activity in combination 
-  with human beta defensins
-(Aziz N. et al., J AIDS Clin Res, 2016)
-* **NFkB** is an inducible transcription factor and a mediator of inflammatory
-response in innate and adaptive immunity. It induces the expression of various 
-pro-inflammatory genes including those encoding cytokines and chemokines. 
-It participates in inflammasome regulation. **NFKB1** = **p50**. *Inappropriate 
-activation of NFKB is associated with inflammatory diseases*
-(Liu T. et al., Signal Transduction and Targeted therapy, 2017)
-
-
 ```{r}
+# downregulated genes
 down_inf_art <- inf_uninf_art_marker %>% 
   arrange(avg_log2FC) %>% 
-  head(20) %>%
+  head(10) %>%
   rownames_to_column("gene")
-down_inf_art %>% kable()
+down_inf_art %>% kable(caption = "Genes downregulated in Inf+EFZ vs. Uninf+EFZ")
 ```
 
-##### Differential gene expression between Inf and Uninf (no treatment)
 
 ```{r}
+# find marker genes between Inf and Uninf
 inf_uninf_marker <- FindMarkers(microglia, ident.1 = "Inf", 
                                 ident.2 = "Uninf", verbose = FALSE)
 
@@ -951,11 +860,13 @@ down_inf_no<- inf_uninf_marker %>%
 
 Only 3% of genes which are upregulated and only 14% of genes which are 
 downregulated in infected vs. uninfected cells 
-overlap between the treatment conditions. This means, that the genes defining 
+overlap between the treatment conditions. This means, that the gene expression response defining 
 the infection might differ between cells with and without treatment. This
 reflects the findings of [@Ryan] that the EFZ treatment lead to a distinct
 immune response of iMg and distinct activation of two inflammatory pathways, 
-RhoGDI and CD40 pathways as will be describe later on.
+RhoGDI and CD40 pathways as will be describe later on. Since there is hardly any
+overlap we will use the genes upregulated in Inf+EFZ compared to Uninf+EFZ
+in the following analysis steps, since the probably best resemble the CSF/Blood samples which originate from patients treated with ART.
 
 ```{r}
 up_inf <- intersect(up_inf_art$gene, up_inf_no$gene)
@@ -975,7 +886,7 @@ p1 <- ggVennDiagram::ggVennDiagram(list(up_inf_art$gene, up_inf_no$gene),
 
 p2 <- ggVennDiagram::ggVennDiagram(list(down_inf_art$gene, down_inf_no$gene),
               label_alpha = 0,
-              category.names= c("Inf+EFZ", "Uninf+EFZ"),
+              category.names= c("Inf+EFZ", "Inf"),
               #set.size = 20,
               label = "percent",
               label_size = 6,
@@ -1015,20 +926,20 @@ inf_uninf_art_marker %>%
 
 ```
 
-
-#### Features differentially expressed between treatment conditions
+### Differential gene expression between treatment conditions
 
 Comparing Uninf+EFZ with Uninf and Inf+EFZ with Inf iMg one might be able to 
 identify genes which are different after treatment of cells with EFZ. Finding 
-overlapping genes between the two infection states increases the confidence of the results, because the identified genes are associated with treatment independently of infection status.
+overlapping genes between the two infection states increases the confidence in the results, because the identified genes are associated with treatment independently of infection status.
 
 The diagram below shows, that 36% of genes are upregulated both in Inf and
 Inf+EFZ iMg compared to Uninf and Uninf+EFZ iMg. These genes are probably 
-associated with the EFZ treatment. It is expected that the drug would affect 
-the iMg and change their gene expression. This signature might be used to 
+associated with the EFZ treatment. The drug affects 
+the iMg and changes their gene expression. This signature might be used to 
 identify Myeloid2 CSF cells which are affected by the treatment. Since ART drugs 
-are found at lower concentrations in CSF than in blood, one would expect that 
-only a subgroup of Myeloid2 are affected by the ART drugs. However, this
+are found at lower concentrations in CSF than in blood, probably
+only a subgroup of Myeloid2 are affected by the ART drugs and it would be 
+interesting to know which are affected by treatement and which are not. However, this
 comparison might be far fetched, since the patients from which the CSF samples 
 have been derived have not been treated with EFZ, but with a combination of 
 other ART drugs which probably have a slightly different effect on cells. 
@@ -1126,7 +1037,7 @@ a different approach was used. The top twenty up- and downregulated genes in
 Inf+EFZ vs Uninf+EFZ were computed. Using these genes as an "infection signature" 
 we will check if some of the Myeloid2 cells from the CSF samples show a similar 
 signature.
-
+  
 
 ```{r}
 # select only genes which are also found in the sc-RNAseq dataset
@@ -1135,54 +1046,23 @@ down_inf_filt <- down_inf_art$gene[down_inf_art$gene %in% rownames(hivmy2@assays
 ```
 
 
-# Gene signature scoring
+## Gene signature scoring
 
 Using the signature genes from differential gene expression analysis between
 Inf+EFZ and Uninf+EFZ we can compute a score of activity of these gene sets in 
 the Myeloid2 cluster of CSF samples. We can plot these scores in a TSNE 
 representation, but we can also get the scores from the metadata and use them 
-elsewhere. 
+for other visualizations 
 
-Below, for simplicity, one plot is shown for upregulated genes.
-
-How can I represent downregulated genes? and one plot for
-downregulated genes.
-
-If the Inf+EFZ signature can be found in the Myeloid2 cells from the CSF samples
-this migth provide additional insights into the infection status of these 
+If the Inf+EFZ signature can be found in some of the Myeloid2 cells from the CSF samples this migth provide additional insights about the infection status of these 
 microglia-like cells.
 
+#### Scores of gene signature upregulated in Inf+EFZ iMg in Myeloid2 cells
 
+In the plot below there are some cells visible which have a high score for the signature composed of genes upregulated in Inf+EFZ microglia. To be precise,
+eleven percent of the Myeloid2 cells have a positive score (17 out of 145 cells).
+These high scroing cells do, however, not correspond to the two clusters (c1, c2) obtained from analysis of TF activity (SCENIC).
 
-```#{r, fig.width=15}
-up_sign <- AddModuleScore(hivmy2,
-                           features = up_inf_filt)
-
-p1 <- FeaturePlot(up_sign, features = "Cluster1", pt.size = .7) +#, split.by = "ht_cluster") +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Signature score of genes upregulated in Inf+EFZ iMg applied to CSF Myeloid2 cells")
-
-
-down_sign <- AddModuleScore(hivmy2,
-                           features = down_inf_filt)
-
-p2 <- FeaturePlot(down_sign, features = "Cluster1", pt.size = .7) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Signature score of genes downregulated in Inf+EFZ iMg applied to CSF Myeloid2 cells")
-
-ggarrange(p1, p2, ncol = 2)
-```
-
-#### Scores of Inf+EFZ signature in Myeloid2 cells
-
-There are some cells which have a high score for signature composed of genes 
-upregulated in Inf+EFZ microglia, but they do not
-correspond to the two clusters (c1, c2) obtained from analysis of 
-TF activity (SCENIC).
-
-Interestingly, there are hardly any cells which show a high score for the
-Uninf+EFZ gene signature. For this reason it might be interesting to see if 
-some cells show a high score for a Uninf (without EFZ treatment) score. ?????
 
 
 ```{r, fig.width=15}
@@ -1205,16 +1085,9 @@ annotate_figure(figure, top = text_grob("Signature score of genes upregulated in
 
 ```
 
-#### Percentage of cells with positive Inf+EFZ gene signature score
-
-11% of the Myeloid2 cells have a positive score for the Inf+EFZ gene
-signature (17 out of 145 cells).
-
-On the other hand, only 4% of the Myeloid2 cells have a positive score 
-for the Uninf+EFZ gene signature. ???
 
 <details>
-*<summary>Exact scores for each cell</summary>*
+<summary>**Exact scores for each cell**</summary>
 
 ```{r, results = "asis"}
 # divide the number of rows(cells) with positive ccores by the number of total 
@@ -1233,17 +1106,32 @@ up_sign@meta.data["Cluster1"] %>%
 ---
 </details>
 
-#### Bimodal Distribution
+#### Defining a signature composed of downregulated genes
 
-If we assume that this gene signature is upregulated in some cells we would 
-expect to see a bimodal distribution of gene expression. To visualize this I 
-first log-normalized the count matrix and then computed the sum over all counts
-for the gene signature. 
+Defining a gene signature composed of both up- and downregulated genes turned 
+out to be more difficult than expected. One idea was to separately investigate 
+upregulated versus downregulated genes. Above the upregulated gene signature 
+scores in Myeloid2 cells were shown. 
 
-**Genes upregulated in Inf+EFZ compared to Uninf+EFZ:**
+We will now have a closer look at the problems that arise when investigating
+downregulated genes. Assuming that our Myeloid2 cells are composed of two 
+distinct populations, one infected and one uninfected, we would expect a 
+bimodal distribution of gene expression for genes upregulated in the infected
+condition. There should be one peak with base level gene expression corresponding
+to uninfected cells and a second peak with higher levels of gene expression 
+corresponding to infected cells. 
 
-In the histogram below there is no evident bimodal distribution. One cannot draw 
-a conclusion from this.
+In the histograms below the distribution of the sum of log-normalized feature counts of genes upregulated or downregulated  respectively can be seen. 
+
+For the upregulated genes (green) a bimodal distribution is not evident from 
+the histogram below. No clear conclusions can be drawn, since the number of
+cells is probably too low.
+
+For the downregulated genes there seem to be a large number of cells which do 
+not express these genes at all. This group of cells could include infected cells,
+however this is a dangerous assumption, since in general there might be cells
+with low or none expression of these genes. There is no way to know if these 
+cells are actually infected cells.
 
 ```{r}
 #normalize counts of upregulated genes
@@ -1253,7 +1141,7 @@ counts_up <- log1p(counts_up)
 counts_up <- counts_up[up_inf_filt, ]
 
 # compute average expression of the 20 signature genes
-as.data.frame(rowSums(t(counts_up))) %>% 
+p1 <- as.data.frame(rowSums(t(counts_up))) %>% 
   rownames_to_column("cell") %>% 
   rename("count" = "rowSums(t(counts_up))") %>% 
   arrange(desc(count)) %>% 
@@ -1261,19 +1149,8 @@ as.data.frame(rowSums(t(counts_up))) %>%
   geom_histogram(bins = 70, color = "olivedrab4", fill = "olivedrab4") +
   xlab("normalized feature counts") +
   ylab("number of cells") +
-  labs(title = "Sum of feature count of genes upregulated in Inf+EFZ vs. Uninf+EFZ")
+  labs(title = "Sum of feature counts of genes upregulated in Inf+EFZ vs. Uninf+EFZ")
 
-```
-
-**Genes downregulated in Inf+EFZ compared to Uninf+EFZ:**
-
-For the downregulated genes there seem to be a large number of cells which do 
-not express these genes at all. This group of cells could include infected cells,
-however this is a dangerous assumption, since in general there might be cells
-with low or none expression of these genes. How can we know if these cells are
-actually infected cells?
-
-```{r}
 #normalize counts of downregulated genes
 counts_down <- (hivmy2@assays$RNA@data)
 counts_down <- t(t(counts_down)) / colSums(counts_down)
@@ -1281,7 +1158,7 @@ counts_down <- log1p(counts_down)
 counts_down <- counts_down[down_inf_filt, ]
 
 # compute average expression of the 20 signature genes
-as.data.frame(rowSums(t(counts_down))) %>% 
+p2 <- as.data.frame(rowSums(t(counts_down))) %>% 
   rownames_to_column("cell") %>% 
   rename("count" = "rowSums(t(counts_down))") %>% 
   arrange(desc(count)) %>% 
@@ -1292,56 +1169,14 @@ as.data.frame(rowSums(t(counts_down))) %>%
   labs(title = "Sum of feature count of genes downregulated in Inf+EFZ vs. Uninf+EFZ")
 ```
 
-
-
+```{r, fig.width=15}
+p1 + p2
 ```
-hivmy2_uninf_efz_sign <- AddModuleScore(hivmy2,
-                           features = uninf_art_signature_filt)
-
-p3 <- FeaturePlot(subset(hivmy2_uninf_efz_sign, ht_cluster == "c1"), 
-                  features = "Cluster1", pt.size = 1) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Myeloid2 Cluster c1")
-  
-p4 <- FeaturePlot(subset(hivmy2_uninf_efz_sign, ht_cluster == "c2"),
-                  features = "Cluster1", pt.size = 1) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Myeloid2 Cluster c1")
-
-figure <- ggarrange(p3, p4, ncol = 2)#, nrow = 2)
-annotate_figure(figure, top = text_grob("Uninf+EFZ gene signature from iMg applied to CSF Myeloid2 cells", 
-               color = "black", face = "bold", size = 20))
-  
-```
-
-There are a few more cells with high scores for the Uninf gene signature 
-(without EFZ treatment) than for the Uninf+EFZ, but stil very few cells.
-
-```
-hivmy2_uninf_sign <- AddModuleScore(hivmy2,
-                           features = uninf_signature_filt)
-
-p3 <- FeaturePlot(subset(hivmy2_uninf_sign, ht_cluster == "c1"), 
-                  features = "Cluster1", pt.size = 1) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Myeloid2 Cluster c1")
-  
-p4 <- FeaturePlot(subset(hivmy2_uninf_sign, ht_cluster == "c2"),
-                  features = "Cluster1", pt.size = 1) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Myeloid2 Cluster c1")
-
-figure <- ggarrange(p3, p4, ncol = 2)#, nrow = 2)
-annotate_figure(figure, top = text_grob("Uninf gene signature from iMg applied to CSF Myeloid2 cells", 
-               color = "black", face = "bold", size = 20))
-  
-```
-
 
 
 #### Percentage of cells with positive Inf gene signature score (no treatment)
 
-```{r}
+```#{r}
 inf_sign <- AddModuleScore(hivmy2,
                            features = up_inf_no$gene)
 
@@ -1361,65 +1196,36 @@ annotate_figure(figure, top = text_grob("Signature score of genes upregulated in
                color = "black", face = "bold", size = 20))
 ```
 
+#### Scores of gene signature upregulated in cells treated with EFZ independently of infection condition.
 
+```{r, fig.width=15}
+up_treat <- AddModuleScore(hivmy2,
+                           features = treatment_up)
 
-11% of the Myeloid2 cells have a positive score for the Inf+EFZ gene
-signature (17 out of 145 cells have a positive score).
-
-On the other hand, only 4% of the Myeloid2 cells have a positive score 
-for the Uninf+EFZ gene signature, while 10% of the Myeloid2 cells have a 
-positive score for the Uninf gene signature (without EFZ treamtent).
-
-```
-# calculate percentage for the Uninf+EFZ signature
-percentage_uninf_art <- dim((@meta.data["Cluster1"] %>% 
-                         filter(Cluster1 > 0)))[1] / 
-  dim(hivmy2_uninf_efz_sign@meta.data["Cluster1"])[1]
-
-# calculate percentage for the Uninf signature
-percentage_uninf <- dim((hivmy2_uninf_sign@meta.data["Cluster1"] %>% 
-                         filter(Cluster1 > 0)))[1] / 
-  dim(hivmy2_uninf_sign@meta.data["Cluster1"])[1]
-```
-
-```#{r, fig.width=15}
-# read in Seurat object contianing alls samples and conditions
-#hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds")
-
-# isolate the Myeloid5 cluster
-#hivmy5 <- subset(hiv7, cell_type == "Myeloid5")
-
-# process Myeloid 5 Seurat object
-#hivmy5 <- ScaleData(hivmy5)
-#hivmy5 <- NormalizeData(hivmy5)
-#hivmy5 <- ScaleData(hivmy5)
-#hivmy5 <- FindVariableFeatures(hivmy5)
-#hivmy5 <- RunPCA(hivmy5, features = VariableFeatures(hivmy5))
-#ElbowPlot(hivmy5)
-#hivmy5 <- RunTSNE(hivmy5, dims= 1:10)
-
-hivmy5_sign <- AddModuleScore(hivmy5,
-                           features = inf_art_signature_filt)
-
-p1 <- FeaturePlot(hivmy5_sign, features = "Cluster1", pt.size = 1) +
+p1 <- FeaturePlot(subset(up_treat, ht_cluster == "c1"),
+                  features = "Cluster1", pt.size = 1) +#, split.by = "ht_cluster") +
   scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Inf+EFZ gene signature from iMg applied to CSF Myeloid5 cells")
+  labs(title = "Myeloid2 Cluster c1")
 
-
-hivmy5_sign <- AddModuleScore(hivmy5,
-                           features = uninf_art_signature_filt)
-
-p2 <- FeaturePlot(hivmy5_sign, features = "Cluster1", pt.size = 1) +
+p2 <- FeaturePlot(subset(up_treat, ht_cluster == "c2"),
+                  features = "Cluster1", pt.size = 1) +#, split.by = "ht_cluster") +
   scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Uninf+EFZ gene signature from iMg applied to CSF Myeloid5 cells")
+  labs(title = "Myeloid2 Cluster c2")
 
 figure <- ggarrange(p1, p2, ncol = 2)#, nrow = 2) 
-annotate_figure(figure, top = text_grob("Myeloid5", 
+annotate_figure(figure, top = text_grob("Signature score of genes upregulated in EFZ treatment", 
                color = "black", face = "bold", size = 20))
 
 ```
 
+
+
 ## Overlay Inf+EFZ signature with the TF activity heatmap
+
+There are a few cells which express the Inf+EFZ signature and they are highlighted
+with an orange colour in the heatmap below. However, they are spread
+across all clusters and patients and since there are so few cells drawing a 
+conclusion or finding a pattern is not feasible.
 
 ```{r}
 # calculate scores for genes upregualted in Inf+EFZ iMg
@@ -1474,8 +1280,7 @@ ht_list <- map(seq.int(1:3), function(n) {
 ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap 
 ```
 
-When you group the cells according to their different gene signatures they 
-express, you do not really see a difference between the groups. 
+When you group the cells according to their different gene signatures as in the heatmap below, you do not really see a difference between the groups. 
 
 ```{r, fig.width=15, fig.height=20}
 # filter the dataset for only Myeloid2 cells 
@@ -1514,10 +1319,9 @@ ht <- draw(Heatmap(t(mtx),
 
 ## Are some TFs differentially active between the infection conditions?
 
-Using a Kruskal-Wallis Test to see if there was a significant different in TF 
-activity between the 3 signatures Inf+EFZ, Uninf+EFZ, Uninf I was not able to
-find any TF which showed differential activity in any of the clusters.
-
+After having identified a few cells with high scores for the infection signature
+we can now check if some of the TFs show significantly different activity between
+the two conditions. For this we can use a pairwise Wilcox Test. 
 
 ```#{r}
 hivmy2_scenic <- AddMetaData(hivmy2, 
@@ -1548,29 +1352,20 @@ sign <- adj_p_values[adj_p_values < 0.05]
 
 # Inflammatory Pathways 
 
-[@Ryan] showed that two pathways are
-specifically activated in the Inf+EFZ condition.
-
-##### Myeloid2 cells
-
-The Inf+EFZ iMg had a milder immune response than the Inf iMg. The RhoGDI and 
-CD40 inflammatory signaling pathway were the only two upregulated compared with
-Uninf iMg. This effect was not seen in Uninf+EFZ, so it does not seem to be 
-caused by EFZ alone, but rather a combination of infection and EFZ treatment [@Ryan].
-
-Compared to Uninf iMg they show in the paper that two inflammatory pathways are
-upregulated: 
+[@Ryan] showed that two pathways are specifically activated in the Inf+EFZ 
+condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen in Uninf+EFZ, so it does not seem to be caused by EFZ alone, but rather a combination of infection and EFZ treatment [@Ryan].
 
 * RhoGDI signaling:
-  + We expect PP1R12A to be upregulated 
-  + We expect RND3, CD44, ACTG1 to be downregulated
+  + PP1R12A was upregulated 
+  + RND3, CD44, ACTG1 were downregulated
 * CD40 signaling:
-  + We expect FOS to be upregulated
-  + we expect NFKBIA, ICAM1, TFNAIP3 to be downregulated 
+  + FOS was upregulated
+  + NFKBIA, ICAM1, TFNAIP3 were downregulated 
   
-**Can we see a similar pattern in the Myeloid2 clusters identified by Scenic?**
+The question was whether we could find similar patterns in the Myeloid2 clusters
+with different TF activity. 
 
-**RhoGDI signaing:**
+##### Myeloid2 cells 
 
 ```{r, results = "asis"}
 inf_uninf_art_marker %>% 
@@ -1610,7 +1405,10 @@ ggarrange(p2, p4, p1, p3, ncol = 2, nrow = 2)
 ```
 
 
-##### Myeloid5 cells
+<details>
+<summary>Same two pathways in Myeloid5 cells</summary>
+
+Myeloid5 cells
 
 
 ```{r, fig.width=15, fig.height=12}
@@ -1645,6 +1443,7 @@ p4 <- VlnPlot(microglia, features = c("NFKBIA", "ICAM1", "TNFAIP3", "FOS"),
 ggarrange(p2, p4, p1, p3, ncol = 2, nrow = 2)
 ```
 
+</details>
 
 # References
 

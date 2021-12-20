@@ -83,5 +83,45 @@ combined <- AddMetaData(combined, combined_clusters, col.name = "combined_cluste
 #saveRDS(combined,"/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_hiv_combined_seurat_object")
 
 ```
+---
 </div>
- 
+
+
+## Heading {.tabset}
+
+TESTEaksdövjaäbnälg
+
+### Tcell
+
+
+### B cell
+
+```{r}
+hist(1:10)
+
+```
+
+## {-}
+
+# Heading1
+
+
+<details> 
+  <summary>Click to Expand</summary>
+  
+**Human Immunodeficiency Virus (HIV)**
+
+HIV is a lentivirus consisting of two single stranded RNA molecules, encoding 
+fifteen different viral proteins which are essential for viral replication 
+[@Osborne]. At the same time these proteins are potential targets for ART drugs.
+The RNA molecules are enclosed in a capsid of p24 protein and the capsid is 
+surrounded by a lipid membrane [@Osborne]. The viral envelope glycoprotein (Env)
+is responsible for recognizing the host cells and the subsequent fusion of the 
+vius with the host cell plasma membrane [@Huarte]. The glycoprotein gp120 binds
+to the cluster of differentiation 4 (CD4) receptors on CD4+ T cells, macrophages
+and microglia cells [@Osborne]. A structure of the virus particle is shown in 
+figure 1 from [@Osborne].
+
+---
+</details> 
+

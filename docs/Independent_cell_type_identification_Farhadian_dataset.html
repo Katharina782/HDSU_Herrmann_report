@@ -459,7 +459,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -468,7 +468,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -480,7 +480,7 @@ div.tocify {
 <strong>Last updated:</strong> 2021-12-18
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 5 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 2
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -496,12 +496,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -544,12 +544,69 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
 </p>
 </div>
-<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div id="strongCachestrongdetected" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+The following chunks had caches available:
+<ul>
+<li>
+session-info-chunk-inserted-by-workflowr
+</li>
+<li>
+unnamed-chunk-1
+</li>
+<li>
+unnamed-chunk-10
+</li>
+<li>
+unnamed-chunk-11
+</li>
+<li>
+unnamed-chunk-12
+</li>
+<li>
+unnamed-chunk-13
+</li>
+<li>
+unnamed-chunk-14
+</li>
+<li>
+unnamed-chunk-15
+</li>
+<li>
+unnamed-chunk-16
+</li>
+<li>
+unnamed-chunk-17
+</li>
+<li>
+unnamed-chunk-2
+</li>
+<li>
+unnamed-chunk-3
+</li>
+<li>
+unnamed-chunk-4
+</li>
+<li>
+unnamed-chunk-5
+</li>
+<li>
+unnamed-chunk-6
+</li>
+<li>
+unnamed-chunk-7
+</li>
+<li>
+unnamed-chunk-8
+</li>
+<li>
+unnamed-chunk-9
+</li>
+</ul>
+<p>To ensure reproducibility of the results, delete the cache directory <code>Independent_cell_type_identification_Farhadian_dataset_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
 </div>
 </div>
 </div>
@@ -568,16 +625,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree076667839092276bf051274adc526b1e10d4f6dftargetblank0766678a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/076667839092276bf051274adc526b1e10d4f6df" target="_blank">0766678</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2a95e927f953c093f2e48cb2b6551d152f735267targetblank2a95e92a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/2a95e927f953c093f2e48cb2b6551d152f735267" target="_blank">2a95e92</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree076667839092276bf051274adc526b1e10d4f6dftargetblank0766678a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2a95e927f953c093f2e48cb2b6551d152f735267targetblank2a95e92a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/076667839092276bf051274adc526b1e10d4f6df" target="_blank">0766678</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/2a95e927f953c093f2e48cb2b6551d152f735267" target="_blank">2a95e92</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -585,12 +642,17 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/HIV_CSF_dataset_analysis_cache/
+    Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_GRN_with_Scenic_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
+    Ignored:    analysis/figure/
 
 Unstaged changes:
+    Modified:   analysis/Independent_cell_type_identification_Farhadian_dataset.Rmd
+    Modified:   analysis/Introduction.Rmd
     Modified:   analysis/_site.yml
+    Modified:   analysis/html_test.Rmd
     Modified:   analysis/references.bib
 
 </code></pre>
@@ -630,6 +692,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/Independent_cell_type_identification_Farhadian_dataset.html" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -774,6 +853,12 @@ recent updates
 </div>
 </div>
 <div style="text-align: justify">
+
+
+
+
+
+
 <pre class="r"><code>library(RColorBrewer)
 library(readxl)
 library(tidyverse)
@@ -821,140 +906,106 @@ library(pheatmap)</code></pre>
 <div id="function-add-module-score" class="section level4">
 <h4>Function Add Module Score</h4>
 <p>This Function Caluclate the average expression levels of each cluster on single cell level, subtracted by the aggregated expression of control feature sets. The analyzed features are binned based on averaged expression and the control features are randomly selected from each bin.</p>
-</div>
-<div id="read-in-seurat-object" class="section level4">
-<h4>read in Seurat object</h4>
-<pre class="r"><code>hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)</code></pre>
-</div>
-<div id="gene-signature-defined-by-farhadian" class="section level2">
-<h2>Gene signature defined by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span></h2>
-<p>Do we find the 60 signature genes from <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> for myeloid2 among the signature defined by @[Gossselin]?</p>
-<div id="read-in-list-of-microglia-signature-genes-found-in-the-gosselin-paper" class="section level5">
-<h5>Read in list of microglia signature genes found in the Gosselin paper</h5>
-<p>which are also found in the HIV1 and HIV2 samples:</p>
-<pre class="r"><code>microglia_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples&quot;)</code></pre>
-<p>28 of the 60 genes used as microglia signature in the <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> Paper are also found in the 881 microglia signature genes defined by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
-<pre class="r"><code># Are there any genes overlapping between Farhadian and Glass paper?
-#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
-paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;, sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
-paper[1,] &lt;- &quot;APOC1&quot;
-colnames(paper) &lt;- &quot;&quot;
-paper &lt;- as.vector(paper[,1])
+<details>
+<summary>
+Click for Answer
+</summary>
+<p>#### read in Seurat object</p>
+<pre class="r"><code>  hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)
+  ```
+  
+  
+  
+  
+  
+  ## Gene signature defined by [@Farhadian]
+  
+  Do we find the 60 signature genes from [@Farhadian] for 
+  myeloid2 among the signature defined by @[Gossselin]?
+  
+  ##### Read in list of microglia signature genes found in the Gosselin paper
+  which are also found in the HIV1 and HIV2 samples:
+  
+  
+  ```r
+  microglia_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples&quot;)
+  ```
+  
+  28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
+  found in the 881 microglia signature genes defined by [@Gosselin].
+  
+  
+  ```r
+  # Are there any genes overlapping between Farhadian and Glass paper?
+  #import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
+  paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;, sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
+  paper[1,] &lt;- &quot;APOC1&quot;
+  colnames(paper) &lt;- &quot;&quot;
+  paper &lt;- as.vector(paper[,1])
+  
+  # Are there any genes overlapping between Farhadian and Glass paper?
+  #paper %in% as.vector(microglia_genes[[&quot;gene_name&quot;]])
+  
+  overlap &lt;- as.vector(microglia_genes[[&quot;gene_name&quot;]]) [as.vector(microglia_genes[[&quot;gene_name&quot;]]) %in% paper]
+  length(overlap)
+  ```
+  
+  [1] 28
+  
+  ```r
+  overlap %&gt;% kable()
+  ```
+  
+  
+  
+  |x        |
+  |:--------|
+  |SCIN     |
+  |CCR5     |
+  |HLA-DMB  |
+  |MSR1     |
+  |HAVCR2   |
+  |VSIG4    |
+  |IL18     |
+  |C3       |
+  |SLC2A5   |
+  |FCGBP    |
+  |CD14     |
+  |OLR1     |
+  |TREM2    |
+  |FOLR2    |
+  |HLA-DMA  |
+  |ZFHX3    |
+  |HLA-DQA1 |
+  |HLA-DPA1 |
+  |DAB2     |
+  |C1QC     |
+  |C1QB     |
+  |LYVE1    |
+  |CYFIP1   |
+  |HLA-DRB1 |
+  |BHLHE41  |
+  |MAF      |
+  |C1QA     |
+  |HLA-DRA  |
+&lt;/details&gt; 
 
-# Are there any genes overlapping between Farhadian and Glass paper?
-#paper %in% as.vector(microglia_genes[[&quot;gene_name&quot;]])
 
-overlap &lt;- as.vector(microglia_genes[[&quot;gene_name&quot;]]) [as.vector(microglia_genes[[&quot;gene_name&quot;]]) %in% paper]
-length(overlap)</code></pre>
-<p>[1] 28</p>
-<pre class="r"><code>overlap %&gt;% kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">SCIN</td>
-</tr>
-<tr class="even">
-<td align="left">CCR5</td>
-</tr>
-<tr class="odd">
-<td align="left">HLA-DMB</td>
-</tr>
-<tr class="even">
-<td align="left">MSR1</td>
-</tr>
-<tr class="odd">
-<td align="left">HAVCR2</td>
-</tr>
-<tr class="even">
-<td align="left">VSIG4</td>
-</tr>
-<tr class="odd">
-<td align="left">IL18</td>
-</tr>
-<tr class="even">
-<td align="left">C3</td>
-</tr>
-<tr class="odd">
-<td align="left">SLC2A5</td>
-</tr>
-<tr class="even">
-<td align="left">FCGBP</td>
-</tr>
-<tr class="odd">
-<td align="left">CD14</td>
-</tr>
-<tr class="even">
-<td align="left">OLR1</td>
-</tr>
-<tr class="odd">
-<td align="left">TREM2</td>
-</tr>
-<tr class="even">
-<td align="left">FOLR2</td>
-</tr>
-<tr class="odd">
-<td align="left">HLA-DMA</td>
-</tr>
-<tr class="even">
-<td align="left">ZFHX3</td>
-</tr>
-<tr class="odd">
-<td align="left">HLA-DQA1</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DPA1</td>
-</tr>
-<tr class="odd">
-<td align="left">DAB2</td>
-</tr>
-<tr class="even">
-<td align="left">C1QC</td>
-</tr>
-<tr class="odd">
-<td align="left">C1QB</td>
-</tr>
-<tr class="even">
-<td align="left">LYVE1</td>
-</tr>
-<tr class="odd">
-<td align="left">CYFIP1</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DRB1</td>
-</tr>
-<tr class="odd">
-<td align="left">BHLHE41</td>
-</tr>
-<tr class="even">
-<td align="left">MAF</td>
-</tr>
-<tr class="odd">
-<td align="left">C1QA</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DRA</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="genes-described-by-farhadian-et-al.-to-distinguish-the-myeloid2-cell-type" class="section level4">
-<h4>60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type</h4>
-<pre class="r"><code># get only genes present in the HIV1 and HIV2 samples!
+#### 60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type
+
+
+```r
+# get only genes present in the HIV1 and HIV2 samples!
 paper &lt;- paper[paper %in% rownames(hiv4@assays$RNA@counts)]
 
 
 hiv_farhadian &lt;- AddModuleScore(hiv4, 
-                           features = paper)
+                         features = paper)
 
 Idents(hiv_farhadian) &lt;- &quot;cell_type&quot;
 FeaturePlot(hiv_farhadian, features = &quot;Cluster1&quot; , pt.size = .5, label = TRUE, repel = TRUE) +
-    scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
-  labs(title = &quot;Farhadian et al., 2018: Microglia signature genes&quot;)
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+labs(title = &quot;Farhadian et al., 2018: Microglia signature genes&quot;)
 Scale for &#39;colour&#39; is already present. Adding another scale for &#39;colour&#39;,
 which will replace the existing scale.</code></pre>
 <p><img src="figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -982,6 +1033,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-5-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-5-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -1004,7 +1066,6 @@ Katharina782
 </tr>
 </tbody>
 </table>
-</div>
 </div>
 </div>
 </div>
@@ -1049,6 +1110,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-6-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-6-1.png" target="_blank">5db3abf</a>
@@ -1114,6 +1186,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-7-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-7-1.png" target="_blank">5db3abf</a>
@@ -1423,6 +1506,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-8-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-8-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -1493,6 +1587,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-9-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-9-1.png" target="_blank">5db3abf</a>
@@ -1583,6 +1688,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -1642,6 +1758,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-2.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-2.png" target="_blank">5db3abf</a>
@@ -1704,6 +1831,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -1760,6 +1898,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-2.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-2.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -1814,6 +1963,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-3.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-3.png" target="_blank">5db3abf</a>
@@ -1877,6 +2037,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-12-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-12-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -1927,6 +2098,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-1.png" target="_blank">5db3abf</a>
@@ -1984,6 +2166,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-2.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-2.png" target="_blank">5db3abf</a>
@@ -2253,6 +2446,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2304,6 +2508,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-2.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-2.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2353,6 +2568,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-3.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-3.png" target="_blank">5db3abf</a>
@@ -2416,6 +2642,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-4.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-4.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2467,6 +2704,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-5.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-5.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2516,6 +2764,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-6.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-6.png" target="_blank">5db3abf</a>
@@ -2631,6 +2890,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2680,6 +2950,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-2.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-2.png" target="_blank">5db3abf</a>
@@ -2733,6 +3014,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-3.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-3.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2782,6 +3074,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-4.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-4.png" target="_blank">5db3abf</a>
@@ -2835,6 +3138,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-5.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-5.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2884,6 +3198,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-6.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-6.png" target="_blank">5db3abf</a>
@@ -2937,6 +3262,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-7.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-7.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -2986,6 +3322,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-8.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-8.png" target="_blank">5db3abf</a>
@@ -3143,6 +3490,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-17-1.png" target="_blank">fc8e61c</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/5db3abfacffa7d6136e94fdeb5fa848b42d66c1e/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-17-1.png" target="_blank">5db3abf</a>
 </td>
 <td>
@@ -3171,7 +3529,6 @@ Katharina782
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
-</div>
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Gosselin" class="csl-entry">
@@ -3267,6 +3624,7 @@ loaded via a namespace (and not attached):
 [109] hms_1.1.1             grid_4.0.2            rpart_4.1-15         
 [112] rmarkdown_2.6         Rtsne_0.15            git2r_0.27.1         
 [115] shiny_1.7.1           lubridate_1.7.9.2    </code></pre>
+</div>
 </div>
 
 

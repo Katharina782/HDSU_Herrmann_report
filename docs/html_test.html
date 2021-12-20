@@ -371,7 +371,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">report</a>
+      <a class="navbar-brand" href="index.html">Report</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -381,20 +381,26 @@ div.tocify {
 <li>
   <a href="Introduction.html">Introduction</a>
 </li>
-<li>
-  <a href="HIV_CSF_dataset_analysis.html">CSF</a>
-</li>
-<li>
-  <a href="TF_activity_analysis_of_myeloid2_cluster.html">TF activity Myeloid2</a>
-</li>
-<li>
-  <a href="Independent_cell_type_identification_Farhadian_dataset.html">Myeloid2 are a microglia-like</a>
-</li>
-<li>
-  <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">Integration CSF &amp; triculture</a>
-</li>
-<li>
-  <a href="Triculture_dataset_GRN_with_Scenic.html">TF activity iMg</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Results
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="HIV_CSF_dataset_analysis.html">1. CSF</a>
+    </li>
+    <li>
+      <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
+    </li>
+    <li>
+      <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF &amp; triculture</a>
+    </li>
+    <li>
+      <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="Discussion.html">Discussion</a>
@@ -437,7 +443,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -446,7 +452,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -455,10 +461,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-12-18
+<strong>Last updated:</strong> 2021-12-19
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -474,28 +480,88 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeb315085a0df3faa48f8d2e2a07393671e6e80b97targetblankb315085a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/b315085a0df3faa48f8d2e2a07393671e6e80b97" target="_blank">b315085</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeb315085a0df3faa48f8d2e2a07393671e6e80b97targetblankb315085a" class="panel-collapse collapse">
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211203code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211203)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20211203code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20211203)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreefce26d5dd39fcac3f053aaaa3ceb1e2c02e05654targetblankfce26d5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654" target="_blank">fce26d5</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreefce26d5dd39fcac3f053aaaa3ceb1e2c02e05654targetblankfce26d5a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/b315085a0df3faa48f8d2e2a07393671e6e80b97" target="_blank">b315085</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654" target="_blank">fce26d5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -507,9 +573,16 @@ Ignored files:
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_GRN_with_Scenic_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
+    Ignored:    analysis/figure/
 
 Unstaged changes:
+    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
+    Modified:   analysis/Independent_cell_type_identification_Farhadian_dataset.Rmd
+    Modified:   analysis/Introduction.Rmd
+    Modified:   analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd
+    Modified:   analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd
     Modified:   analysis/_site.yml
+    Modified:   analysis/html_test.Rmd
     Modified:   analysis/references.bib
 
 </code></pre>
@@ -549,6 +622,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/076667839092276bf051274adc526b1e10d4f6df/docs/html_test.html" target="_blank">0766678</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -657,7 +747,71 @@ combined &lt;- AddMetaData(combined, combined_clusters, col.name = &quot;combine
 
 #saveRDS(combined,&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_hiv_combined_seurat_object&quot;)
 </code></pre>
+<hr />
 </div>
+</div>
+</div>
+<div id="heading-1" class="section level2 tabset">
+<h2 class="tabset">Heading</h2>
+<p>TESTEaksdövjaäbnälg</p>
+<div id="tcell" class="section level3">
+<h3>Tcell</h3>
+</div>
+<div id="b-cell" class="section level3">
+<h3>B cell</h3>
+<pre class="r"><code>hist(1:10)</code></pre>
+<p><img src="figure/html_test.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="section" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
+</div>
+<div id="heading1" class="section level1">
+<h1>Heading1</h1>
+<details>
+<summary>
+Click to Expand
+</summary>
+<p><strong>Human Immunodeficiency Virus (HIV)</strong></p>
+<p>HIV is a lentivirus consisting of two single stranded RNA molecules, encoding fifteen different viral proteins which are essential for viral replication <span class="citation">[@Osborne]</span>. At the same time these proteins are potential targets for ART drugs. The RNA molecules are enclosed in a capsid of p24 protein and the capsid is surrounded by a lipid membrane <span class="citation">[@Osborne]</span>. The viral envelope glycoprotein (Env) is responsible for recognizing the host cells and the subsequent fusion of the vius with the host cell plasma membrane <span class="citation">[@Huarte]</span>. The glycoprotein gp120 binds to the cluster of differentiation 4 (CD4) receptors on CD4+ T cells, macrophages and microglia cells <span class="citation">[@Osborne]</span>. A structure of the virus particle is shown in figure 1 from <span class="citation">[@Osborne]</span>.</p>
+<hr />
+</details>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/libopenblasp-r0.3.3.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7       whisker_0.4      knitr_1.30       magrittr_2.0.1  
+ [5] workflowr_1.6.2  R6_2.5.1         rlang_0.4.12     fastmap_1.1.0   
+ [9] fansi_0.5.0      stringr_1.4.0    tools_4.0.2      xfun_0.29       
+[13] utf8_1.2.2       git2r_0.27.1     htmltools_0.5.2  ellipsis_0.3.2  
+[17] rprojroot_2.0.2  yaml_2.2.1       digest_0.6.29    tibble_3.1.6    
+[21] lifecycle_1.0.1  crayon_1.4.2     later_1.3.0      vctrs_0.3.8     
+[25] promises_1.2.0.1 fs_1.5.1         glue_1.5.1       evaluate_0.14   
+[29] rmarkdown_2.6    stringi_1.7.6    compiler_4.0.2   pillar_1.6.4    
+[33] httpuv_1.6.3     pkgconfig_2.0.3 </code></pre>
 </div>
 </div>
 

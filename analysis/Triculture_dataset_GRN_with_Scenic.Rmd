@@ -1,19 +1,22 @@
 ---
-title: "Triculture Dataset GRN with Scenic"
+title: "TF activity in iMg from triculture dataset"
 author: "kmikulik"
 date: "2 12 2021"
-output: 
-  html_document:
-    toc: true
-    toc_depth: 5
-    code_folding: hide
+output: html_document
 ---
 
-```{r setup}
-knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
-                      cache = TRUE, cache.lazy = FALSE, autodep = TRUE)
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = FALSE, autodep = TRUE, 
+                      collapse = TRUE, message = FALSE)
+
 set.seed(42)
 ```
+
 
 ```{r}
 library(tidyverse)
@@ -40,27 +43,21 @@ library(multtest)
 library(readxl)
 ```
 
-## GRN inference with SCENIC
+## Gene regulatory network (GRN) inference with SCENIC
 
-* Prepare expression matrix for SCENIC 
+To infer GRNs from iMg cells from the triculture dataset [@Ryan] (4333 cells in 
+total) I again used SCENIC.
 
-Because the snakemake pipeline pySCENIC_pipeline (https://github.com/hdsu-bioquant/pySCENIC_pipeline/blob/master/input/gene_exp_mtx_example.tsv)
-requires an input matrix which has genes as columns and cells as rows I will
-transpose the matrix.
-
-When referring to differentially bound TFs in primary microglia in the following
+When referring to differentially bound TFs in the C20 cell line in the following
 I am referring to differential binding scores between infection conditions 
-obtained from bulk ATACseq data from primary microglia cell cultures using TOBIAS.
+obtained from bulk ATACseq data from C20 cell line cultures using TOBIAS.
 
-How many of the most Highly Variable Genes (HVG) should I use?
-Are 3000 enough? No, because then I only get an overlap with differentially bound
-TFs in primariy microglia of 8 TFs.
-When using the 10,000 most highly variable genes, SCENIC returns 232 TFs and 
-their corresponding activity score in each cell. 25 of these TFs overlap with 
-differentially bound TFs in primary microglia.
+I first tried to run SCENIC with 3000 most highly variable genes (HVG), but then
+I only got an overlap with differentially bound TFS of eight. When using 10,000
+HVG SCENIC returns 232 TFS and their corresponding activity score for each cell.
+25 of these TFs overlap with differentially bound TFs in the C20 cell line.
 
 
-Use only the iMg cells from the triculture dataset (4433 cells in total).
 
 
 ```{r}
@@ -69,28 +66,40 @@ triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture
 
 # read in CSF HIV Seurat object
 hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds")
+
+imicroglia <- subset(triculture, cell_type == "iMg")
+
 ```
 
 
-```{r}
+<details>
+<summary>**preparing matrix for SCENIC**</summary>
 
-imicroglia <- subset(triculture, cell_type == "iMg")
+First, I use SCTransform for normalization of the expression data, then
+the top 10,000 HVGs are selected and the matrix transposed, because the pySCENIC
+pipeline used requires an in input matrix which has genes as columns and cells 
+as rows.
+ (https://github.com/hdsu-bioquant/pySCENIC_pipeline/blob/master/input/gene_exp_mtx_example.tsv)
+
+```
 # use 10 000 most highly variable genes
-#scenic <- SCTransform(imicroglia, variable.features.n = 10000, verbose=FALSE)
-#saveRDS(scenic, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_scenic")
-#scenic <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_scenic")
-#scenic_hvg <- subset(scenic, features = scenic@assays$SCT@var.features)
-#scenic_mtx <- t(scenic_hvg@assays$SCT@scale.data)
-#write.table(x = scenic_mtx, file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/pySCENIC_pipeline/input/triculture_mtx.tsv", sep = "\t")
+scenic <- SCTransform(imicroglia, variable.features.n = 10000, verbose=FALSE)
+saveRDS(scenic, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_scenic")
+scenic <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_scenic")
+scenic_hvg <- subset(scenic, features = scenic@assays$SCT@var.features)
+scenic_mtx <- t(scenic_hvg@assays$SCT@scale.data)
+write.table(x = scenic_mtx, file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/pySCENIC_pipeline/input/triculture_mtx.tsv", sep = "\t")
 
 #scenic_matrix <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/pySCENIC_pipeline/input/triculture_mtx.tsv", sep = "\t")
 ```
+---
+</details>
 
 
-* AuCell matrix - output from Scenic
+**AuCell matrix - output from Scenic**
 
-The output from SCENIC results is a matrix containing cells as rows and 232 TFs
-as columns. The TF activity for each cell can be used to draw conclusions
+The output from SCENIC is a matrix containing cells as rows and 232 TFs
+as columns. Five exemplary rows and columns are shown below. The TF activity for each cell can be used to draw conclusions
 about different cell states. 
 
 
@@ -99,11 +108,10 @@ auc_mtx <- read.csv("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_d
 auc_mtx <- auc_mtx %>% column_to_rownames("Cell")
 auc_mtx <- auc_mtx %>% setnames( old = colnames(auc_mtx), new = sapply(strsplit(
   colnames(auc_mtx), "[...]"), `[`, 1))
+
+auc_mtx[1:5, 1:5] %>% kable()
 ```
 
-
-
-* Combine AuCell Matrix and Seurat object
 
 ```{r}
 # add auc matrix to metadata of hiv4 seurat object
@@ -113,36 +121,29 @@ tri_mg <- AddMetaData(imicroglia,
 
 ```
 
-## Number of cells in each condition
-
-Triculture Dataset
 
 ```{r, results = "asis"}
 tri_mg@meta.data %>% 
-  group_by(orig.ident) %>%
+  rename(condition  = orig.ident) %>%
+  group_by(condition) %>%
   summarize(n = n()) %>% 
-  kable()
+  kable(caption = "Number of cells in each condition")
 ```
 
 
 ## ATACseq binding scores of TFs between infection conditions in primary microglia
 
-The primary microglia are cells from the C20 cell line which was derived from 
+The C20 cell line was derived from 
 an HIV+ patient  treated with ART (Antiretroviral Therapy). Since the access 
 of ART to the brain is limited due to the blood-brain barrier, the effects of 
-ART on these cells are probably negligible.
+ART on these cells are probably negligible. Only the 75 TFs with p-values for differential binding scores below 1e-50 were used. We will focus on TFs which show differential binding scores between latent
+infection and uninfected conditions in primary microglia.
+For 25 of these 75 TFs there is a TF activity score for the iMg. Focusing on these 25 TFs we might be able to find activity patterns that 
+correlate with the TF binding scores. Five TFs are more bound in latent infection
+and twenty TFs are more bound in uninfected cells
 
-* select only 75 TFs with p-values for differential binding scores < 1e-50
-* we will focus on TFs which show differential binding scores between latent
-infection and uninfected conditions in primary microglia
-* For 25 of these 75 TFs there is a TF activity score for the induced microglia
-* focusing on these 25 TFs we might be able to find activity patterns that 
-correlate with the TF binding scores
-* 5 TFs are more bound in latent infection
-* 25 TFs are more bound in uninfected cells
-
-Is there a reason why we find more of the TFs more bound in uninfected cells 
-in the TF activity score matrix from SCENIC?
+The reason why we find more of the TFs more bound in uninfected cells 
+in the TF activity score matrix from SCENIC is unclear.
 
 ```{r}
 tfs_ana <- read.table("/media/ag-cherrmann/projects/06_HIV_Microglia/data/atacseq/data-2020-11-06/tobias/TOBIAS_snakemake/footprint_mglia2_GlassTF_17-03/TFBS/bindetect_results.txt", sep = "\t", header = TRUE)
@@ -162,16 +163,10 @@ up_latent <- atac_tfs_df$name[atac_tfs_df$condition == "up_latent"]
 up_uninf <- atac_tfs_df$name[atac_tfs_df$condition == "up_uninf"]
 ```
 
-## Gosselin TFs
-
-```{r}
-gosselin_tfs <- as.vector(read.table( "/media/ag-cherrmann/kmikulik/HIV_microglia/data/TFs_microglia_Glass_paper.txt")[["V1"]])
-```
-
 
 ### Heatmap for all TFs
 
-In the heatmap below you can already see a trend towards a separation of 
+In the heatmap of TF activities below you can already see a trend towards a separation of 
 cells treated with EFZ (blue and green) from untreated cells (red and orange).
 
 ```{r, fig.width=15, fig.height=25}
@@ -195,13 +190,13 @@ ht
 ```
 
 
-### Heatmap of TF activity scores for the 25 TFs with differential binding score
+### Heatmap of 25 TFs with differential binding score
 
 We will now investigate if we can find activity patterns which resemble
 the differential binding score patterns found in 25 TFs.
 
 
-#### Hierarchical clustering with different k 
+#### Hierarchical clustering with different k {.tabset}
 
 Using hierarchical clustering we migth be able to identify clusters with certain
 patterns of TF activity. Judging from the different heatmaps, k = 4 might be the
@@ -215,9 +210,7 @@ untreated cells. These two clusters have a very evident biological meaning.
 Using k = 3 or k = 4 keeps these two biologically 
 relevant groups separate, but also creates additional clusters which seem to be
 a mixture of treated and untreated cells. Having a closer look at clusters from
-k = 4 might give som additional biological insights which is why we will have 
-a closer look at these. 
-
+k = 4 might give som additional biological insights.
 
 Having a closer look at the four clusters, it becomes evident that the two left
 most clusters separate treated cells from untreated cells, independent of the 
@@ -241,6 +234,8 @@ TCF4 distinguishes a third cluster.
 Is there a biological meaning behind that? Maybe we can associate them with 
 a particular condition?
 
+##### wss plot
+
 ```{r}
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
                                     orig.ident == "HIV1_CSF")
@@ -256,6 +251,7 @@ plot(2:15, wss, type = "b",
      ylab = "Total within-clusters sum of square")
 ```
 
+##### different k
 
 ```{r, fig.width=15, fig.height=10}
 
@@ -281,7 +277,10 @@ ht_list <- ht_list[[1]] + ht_list[[2]] + ht_list[[3]] + ht_list[[4]] + ht_list[[
 draw(ht_list, column_title = "Hierarchical clustering with different k", ht_gap = unit(2, "cm"))
 ```
 
-```{r, fig.widht = 15, fig.height=10}
+
+##### k = 4
+
+```{r, fig.width = 15, fig.height=10}
 ht <- draw(Heatmap(t(auc_mtx[, atac_tfs_df$name]), 
       col =  colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
       column_title = "hierarchical clustering with k = 4",
@@ -298,6 +297,11 @@ ht <- draw(Heatmap(t(auc_mtx[, atac_tfs_df$name]),
        ))
 ```
 
+#### {-}
+
+---
+
+### Split heatmaps to find patterns {.tabset}
 
 #### Separate Heatmaps according to infection condition
 
@@ -319,15 +323,9 @@ Three TFs seem to be more active in Inf and Uninf (compared to Inf+EFZ and Uninf
 * **NFAT5:** In microglia cells inflammatory signals trigger NFAT5 expression. 
 (Yang X.L. et al., Dev Neurosci, 2018)
 * **TCF7L2**
-* **CEBPB**
-
-Especially the TFs NFAT5, TCF7L2 and CEBPB seem to be more active in untreated 
-cells:
-
 * **CEBPB** regulates pro-inflammatory gene expression,
 increased expression in HAND (HIV-associated neurocognitive disorder), 
 BUT no data from microglia (Canchi S. et al. J Neuroinflammation, 2020)
-* **NFAT5** 
 
 ```{r, fig.width=15, fig.height=10}
 ht_conditions <- Heatmap(t(auc_mtx[, atac_tfs_df$name]), 
@@ -354,18 +352,21 @@ ht_conditions
 
 ```
 
-#### Separate Heatmaps according to TF binding scores from ATACseq data
+#### Split Heatmaps according to TF binding scores from ATACseq data
 
 Separating the heatmap along the rows, according to TFs either more bound in 
 latently infected microglia or more bound in uninfected primary microglia,
-does not result in a separation according to treatment with EFZ. Therefore, 
-the heatmap below might yield additional biological insights.
+does not result in a separation according to treatment with EFZ. 
 
 What one might expect to see, is that TFs more bound in uninfected primary 
 microglia would also show higher activity in uninfected iMg, while TFs more 
 bound in latently infected primary microglia would show higher activity in 
 Inf+EFZ iMg. However, such a pattern is not immediately visible in the heatmap 
 below.
+
+The TFs more bound in latently infected cells do not seem to correlate with any condition, but rather vary a lot more across all cells than the TFs more bound 
+in uninfected cells which show some correlation with the condition and less 
+across all cells.
 
 
 ```{r, fig.width=15, fig.height=10}
@@ -400,7 +401,7 @@ ht_tfs1 <- Heatmap(t(auc_mtx[, atac_tfs_df$name]),
 ```
 
 
-```{r, fig.width=15, fig.height=10}
+```{r}
 ht_tfs2 <- Heatmap(t(auc_mtx[, atac_tfs_df$name]), 
         #col =  colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
         column_title = "split according to TF binding score for latent vs. uninfected",
@@ -426,20 +427,24 @@ ht_tfs2 <- Heatmap(t(auc_mtx[, atac_tfs_df$name]),
                       col = list(TF_footprinting = c("up_latent" = "pink", 
                                                      "up_uninf" = "darkgreen")))
         )
+```
 
+```{r, fig.width=15, fig.height=10}
 ht_list <- ht_tfs1 + ht_tfs2
 draw(ht_list, ht_gap = unit(2, "cm"))
 
 ```
+### {-}
 
+---
 
 ### Statistical Tests to find TF activity differences between clusters
 
 To quantitatively investigate whether we can find TFs which have significantly
 different activity between clusters we can use Kruskal-Wallis test and 
-pairwise wilcox test as a posthoc analysis.
+pairwise wilcox test as a posthoc analysis. 
 
-
+206 TFs have different acivity between the clusters. 
 
 ```{r}
 p_values <- map(seq.int(1:length(colnames(auc_mtx))), function(n){
@@ -457,18 +462,20 @@ adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
 
 
 # how many transcription factors are significantly different between the clusters?
-length(adj_p_values[adj_p_values<0.01])
-## [1] 16
+#length(adj_p_values[adj_p_values<0.01])
 
 ```
 
-### Boxplots of TFs activity across conditions of TFs more bound in latent infection
+### Posthoc analysis {.tabset}
 
-There is a very small or none significant difference between the TF activity 
-between Inf and Uninf as well as between Inf+EFZ and Uninf+EFZ.
-However, between the treatment conditions there is a difference for REST,
-ZEB1 and TCF4. 
-However, there is no clear pattern observed.
+#### more bound in latent infection
+
+**Boxplots of TFs activity across conditions of TFs more bound in latent infection**
+
+Among the TFs more bound in latently infected cells there is a difference in 
+activity for REST and ZEB1, but only between treatment conditions and not 
+between infection conditions. For the other three TFs there are no differences 
+or patterns. 
 
 ```{r, fig.width=15, fig.height=8}
 
@@ -488,14 +495,21 @@ boxplot_list <- map(up_latent, function(tf) {
 do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 3, nrow = 2))
 ```
 
-### Boxplots of TFs activity across conditions of TFs more bound in uninfected primary microglia
+#### more bound in uninfected 
+
+**Boxplots of TFs activity across conditions of TFs more bound in uninfected primary microglia**
 
 In the plots below the trend of TF activity being negatively correlated between
 treated and untreated cells, independent of the infection status can be seen for
 some TFs, for example CEBPB and MEF2C. For other TFs there is no difference 
 between either infection status or treatment, for example CREB1 and ETS1.
 
-One assumption migth be, that TFs which are markers of microglia cells might 
+Yet, even though the effect of treatment is most prominent, some TFs are 
+additionally following the pattern of the footprinting. For example, MEF2C is
+more bound in the uninfected iMg than in infected iMg.
+
+
+One assumption is that TFs which are markers of microglia cells might 
 be more or less active depending on whether the cells were treated with EFZ or 
 not. An argument against this assumption is that both CEBPB and MEF2C are 
 typically expressed in microglia, yet we observe an opposite trend. 
@@ -526,6 +540,10 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))
  #               top = text_grob("TFs activity across conditions for TFs more bound in uninfected primary microglia", size = 20))
 
 ```
+### {-}
+
+---
+
 
 ## Correlations between conditions
 
@@ -543,13 +561,32 @@ testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 
 # plot correlations
 # p.mat = matrix of p_values
-corrplot(cor_mtx,method = "color", order = "hclust", 
+
+
+corrplot(cor_mtx,
+         #method = "color", 
+         order = "hclust", 
          addrect = 4, # add boxes 
          p.mat = testCor$p, 
          #sig.level = .05,
-         insig = "p-value")
+         insig = "p-value", 
+         tl.col = "black")
 
 ```
+
+```{r, fig.width=12, fig.height=8}
+tri_mg@meta.data %>% 
+  rownames_to_column("cell") %>%
+  select(c("cell", "orig.ident", colnames(auc_mtx))) %>%
+  group_by(orig.ident) %>%
+  summarize_if(is.numeric, mean) %>% 
+  gather(TF, value, -orig.ident) %>% 
+  spread(orig.ident, value) %>% 
+  column_to_rownames("TF") %>% GGally::ggpairs() +
+    labs(title = "Scatter matrix for different conditions")
+```
+
+
 
 
 Correlations between Tfs
@@ -564,12 +601,16 @@ cor_mtx <- tri_mg@meta.data %>%
 
 testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 
-corrplot(cor_mtx,method = "color", order = "hclust", 
+corrplot(cor_mtx,
+         #method = "color",
+         order = "hclust", 
          addrect = 4, # add boxes 
          p.mat = testCor$p,
-         insig = "p-value")
+         insig = "p-value", 
+         tl.col = "black")
 
 ```
+
 
 
 ### TFs more bound in uninfected primary microglia
@@ -584,11 +625,26 @@ cor_mtx <- tri_mg@meta.data %>%
 
 testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 
-corrplot(cor_mtx,method = "color", order = "hclust", 
+corrplot(cor_mtx,
+         #method = "color", 
+         order = "hclust", 
          addrect = 4, # add boxes 
          p.mat = testCor$p,
-         insig = "p-value")
+         insig = "p-value",
+         tl.col = "black")
 ```
+
+```{r, fig.width=15, fig.height=15}
+tri_mg@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  select(c("cell", "orig.ident", up_uninf, "REST")) %>% # only TFs with differential binding scores from ATACseq
+  group_by(orig.ident) %>%
+  summarize_if(is.numeric, mean) %>% 
+  column_to_rownames("orig.ident") %>%
+  GGally::ggpairs() +
+  labs("Scatter matrix for different conditions")
+```
+
 
 ### TFs more bound in latent infection
 
@@ -602,7 +658,9 @@ cor_mtx <- tri_mg@meta.data %>%
 
 testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 
-corrplot(cor_mtx,method = "color", order = "hclust", 
+corrplot(cor_mtx,
+         #method = "color",
+         order = "hclust", 
          addrect = 4, # add boxes 
          p.mat = testCor$p,
          insig = "p-value")
@@ -635,13 +693,25 @@ cor_mtx <- tri_mg@meta.data %>%
 
 testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 
-corrplot(cor_mtx,method = "color", order = "hclust", 
+corrplot(cor_mtx,
+         #method = "color",
+         order = "hclust", 
          addrect = 4, # add boxes 
          p.mat = testCor$p,
          insig = "p-value")
 ```
 
 
+```{r, fig.height=10, fig.width=15}
+tri_mg@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  select(c("cell", "orig.ident", intersect_csf$x[intersect_csf$x %in% colnames(auc_mtx)])) %>% # only TFs with differential binding scores from ATACseq
+  group_by(orig.ident) %>%
+  summarize_if(is.numeric, mean) %>% 
+  column_to_rownames("orig.ident") %>%
+  GGally::ggpairs() +
+  labs(title = "Scatter Matrix for different TFs")
+```
 
 
 

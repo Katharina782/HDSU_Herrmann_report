@@ -1,5 +1,5 @@
 ---
-title: "Analysis of HIV-1 CSF dataset"
+title: "Analysis of HIV CSF/Blood dataset"
 author: "kmikulik"
 date: "3 12 2021"
 output: 
@@ -16,19 +16,17 @@ body {
 text-align: justify}
 </style>
 
-```#{r setup}
-knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,
-                      cache = TRUE, autodep = TRUE)
-set.seed(42)
-```
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE, autodep = TRUE, 
+knitr::opts_chunk$set(cache = FALSE, autodep = TRUE, 
                       collapse = TRUE, message = FALSE)
 
 set.seed(42)
 ```
 
+```{r}
+setwd("/media/ag-cherrmann/kmikulik/HIV_microglia/src/report/")
+```
 
 
 ```{r}
@@ -62,31 +60,43 @@ First, the analysis done by [@Farhadian] was reproduced and then more extended
 analysis of the dataset was performed. The microglia-like cell cluster identified
 by [@Farhadian] was of particular interest.
 
-To give a quick overview of the dataset. 
+The dataset included three CSF samples from HIV infected patients, two blood 
+samples from HIV infected patients, as well as, two CSF samples from uninfected
+patients. [@Farhadian] first used two CSF and two bloods samples from infected
+patients for clustering and cell type annotation. After having identified a 
+novel subcluster of myeloid cells, which they propose are microglia-like, they 
+then confirm their results using the third CSF samples from an infected patient.
+Additionally, they compare the number of Myeloid2-specific transcripts to 
+the CSF samples from uninfected patients. They show that the percentage of Myeloid2
+transcripts was higher in CSF from infected patients than in CSF from uninfected
+patients and higher in CSF than in blood in general. 
 
-* 3 CSF samples from HIV1-infected patients
-* 2 Blood samples from HIV1-infected patients
-* 2 CSF samples from uninfected patients
+Blood and CSF were processed separately for scRNAseq using SeqWell. The seven
+samples were sequenced separately, one SeqWell array per CSF or PBMC sample
+[@Farhadian].
 
 For more details see [@Farhadian].
 
 First, the following analysis steps were performed similar as in the paper:
 
-* import files
-* create Seurat objects
+* Import files
+* Create Seurat objects
 * Quality Control
 * Normalization & Scaling
 * Clustering
 * Dimensionality reduction
 
 
+</details>
 
-* Read in data(count matrices)
+<details> 
+<summary>Importing files & creating Seurat objects</summary>
 
-The data is available under https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397
+**Read in data(count matrices)**
+The data is available under https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397.
 There is one count matrix for each of the 7 samples.
 
-```{r}
+```
 path <- "/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE117397_RAW (1)/"
 all_files <- list.files(path)
 
@@ -129,9 +139,10 @@ uninfected_list <- map(seq.int(7,8), function(n) {
   #          sep = "\t")
 ```
 
-* Create one Seurat object with all samples
+**Create one Seurat object with all samples**
 
-```{r}
+```
+
 hiv <- merge(hiv_object_list[[1]]$seurat_ob, 
                    c(hiv_object_list[[2]]$seurat_ob,
                      hiv_object_list[[3]]$seurat_ob,
@@ -144,20 +155,24 @@ hiv <- merge(hiv_object_list[[1]]$seurat_ob,
 
 # add percentage of mitochondrial genes to the metadata
 hiv[["percent_mt"]] <- PercentageFeatureSet(hiv, pattern = "^MT-")
+#saveRDS(hiv, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_unprocessed")
 ```
+---
+</details>
 
-* Quality control was performed on every individual object. 
+**Quality control was performed on every individual object.**
 
-* removing the 10% of cells with the highest percentage of mitochdonrial genes
-* remove features that are expressed in less than 3 cells
-* remove cells with 500 < nFeature_RNA > 2500
-
-Quality control was done for each sample separately and then the samples were
+Quality control was performed as described in [@Farhadian]. The 10% of cells 
+with the highest percentage of mitochondrial genes was removed,
+as well as features which are expressed in less than 3 cells. Also, cells with 
+number of features below 500 or above 2500 were removed. Quality control was 
+done for each sample separately and then the samples were
 combined again before normalization.
 
-**Function to remove features that are expressed in less than three cells:**
-
 ```{r} 
+# read in unprocessed seurat object containing all 7 samples
+hiv <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_unprocessed")
+
 # FUNCTION:
 # to remove features that are expressed in less than three cells
 # returns a list of feature names to keep
@@ -222,7 +237,7 @@ hiv_filt <- merge(qc[[1]],
 
 ### Number of Features
 
-```{r, results="asis", fig.width=15, figh.height = 12}
+```{r, results = "asis", fig.width=15, fig.height=12}
 
 #have a look at the number of detected features
 p1 <- hiv@meta.data %>% 
@@ -256,11 +271,13 @@ annotate_figure(figure, top = text_grob("Number of Features",
 
 
 hiv@meta.data %>%
-  group_by(orig.ident) %>% 
+  rename(sample = orig.ident) %>% 
+  group_by(sample) %>% 
   summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
             q50 = quantile(nFeature_RNA, .5), 
             q75 = quantile(nFeature_RNA, .75), 
-            mean = mean(nFeature_RNA)) %>% kable()
+            mean = mean(nFeature_RNA)) %>%
+    kable(caption = "Number of Features per sample")
 
 ```
 
@@ -298,11 +315,13 @@ figure <- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob("Library size (number of counts)",
                                         size = 25,  face = "bold"))
 hiv@meta.data %>%
-  group_by(orig.ident) %>% 
+  rename(sample = orig.ident) %>% 
+  group_by(sample) %>% 
   summarise(n = n(), q25 = quantile( nCount_RNA, .25),
             q50 = quantile(nCount_RNA, .5), 
             q75 = quantile(nCount_RNA, .75), 
-            mean = mean(nCount_RNA)) %>% kable()
+            mean = mean(nCount_RNA)) %>% 
+    kable(caption = "Library size per sample")
 
 ```
 
@@ -341,11 +360,13 @@ annotate_figure(figure, top = text_grob("Percentage of Mitochondrial gene",
                                         size = 25,  face = "bold"))
 
 hiv@meta.data %>%
-  group_by(orig.ident) %>% 
+  rename(sample = orig.ident) %>% 
+  group_by(sample) %>% 
   summarise(n = n(), q25 = quantile( percent_mt, .25),
             q50 = quantile(percent_mt, .5), 
             q75 = quantile(percent_mt, .75), 
-            mean = mean(percent_mt)) %>% kable()
+            mean = mean(percent_mt)) %>% 
+    kable(caption = "Percentage of mitochondrial genes per sample")
 
 ```
 
@@ -384,11 +405,15 @@ figure <- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob("Number of features after quality control",
                                         size = 25,  face = "bold"))
 
-hiv_filt@meta.data %>% group_by(orig.ident) %>%
+hiv_filt@meta.data %>% 
+  rename(sample = orig.ident) %>% 
+  group_by(sample) %>%
   summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
             q50 = quantile(nFeature_RNA, .5),
             q75 = quantile(nFeature_RNA, .75),
-            mean = mean(nFeature_RNA)) %>% kable
+            mean = mean(nFeature_RNA)) %>%
+    kable(caption = "Number of Features per sample after quality control")
+
 ```
 
 ### Library size 
@@ -415,11 +440,15 @@ figure <- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob("Library size (number of counts) after quality control",
                                         size = 25,  face = "bold"))
 
-hiv_filt@meta.data %>% group_by(orig.ident) %>%
+hiv_filt@meta.data %>% 
+  rename(sample = orig.ident) %>% 
+  group_by(sample) %>%
   summarise(n = n(), q25 = quantile(nCount_RNA, .25),
             q50 = quantile(nCount_RNA, .5),
             q75 = quantile(nCount_RNA, .75),
-            mean = mean(nCount_RNA)) %>% kable
+            mean = mean(nCount_RNA)) %>%
+  kable(caption = "Library size per sample after quality control")
+
 ```
 
 ### Percentage of Mitochondrial genes 
@@ -446,11 +475,15 @@ figure <- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob("Percentage of Mitochondrial genes after quality control",
                                         size = 25,  face = "bold"))
 
-hiv_filt@meta.data %>% group_by(orig.ident) %>%
+hiv_filt@meta.data %>% 
+  rename(sample = orig.ident) %>% 
+  group_by(sample) %>%
   summarise(n = n(), q25 = quantile(percent_mt, .25),
             q50 = quantile(percent_mt, .5),
             q75 = quantile(percent_mt, .75),
-            mean = mean(percent_mt)) %>% kable
+            mean = mean(percent_mt)) %>% 
+    kable(caption = "Percentage of mitochondrial genes per sample after quality control")
+
 ```
 
 ## {-}
@@ -458,18 +491,18 @@ hiv_filt@meta.data %>% group_by(orig.ident) %>%
 </details>
 
 <details> 
-*<summary>Code for Dimensionality reduction & Clustering</summary>*
+**<summary>Code for Dimensionality reduction & Clustering</summary>**
 
-**Subset Seurat object**
+Use blood and CSF samples from two patients (HIV1_CSF/Bld, HIV2_CSF/Bld) for
+further analysis like in the paper.
 
-Use 4 samples (2 blood, 2 csf) from two patients for further analysis like 
-in the paper
+* **Subset Seurat object**
 
 ```{r}
 hiv4 <- subset(hiv_filt, orig.ident %in% c("HIV1_CSF", "HIV2_CSF", "HIV1_Bld", "HIV2_Bld"))
 ```
 
-* Normalize, Scale and find variable features
+* **Normalize, Scale and find variable features**
 
 ```{r}
 hiv4 <- NormalizeData(hiv4, verbose = FALSE)
@@ -478,7 +511,7 @@ hiv4 <- FindVariableFeatures(hiv4, verbose = FALSE)
 ```
 
 
-**Dimensionality reduction**
+* **Dimensionality reduction**
 
 **PCA**
 
@@ -491,7 +524,10 @@ hiv4 <- RunPCA(hiv4, features = VariableFeatures(hiv4), verbose = FALSE)
 
 # elbow plot to determine which PCs account for most of the variance
 ElbowPlot(hiv4)
+```
 
+
+```{r, fig.width=15, fig.height=15}
 #pca plots
 pca_plots <- comprehenr::to_list(for (i in 1:13)
   DimPlot(hiv4, reduction = "pca", dims = i : (i+1)) +
@@ -516,6 +552,7 @@ table(hiv4$seurat_clusters)
 hiv4 <- RunTSNE(hiv4, dims = 1:10, verbose = FALSE)
 ```
 
+---
 </details>
 
 
@@ -561,7 +598,11 @@ marker_genes <- FindAllMarkers(hiv4, logfc.threshold = .01, min.pct = .01)
 ```
 ## Top marker genes
 
-The table below lists the two most highly expressed genes for each clusters. 
+The function `FindAllMarkers()` identifies differentially expressed genes between
+two groups of cells, in this case I compared one group of cells at a time against
+the rest of cells using a Wilcoxon Rank Sum test. 
+The table below lists the two most highly differentially expressed genes for 
+each clusters. 
 
 ```{r, results = "asis"}
 # filter for significant marker genes
@@ -570,8 +611,8 @@ The table below lists the two most highly expressed genes for each clusters.
 sign_marker_genes <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/sign_marker_genes.tsv")
 
 #show the top 10 differentially expressed genes for each cluster
-sign_marker_genes %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC ) %>%
-  kable(caption = "An example table caption.")#, digits = c(3, format.args = list(scientific = TRUE)) #= TRUE))
+#sign_marker_genes %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC ) #%>%
+  #kable(caption = "Top two differentially expressed genes for each cluster")#, digits = c(3, format.args = list(scientific = TRUE)) #= TRUE))
 ```
 
 
@@ -588,8 +629,8 @@ ggarrange(p1,p2, nrow = 2, ncol = 1)
 ```
 
 ### NK cells
-In cluster 5 and 9. 
-GZMB is also foudn in cluster 14.
+NK cells are primarily found in cluster 5 and 9. 
+GZMB is also found in cluster 14.
 
 ```{r, fig.width=15, fig.height=12}
 p1 <- VlnPlot(hiv4, features = c("NKG7", "GNLY", "GZMB"),
@@ -599,7 +640,9 @@ p2 <- RidgePlot(hiv4, features = c("NKG7", "GNLY", "GZMB"), sort = "decreasing")
 ggarrange(p1,p2, nrow = 2, ncol = 1)
 ```
 
-### Tcells 
+### CD4+ & CD8+ T cells 
+
+**CD4+ T cells:**
 
 * A general T cell marker CD3E is expressed in cluster 0,1,3,4,5,6.
 * IL7R in clusters 0-6
@@ -609,11 +652,11 @@ ggarrange(p1,p2, nrow = 2, ncol = 1)
 * LTB in 0-7
 * CD2 in 1,3,4,5,9
 
-Tcells 1, 2, 3 are assigned arbitrarily, because they are not used for further analysis.
+Tcells1/2/3 are assigned arbitrarily, because they are not used for further analysis.
 
-CD8+ T cells
+**CD8+ T cells:**
+
 * CD8A is expressed in decreasing order in 1,5,3
-(could cluster 1 and 5 be CD8 T cells?)
 
 ```{r, fig.height=20, fig.width=15}
 # general T cell marker for CD4+ and CD8+ Tcells
@@ -638,7 +681,7 @@ ggarrange(p1, p2,p3, p4, p5, p6, p7,p8, ncol = 2, nrow = 4)
 
 ### plasma cells
 
-in cluster 14
+Cluster 14 seems to contain plasma cells.
 
 ```{r, fig.width=15, fig.height=8}
 p1 <- VlnPlot(hiv4, features = c("IGJ"), pt.size = .01, ncol = 2)
@@ -653,12 +696,7 @@ ggarrange(p1,p2, nrow = 1, ncol = 2)
 * macrophages
 * dendritic cells
 
--> clusters 8, 10, 11, 12, 13 are myeloid cells
-
-
-  
-The 3 genes (AXL, APOE, TREM2) associated with neurodegenrative-disaes-associated
-microglia are expressed in myeloid2, however, only at very low concentrations
+The clusters 8, 10, 11, 12, 13 are myeloid cells
 
 Myeloid1, 3, 4 are assigned arbitrarily, because they are not of interest. 
 
@@ -675,10 +713,8 @@ ggarrange(p1,p2,p3, nrow = 3, ncol = 1)
 
 ### Myeloid 5 
 
-  + (from paper) 
-  + was characterized by: FCER1A, CD1C 
-  + cluster 12
-
+* cluster 12
+* was characterized by [@Farhadian] with the markers FCER1A, CD1C  
 
 ```{r, fig.width=15, fig.height=12}
 # Myeloid 5 in the paper
@@ -688,10 +724,11 @@ ggarrange(p1, p2, nrow = 2, ncol = 1)
 ```
 
 ### Myeloid 2 
-  + (from paper) -> cluster 11
-  + AXL, APOE, TREM2 (these genes are enriched in neurodegenerative 
-  disease-associated microglia)
-  + "CTSB", "APOC1", "MSR1", "C1QA-C" are expressed more highly in myeloid 2
+
+* cluster 11
+* AXL, APOE, TREM2 (these genes are enriched in neurodegenerative 
+  disease-associated microglia [@Farhadian])
+* CTSB, APOC1, MSR1, C1QA-C are expressed more highly in myeloid 2
   compared to other myeloid clusters
 
 ```{r, fig.width=15, fig.height=20}
@@ -709,11 +746,16 @@ ggarrange(p1, p2, p3, p4, ncol = 1, nrow = 4)
 
 ## {-}
 
-## Annotate cells 
 
 * Why is the mixed population primarily composed of cells from HIV1 
 patient blood sample?
 * Why are T cells primarily from CSF samples and CD8 T cells primarily from blood?
+
+
+</details>
+
+<details> 
+**<summary>Table of annotation of cell types to clusters</summary>**
 
 ```{r}
 Idents(hiv4) <- "seurat_clusters"
@@ -740,6 +782,8 @@ hiv4 <- AddMetaData(hiv4, col.name = "Condition", metadata = Idents(hiv4))
 
 ```
 
+</details>
+
 **Overview of some of the most important marker genes:**
 
 ```{r}
@@ -758,30 +802,31 @@ DotPlot(object = hiv4, features = c("MS4A1", # B cells
 
 ```
 
-# Visualize the cell types, conditions, samples and nCountRNA:
+# tSNE visualizations of cell types, conditions, samples and sequencing quality
 
 ```{r,  fig.height=12, fig.width=15}
 p1 <- DimPlot(hiv4, reduction = "tsne", label = TRUE, 
               group.by = "cell_type", pt.size = 0.1) +
-  NoLegend()
-p2 <- DimPlot(hiv4, reduction = "tsne", group.by =  "Condition", pt.size = 0.1)
-p3 <- DimPlot(hiv4, reduction = "tsne", group.by = "orig.ident", pt.size = 0.1)
+  NoLegend() +
+  labs(title = "Cell types")
+p2 <- DimPlot(hiv4, reduction = "tsne", group.by =  "Condition", pt.size = 0.1) +
+  labs(title = "CSF or Blood origin")
+p3 <- DimPlot(hiv4, reduction = "tsne", group.by = "orig.ident", pt.size = 0.1) +
+  labs(title = "Sample origin - patient")
 p4 <- FeaturePlot(hiv4, features= "nCount_RNA", pt.size = 0.1) + 
-    scale_color_viridis_c()
+    scale_color_viridis_c() +
+  labs(title= "number of counts")
 ggarrange(p1,p2,p3,p4, ncol = 2, nrow = 2)
 #p1 + p2 + p3 + p4
 ```
 
-* Blood and CSF were processed separately for scRNAseq using SeqWell. 
-* The 4 samples were sequenced separately. 
-* One SeqWell array per CSF or PBMC samples.
-[@Farhadian]
 
 # Relative contributions of CSF and blood cells to each cluster 
 
 
-In the histogram below Myeloid2 and Myeloid5 are predominantly composed of CSF
-cells. 
+The histogram below shows that Myeloid2 and Myeloid5 are predominantly composed of CSF
+cells, while Myeloid1, Myeloid3 and Myeloid4 are predominantly composed of Blood
+cells. This reflects the findings of [@Farhadian] very nicely. 
 
 ```{r}
 
@@ -797,11 +842,11 @@ ggplot(hiv4@meta.data) +
 ```
 
 
-**Question**: Myeloid-1, Myeloid-2 are mainly found in Blood cells, 
-Myeloid-4 is only found in Blood cells from HIV1 patient. What does that mean?
+**Question**: Myeloid1, Myeloid2 are mainly found in Blood cells, 
+Myeloid4 is only found in Blood cells from HIV1 patient. What does that mean?
 
 
-## How big are Myeloid2 and Myeloid5 clusters and where do cells come from?
+### How big are Myeloid2 and Myeloid5 clusters and where do cells come from?
 
 Myeloid2 cells originate from the CSF samples of HIV infected patients, while
 a few cells (thirteen) classified as Myeloid5 cells originate from Blood samples. 
@@ -837,17 +882,12 @@ Idents(hiv4) <- "cell_type"
 all.comp <- purrr::map(c(1,3,4,5), function(n){
   markers <- FindMarkers(hiv4,
               ident.1 = "Myeloid2",
-              ident.2 = paste0("Myeloid", n), only.pos = TRUE)
+              ident.2 = paste0("Myeloid", n),
+              only.pos = TRUE, 
+              verbose = FALSE)
   markers <- rownames_to_column(markers, var = "gene")
   name <- paste0("Comparison Myeloid 2 vs Myeloid ", n)
   list(df = markers, name = name)
-})
-
-
-map(seq.int(1,4), function(n) {
-  all.comp[[n]]$df %>% 
-  filter(p_val_adj <= .2) %>%
-  filter(gene %in% paper) %>% head() %>% kable()
 })
 
 my2_genes <- map(seq.int(1,4), function(n) {
@@ -860,9 +900,14 @@ my2_genes <- map(seq.int(1,4), function(n) {
 
 ```
 
-## Show expression of the 60 genes identified in the paper as Myeloid 2 markers
+### Expression of the 60 genes identified in the paper as Myeloid 2 markers
 
-The genes show the highest expression in Myeloid2 and Myeloid5 cells.
+The genes show the highest expression in Myeloid2 and for some genes like CD74 
+and genes of the HLA family are also highly expressed in Myeloid5 cells. However, there 
+are a few genes, like FAU, TPT1, TMSB10 and MIR4426 which do not show expression 
+specific to the Myeloid2 cluster. It is unclear why [@Farhadian] chose these 
+genes as signature genes.
+
 ```{r, fig.height =15, fig.width=12}
 DotPlot(hiv4, features = c(paper)) + 
   coord_flip() +
@@ -871,129 +916,135 @@ DotPlot(hiv4, features = c(paper)) +
 
 
 
-## Percentage of Myeloid2 transcripts per Cell in Blood, CSF and Uninfected samples
+### Percentage of Myeloid2 transcripts per Cell in Blood, CSF and Uninfected samples
+
+First, it is important to mention, that after quality control the number of cells
+is significantly lower in the two uninfected CSF samples, 216 and 340 respectively,
+compared to all other samples which contain between 932 and 2520 cells. However, 
+also the CSF sample from patient1 (HIV1_CSF) with 932 cells contains much fewer 
+cells compared to all other samples. 
+
+The results shown by [@Farhadian] are controversial, because when they compare
+the percentage of Myeloid2 transcripts between the three conditions, they
+pool 1770 cells for the uninfected condition, which is a lot more than we find
+here. Yet, they do not mention that they used different thresholds for quality 
+control of the uninfected samples. Therefore, I was not able to reproduce their
+findings. Below, I will describe the percentage of Myeloid2 transcripts when
+comparing the conditions with the number of cells obtained when using the 
+same thresholds for quality control as described in the paper.
+
+The interpretability of the comparison probably suffers from the fact that the 
+number of cells in the uninfected conditions is so much smaller. 
+
+```{r, results = "asis"}
+hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds")
+
+hiv7@meta.data %>% group_by(orig.ident) %>% 
+  summarise(number_of_cells = n()) %>% 
+  kable(caption = "Number of cells per sample")
+```
 
 
 ```{r}
-Idents(hiv_filt) = "orig.ident"
-table(Idents(hiv_filt))
-bld <- subset(hiv_filt, 
-              orig.ident %in% c("HIV1_Bld", 
-                                "HIV2_Bld"))@assays$RNA@counts
-csf <- subset(hiv_filt, 
-              orig.ident %in% c("HIV1_CSF", 
-                                "HIV2_CSF", 
-                                "HIV3_CSF"))@assays$RNA@counts
-healthy <- subset(hiv_filt,
-                  orig.ident %in% c("Uninfected1_CSF",
-                                    "Uninfected2_CSF"))@assays$RNA@counts
+hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds")
 
-matrix_list <- list("blood" = bld, "csf" = csf, "uninfected" = healthy)
+# create a list for the 3 different conditons
+subset.list <- list(infected_blood = c("HIV1_Bld", "HIV2_Bld"), 
+                    infected_csf = c("HIV1_CSF", "HIV2_CSF", "HIV3_CSF"),
+                    uninfected_csf = c("Uninfected1_CSF", "Uninfected2_CSF"))
 
-percentage_my2_transcripts <- map(seq(1,3), function(n) {
-  count_m <- matrix_list[[n]]
+# for each cell of each condition calculate a percentage of Myeloid2 transcripts
+# and combine to a dataframe
+percentage_my2_transcripts <- map2_dfr(subset.list, names(subset.list), function(n, name) {
+  count_m <- subset(hiv7, orig.ident %in% n)@assays$RNA@counts
   total_transcripts <- colSums(count_m) # number of transcripts per cell
   my2_matrix <- count_m[rownames(count_m) %in% paper, ] # get only myeloid2 genes 
   my2_transcripts <- colSums(my2_matrix) # sum of myeloid2 transcripts
-  percentage_my2_transcripts <- my2_transcripts/total_transcripts # fraction
+  tibble(percentage =  my2_transcripts/total_transcripts, condition = name)
 })
-
-
-ggplot() +
-  geom_boxplot(aes(x = "HIV+ CSF", y= percentage_my2_transcripts[[2]], fill = "CSF")) +
-  geom_boxplot(aes(x = "Uninfected_CSF", y = percentage_my2_transcripts[[3]], fill = "Uninfeced_CSF")) +
-  geom_boxplot(aes(x = "HIV+ Blood",y = percentage_my2_transcripts[[1]], fill = "Blood")) +
-  xlab("Sample origin") +
-  ylab("Frequency of myeloid2 transcripts per cell") 
-
 ```
 
-### Summary statistics
+**Is there a significant difference in percentage of Myeloid2 transcripts
+between the three conditions?**
 
-#### CSF from HIV-1 infected patients
-
-```{r, results = "asis"}
-#CSF
-summary(percentage_my2_transcripts[[2]])#%>% kable()
+```{r}
+percentage_my2_transcripts %>% 
+  group_by(condition) %>% 
+  summarise(n = n(), q25 = quantile(percentage, .25),
+            q50 = quantile(percentage, .5), 
+            q75 = quantile(percentage, .75), 
+            mean = mean(percentage),
+            median = median(percentage)) %>% 
+  kable(digits = 4, 
+        caption = "Summary statistics of percentage of Myeloid2 transcripts for different conditions")
 ```
 
-#### Blood from HIV-1 infected patients
+To see if there is a difference between the three conditions a Kruskal-Wallis-Test
+was performed. We get a p-value of 4.88 * 10^-9. Therefore, we will perform 
+a pairwise Wilcox test to see which condtions are different from each other.
 
-```{r, results = "asis"}
-#Blood
-summary(percentage_my2_transcripts[[1]]) 
+```{r}
+percentage_my2_transcripts %>% 
+  rstatix::kruskal_test(percentage ~ condition) %>%
+  kable(caption = "Kruskal Wallis Test")
 ```
 
-#### CSF from uninfected patients
+**Pairwise Wilcox test:**
 
-```{r, results = "asis"}
-# Uninfected
-summary(percentage_my2_transcripts[[3]])
-```
+In the table and boxplot below we can see that all three conditions are significantly 
+different from each other. As mentioned above, the sample size is much smaller
+for the uninfected condition. P-values are listed in the table below.
 
+Only the p-value for the comparison between infected CSF vs uninfected CSF is
+the same as in the paper, where they state that the Myeloid2 transcripts were
+found at lower levels in the uninfected samples compared to the infected samples.
+Otherwise, the results contradict the results found
+by [@Farhadian]. Contradictory to what is claimed in the paper, it is not evident
+that both infected and uninfected CSF samples have higher rates of Myeloid2 
+transcripts, rather the Blood samples seem to have the highest rate of Myeloid2 
+transcripts. 
 
-### What are the differences in Myeloid2 transcripts between samples?
-
-* **HIV+ Blood** vs. **HIV+ CSF**: p-value  = 2.95 * 10^-4
-* **HIV+ CSF** vs. **HIV- CSF**: p-value = 2.87 * 10^-7 (same result as in the paper)
-* **HIV+ Blood** vs. **HIV- CSF**: p-value = 7.98 * 10^-7
-
-In the paper they found the largest difference between infected blood and csf
-samples, but I find larger differences between HIV+ CSF/Blood and HIV- CSF samples.
-
-* My results suggest that Myeloid2 transcripts are detected at lower levels in 
-HIV- CSF samples than in HIV+ CSF samples.
-* Myeloid2 transcripts are found at lower levels in HIV- CSF samples than 
-in HIV+ Blood samples.
-* Myeloid2 transcripts are detected at similar levels in HIV+ CSF samples and
-in HIV+ Blood samples, however there are far more outliers with very high 
-frequency of Myeloid2 transcripts in HIV+ CSF samples compared to HIV+ Blood.
-
-How much sense does this interpretation make? The median is rather robust
-to outliers, so even if in CSF there are some cells which have much higher
+The comparison drawn is questionable in general, because what the boxplots below
+show is that there is some level of Myeloid2 transcript expression in all conditions. 
+However, there are more outliers with very high percentage of Myeloid2 transcripts in
+both CSF samples. This might be a hint that in the CSF samples there is a 
+outlier population representing the Myeloid2 cluster, which cannot be seen 
+in the blood sample. Since the median is rather robust
+to outliers, even if in CSF samples there are some cells which have much higher
 frequencies of transcripts, it might be that the median is still lower than 
-in blood.
+in blood samples.
 
-Wilcoxon rank sum test of the null hypothesis that the distribution
-of x and y differs by a location shift of mu and the alternative is that they
-differ by some other location shif. (If I set mu = 0, the null hypothesis is that
-the distributiosn differ by a location shift of 0).
+Therefore, comparing the overall percentage of 
+Myeloid2 transcripts might not provide any insights on the number of 
+Myeloid2 cells in a particular sample.
 
-##### Wilcoxon test between HIV+ Blood an HIV+ CSF
+```{r, fig.width = 10, fig.height=6}
+p1 <- percentage_my2_transcripts %>% ggplot() +
+  geom_boxplot(aes(x = condition, y = percentage, fill = condition)) +
+  xlab("Sample origin") +
+  ylab("Frequency of myeloid2 transcripts per cell") +
+  labs(title = "All cells") +
+  stat_pvalue_manual(percentage_my2_transcripts %>% 
+    rstatix::pairwise_wilcox_test(percentage ~ condition) %>% 
+      rstatix::add_xy_position()) +
+  NoLegend()
 
-```{r, results = "asis"}
+p2 <- percentage_my2_transcripts %>% ggplot() +
+  geom_boxplot(aes(x = condition, y = percentage, fill = condition), 
+               outlier.shape = NA) +
+  xlab("Sample origin") +
+  ylab("Frequency of myeloid2 transcripts per cell") +
+  labs(title = "Remove outliers to see difference") +
+  NoLegend()
 
-# bld vs csf
-wilcox.test(percentage_my2_transcripts[[1]], # blood samples
-            percentage_my2_transcripts[[2]], # csf samples
-            alternative = "two.sided", 
-            paired = FALSE, 
-            conf.int = TRUE)# %>% kable()
+ggarrange(p1, p2, ncol = 2, nrow = 1)
 ```
 
-
-##### Wilcoxon test between HIV+ CSF and HIV- CSF
 
 ```{r}
-# csf vs uninfected
-wilcox.test(percentage_my2_transcripts[[2]], # csf samples
-            percentage_my2_transcripts[[3]],
-            alternative = "two.sided",
-            conf.int = TRUE) # uninfected samples
+percentage_my2_transcripts %>% 
+  rstatix::wilcox_test(percentage ~ condition) %>% kable(caption = "Pairwise Wilcox Test")
 ```
-
-##### Wilcoxon test between HIV+ Blood and HIV- CSF
-
-```{r}
-# blood vs uninfected
-wilcox.test(percentage_my2_transcripts[[1]], # blood samples
-            percentage_my2_transcripts[[3]], # uninfected samples
-            alternative = "two.sided",
-            conf.int = TRUE)
-
-```
-
-
 
 
 # Label Transfer
@@ -1008,21 +1059,18 @@ the remaining samples:
 
 For reference see:
 https://satijalab.org/seurat/articles/integration_mapping.html
-https://satijalab.org/seurat/articles/multimodal_reference_mapping.html
-
 
 ```{r}
 # Seurat objects
 hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
-
-hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds")
+#hiv4 <- readRDS("seurat_objects/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
 ```
 
 
 ## Find Integration anchors
 
 We perform Normalization separately for each dataset and try to find 
-Variable Features.
+variable Features.
 
 ```{r}
 #hiv_list <- SplitObject(hiv7, split.by = "orig.ident")
@@ -1036,10 +1084,14 @@ Variable Features.
 #}
 
 #saveRDS(hiv_list, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list")
-hiv_list <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list")
+#hiv_list <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list")
 #reference.list <- SplitObject(hiv4, split.by = "orig.ident")
 ```
 
+```{r}
+hiv_filt <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds")
+hiv_list <- SplitObject(hiv_filt, split.by = "orig.ident")
+```
 
 
 
@@ -1055,20 +1107,17 @@ cell type labels)
 We will use the four samples we have analyzed above as a reference.
 The query dataset will be the HIV+ CSF3 sample and the two uninfected sample:
 
-The label transfer identifies hardly any B cells and Myeloid 1, 3, 4 are also
-not/hardly present in the CSF samples which is expected, since they originated
-exclusively from the Blood samples.
+Myeloid 1, 3, 4 are not/hardly present in the CSF samples which is expected, 
+since they originated exclusively from the Blood samples in the reference dataset.
 
 ```{r, results = "asis"}
-# get Seurat object for CSF3 sample
-#hiv3csf <- hiv_list[["HIV3_CSF"]]
 # merge the 3 query Seurat objects
 query <- merge(hiv_list[["Uninfected1_CSF"]], 
                c(hiv_list[["Uninfected2_CSF"]], hiv_list[["HIV3_CSF"]]))
 
 # find transfer anchors between the 3 query samples and the 4 samples we have 
 # analyzed previously
-hiv4.transfer_anchors <- FindTransferAnchors(reference = hiv4,
+hiv4_transfer_anchors <- FindTransferAnchors(reference = hiv4,
                                              query = query, 
                                              dims = 1:15,
                                              normalization.method = "LogNormalize",
@@ -1076,24 +1125,25 @@ hiv4.transfer_anchors <- FindTransferAnchors(reference = hiv4,
                                              reduction = "pcaproject",
                                              verbose = FALSE)
 
-predictions <- TransferData(anchorset = hiv4.transfer_anchors, 
+predictions <- TransferData(anchorset = hiv4_transfer_anchors, 
                             refdata = hiv4$cell_type, 
                             dims = 1:15,
                             verbose = FALSE)
 #predictions %>% head %>% kable()
 
 query <- AddMetaData(query, metadata = predictions)
+#saveRDS(query, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/query_seurat_object_label_transfer")
 table(query$predicted.id) %>% kable()
 ```
 
-## Check the gene expression levels in the predicted cell types
+### Check the gene expression levels in the predicted cell types {.tabset}
 
 The Label Transfer seems to work nicely, judging by the correct expression of
 common cell type markers for the individual cell types.
 
 #### Myeloid2 marker genes
 
-```#{r, fig.width=12, fig.height = }
+```{r, fig.width=12, fig.height = 10}
 # ceck the Myeloid2 markers
 p1 <- VlnPlot(query,
               features =  c("AXL", "APOE", "TREM2"), 
@@ -1162,7 +1212,8 @@ VlnPlot(query, features = c("MS4A1", "CD79A", "TCL1A"),
 
 ```
 
-
+---
+### {-}
 
 ## UMAP projection of additional samples
 
@@ -1176,7 +1227,7 @@ hiv4_test <- RunUMAP(hiv4, dims = 1:15,
                      return.model = TRUE, 
                      verbose = FALSE)
 
-hiv3csf <- MapQuery(anchorset = hiv4.transfer_anchors,
+hiv3csf <- MapQuery(anchorset = hiv4_transfer_anchors,
                     reference = hiv4_test, query = query,
                     refdata = list(celltype = "cell_type"),
                     reference.reduction = "pca",
@@ -1186,13 +1237,13 @@ hiv3csf <- MapQuery(anchorset = hiv4.transfer_anchors,
 
 
 
-query <- TransferData(anchorset = hiv4.transfer_anchors,
+query <- TransferData(anchorset = hiv4_transfer_anchors,
                                reference = hiv4_test,
                                query = query,
                                refdata = list(celltype = "cell_type"), 
                       verbose = FALSE)
 
-query <- IntegrateEmbeddings(anchorset = hiv4.transfer_anchors,
+query <- IntegrateEmbeddings(anchorset = hiv4_transfer_anchors,
                                       reference = hiv4_test,
                                       query = query,
                                new.reduction.name = "ref.pca",
@@ -1269,50 +1320,50 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 ```
 
-
-
 # Independent annotation of Myeloid2 and Myeloid5 clusters as Microglia-like cells
 
-Can we identify the microglia-like myeloid2/myeloid5 cluster they found in the 
-paper by [@Farhadian] when using independent genes for annotations?
 
+In the following part we tried to confirm that the Myeloid2 (and maybe the 
+Myeloid5) cluster are microglia-like cells. [@Farhadian] used 60 genes to 
+characterize Myeloid2 cells, some of which are found in disease-associated 
+microglia. Searching the literature for additional microglia signatures we might
+be able to independently confirm this microglia-like signature.
 
-Here, I will first use the 881 Microglia marker genes and then also try the list
-of TFs provided by [@Gosselin].
+Below you can click on the tabs to see the results of using different gene 
+signatures to confirm the microglia-like signature of Myeloid2 and Myeloid5. 
+The function used to calculate the gene signature score in different cells
+is `AddModuleScore()`.
+
 
 #### Function Add Module Score
 
-This Function Caluclate the average expression levels of each cluster on single cell level, 
-subtracted by the aggregated expression of control feature sets. The analyzed
-features are binned based on averaged expression and the control features are 
+This Function calculates the average expression levels of each cluster on single 
+cell level, subtracted by the aggregated expression of control feature sets. 
+The analyzed features are binned based on averaged expression and the control features are 
 randomly selected from each bin. 
 
 
-#### read in Seurat object
-
-
 ```{r}
+# read in Seurat object
 hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
 ```
 
 
 
+## Different gene signatures found in the literature {.tabset}
 
+### Farhadian et al.
 
-## Gene signature defined by [@Farhadian]
-
-Do we find the 60 signature genes from [@Farhadian] for 
-myeloid2 among the signature defined by @[Gossselin]?
-
-##### Read in list of microglia signature genes found in the Gosselin paper
-which are also found in the HIV1 and HIV2 samples:
+60 genes were used by Farhadian et al. to distinguish the Myeloid2 cell type.
+28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
+found in the 881 microglia signature genes defined by [@Gosselin].
 
 ```{r}
+## Read in list of microglia signature genes found in the Gosselin paper
+## which are also found in the HIV1 and HIV2 samples:
 microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
 ```
 
-28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
-found in the 881 microglia signature genes defined by [@Gosselin].
 
 ```{r, results = "asis"}
 # Are there any genes overlapping between Farhadian and Glass paper?
@@ -1326,12 +1377,9 @@ paper <- as.vector(paper[,1])
 #paper %in% as.vector(microglia_genes[["gene_name"]])
 
 overlap <- as.vector(microglia_genes[["gene_name"]]) [as.vector(microglia_genes[["gene_name"]]) %in% paper]
-length(overlap)
-overlap %>% kable()
+#length(overlap)
+#overlap %>% kable()
 ```
-
-
-#### 60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type
 
 ```{r}
 # get only genes present in the HIV1 and HIV2 samples!
@@ -1348,7 +1396,11 @@ FeaturePlot(hiv_farhadian, features = "Cluster1" , pt.size = .5, label = TRUE, r
 
 ```
 
-## Gene signature defined by @[Gosselin]
+### Gosselin et al. 
+
+
+Here, I will first use the 881 microglia marker genes and then also try the list
+of TFs provided by [@Gosselin].
 
 The Transcription Factors mentioned in the paper do not seem to be 
 specific for the Myeloid2 cluster. Interestingly, there is a very low score  
@@ -1369,7 +1421,9 @@ FeaturePlot(hiv4_glass, features = "Cluster1", label = TRUE, repel = TRUE, pt.si
 
 ```
 
-### signature of HAND (HIV-associated neurodegenerative disease)
+### HAND signature
+
+(HAND = HIV-associated neurodegenerative disease)
 
 [@Gosselin] defined a group of genes upregulated
 in microglia from patients with HAND. 
@@ -1391,53 +1445,15 @@ FeaturePlot(hiv_hand, features = "Cluster1", pt.size = .01) +
 
 ```
 
-##### TFs downregulated in in vitro microglia
 
-The list of TFs is derived from [@Gosselin]:
+### Grassivaro et al.
 
-**Comparison between microglia and primitive yolk sac macrphages:**
-
-In this paper they found:
-
-* a subset of mRNAs was expressed in primitive yolk sac macrophages and 
-maintained expression levels in brain microglia
-* a second subset were preferentially expressed in adult mouse/human microglia
--> increase in expression from ebryonic to adult stage of brain development
-* a majority of the TFs that showed reduced expression after transfer to in 
-*in vitro* environment were induced following migration of primitive macrophages
-into the developing brain -> induction by local **environment factors**
-
-
-```{r}
-# TFs downregulated in in vitro microglia
-tfs_down <- c( "IRF1", "IRF2", "IRF3", "IRF8", "IRF9", "CTCF", "MEF2A", "MEF2C", "MEF2D","MAF", "MAF1", "MAFB", "MAFF","MAFG", "MAFK", "RUNX1", "RUNX2", "SMAD3", "CEBPB", "CEBPA", "CEBPG", "JUND", "JUNB", "JUN", "FOS", "FOSB", "ARID3A", "ARID5A", "BHLHE41", "BTG2", "DBP", "EGR1", "EGR2", "EGR3", "ERF", "ELF1", "ELMSAN1", "ETV6", "FLI1", "KLF2", "KLF4", "KLF6", "MLXIPL", "MNT", "MYCL", "NFATC2", "NFE2L2","NR4A1", "RELA", "RREB1", "STAT3", "TAL1", "TCF4", "TFEB", "USF2", "ZEB2", "ZFHX3", "ZNF217", "ZNF691")
-
-#map(seq.int(1:59), function(n){
- # VlnPlot(hiv4, features = tfs_down[n], group.by = "cell_type")
-#})
-
-tfs_down %in% rownames(hiv4@assays$RNA@counts)
-
-hiv_down <- AddModuleScore(hiv4,
-                           features = tfs_down)
-hiv_hand@meta.data %>% head
-
-FeaturePlot(hiv_down, features = "Cluster1",
-            label = TRUE, 
-            repel = TRUE, pt.size = .1) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "TFs downregulated in in vitro microglia")
-
-```
-
-
-
-## Features identified in a paper on convergence of microglia and macrophages [@Grassivaro]
-
+[@Grassivaro] identified features related to convergence of microglia and 
+macrophages.
 They identified 14 genes that are conserved in microglia throughout development,
-but not expressed in myeloid-derived monocytes
-MDM. Only in the context of neuroinflammation are the
-14 genes expressed in macrophages.
+but not expressed in myeloid-derived monocytes (MDM).
+Only in the context of neuroinflammation are the 14 genes expressed in 
+macrophages as well.
 
 ```{r}
 tfs <- c("CRYBB1", "GARNL3", "GPR34", "LAG3", "NUAK1", "OLFML3", "RTN1",  "SALL3",  "SLC1A3", "SPARC", "TNFRSF17")
@@ -1459,16 +1475,24 @@ FeaturePlot(hivt, features = "Cluster2",
 ```
 
 
-## Marker genes referred to by [@Farhadian] 
+### Keren-Shaul et al. & Kraseman et al.
 
-References:
+The marker genes mentioned by [@Keren-Shaul] and [@Kraseman] were referred to 
+by [@Farhadian] and used as marker genes for microglia associated with 
+neurodegenerative disease.
 
-* [@Keren-Shaul]
-* [@Kraseman]
+Neither of these signatures show a high score for the Myeloid2/5 clusters. 
 
-Neither of these signatures shows a high score for the Myeloid2 clusters.
+* The signature genes defined by [@Keren-Shaul] are expressed to some level 
+in all myeloid clusters
+* The signature defined by [@Kraseman] is also mainly expressed in the 
+Myeloid clusters
+* CD9 and SPP1 might be added to the list of microglia marker genes expressed
+in Myeloid2 cluster
 
-```{r}
+It is not clear why [@Farhadian] used these genes as marker genes.
+
+```{r, fig.width=10}
 # upregulated in disease associated microglia (Keren-Shaul)
 disease <- c("SPP1", "ITGAX", "AXL", "LILRB4", "CLEC7A", "CCL2", "CSF1") 
 
@@ -1494,7 +1518,7 @@ mgnd <- mgnd[mgnd %in% rownames(hiv4@assays$RNA@counts)]
 hiv_disease <- AddModuleScore(hiv4,
                            features = disease)
 
-FeaturePlot(hiv_disease, features = "Cluster1", pt.size = .01) +
+keren <- FeaturePlot(hiv_disease, features = "Cluster1", pt.size = .01) +
   scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
   labs(title = "Keren-Shaul et al., Genes upregulated in disease-associated microglia")
 
@@ -1503,30 +1527,24 @@ FeaturePlot(hiv_disease, features = "Cluster1", pt.size = .01) +
 hiv_mgnd <- AddModuleScore(hiv4,
                            features = mgnd)
 
-FeaturePlot(hiv_mgnd, features = "Cluster1", pt.size = .01) +
+kraseman <- FeaturePlot(hiv_mgnd, features = "Cluster1", pt.size = .01) +
   scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
   labs(title = "Kraseman et al., 28 inflammatory genes upregulated in 
        disease associated microglia")
+
+ggarrange(keren, kraseman, ncol = 2, nrow = 1)
 ```
 
-Neither of the signature genes are very specific for the Myeloid2/5 cluster.
 
-* The signature genes defined by [@Keren-Shaul] are expressed to some level 
-in all myeloid clusters
-* The signature defined by [@Kraseman] is also mainly expressed in the 
-Myeloid clusters
-* CD9 and SPP1 might be added to the list of microglia marker genes expressed
-in Myeloid2 cluster
-
-```{r}
+```{r, fig.width=15}
 # Keren Shaul et al. signature
-DotPlot(hiv4, features = disease, group.by = "cell_type") + 
+p1 <- DotPlot(hiv4, features = disease, group.by = "cell_type") + 
   coord_flip() +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
     labs(title = "Keren-Shaul et al., Genes upregulated in disease-associated microglia")
 
 # Kraseman et al. signature
-DotPlot(hiv4, features = mgnd, group.by = "cell_type") + 
+p2 <- DotPlot(hiv4, features = mgnd, group.by = "cell_type") + 
   coord_flip() +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
     labs(title = "Kraseman et al., 28 inflammatory genes upregulated in 
@@ -1534,19 +1552,20 @@ DotPlot(hiv4, features = mgnd, group.by = "cell_type") +
 
 
 # some genes that might be markers for Myeloid2
-DotPlot(hiv4, features = c("CD9", "APOE", "AXL", "CTSL", "SPP1"), group.by = "cell_type") + 
+p3 <- DotPlot(hiv4, features = c("CD9", "APOE", "AXL", "CTSL", "SPP1"), group.by = "cell_type") + 
   coord_flip() +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
   labs(title = "Genes that might be used as markers for Myeloid2")
 
-
+ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
 ```
 
 
-## Gene signature defined by [@Esaulova]
+### Esaulova et al.
 
+Gene signature defined by [@Esaulova]
 
-##### Homeostatic genes
+##### Homeostatic genes: 
 
 * the homeostatic microglia gene signature is found in all myeloid clusters, 
 not only in the Myeloid 2 (except for SLC2A5 which was also included in the 
@@ -1561,29 +1580,29 @@ FeaturePlot(hiv4, features = microglia, ncol = 3)
 
 
 
-```{r}
-DotPlot(hiv4, features = microglia, group.by = "cell_type") + 
+```{r, fig.width=15}
+dotplot <- DotPlot(hiv4, features = microglia, group.by = "cell_type") + 
   coord_flip() +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
 
 hivt <- AddModuleScore(hiv4, features = microglia)
 Idents(hivt) <- "cell_type"
-FeaturePlot(hivt, features = "Cluster1", label =TRUE, repel = TRUE, pt.size = .7) +
+tsne <- FeaturePlot(hivt, features = "Cluster1", label =TRUE, repel = TRUE, pt.size = .7) +
   scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
     labs(title = "Homeostatic microglia signature from Esaulova paper")
+
+ggarrange(dotplot, tsne, ncol =2, nrow = 1)
 ```
 
-##### Microglia-specific genes
+##### Microglia-specific genes:
 
 * **GPR34**, **TMEM119** supports the hypothesis that myeloid2 are microglia-like,
-since they are expressed at higher levels in the myeloid2 cluster
+since they are expressed at higher levels in the Myeloid2 cluster
 * they use 10 genes to discriminate microglia, four of which have not been 
-inlcude in the Farhadian Paper: **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12**
+inlcuded by [@Farhadian]: **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12**
 * the genes **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12** are not included in
-the 60 genes used by Farhadian et al., but they do not show specific expression
-for myeloid2 cells
-
-
+the 60 genes used by [@Farhadian], but they do not show specific expression
+for Myeloid2 cells
 
 ```{r, fig.width=15}
 # 10 genes that discriminate microglia
@@ -1596,50 +1615,55 @@ microglia <- c("C1QC", "C1QB", "C1QA", "TREM2", "TIMD4", "APOC1",
 Idents(hiv4) <- "cell_type"
 
 #  two genes whcih might support that myeloid2 cluster contains microglia-like cells
-FeaturePlot(hiv4, features = c("GPR34", "TMEM119"), label = TRUE, pt.size = .7,
-            repel = TRUE)
-DotPlot(hiv4, features = c("TMEM119", "GPR34"), group.by = "cell_type") + 
-     coord_flip() +
-     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+#FeaturePlot(hiv4, features = c("GPR34", "TMEM119"), label = TRUE, pt.size = .7,
+       #     repel = TRUE)
+#DotPlot(hiv4, features = c("TMEM119", "GPR34"), group.by = "cell_type") + 
+  #   coord_flip() +
+   #  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
 
 # these are not inlcuded in the Farhadian gene signature
-FeaturePlot(hiv4, features = c("CLEC9A", "TIMD4", "TNFSF18", "CXCL12"),
+FeaturePlot(hiv4, features = c("CLEC9A", "TIMD4", "TNFSF18", "CXCL12", 
+                               "GPR34", "TMEM119"),
             pt.size = .7, label = TRUE, repel = TRUE, ncol= 2)
 
 
 
 ```
 
-## Microglia in human brain
+### Sankowski et al.
 
-Reference:
-Sankowski R. et al. 2019. Mapping microglia states in the human brain through the
-integration of high-dimensional techniques. Nature Neuroscience. Vol 22
-https://www.nature.com/articles/s41593-019-0532-y#Sec29
+[@Sankowski] describe different states of microglia cells from the human brain.
 
 In the paper microglia cells were obtained through brain surgery.
-Microglia were defined by the core signature called "microglia signature" below.
-Sankowski et al. performed unsupervised clustering using Race ID3 which resulted
-in 9 major sublcusters of the microglia cells. The authors suggested that these
+Microglia were defined by a core signature called "microglia signature" below.
+[@Sankowski] performed unsupervised clustering using Race ID3 which resulted
+in 9 major subclusters of the microglia cells. The authors suggested that these
 subclusters represent the wide spectrum of transcriptional states in human 
 microglia.
 
 **RaceID:**
 RaceID is a clustering algorithm for the identification of cell types from 
 scRNA-seq data. It was designed to work particularly well for the detection of
-rare cells. 
-https://github.com/dgrun/RaceID3_StemID2_package
+rare cells. See for more details: https://github.com/dgrun/RaceID3_StemID2_package
 
 
-* The microglia signature is most pronounced in Myeloid2 cluster
+* The microglia signature is most pronounced in Myeloid2 cluster which supports 
+the hypothesis that Myeoid2 are microglia-like cells.
 * The monocyte signature is less pronounced in Myeloid2 cluster and more 
-pronounced in the other Myeloid clsuters
-* Homeostatic microglia (core signature genes expressed by all clusters in the 
-paper) gene signature is found in all Myeloid cluster as well 
-as NK cells, with high expression also in Myeloid2 
-  + **CSF1R** and **MARCKS** are most highly expressed in Myeloid2
+pronounced in the other Myeloid clusters which is in line with the assumption 
+that the cells in blood and CSF are monocytes or monocyte-derived macrophages
+rather than microglia-like cells.
+* Homeostatic microglia gene signature (core signature genes expressed by all clusters in the 
+paper) is found in all Myeloid cluster as well as NK cells, with high expression 
+also in Myeloid2. It is not clear why NK cells would express a homeostatic 
+microglia signature. The reason why all Myeloid cluster express this signature 
+might be that homeostatic microlglia have some overlap in gene expression with 
+peripheral macrophages. 
 
-```{r}
+Two potential markers for Myeloid2 are **CSF1R** and **MARCKS** which are most 
+highly expressed in Myeloid2 cells.
+
+```{r, fig.width=15, fig.height=12}
 # microglia gene signature from supplementary table 3a
 microglia <- c("P2RY12", "CX3CR1", "CSF1R", "TMEM119", "SLC2A5" )
 
@@ -1651,7 +1675,7 @@ homeostatic <- c("CX3CR1", "TMEM119", "CSF1R", "P2RY12",
                  "P2RY13","SELPLG", "MARCKS")
 
 
-map(seq.int(1:3), function(n){
+tsne_list <- map(seq.int(1:3), function(n){
   names <- c("microglia", "monocyte", "homeostatic")
   feature_list <- list(microglia, monocyte, homeostatic)
   features = feature_list[[n]]
@@ -1663,7 +1687,7 @@ map(seq.int(1:3), function(n){
     labs(title = paste0(names[n]," microglia gene signature"))
 })
   
-map(seq.int(1:3), function(n){
+dotplot_list <- map(seq.int(1:3), function(n){
   names <- c("microglia", "monocyte", "homeostatic")
   feature_list <- list(microglia, monocyte, homeostatic)
   features = feature_list[[n]] 
@@ -1674,11 +1698,12 @@ map(seq.int(1:3), function(n){
   labs(title = paste0(names[n]," gene signature"))
 })
   
+do.call(grid.arrange, c(append(tsne_list, dotplot_list), ncol = 3, nrow = 2))
 ```
 
-Check the clusters across the transcriptional spectrum of microglia:
+#### Clusters across the transcriptional spectrum of microglia
 
-Sankowski R. et al., Nature Neuroscience, 2019 defined 9 subclusters within the 
+[@Sankowski] defined 9 subclusters within the 
 microglia cell population. Can we find these gene signatures in the CSF-derived
 Myeloid cells? This could further confirm that Myeloid2 and Myeloid5 are 
 microglia-like cells. 
@@ -1689,10 +1714,10 @@ microglia-like cells.
   + C3: high expression of microglial core genes CX3CR1, TMEM119   
 * **antigen processing and peptide antigen presentation**
 C6 and C7 were characterized by low expression of CX3CR1 and high expression
-of integrin-receptor binding protein and metabolism genes (SPP1, APOE, LPL)
+of integrin-receptor binding protein and metabolism genes (SPP1, APOE, LPL).
 * ** proinflammatory clusters:** 
 C1, C5, C8, C9 were characterized by expression of chemokine and cytokine 
-genes (CCL2, IL1B)
+genes (CCL2, IL1B).
 
 Since Cluster C2 was characterized as a homeostati microglia cluster and showed
 expression of MHC-II and antivrial immunity genes like IFI44L, HLA-DRA, CD74, 
@@ -1703,7 +1728,7 @@ mainly originate from Blood samples and also in B cells.
 There is also a high score for C5 and C8 signature genes, which are both 
 proinflammatory gene signatures.
 
-```{r}
+```{r, fig.width = 15, fig.height=10}
 # get differentially expressed genes per cluster across the transcriptional 
 # spectrum of microglia 
 excel_sheets("/media/ag-cherrmann/kmikulik/HIV_microglia/data/2019_Sankowski_Mapping_microgliastates_in_the_human_brain_Supplementary_tables.xlsx")
@@ -1724,7 +1749,7 @@ cluster_list <- map(seq.int(1:8), function(n) {
 })
 
 
-map(seq.int(1:8), function(n){
+cluster_plots <- map(seq.int(1:8), function(n){
   c <- cluster_list[[n]]$cluster
   name <- cluster_list[[n]]$name
   hivc <- AddModuleScore(hiv4, features = c)
@@ -1735,7 +1760,7 @@ map(seq.int(1:8), function(n){
     labs(title = paste0("Differentially expressed genes of cluster ", name))
 })
 
-
+do.call(grid.arrange, c(cluster_plots, ncol = 4, nrow = 2))
 
 #map(seq.int(1:8), function(n){
  # c <- cluster_list[[n]]$cluster
@@ -1747,9 +1772,11 @@ map(seq.int(1:8), function(n){
 #})
 ```
 
+## {-}
 
-## Look for genes which are upregulated in Myeloid2 compared to all other Myeloid
-clusters
+---
+
+## Genes which are upregulated in Myeloid2 compared to all other Myeloid clusters
 
 * overlap of 5 genes with Kraseman microglia -> inflammatory molecules 
 upregulated in disease associated microglia (Krasemann)
@@ -1816,6 +1843,17 @@ FeaturePlot(hiv_new, features = "Cluster1") +
 
 ```
 
+##  Conclusions on Myloid2 cell type
+
+Taken together the results above do not provide a clear picture on whether the
+Myeloid2 cluster consists of microglia-like cells. There are several genes which 
+are associated with microglia and disease-associated microglia, several of which 
+referred to by [@Farhadian]. Nevertheless, there are also many genes which 
+are described to be microglia markers in the literature, but do not show a 
+significantly higher expression in Myeloid2 than in the other Myeloid clusters.
+Therefore, the cluster will be considered microglia-like for now and the
+following analysis will provide additional insights on the identity and 
+characteristics of this cluster.  
 
 
 # References

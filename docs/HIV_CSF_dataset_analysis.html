@@ -12,7 +12,7 @@
 <meta name="author" content="kmikulik" />
 
 
-<title>Analysis of HIV-1 CSF dataset</title>
+<title>Analysis of HIV CSF/Blood dataset</title>
 
 <script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -405,7 +405,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Main Part
+    Results
      
     <span class="caret"></span>
   </a>
@@ -456,7 +456,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Analysis of HIV-1 CSF dataset</h1>
+<h1 class="title toc-ignore">Analysis of HIV CSF/Blood dataset</h1>
 <h4 class="author">kmikulik</h4>
 <h4 class="date">3 12 2021</h4>
 
@@ -483,10 +483,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-12-18
+<strong>Last updated:</strong> 2021-12-20
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 4 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 3
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -502,12 +502,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -557,9 +557,6 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel-body">
 The following chunks had caches available:
 <ul>
-<li>
-session-info-chunk-inserted-by-workflowr
-</li>
 <li>
 unnamed-chunk-1
 </li>
@@ -669,94 +666,10 @@ unnamed-chunk-40
 unnamed-chunk-41
 </li>
 <li>
-unnamed-chunk-42
-</li>
-<li>
-unnamed-chunk-43
-</li>
-<li>
-unnamed-chunk-44
-</li>
-<li>
-unnamed-chunk-45
-</li>
-<li>
-unnamed-chunk-46
-</li>
-<li>
-unnamed-chunk-47
-</li>
-<li>
-unnamed-chunk-48
-</li>
-<li>
-unnamed-chunk-49
-</li>
-<li>
 unnamed-chunk-5
 </li>
 <li>
-unnamed-chunk-50
-</li>
-<li>
-unnamed-chunk-51
-</li>
-<li>
-unnamed-chunk-52
-</li>
-<li>
-unnamed-chunk-53
-</li>
-<li>
-unnamed-chunk-54
-</li>
-<li>
-unnamed-chunk-55
-</li>
-<li>
-unnamed-chunk-56
-</li>
-<li>
-unnamed-chunk-57
-</li>
-<li>
-unnamed-chunk-58
-</li>
-<li>
-unnamed-chunk-59
-</li>
-<li>
 unnamed-chunk-6
-</li>
-<li>
-unnamed-chunk-60
-</li>
-<li>
-unnamed-chunk-61
-</li>
-<li>
-unnamed-chunk-62
-</li>
-<li>
-unnamed-chunk-63
-</li>
-<li>
-unnamed-chunk-64
-</li>
-<li>
-unnamed-chunk-65
-</li>
-<li>
-unnamed-chunk-66
-</li>
-<li>
-unnamed-chunk-67
-</li>
-<li>
-unnamed-chunk-68
-</li>
-<li>
-unnamed-chunk-69
 </li>
 <li>
 unnamed-chunk-7
@@ -775,28 +688,52 @@ unnamed-chunk-9
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
 </p>
 </div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>
+Using absolute paths to the files within your workflowr project makes it difficult for you and others to run your code on a different machine. Change the absolute path(s) below to the suggested relative path(s) to make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/media/ag-cherrmann/kmikulik/HIV_microglia/src/report/
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2be0932ddfed52b8d9f4a4086763fe9eeb4602b0targetblank2be0932a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0" target="_blank">2be0932</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7843b5a7865b5270e721642ea06e9cb5261d374targetblankf7843b5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f7843b5a7865b5270e721642ea06e9cb5261d374" target="_blank">f7843b5</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree2be0932ddfed52b8d9f4a4086763fe9eeb4602b0targetblank2be0932a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7843b5a7865b5270e721642ea06e9cb5261d374targetblankf7843b5a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0" target="_blank">2be0932</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f7843b5a7865b5270e721642ea06e9cb5261d374" target="_blank">f7843b5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -808,10 +745,13 @@ Ignored files:
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_GRN_with_Scenic_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
+    Ignored:    analysis/figure/
 
 Unstaged changes:
+    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
     Modified:   analysis/Independent_cell_type_identification_Farhadian_dataset.Rmd
     Modified:   analysis/Introduction.Rmd
+    Modified:   analysis/Triculture_dataset_GRN_with_Scenic.Rmd
     Modified:   analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd
     Modified:   analysis/_site.yml
     Modified:   analysis/html_test.Rmd
@@ -854,6 +794,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/fce26d5dd39fcac3f053aaaa3ceb1e2c02e05654/docs/HIV_CSF_dataset_analysis.html" target="_blank">fce26d5</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1018,7 +975,7 @@ recent updates
 body {
 text-align: justify}
 </style>
-<p><code>#{r setup} knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, message = FALSE,                       cache = TRUE, autodep = TRUE) set.seed(42)</code></p>
+<pre class="r"><code>setwd(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/report/&quot;)</code></pre>
 <pre class="r"><code>library(tidyverse)
 library(Seurat)
 library(edgeR)
@@ -1044,25 +1001,25 @@ library(harmony)
 library(SeuratDisk)
 library(patchwork)</code></pre>
 <p>First, the analysis done by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> was reproduced and then more extended analysis of the dataset was performed. The microglia-like cell cluster identified by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> was of particular interest.</p>
-<p>To give a quick overview of the dataset.</p>
-<ul>
-<li>3 CSF samples from HIV1-infected patients</li>
-<li>2 Blood samples from HIV1-infected patients</li>
-<li>2 CSF samples from uninfected patients</li>
-</ul>
+<p>The dataset included three CSF samples from HIV infected patients, two blood samples from HIV infected patients, as well as, two CSF samples from uninfected patients. <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> first used two CSF and two bloods samples from infected patients for clustering and cell type annotation. After having identified a novel subcluster of myeloid cells, which they propose are microglia-like, they then confirm their results using the third CSF samples from an infected patient. Additionally, they compare the number of Myeloid2-specific transcripts to the CSF samples from uninfected patients. They show that the percentage of Myeloid2 transcripts was higher in CSF from infected patients than in CSF from uninfected patients and higher in CSF than in blood in general.</p>
+<p>Blood and CSF were processed separately for scRNAseq using SeqWell. The seven samples were sequenced separately, one SeqWell array per CSF or PBMC sample <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>.</p>
 <p>For more details see <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>.</p>
 <p>First, the following analysis steps were performed similar as in the paper:</p>
 <ul>
-<li><p>import files</p></li>
-<li><p>create Seurat objects</p></li>
-<li><p>Quality Control</p></li>
-<li><p>Normalization &amp; Scaling</p></li>
-<li><p>Clustering</p></li>
-<li><p>Dimensionality reduction</p></li>
-<li><p>Read in data(count matrices)</p></li>
+<li>Import files</li>
+<li>Create Seurat objects</li>
+<li>Quality Control</li>
+<li>Normalization &amp; Scaling</li>
+<li>Clustering</li>
+<li>Dimensionality reduction</li>
 </ul>
-<p>The data is available under <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397</a> There is one count matrix for each of the 7 samples.</p>
-<pre class="r"><code>path &lt;- &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE117397_RAW (1)/&quot;
+</details>
+<details>
+<summary>
+Importing files &amp; creating Seurat objects
+</summary>
+<p><strong>Read in data(count matrices)</strong> The data is available under <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117397</a>. There is one count matrix for each of the 7 samples.</p>
+<pre><code>path &lt;- &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE117397_RAW (1)/&quot;
 all_files &lt;- list.files(path)
 
 #Function to create a sparse matrix from each of the dataframes
@@ -1087,20 +1044,6 @@ hiv_object_list &lt;- map(seq.int(2,6), function(n) {
                      min.features = 1)
   list(df=df, sparse_matrix = sparse_matrix, seurat_ob = seurat_ob, name=name)
 })
-Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
-(&#39;-&#39;)
-
-Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
-(&#39;-&#39;)
-
-Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
-(&#39;-&#39;)
-
-Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
-(&#39;-&#39;)
-
-Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
-(&#39;-&#39;)
 
 uninfected_list &lt;- map(seq.int(7,8), function(n) {
   file &lt;- all_files[grepl(paste0(&quot;GSM329382&quot;, n), all_files)]
@@ -1112,19 +1055,13 @@ uninfected_list &lt;- map(seq.int(7,8), function(n) {
                      min.features = 1, verbose = FALSE)
   list(df=df, sparse_matrix = sparse_matrix, seurat_ob = seurat_ob, name=name)
 })
-Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
-(&#39;-&#39;)
-
-Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with dashes
-(&#39;-&#39;)
 
 #write.table(uninfected_list[[1]]$sparse_matrix,
  #           &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/job_test.tsv&quot;, 
   #          sep = &quot;\t&quot;)</code></pre>
-<ul>
-<li>Create one Seurat object with all samples</li>
-</ul>
-<pre class="r"><code>hiv &lt;- merge(hiv_object_list[[1]]$seurat_ob, 
+<p><strong>Create one Seurat object with all samples</strong></p>
+<pre><code>
+hiv &lt;- merge(hiv_object_list[[1]]$seurat_ob, 
                    c(hiv_object_list[[2]]$seurat_ob,
                      hiv_object_list[[3]]$seurat_ob,
                      hiv_object_list[[4]]$seurat_ob,
@@ -1135,16 +1072,16 @@ Warning: Feature names cannot have underscores (&#39;_&#39;), replacing with das
                    add.cell.ids = c(&quot;1B&quot;, &quot;1C&quot;, &quot;2B&quot;, &quot;2C&quot;, &quot;3C&quot;, &quot;U1&quot;, &quot;U2&quot;))
 
 # add percentage of mitochondrial genes to the metadata
-hiv[[&quot;percent_mt&quot;]] &lt;- PercentageFeatureSet(hiv, pattern = &quot;^MT-&quot;)</code></pre>
-<ul>
-<li><p>Quality control was performed on every individual object.</p></li>
-<li><p>removing the 10% of cells with the highest percentage of mitochdonrial genes</p></li>
-<li><p>remove features that are expressed in less than 3 cells</p></li>
-<li><p>remove cells with 500 &lt; nFeature_RNA &gt; 2500</p></li>
-</ul>
-<p>Quality control was done for each sample separately and then the samples were combined again before normalization.</p>
-<p><strong>Function to remove features that are expressed in less than three cells:</strong></p>
-<pre class="r"><code># FUNCTION:
+hiv[[&quot;percent_mt&quot;]] &lt;- PercentageFeatureSet(hiv, pattern = &quot;^MT-&quot;)
+#saveRDS(hiv, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_unprocessed&quot;)</code></pre>
+<hr />
+</details>
+<p><strong>Quality control was performed on every individual object.</strong></p>
+<p>Quality control was performed as described in <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>. The 10% of cells with the highest percentage of mitochondrial genes was removed, as well as features which are expressed in less than 3 cells. Also, cells with number of features below 500 or above 2500 were removed. Quality control was done for each sample separately and then the samples were combined again before normalization.</p>
+<pre class="r"><code># read in unprocessed seurat object containing all 7 samples
+hiv &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_unprocessed&quot;)
+
+# FUNCTION:
 # to remove features that are expressed in less than three cells
 # returns a list of feature names to keep
 
@@ -1233,19 +1170,22 @@ p4 &lt;- hiv@meta.data %&gt;%
 figure &lt;- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob(&quot;Number of Features&quot;,
                                         size = 25,  face = &quot;bold&quot;))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-5-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-4-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>
 
 hiv@meta.data %&gt;%
-  group_by(orig.ident) %&gt;% 
+  rename(sample = orig.ident) %&gt;% 
+  group_by(sample) %&gt;% 
   summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
             q50 = quantile(nFeature_RNA, .5), 
             q75 = quantile(nFeature_RNA, .75), 
-            mean = mean(nFeature_RNA)) %&gt;% kable()</code></pre>
+            mean = mean(nFeature_RNA)) %&gt;%
+    kable(caption = &quot;Number of Features per sample&quot;)</code></pre>
 <table>
+<caption>Number of Features per sample</caption>
 <thead>
 <tr class="header">
-<th align="left">orig.ident</th>
+<th align="left">sample</th>
 <th align="right">n</th>
 <th align="right">q25</th>
 <th align="right">q50</th>
@@ -1344,17 +1284,20 @@ p4 &lt;- hiv@meta.data %&gt;%
 figure &lt;- ggarrange(p1, p3, p4, p2, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob(&quot;Library size (number of counts)&quot;,
                                         size = 25,  face = &quot;bold&quot;))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-6-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-5-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>hiv@meta.data %&gt;%
-  group_by(orig.ident) %&gt;% 
+  rename(sample = orig.ident) %&gt;% 
+  group_by(sample) %&gt;% 
   summarise(n = n(), q25 = quantile( nCount_RNA, .25),
             q50 = quantile(nCount_RNA, .5), 
             q75 = quantile(nCount_RNA, .75), 
-            mean = mean(nCount_RNA)) %&gt;% kable()</code></pre>
+            mean = mean(nCount_RNA)) %&gt;% 
+    kable(caption = &quot;Library size per sample&quot;)</code></pre>
 <table>
+<caption>Library size per sample</caption>
 <thead>
 <tr class="header">
-<th align="left">orig.ident</th>
+<th align="left">sample</th>
 <th align="right">n</th>
 <th align="right">q25</th>
 <th align="right">q50</th>
@@ -1455,66 +1398,21 @@ Warning: Transformation introduced infinite values in continuous y-axis
 Warning: Removed 2014 rows containing non-finite values (stat_ydensity).
 annotate_figure(figure, top = text_grob(&quot;Percentage of Mitochondrial gene&quot;,
                                         size = 25,  face = &quot;bold&quot;))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-7-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
-Past versions of unnamed-chunk-7-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-7-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">5830d4f</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-6-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>
 hiv@meta.data %&gt;%
-  group_by(orig.ident) %&gt;% 
+  rename(sample = orig.ident) %&gt;% 
+  group_by(sample) %&gt;% 
   summarise(n = n(), q25 = quantile( percent_mt, .25),
             q50 = quantile(percent_mt, .5), 
             q75 = quantile(percent_mt, .75), 
-            mean = mean(percent_mt)) %&gt;% kable()</code></pre>
+            mean = mean(percent_mt)) %&gt;% 
+    kable(caption = &quot;Percentage of mitochondrial genes per sample&quot;)</code></pre>
 <table>
+<caption>Percentage of mitochondrial genes per sample</caption>
 <thead>
 <tr class="header">
-<th align="left">orig.ident</th>
+<th align="left">sample</th>
 <th align="right">n</th>
 <th align="right">q25</th>
 <th align="right">q50</th>
@@ -1613,13 +1511,13 @@ p3 &lt;- hiv_filt@meta.data %&gt;%
 figure &lt;- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob(&quot;Number of features after quality control&quot;,
                                         size = 25,  face = &quot;bold&quot;))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-8-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-7-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
-Past versions of unnamed-chunk-8-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div id="fig-unnamed-chunk-7-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -1638,7 +1536,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">5830d4f</a>
+<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">5830d4f</a>
 </td>
 <td>
 Katharina782
@@ -1649,7 +1547,7 @@ Katharina782
 </tr>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">dde1097</a>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">dde1097</a>
 </td>
 <td>
 Katharina782
@@ -1663,15 +1561,19 @@ Katharina782
 </div>
 </div>
 <pre class="r"><code>
-hiv_filt@meta.data %&gt;% group_by(orig.ident) %&gt;%
+hiv_filt@meta.data %&gt;% 
+  rename(sample = orig.ident) %&gt;% 
+  group_by(sample) %&gt;%
   summarise(n = n(), q25 = quantile(nFeature_RNA, .25),
             q50 = quantile(nFeature_RNA, .5),
             q75 = quantile(nFeature_RNA, .75),
-            mean = mean(nFeature_RNA)) %&gt;% kable</code></pre>
+            mean = mean(nFeature_RNA)) %&gt;%
+    kable(caption = &quot;Number of Features per sample after quality control&quot;)</code></pre>
 <table>
+<caption>Number of Features per sample after quality control</caption>
 <thead>
 <tr class="header">
-<th align="left">orig.ident</th>
+<th align="left">sample</th>
 <th align="right">n</th>
 <th align="right">q25</th>
 <th align="right">q50</th>
@@ -1761,13 +1663,13 @@ p3 &lt;- hiv_filt@meta.data %&gt;%
 figure &lt;- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob(&quot;Library size (number of counts) after quality control&quot;,
                                         size = 25,  face = &quot;bold&quot;))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-8-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
-Past versions of unnamed-chunk-9-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div id="fig-unnamed-chunk-8-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -1786,7 +1688,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">5830d4f</a>
+<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">5830d4f</a>
 </td>
 <td>
 Katharina782
@@ -1797,7 +1699,7 @@ Katharina782
 </tr>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">dde1097</a>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">dde1097</a>
 </td>
 <td>
 Katharina782
@@ -1811,15 +1713,19 @@ Katharina782
 </div>
 </div>
 <pre class="r"><code>
-hiv_filt@meta.data %&gt;% group_by(orig.ident) %&gt;%
+hiv_filt@meta.data %&gt;% 
+  rename(sample = orig.ident) %&gt;% 
+  group_by(sample) %&gt;%
   summarise(n = n(), q25 = quantile(nCount_RNA, .25),
             q50 = quantile(nCount_RNA, .5),
             q75 = quantile(nCount_RNA, .75),
-            mean = mean(nCount_RNA)) %&gt;% kable</code></pre>
+            mean = mean(nCount_RNA)) %&gt;%
+  kable(caption = &quot;Library size per sample after quality control&quot;)</code></pre>
 <table>
+<caption>Library size per sample after quality control</caption>
 <thead>
 <tr class="header">
-<th align="left">orig.ident</th>
+<th align="left">sample</th>
 <th align="right">n</th>
 <th align="right">q25</th>
 <th align="right">q50</th>
@@ -1909,13 +1815,13 @@ p3 &lt;- hiv_filt@meta.data %&gt;%
 figure &lt;- ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 annotate_figure(figure, top = text_grob(&quot;Percentage of Mitochondrial genes after quality control&quot;,
                                         size = 25,  face = &quot;bold&quot;))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-10-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
-Past versions of unnamed-chunk-10-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div id="fig-unnamed-chunk-9-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -1934,7 +1840,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-10-1.png" target="_blank">5830d4f</a>
+<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">5830d4f</a>
 </td>
 <td>
 Katharina782
@@ -1945,7 +1851,7 @@ Katharina782
 </tr>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-10-1.png" target="_blank">dde1097</a>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">dde1097</a>
 </td>
 <td>
 Katharina782
@@ -1959,15 +1865,19 @@ Katharina782
 </div>
 </div>
 <pre class="r"><code>
-hiv_filt@meta.data %&gt;% group_by(orig.ident) %&gt;%
+hiv_filt@meta.data %&gt;% 
+  rename(sample = orig.ident) %&gt;% 
+  group_by(sample) %&gt;%
   summarise(n = n(), q25 = quantile(percent_mt, .25),
             q50 = quantile(percent_mt, .5),
             q75 = quantile(percent_mt, .75),
-            mean = mean(percent_mt)) %&gt;% kable</code></pre>
+            mean = mean(percent_mt)) %&gt;% 
+    kable(caption = &quot;Percentage of mitochondrial genes per sample after quality control&quot;)</code></pre>
 <table>
+<caption>Percentage of mitochondrial genes per sample after quality control</caption>
 <thead>
 <tr class="header">
-<th align="left">orig.ident</th>
+<th align="left">sample</th>
 <th align="right">n</th>
 <th align="right">q25</th>
 <th align="right">q50</th>
@@ -2040,37 +1950,86 @@ hiv_filt@meta.data %&gt;% group_by(orig.ident) %&gt;%
 <h2 class="unnumbered"></h2>
 </details>
 <details>
-*
+**
 <summary>
 Code for Dimensionality reduction &amp; Clustering
 </summary>
+<p>**</p>
+<p>Use blood and CSF samples from two patients (HIV1_CSF/Bld, HIV2_CSF/Bld) for further analysis like in the paper.</p>
 <ul>
-<li></li>
+<li><strong>Subset Seurat object</strong></li>
 </ul>
-<p><strong>Subset Seurat object</strong></p>
-<p>Use 4 samples (2 blood, 2 csf) from two patients for further analysis like in the paper</p>
 <pre class="r"><code>hiv4 &lt;- subset(hiv_filt, orig.ident %in% c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV1_Bld&quot;, &quot;HIV2_Bld&quot;))</code></pre>
 <ul>
-<li>Normalize, Scale and find variable features</li>
+<li><strong>Normalize, Scale and find variable features</strong></li>
 </ul>
 <pre class="r"><code>hiv4 &lt;- NormalizeData(hiv4, verbose = FALSE)
 hiv4 &lt;- ScaleData(hiv4, verbose = FALSE)
 hiv4 &lt;- FindVariableFeatures(hiv4, verbose = FALSE)</code></pre>
-<p><strong>Dimensionality reduction</strong></p>
+<ul>
+<li><strong>Dimensionality reduction</strong></li>
+</ul>
 <p><strong>PCA</strong></p>
 <p>Compute PCA for highly variable genes: The first 10 dimensions seem to account for most of the variance (see elbow plot). The plots seem to indicate that the blood samples and csf samples are different.</p>
 <pre class="r"><code>hiv4 &lt;- RunPCA(hiv4, features = VariableFeatures(hiv4), verbose = FALSE)
 
 # elbow plot to determine which PCs account for most of the variance
 ElbowPlot(hiv4)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-13-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>
-#pca plots
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-12-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-12-1.png" target="_blank">5830d4f</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-16
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-12-1.png" target="_blank">dde1097</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>#pca plots
 pca_plots &lt;- comprehenr::to_list(for (i in 1:13)
   DimPlot(hiv4, reduction = &quot;pca&quot;, dims = i : (i+1)) +
     theme())
 do.call(gridExtra::grid.arrange, c(pca_plots, ncol=3, nrow = 5))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-13-2.png" width="1440" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-13-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p><strong>Clustering &amp; tSNE embedding</strong></p>
 <ul>
 <li>compute KNN-graph</li>
@@ -2084,6 +2043,7 @@ table(hiv4$seurat_clusters)
    0    1    2    3    4    5    6    7    8    9   10   11   12   13   14 
 1301 1119  948  868  742  687  677  415  308  301  132  106  105   72   56 </code></pre>
 <pre class="r"><code>hiv4 &lt;- RunTSNE(hiv4, dims = 1:10, verbose = FALSE)</code></pre>
+<hr />
 </details>
 </div>
 <div id="visualization-of-quality-in-tsne-plot" class="section level1">
@@ -2123,301 +2083,15 @@ ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)</code></pre>
 <pre><code>marker_genes &lt;- FindAllMarkers(hiv4, logfc.threshold = .01, min.pct = .01)</code></pre>
 <div id="top-marker-genes" class="section level2">
 <h2>Top marker genes</h2>
-<p>The table below lists the two most highly expressed genes for each clusters.</p>
+<p>The function <code>FindAllMarkers()</code> identifies differentially expressed genes between two groups of cells, in this case I compared one group of cells at a time against the rest of cells using a Wilcoxon Rank Sum test. The table below lists the two most highly differentially expressed genes for each clusters.</p>
 <pre class="r"><code># filter for significant marker genes
 #sign_marker_genes &lt;- marker_genes %&gt;% filter(p_val_adj &lt;= .1)
 
 sign_marker_genes &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/sign_marker_genes.tsv&quot;)
 
 #show the top 10 differentially expressed genes for each cluster
-sign_marker_genes %&gt;% group_by(cluster) %&gt;% top_n(n = 2, wt = avg_logFC ) %&gt;%
-  kable(caption = &quot;An example table caption.&quot;)#, digits = c(3, format.args = list(scientific = TRUE)) #= TRUE))</code></pre>
-<table>
-<caption>An example table caption.</caption>
-<thead>
-<tr class="header">
-<th align="right">p_val</th>
-<th align="right">avg_logFC</th>
-<th align="right">pct.1</th>
-<th align="right">pct.2</th>
-<th align="right">p_val_adj</th>
-<th align="right">cluster</th>
-<th align="left">gene</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0.9583899</td>
-<td align="right">0.545</td>
-<td align="right">0.144</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left">CCR7</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0.7910095</td>
-<td align="right">0.463</td>
-<td align="right">0.149</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left">LEF1</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">1.3378085</td>
-<td align="right">0.955</td>
-<td align="right">0.401</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="left">CCL5</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">1.3312006</td>
-<td align="right">0.627</td>
-<td align="right">0.117</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="left">GZMK</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0.9648694</td>
-<td align="right">0.818</td>
-<td align="right">0.141</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="left">LYZ</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0.9325701</td>
-<td align="right">0.039</td>
-<td align="right">0.002</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="left">CLC</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0.5249648</td>
-<td align="right">0.814</td>
-<td align="right">0.617</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="left">IL7R</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0.5271194</td>
-<td align="right">0.358</td>
-<td align="right">0.172</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="left">GZMK</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0.5918064</td>
-<td align="right">0.681</td>
-<td align="right">0.468</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="left">LTB</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0.4685953</td>
-<td align="right">0.831</td>
-<td align="right">0.618</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="left">IL7R</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">1.3880325</td>
-<td align="right">0.713</td>
-<td align="right">0.183</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="left">GNLY</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">1.1492939</td>
-<td align="right">0.677</td>
-<td align="right">0.177</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="left">NKG7</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0.7306204</td>
-<td align="right">0.875</td>
-<td align="right">0.457</td>
-<td align="right">0</td>
-<td align="right">6</td>
-<td align="left">LTB</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0.6855607</td>
-<td align="right">0.481</td>
-<td align="right">0.172</td>
-<td align="right">0</td>
-<td align="right">6</td>
-<td align="left">MAF</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">2.7480043</td>
-<td align="right">0.983</td>
-<td align="right">0.093</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="left">MS4A1</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">2.2013054</td>
-<td align="right">0.670</td>
-<td align="right">0.041</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="left">IGHM</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">3.4870174</td>
-<td align="right">1.000</td>
-<td align="right">0.191</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="left">LYZ</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">3.1688361</td>
-<td align="right">0.977</td>
-<td align="right">0.123</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="left">S100A9</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">2.1622754</td>
-<td align="right">0.804</td>
-<td align="right">0.063</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="left">FGFBP2</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">2.2885232</td>
-<td align="right">0.957</td>
-<td align="right">0.201</td>
-<td align="right">0</td>
-<td align="right">9</td>
-<td align="left">GNLY</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">2.3732654</td>
-<td align="right">0.955</td>
-<td align="right">0.098</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="left">FCGR3A</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">2.4715316</td>
-<td align="right">0.977</td>
-<td align="right">0.137</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="left">AIF1</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">3.0007641</td>
-<td align="right">0.860</td>
-<td align="right">0.004</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="left">C1QB</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">2.8593634</td>
-<td align="right">0.794</td>
-<td align="right">0.002</td>
-<td align="right">0</td>
-<td align="right">11</td>
-<td align="left">C1QC</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">2.8500142</td>
-<td align="right">1.000</td>
-<td align="right">0.235</td>
-<td align="right">0</td>
-<td align="right">12</td>
-<td align="left">HLA-DPA1</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">2.8524059</td>
-<td align="right">1.000</td>
-<td align="right">0.239</td>
-<td align="right">0</td>
-<td align="right">12</td>
-<td align="left">HLA-DRA</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">3.7525676</td>
-<td align="right">0.986</td>
-<td align="right">0.014</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="left">FCGR3B</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">3.6378226</td>
-<td align="right">0.653</td>
-<td align="right">0.053</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="left">IL8</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">4.1426093</td>
-<td align="right">0.911</td>
-<td align="right">0.039</td>
-<td align="right">0</td>
-<td align="right">14</td>
-<td align="left">IGJ</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">4.0013955</td>
-<td align="right">0.321</td>
-<td align="right">0.026</td>
-<td align="right">0</td>
-<td align="right">14</td>
-<td align="left">IGHG1</td>
-</tr>
-</tbody>
-</table>
+#sign_marker_genes %&gt;% group_by(cluster) %&gt;% top_n(n = 2, wt = avg_logFC ) #%&gt;%
+  #kable(caption = &quot;Top two differentially expressed genes for each cluster&quot;)#, digits = c(3, format.args = list(scientific = TRUE)) #= TRUE))</code></pre>
 </div>
 <div id="cell-type-annotation-with-canonical-marker-genes" class="section level2 tabset">
 <h2 class="tabset">Cell type annotation with canonical marker genes</h2>
@@ -2479,7 +2153,7 @@ Katharina782
 </div>
 <div id="nk-cells" class="section level3">
 <h3>NK cells</h3>
-<p>In cluster 5 and 9. GZMB is also foudn in cluster 14.</p>
+<p>NK cells are primarily found in cluster 5 and 9. GZMB is also found in cluster 14.</p>
 <pre class="r"><code>p1 &lt;- VlnPlot(hiv4, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;GZMB&quot;),
         pt.size = .01, ncol = 3)#, stack = TRUE)
 p2 &lt;- RidgePlot(hiv4, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;GZMB&quot;), sort = &quot;decreasing&quot;)
@@ -2487,8 +2161,9 @@ p2 &lt;- RidgePlot(hiv4, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;
 ggarrange(p1,p2, nrow = 2, ncol = 1)</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-19-1.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
-<div id="tcells" class="section level3">
-<h3>Tcells</h3>
+<div id="cd4-cd8-t-cells" class="section level3">
+<h3>CD4+ &amp; CD8+ T cells</h3>
+<p><strong>CD4+ T cells:</strong></p>
 <ul>
 <li>A general T cell marker CD3E is expressed in cluster 0,1,3,4,5,6.</li>
 <li>IL7R in clusters 0-6</li>
@@ -2498,8 +2173,11 @@ ggarrange(p1,p2, nrow = 2, ncol = 1)</code></pre>
 <li>LTB in 0-7</li>
 <li>CD2 in 1,3,4,5,9</li>
 </ul>
-<p>Tcells 1, 2, 3 are assigned arbitrarily, because they are not used for further analysis.</p>
-<p>CD8+ T cells * CD8A is expressed in decreasing order in 1,5,3 (could cluster 1 and 5 be CD8 T cells?)</p>
+<p>Tcells1/2/3 are assigned arbitrarily, because they are not used for further analysis.</p>
+<p><strong>CD8+ T cells:</strong></p>
+<ul>
+<li>CD8A is expressed in decreasing order in 1,5,3</li>
+</ul>
 <pre class="r"><code># general T cell marker for CD4+ and CD8+ Tcells
 p1 &lt;- VlnPlot(hiv4, features = c(&quot;CD8A&quot;,&quot;CD3E&quot;), pt.size = .01, ncol = 2)
 p2 &lt;- RidgePlot(hiv4, features = c(&quot;CD8A&quot;,&quot;CD3E&quot;), sort = &quot;decreasing&quot;)
@@ -2570,7 +2248,7 @@ Katharina782
 </div>
 <div id="plasma-cells" class="section level3">
 <h3>plasma cells</h3>
-<p>in cluster 14</p>
+<p>Cluster 14 seems to contain plasma cells.</p>
 <pre class="r"><code>p1 &lt;- VlnPlot(hiv4, features = c(&quot;IGJ&quot;), pt.size = .01, ncol = 2)
 p2 &lt;- RidgePlot(hiv4, features = c(&quot;IGJ&quot;), sort = &quot;decreasing&quot;)
 ggarrange(p1,p2, nrow = 1, ncol = 2)</code></pre>
@@ -2632,8 +2310,7 @@ Katharina782
 <li>macrophages</li>
 <li>dendritic cells</li>
 </ul>
-<p>-&gt; clusters 8, 10, 11, 12, 13 are myeloid cells</p>
-<p>The 3 genes (AXL, APOE, TREM2) associated with neurodegenrative-disaes-associated microglia are expressed in myeloid2, however, only at very low concentrations</p>
+<p>The clusters 8, 10, 11, 12, 13 are myeloid cells</p>
 <p>Myeloid1, 3, 4 are assigned arbitrarily, because they are not of interest.</p>
 <pre class="r"><code>p1 &lt;- VlnPlot(hiv4, features = c(&quot;LYZ&quot;, &quot;FCER1A&quot;, &quot;CD14&quot;, &quot;FCGR3A&quot;), # FCG3A is also expressed in cluster 9 (NK cells)
         pt.size = .01, ncol = 2)
@@ -2695,9 +2372,8 @@ Katharina782
 <div id="myeloid-5" class="section level3">
 <h3>Myeloid 5</h3>
 <ul>
-<li>(from paper)</li>
-<li>was characterized by: FCER1A, CD1C</li>
 <li>cluster 12</li>
+<li>was characterized by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> with the markers FCER1A, CD1C</li>
 </ul>
 <pre class="r"><code># Myeloid 5 in the paper
 p1 &lt;- VlnPlot(hiv4, features = c( &quot;FCER1A&quot;, &quot;CD1C&quot;), pt.size = .01, ncol = 2)
@@ -2756,9 +2432,9 @@ Katharina782
 <div id="myeloid-2" class="section level3">
 <h3>Myeloid 2</h3>
 <ul>
-<li>(from paper) -&gt; cluster 11</li>
-<li>AXL, APOE, TREM2 (these genes are enriched in neurodegenerative disease-associated microglia)</li>
-<li>“CTSB,” “APOC1,” “MSR1,” “C1QA-C” are expressed more highly in myeloid 2 compared to other myeloid clusters</li>
+<li>cluster 11</li>
+<li>AXL, APOE, TREM2 (these genes are enriched in neurodegenerative disease-associated microglia <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>)</li>
+<li>CTSB, APOC1, MSR1, C1QA-C are expressed more highly in myeloid 2 compared to other myeloid clusters</li>
 </ul>
 <pre class="r"><code># Myeloid 2
 p1 &lt;- VlnPlot(hiv4, features = c(&quot;AXL&quot;, &quot;APOE&quot;, &quot;TREM2&quot;), pt.size = .01, ncol = 3)
@@ -2822,13 +2498,17 @@ Katharina782
 </div>
 <div id="section-2" class="section level2 unnumbered">
 <h2 class="unnumbered"></h2>
-</div>
-<div id="annotate-cells" class="section level2">
-<h2>Annotate cells</h2>
 <ul>
 <li>Why is the mixed population primarily composed of cells from HIV1 patient blood sample?</li>
 <li>Why are T cells primarily from CSF samples and CD8 T cells primarily from blood?</li>
 </ul>
+</details>
+<details>
+**
+<summary>
+Table of annotation of cell types to clusters
+</summary>
+<p>**</p>
 <pre class="r"><code>Idents(hiv4) &lt;- &quot;seurat_clusters&quot;
 cell_types &lt;- c(&quot;Tcell2&quot;, &quot;CD8&quot;, &quot;mixed&quot;, &quot;CD81&quot;, &quot;Tcell3&quot;, &quot;NKcell1&quot;,
                 &quot;Tcell1&quot;, &quot;Bcell&quot;, &quot;Myeloid1&quot;, &quot;NKcell2&quot;, &quot;Myeloid3&quot;, &quot;Myeloid2&quot;
@@ -2920,6 +2600,7 @@ hiv4 &lt;- RenameIdents(hiv4, conditions)
 
 hiv4 &lt;- AddMetaData(hiv4, col.name = &quot;Condition&quot;, metadata = Idents(hiv4))
 </code></pre>
+</details>
 <p><strong>Overview of some of the most important marker genes:</strong></p>
 <pre class="r"><code>
 DotPlot(object = hiv4, features = c(&quot;MS4A1&quot;, # B cells
@@ -2956,6 +2637,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-26-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-26-1.png" target="_blank">b315085</a>
@@ -2995,27 +2687,26 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="visualize-the-cell-types-conditions-samples-and-ncountrna" class="section level1">
-<h1>Visualize the cell types, conditions, samples and nCountRNA:</h1>
+<div id="tsne-visualizations-of-cell-types-conditions-samples-and-sequencing-quality" class="section level1">
+<h1>tSNE visualizations of cell types, conditions, samples and sequencing quality</h1>
 <pre class="r"><code>p1 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, label = TRUE, 
               group.by = &quot;cell_type&quot;, pt.size = 0.1) +
-  NoLegend()
-p2 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, group.by =  &quot;Condition&quot;, pt.size = 0.1)
-p3 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, group.by = &quot;orig.ident&quot;, pt.size = 0.1)
+  NoLegend() +
+  labs(title = &quot;Cell types&quot;)
+p2 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, group.by =  &quot;Condition&quot;, pt.size = 0.1) +
+  labs(title = &quot;CSF or Blood origin&quot;)
+p3 &lt;- DimPlot(hiv4, reduction = &quot;tsne&quot;, group.by = &quot;orig.ident&quot;, pt.size = 0.1) +
+  labs(title = &quot;Sample origin - patient&quot;)
 p4 &lt;- FeaturePlot(hiv4, features= &quot;nCount_RNA&quot;, pt.size = 0.1) + 
-    scale_color_viridis_c()
+    scale_color_viridis_c() +
+  labs(title= &quot;number of counts&quot;)
 ggarrange(p1,p2,p3,p4, ncol = 2, nrow = 2)</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-27-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#p1 + p2 + p3 + p4</code></pre>
-<ul>
-<li>Blood and CSF were processed separately for scRNAseq using SeqWell.</li>
-<li>The 4 samples were sequenced separately.</li>
-<li>One SeqWell array per CSF or PBMC samples. <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span></li>
-</ul>
 </div>
 <div id="relative-contributions-of-csf-and-blood-cells-to-each-cluster" class="section level1">
 <h1>Relative contributions of CSF and blood cells to each cluster</h1>
-<p>In the histogram below Myeloid2 and Myeloid5 are predominantly composed of CSF cells.</p>
+<p>The histogram below shows that Myeloid2 and Myeloid5 are predominantly composed of CSF cells, while Myeloid1, Myeloid3 and Myeloid4 are predominantly composed of Blood cells. This reflects the findings of <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> very nicely.</p>
 <pre class="r"><code>
 custom_color &lt;- c(&quot;#C3D7A4&quot;, &quot;#4E84C4&quot;, &quot;#52854C&quot;, &quot;#293352&quot;)
 
@@ -3049,6 +2740,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-28-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-28-1.png" target="_blank">b315085</a>
@@ -3086,9 +2788,9 @@ Katharina782
 </table>
 </div>
 </div>
-<p><strong>Question</strong>: Myeloid-1, Myeloid-2 are mainly found in Blood cells, Myeloid-4 is only found in Blood cells from HIV1 patient. What does that mean?</p>
-<div id="how-big-are-myeloid2-and-myeloid5-clusters-and-where-do-cells-come-from" class="section level2">
-<h2>How big are Myeloid2 and Myeloid5 clusters and where do cells come from?</h2>
+<p><strong>Question</strong>: Myeloid1, Myeloid2 are mainly found in Blood cells, Myeloid4 is only found in Blood cells from HIV1 patient. What does that mean?</p>
+<div id="how-big-are-myeloid2-and-myeloid5-clusters-and-where-do-cells-come-from" class="section level3">
+<h3>How big are Myeloid2 and Myeloid5 clusters and where do cells come from?</h3>
 <p>Myeloid2 cells originate from the CSF samples of HIV infected patients, while a few cells (thirteen) classified as Myeloid5 cells originate from Blood samples.</p>
 <pre class="r"><code>hiv4@meta.data %&gt;% 
   filter(cell_type %in% c(&quot;Myeloid2&quot;, &quot;Myeloid5&quot;)) %&gt;% 
@@ -3153,271 +2855,14 @@ Idents(hiv4) &lt;- &quot;cell_type&quot;
 all.comp &lt;- purrr::map(c(1,3,4,5), function(n){
   markers &lt;- FindMarkers(hiv4,
               ident.1 = &quot;Myeloid2&quot;,
-              ident.2 = paste0(&quot;Myeloid&quot;, n), only.pos = TRUE)
+              ident.2 = paste0(&quot;Myeloid&quot;, n),
+              only.pos = TRUE, 
+              verbose = FALSE)
   markers &lt;- rownames_to_column(markers, var = &quot;gene&quot;)
   name &lt;- paste0(&quot;Comparison Myeloid 2 vs Myeloid &quot;, n)
   list(df = markers, name = name)
 })
 
-
-map(seq.int(1,4), function(n) {
-  all.comp[[n]]$df %&gt;% 
-  filter(p_val_adj &lt;= .2) %&gt;%
-  filter(gene %in% paper) %&gt;% head() %&gt;% kable()
-})</code></pre>
-<p>[[1]]</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">gene</th>
-<th align="right">p_val</th>
-<th align="right">avg_log2FC</th>
-<th align="right">pct.1</th>
-<th align="right">pct.2</th>
-<th align="right">p_val_adj</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">C1QB</td>
-<td align="right">0</td>
-<td align="right">4.322413</td>
-<td align="right">0.858</td>
-<td align="right">0.006</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">C1QC</td>
-<td align="right">0</td>
-<td align="right">4.154311</td>
-<td align="right">0.792</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">C1QA</td>
-<td align="right">0</td>
-<td align="right">3.320555</td>
-<td align="right">0.783</td>
-<td align="right">0.016</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">APOE</td>
-<td align="right">0</td>
-<td align="right">3.594296</td>
-<td align="right">0.726</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">LYVE1</td>
-<td align="right">0</td>
-<td align="right">3.889012</td>
-<td align="right">0.651</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">MSR1</td>
-<td align="right">0</td>
-<td align="right">2.784011</td>
-<td align="right">0.679</td>
-<td align="right">0.058</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<p>[[2]]</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">gene</th>
-<th align="right">p_val</th>
-<th align="right">avg_log2FC</th>
-<th align="right">pct.1</th>
-<th align="right">pct.2</th>
-<th align="right">p_val_adj</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">C1QB</td>
-<td align="right">0</td>
-<td align="right">3.830956</td>
-<td align="right">0.858</td>
-<td align="right">0.068</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">C1QC</td>
-<td align="right">0</td>
-<td align="right">4.022519</td>
-<td align="right">0.792</td>
-<td align="right">0.008</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">CD14</td>
-<td align="right">0</td>
-<td align="right">3.605687</td>
-<td align="right">0.830</td>
-<td align="right">0.053</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DPB1</td>
-<td align="right">0</td>
-<td align="right">2.540395</td>
-<td align="right">0.962</td>
-<td align="right">0.470</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">HLA-DRA</td>
-<td align="right">0</td>
-<td align="right">2.381817</td>
-<td align="right">0.981</td>
-<td align="right">0.720</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">APOE</td>
-<td align="right">0</td>
-<td align="right">3.594296</td>
-<td align="right">0.726</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<p>[[3]]</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">gene</th>
-<th align="right">p_val</th>
-<th align="right">avg_log2FC</th>
-<th align="right">pct.1</th>
-<th align="right">pct.2</th>
-<th align="right">p_val_adj</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">HLA-DRA</td>
-<td align="right">0</td>
-<td align="right">4.314835</td>
-<td align="right">0.981</td>
-<td align="right">0.069</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DPB1</td>
-<td align="right">0</td>
-<td align="right">3.571806</td>
-<td align="right">0.962</td>
-<td align="right">0.097</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">CD74</td>
-<td align="right">0</td>
-<td align="right">3.850998</td>
-<td align="right">0.972</td>
-<td align="right">0.236</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DPA1</td>
-<td align="right">0</td>
-<td align="right">3.969028</td>
-<td align="right">0.915</td>
-<td align="right">0.083</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">C1QB</td>
-<td align="right">0</td>
-<td align="right">4.376544</td>
-<td align="right">0.858</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DRB1</td>
-<td align="right">0</td>
-<td align="right">3.970074</td>
-<td align="right">0.887</td>
-<td align="right">0.069</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<p>[[4]]</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">gene</th>
-<th align="right">p_val</th>
-<th align="right">avg_log2FC</th>
-<th align="right">pct.1</th>
-<th align="right">pct.2</th>
-<th align="right">p_val_adj</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">C1QB</td>
-<td align="right">0</td>
-<td align="right">3.957066</td>
-<td align="right">0.858</td>
-<td align="right">0.048</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">C1QC</td>
-<td align="right">0</td>
-<td align="right">4.154311</td>
-<td align="right">0.792</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">CD14</td>
-<td align="right">0</td>
-<td align="right">3.253946</td>
-<td align="right">0.830</td>
-<td align="right">0.133</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">C1QA</td>
-<td align="right">0</td>
-<td align="right">3.136295</td>
-<td align="right">0.783</td>
-<td align="right">0.048</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">APOE</td>
-<td align="right">0</td>
-<td align="right">3.564194</td>
-<td align="right">0.726</td>
-<td align="right">0.010</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">LYVE1</td>
-<td align="right">0</td>
-<td align="right">3.889012</td>
-<td align="right">0.651</td>
-<td align="right">0.000</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code>
 my2_genes &lt;- map(seq.int(1,4), function(n) {
   name &lt;- all.comp[[]]$name
   my2_genes &lt;- all.comp[[n]]$df %&gt;% 
@@ -3425,10 +2870,9 @@ my2_genes &lt;- map(seq.int(1,4), function(n) {
   filter(gene %in% paper)
   my2_genes &lt;- my2_genes[,&quot;gene&quot;]
 })</code></pre>
-</div>
-<div id="show-expression-of-the-60-genes-identified-in-the-paper-as-myeloid-2-markers" class="section level2">
-<h2>Show expression of the 60 genes identified in the paper as Myeloid 2 markers</h2>
-<p>The genes show the highest expression in Myeloid2 and Myeloid5 cells.</p>
+<div id="expression-of-the-60-genes-identified-in-the-paper-as-myeloid-2-markers" class="section level3">
+<h3>Expression of the 60 genes identified in the paper as Myeloid 2 markers</h3>
+<p>The genes show the highest expression in Myeloid2 and for some genes like CD74 and genes of the HLA family are also highly expressed in Myeloid5 cells. However, there are a few genes, like FAU, TPT1, TMSB10 and MIR4426 which do not show expression specific to the Myeloid2 cluster. It is unclear why <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> chose these genes as signature genes.</p>
 <pre class="r"><code>DotPlot(hiv4, features = c(paper)) + 
   coord_flip() +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
@@ -3436,133 +2880,229 @@ Warning in FetchData(object = object, vars = features, cells = cells): The
 following requested variables were not found: SELENOP</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-31-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
-<div id="percentage-of-myeloid2-transcripts-per-cell-in-blood-csf-and-uninfected-samples" class="section level2">
-<h2>Percentage of Myeloid2 transcripts per Cell in Blood, CSF and Uninfected samples</h2>
-<pre class="r"><code>Idents(hiv_filt) = &quot;orig.ident&quot;
-table(Idents(hiv_filt))
+<div id="percentage-of-myeloid2-transcripts-per-cell-in-blood-csf-and-uninfected-samples" class="section level3">
+<h3>Percentage of Myeloid2 transcripts per Cell in Blood, CSF and Uninfected samples</h3>
+<p>First, it is important to mention, that after quality control the number of cells is significantly lower in the two uninfected CSF samples, 216 and 340 respectively, compared to all other samples which contain between 932 and 2520 cells. However, also the CSF sample from patient1 (HIV1_CSF) with 932 cells contains much fewer cells compared to all other samples.</p>
+<p>The results shown by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> are controversial, because when they compare the percentage of Myeloid2 transcripts between the three conditions, they pool 1770 cells for the uninfected condition, which is a lot more than we find here. Yet, they do not mention that they used different thresholds for quality control of the uninfected samples. Therefore, I was not able to reproduce their findings. Below, I will describe the percentage of Myeloid2 transcripts when comparing the conditions with the number of cells obtained when using the same thresholds for quality control as described in the paper.</p>
+<p>The interpretability of the comparison probably suffers from the fact that the number of cells in the uninfected conditions is so much smaller.</p>
+<pre class="r"><code>hiv7 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds&quot;)
 
-       HIV1_Bld        HIV1_CSF        HIV2_Bld        HIV2_CSF        HIV3_CSF 
-           2076             932            2520            2309            1384 
-Uninfected1_CSF Uninfected2_CSF 
-            216             340 
-bld &lt;- subset(hiv_filt, 
-              orig.ident %in% c(&quot;HIV1_Bld&quot;, 
-                                &quot;HIV2_Bld&quot;))@assays$RNA@counts
-csf &lt;- subset(hiv_filt, 
-              orig.ident %in% c(&quot;HIV1_CSF&quot;, 
-                                &quot;HIV2_CSF&quot;, 
-                                &quot;HIV3_CSF&quot;))@assays$RNA@counts
-healthy &lt;- subset(hiv_filt,
-                  orig.ident %in% c(&quot;Uninfected1_CSF&quot;,
-                                    &quot;Uninfected2_CSF&quot;))@assays$RNA@counts
+hiv7@meta.data %&gt;% group_by(orig.ident) %&gt;% 
+  summarise(number_of_cells = n()) %&gt;% 
+  kable(caption = &quot;Number of cells per sample&quot;)</code></pre>
+<table>
+<caption>Number of cells per sample</caption>
+<thead>
+<tr class="header">
+<th align="left">orig.ident</th>
+<th align="right">number_of_cells</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HIV1_Bld</td>
+<td align="right">2076</td>
+</tr>
+<tr class="even">
+<td align="left">HIV1_CSF</td>
+<td align="right">932</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV2_Bld</td>
+<td align="right">2520</td>
+</tr>
+<tr class="even">
+<td align="left">HIV2_CSF</td>
+<td align="right">2309</td>
+</tr>
+<tr class="odd">
+<td align="left">HIV3_CSF</td>
+<td align="right">1384</td>
+</tr>
+<tr class="even">
+<td align="left">Uninfected1_CSF</td>
+<td align="right">216</td>
+</tr>
+<tr class="odd">
+<td align="left">Uninfected2_CSF</td>
+<td align="right">340</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>hiv7 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds&quot;)
 
-matrix_list &lt;- list(&quot;blood&quot; = bld, &quot;csf&quot; = csf, &quot;uninfected&quot; = healthy)
+# create a list for the 3 different conditons
+subset.list &lt;- list(infected_blood = c(&quot;HIV1_Bld&quot;, &quot;HIV2_Bld&quot;), 
+                    infected_csf = c(&quot;HIV1_CSF&quot;, &quot;HIV2_CSF&quot;, &quot;HIV3_CSF&quot;),
+                    uninfected_csf = c(&quot;Uninfected1_CSF&quot;, &quot;Uninfected2_CSF&quot;))
 
-percentage_my2_transcripts &lt;- map(seq(1,3), function(n) {
-  count_m &lt;- matrix_list[[n]]
+# for each cell of each condition calculate a percentage of Myeloid2 transcripts
+# and combine to a dataframe
+percentage_my2_transcripts &lt;- map2_dfr(subset.list, names(subset.list), function(n, name) {
+  count_m &lt;- subset(hiv7, orig.ident %in% n)@assays$RNA@counts
   total_transcripts &lt;- colSums(count_m) # number of transcripts per cell
   my2_matrix &lt;- count_m[rownames(count_m) %in% paper, ] # get only myeloid2 genes 
   my2_transcripts &lt;- colSums(my2_matrix) # sum of myeloid2 transcripts
-  percentage_my2_transcripts &lt;- my2_transcripts/total_transcripts # fraction
-})
-
-
-ggplot() +
-  geom_boxplot(aes(x = &quot;HIV+ CSF&quot;, y= percentage_my2_transcripts[[2]], fill = &quot;CSF&quot;)) +
-  geom_boxplot(aes(x = &quot;Uninfected_CSF&quot;, y = percentage_my2_transcripts[[3]], fill = &quot;Uninfeced_CSF&quot;)) +
-  geom_boxplot(aes(x = &quot;HIV+ Blood&quot;,y = percentage_my2_transcripts[[1]], fill = &quot;Blood&quot;)) +
+  tibble(percentage =  my2_transcripts/total_transcripts, condition = name)
+})</code></pre>
+<p><strong>Is there a significant difference in percentage of Myeloid2 transcripts between the three conditions?</strong></p>
+<pre class="r"><code>percentage_my2_transcripts %&gt;% 
+  group_by(condition) %&gt;% 
+  summarise(n = n(), q25 = quantile(percentage, .25),
+            q50 = quantile(percentage, .5), 
+            q75 = quantile(percentage, .75), 
+            mean = mean(percentage),
+            median = median(percentage)) %&gt;% 
+  kable(digits = 4, 
+        caption = &quot;Summary statistics of percentage of Myeloid2 transcripts for different conditions&quot;)</code></pre>
+<table>
+<caption>Summary statistics of percentage of Myeloid2 transcripts for different conditions</caption>
+<thead>
+<tr class="header">
+<th align="left">condition</th>
+<th align="right">n</th>
+<th align="right">q25</th>
+<th align="right">q50</th>
+<th align="right">q75</th>
+<th align="right">mean</th>
+<th align="right">median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">infected_blood</td>
+<td align="right">4596</td>
+<td align="right">0.0155</td>
+<td align="right">0.0189</td>
+<td align="right">0.0224</td>
+<td align="right">0.0192</td>
+<td align="right">0.0189</td>
+</tr>
+<tr class="even">
+<td align="left">infected_csf</td>
+<td align="right">4625</td>
+<td align="right">0.0151</td>
+<td align="right">0.0183</td>
+<td align="right">0.0218</td>
+<td align="right">0.0203</td>
+<td align="right">0.0183</td>
+</tr>
+<tr class="odd">
+<td align="left">uninfected_csf</td>
+<td align="right">556</td>
+<td align="right">0.0120</td>
+<td align="right">0.0151</td>
+<td align="right">0.0287</td>
+<td align="right">0.0216</td>
+<td align="right">0.0151</td>
+</tr>
+</tbody>
+</table>
+<p>To see if there is a difference between the three conditions a Kruskal-Wallis-Test was performed. We get a p-value of 4.88 * 10^-9. Therefore, we will perform a pairwise Wilcox test to see which condtions are different from each other.</p>
+<pre class="r"><code>percentage_my2_transcripts %&gt;% 
+  rstatix::kruskal_test(percentage ~ condition) %&gt;%
+  kable(caption = &quot;Kruskal Wallis Test&quot;)</code></pre>
+<table>
+<caption>Kruskal Wallis Test</caption>
+<thead>
+<tr class="header">
+<th align="left">.y.</th>
+<th align="right">n</th>
+<th align="right">statistic</th>
+<th align="right">df</th>
+<th align="right">p</th>
+<th align="left">method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">percentage</td>
+<td align="right">9777</td>
+<td align="right">38.27649</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="left">Kruskal-Wallis</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pairwise Wilcox test:</strong></p>
+<p>In the table and boxplot below we can see that all three conditions are significantly different from each other. As mentioned above, the sample size is much smaller for the uninfected condition. P-values are listed in the table below.</p>
+<p>Only the p-value for the comparison between infected CSF vs uninfected CSF is the same as in the paper, where they state that the Myeloid2 transcripts were found at lower levels in the uninfected samples compared to the infected samples. Otherwise, the results contradict the results found by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>. Contradictory to what is claimed in the paper, it is not evident that both infected and uninfected CSF samples have higher rates of Myeloid2 transcripts, rather the Blood samples seem to have the highest rate of Myeloid2 transcripts.</p>
+<p>The comparison drawn is questionable in general, because what the boxplots below show is that there is some level of Myeloid2 transcript expression in all conditions. However, there are more outliers with very high percentage of Myeloid2 transcripts in both CSF samples. This might be a hint that in the CSF samples there is a outlier population representing the Myeloid2 cluster, which cannot be seen in the blood sample. Since the median is rather robust to outliers, even if in CSF samples there are some cells which have much higher frequencies of transcripts, it might be that the median is still lower than in blood samples.</p>
+<p>Therefore, comparing the overall percentage of Myeloid2 transcripts might not provide any insights on the number of Myeloid2 cells in a particular sample.</p>
+<pre class="r"><code>p1 &lt;- percentage_my2_transcripts %&gt;% ggplot() +
+  geom_boxplot(aes(x = condition, y = percentage, fill = condition)) +
   xlab(&quot;Sample origin&quot;) +
-  ylab(&quot;Frequency of myeloid2 transcripts per cell&quot;) </code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="summary-statistics" class="section level3">
-<h3>Summary statistics</h3>
-<div id="csf-from-hiv-1-infected-patients" class="section level4">
-<h4>CSF from HIV-1 infected patients</h4>
-<pre class="r"><code>#CSF
-summary(percentage_my2_transcripts[[2]])#%&gt;% kable()</code></pre>
-<pre><code>Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </code></pre>
-<p>0.003974 0.015144 0.018277 0.020325 0.021825 0.135734</p>
-</div>
-<div id="blood-from-hiv-1-infected-patients" class="section level4">
-<h4>Blood from HIV-1 infected patients</h4>
-<pre class="r"><code>#Blood
-summary(percentage_my2_transcripts[[1]]) </code></pre>
-<pre><code> Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </code></pre>
-<p>0.0009302 0.0154600 0.0189051 0.0191886 0.0223501 0.0556745</p>
-</div>
-<div id="csf-from-uninfected-patients" class="section level4">
-<h4>CSF from uninfected patients</h4>
-<pre class="r"><code># Uninfected
-summary(percentage_my2_transcripts[[3]])</code></pre>
-<pre><code>Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </code></pre>
-<p>0.005771 0.012050 0.015132 0.021576 0.028695 0.096354</p>
-</div>
-</div>
-<div id="what-are-the-differences-in-myeloid2-transcripts-between-samples" class="section level3">
-<h3>What are the differences in Myeloid2 transcripts between samples?</h3>
-<ul>
-<li><strong>HIV+ Blood</strong> vs. <strong>HIV+ CSF</strong>: p-value = 2.95 * 10^-4</li>
-<li><strong>HIV+ CSF</strong> vs. <strong>HIV- CSF</strong>: p-value = 2.87 * 10^-7 (same result as in the paper)</li>
-<li><strong>HIV+ Blood</strong> vs. <strong>HIV- CSF</strong>: p-value = 7.98 * 10^-7</li>
-</ul>
-<p>In the paper they found the largest difference between infected blood and csf samples, but I find larger differences between HIV+ CSF/Blood and HIV- CSF samples.</p>
-<ul>
-<li>My results suggest that Myeloid2 transcripts are detected at lower levels in HIV- CSF samples than in HIV+ CSF samples.</li>
-<li>Myeloid2 transcripts are found at lower levels in HIV- CSF samples than in HIV+ Blood samples.</li>
-<li>Myeloid2 transcripts are detected at similar levels in HIV+ CSF samples and in HIV+ Blood samples, however there are far more outliers with very high frequency of Myeloid2 transcripts in HIV+ CSF samples compared to HIV+ Blood.</li>
-</ul>
-<p>How much sense does this interpretation make? The median is rather robust to outliers, so even if in CSF there are some cells which have much higher frequencies of transcripts, it might be that the median is still lower than in blood.</p>
-<p>Wilcoxon rank sum test of the null hypothesis that the distribution of x and y differs by a location shift of mu and the alternative is that they differ by some other location shif. (If I set mu = 0, the null hypothesis is that the distributiosn differ by a location shift of 0).</p>
-<div id="wilcoxon-test-between-hiv-blood-an-hiv-csf" class="section level5">
-<h5>Wilcoxon test between HIV+ Blood an HIV+ CSF</h5>
-<pre class="r"><code>
-# bld vs csf
-wilcox.test(percentage_my2_transcripts[[1]], # blood samples
-            percentage_my2_transcripts[[2]], # csf samples
-            alternative = &quot;two.sided&quot;, 
-            paired = FALSE, 
-            conf.int = TRUE)# %&gt;% kable()</code></pre>
-<pre><code>Wilcoxon rank sum test with continuity correction</code></pre>
-<p>data: percentage_my2_transcripts[[1]] and percentage_my2_transcripts[[2]] W = 11090858, p-value = 0.0002952 alternative hypothesis: true location shift is not equal to 0 95 percent confidence interval: 0.0001932858 0.0006133828 sample estimates: difference in location 0.0004188108</p>
-</div>
-<div id="wilcoxon-test-between-hiv-csf-and-hiv--csf" class="section level5">
-<h5>Wilcoxon test between HIV+ CSF and HIV- CSF</h5>
-<pre class="r"><code># csf vs uninfected
-wilcox.test(percentage_my2_transcripts[[2]], # csf samples
-            percentage_my2_transcripts[[3]],
-            alternative = &quot;two.sided&quot;,
-            conf.int = TRUE) # uninfected samples
+  ylab(&quot;Frequency of myeloid2 transcripts per cell&quot;) +
+  labs(title = &quot;All cells&quot;) +
+  stat_pvalue_manual(percentage_my2_transcripts %&gt;% 
+    rstatix::pairwise_wilcox_test(percentage ~ condition) %&gt;% 
+      rstatix::add_xy_position()) +
+  NoLegend()
 
-    Wilcoxon rank sum test with continuity correction
+p2 &lt;- percentage_my2_transcripts %&gt;% ggplot() +
+  geom_boxplot(aes(x = condition, y = percentage, fill = condition), 
+               outlier.shape = NA) +
+  xlab(&quot;Sample origin&quot;) +
+  ylab(&quot;Frequency of myeloid2 transcripts per cell&quot;) +
+  labs(title = &quot;Remove outliers to see difference&quot;) +
+  NoLegend()
 
-data:  percentage_my2_transcripts[[2]] and percentage_my2_transcripts[[3]]
-W = 1456760, p-value = 2.87e-07
-alternative hypothesis: true location shift is not equal to 0
-95 percent confidence interval:
- 0.001120779 0.002379251
-sample estimates:
-difference in location 
-           0.001757612 </code></pre>
-</div>
-<div id="wilcoxon-test-between-hiv-blood-and-hiv--csf" class="section level5">
-<h5>Wilcoxon test between HIV+ Blood and HIV- CSF</h5>
-<pre class="r"><code># blood vs uninfected
-wilcox.test(percentage_my2_transcripts[[1]], # blood samples
-            percentage_my2_transcripts[[3]], # uninfected samples
-            alternative = &quot;two.sided&quot;,
-            conf.int = TRUE)
-
-    Wilcoxon rank sum test with continuity correction
-
-data:  percentage_my2_transcripts[[1]] and percentage_my2_transcripts[[3]]
-W = 1441190, p-value = 7.984e-07
-alternative hypothesis: true location shift is not equal to 0
-95 percent confidence interval:
- 0.001101844 0.002441881
-sample estimates:
-difference in location 
-           0.001778961 </code></pre>
-</div>
+ggarrange(p1, p2, ncol = 2, nrow = 1)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-36-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>percentage_my2_transcripts %&gt;% 
+  rstatix::wilcox_test(percentage ~ condition) %&gt;% kable(caption = &quot;Pairwise Wilcox Test&quot;)</code></pre>
+<table>
+<caption>Pairwise Wilcox Test</caption>
+<thead>
+<tr class="header">
+<th align="left">.y.</th>
+<th align="left">group1</th>
+<th align="left">group2</th>
+<th align="right">n1</th>
+<th align="right">n2</th>
+<th align="right">statistic</th>
+<th align="right">p</th>
+<th align="right">p.adj</th>
+<th align="left">p.adj.signif</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">percentage</td>
+<td align="left">infected_blood</td>
+<td align="left">infected_csf</td>
+<td align="right">4596</td>
+<td align="right">4625</td>
+<td align="right">11090858</td>
+<td align="right">2.95e-04</td>
+<td align="right">2.95e-04</td>
+<td align="left">***</td>
+</tr>
+<tr class="even">
+<td align="left">percentage</td>
+<td align="left">infected_blood</td>
+<td align="left">uninfected_csf</td>
+<td align="right">4596</td>
+<td align="right">556</td>
+<td align="right">1441190</td>
+<td align="right">8.00e-07</td>
+<td align="right">1.60e-06</td>
+<td align="left">****</td>
+</tr>
+<tr class="odd">
+<td align="left">percentage</td>
+<td align="left">infected_csf</td>
+<td align="left">uninfected_csf</td>
+<td align="right">4625</td>
+<td align="right">556</td>
+<td align="right">1456760</td>
+<td align="right">3.00e-07</td>
+<td align="right">9.00e-07</td>
+<td align="left">****</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -3573,14 +3113,13 @@ difference in location
 <li>1 CSF smaple from HIV-1 infected patient</li>
 <li>2 CSF samples from uninfected patients</li>
 </ul>
-<p>For reference see: <a href="https://satijalab.org/seurat/articles/integration_mapping.html" class="uri">https://satijalab.org/seurat/articles/integration_mapping.html</a> <a href="https://satijalab.org/seurat/articles/multimodal_reference_mapping.html" class="uri">https://satijalab.org/seurat/articles/multimodal_reference_mapping.html</a></p>
+<p>For reference see: <a href="https://satijalab.org/seurat/articles/integration_mapping.html" class="uri">https://satijalab.org/seurat/articles/integration_mapping.html</a></p>
 <pre class="r"><code># Seurat objects
 hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)
-
-hiv7 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds&quot;)</code></pre>
+#hiv4 &lt;- readRDS(&quot;seurat_objects/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)</code></pre>
 <div id="find-integration-anchors" class="section level2">
 <h2>Find Integration anchors</h2>
-<p>We perform Normalization separately for each dataset and try to find Variable Features.</p>
+<p>We perform Normalization separately for each dataset and try to find variable Features.</p>
 <pre class="r"><code>#hiv_list &lt;- SplitObject(hiv7, split.by = &quot;orig.ident&quot;)
 
 #for (i in 1:length(hiv_list)) {
@@ -3592,8 +3131,10 @@ hiv7 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduc
 #}
 
 #saveRDS(hiv_list, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list&quot;)
-hiv_list &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list&quot;)
+#hiv_list &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv_list&quot;)
 #reference.list &lt;- SplitObject(hiv4, split.by = &quot;orig.ident&quot;)</code></pre>
+<pre class="r"><code>hiv_filt &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_filtered_seurat_object.rds&quot;)
+hiv_list &lt;- SplitObject(hiv_filt, split.by = &quot;orig.ident&quot;)</code></pre>
 </div>
 <div id="cell-type-classification-using-an-integrated-reference" class="section level2">
 <h2>Cell type classification using an integrated reference</h2>
@@ -3604,18 +3145,14 @@ hiv_list &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Repr
 <li>we classify the query cells based on the reference data (a vector of reference cell type labels)</li>
 </ul>
 <p>We will use the four samples we have analyzed above as a reference. The query dataset will be the HIV+ CSF3 sample and the two uninfected sample:</p>
-<p>The label transfer identifies hardly any B cells and Myeloid 1, 3, 4 are also not/hardly present in the CSF samples which is expected, since they originated exclusively from the Blood samples.</p>
-<pre class="r"><code># get Seurat object for CSF3 sample
-#hiv3csf &lt;- hiv_list[[&quot;HIV3_CSF&quot;]]
-# merge the 3 query Seurat objects
+<p>Myeloid 1, 3, 4 are not/hardly present in the CSF samples which is expected, since they originated exclusively from the Blood samples in the reference dataset.</p>
+<pre class="r"><code># merge the 3 query Seurat objects
 query &lt;- merge(hiv_list[[&quot;Uninfected1_CSF&quot;]], 
                c(hiv_list[[&quot;Uninfected2_CSF&quot;]], hiv_list[[&quot;HIV3_CSF&quot;]]))
-Warning in CheckDuplicateCellNames(object.list = objects): Some cell names are
-duplicated across objects provided. Renaming to enforce unique cell names.
 
 # find transfer anchors between the 3 query samples and the 4 samples we have 
 # analyzed previously
-hiv4.transfer_anchors &lt;- FindTransferAnchors(reference = hiv4,
+hiv4_transfer_anchors &lt;- FindTransferAnchors(reference = hiv4,
                                              query = query, 
                                              dims = 1:15,
                                              normalization.method = &quot;LogNormalize&quot;,
@@ -3623,13 +3160,14 @@ hiv4.transfer_anchors &lt;- FindTransferAnchors(reference = hiv4,
                                              reduction = &quot;pcaproject&quot;,
                                              verbose = FALSE)
 
-predictions &lt;- TransferData(anchorset = hiv4.transfer_anchors, 
+predictions &lt;- TransferData(anchorset = hiv4_transfer_anchors, 
                             refdata = hiv4$cell_type, 
                             dims = 1:15,
                             verbose = FALSE)
 #predictions %&gt;% head %&gt;% kable()
 
 query &lt;- AddMetaData(query, metadata = predictions)
+#saveRDS(query, &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/query_seurat_object_label_transfer&quot;)
 table(query$predicted.id) %&gt;% kable()</code></pre>
 <table>
 <thead>
@@ -3641,80 +3179,85 @@ table(query$predicted.id) %&gt;% kable()</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Bcell</td>
-<td align="right">501</td>
+<td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">CD8</td>
-<td align="right">180</td>
+<td align="right">137</td>
 </tr>
 <tr class="odd">
 <td align="left">CD81</td>
-<td align="right">141</td>
+<td align="right">271</td>
 </tr>
 <tr class="even">
 <td align="left">mixed</td>
-<td align="right">144</td>
+<td align="right">57</td>
 </tr>
 <tr class="odd">
 <td align="left">Myeloid1</td>
-<td align="right">381</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="left">Myeloid3</td>
-<td align="right">237</td>
+<td align="left">Myeloid2</td>
+<td align="right">132</td>
 </tr>
 <tr class="odd">
 <td align="left">Myeloid4</td>
-<td align="right">207</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="left">Myeloid5</td>
-<td align="right">12</td>
+<td align="right">43</td>
 </tr>
 <tr class="odd">
 <td align="left">NKcell1</td>
-<td align="right">738</td>
+<td align="right">55</td>
 </tr>
 <tr class="even">
-<td align="left">NKcell2</td>
-<td align="right">450</td>
-</tr>
-<tr class="odd">
 <td align="left">plasma cell</td>
-<td align="right">72</td>
-</tr>
-<tr class="even">
-<td align="left">Tcell1</td>
-<td align="right">258</td>
+<td align="right">12</td>
 </tr>
 <tr class="odd">
-<td align="left">Tcell2</td>
-<td align="right">2541</td>
+<td align="left">Tcell1</td>
+<td align="right">153</td>
 </tr>
 <tr class="even">
+<td align="left">Tcell2</td>
+<td align="right">732</td>
+</tr>
+<tr class="odd">
 <td align="left">Tcell4</td>
-<td align="right">366</td>
+<td align="right">341</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="check-the-gene-expression-levels-in-the-predicted-cell-types" class="section level2">
-<h2>Check the gene expression levels in the predicted cell types</h2>
+<div id="check-the-gene-expression-levels-in-the-predicted-cell-types" class="section level3 tabset">
+<h3 class="tabset">Check the gene expression levels in the predicted cell types</h3>
 <p>The Label Transfer seems to work nicely, judging by the correct expression of common cell type markers for the individual cell types.</p>
 <div id="myeloid2-marker-genes" class="section level4">
 <h4>Myeloid2 marker genes</h4>
-<p>```#{r, fig.width=12, fig.height = } # ceck the Myeloid2 markers p1 &lt;- VlnPlot(query, features = c(“AXL,” “APOE,” “TREM2”), group.by = “predicted.id,” pt.size = .01, ncol = 3) p2 &lt;- VlnPlot(query, features = c(“CTSB,” “MSR1,” “C1QA”), group.by = “predicted.id,” pt.size = .01, ncol = 4)</p>
-<p>figure &lt;- ggarrange(p1, p2, ncol = 1, nrow = 2) annotate_figure(figure, top = text_grob(“Myeloid2 marker genes”))</p>
-<pre><code>
-#### Myeloid5 marker genes
+<pre class="r"><code># ceck the Myeloid2 markers
+p1 &lt;- VlnPlot(query,
+              features =  c(&quot;AXL&quot;, &quot;APOE&quot;, &quot;TREM2&quot;), 
+              group.by = &quot;predicted.id&quot;, 
+              pt.size = .01, ncol = 3)
+p2 &lt;- VlnPlot(query, 
+              features =  c(&quot;CTSB&quot;, &quot;MSR1&quot;, &quot;C1QA&quot;), 
+              group.by = &quot;predicted.id&quot;,
+              pt.size = .01, ncol = 4)
 
-```r
-
+figure &lt;- ggarrange(p1, p2, ncol = 1, nrow = 2)
+annotate_figure(figure, top = text_grob(&quot;Myeloid2 marker genes&quot;))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-42-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="myeloid5-marker-genes" class="section level4">
+<h4>Myeloid5 marker genes</h4>
+<pre class="r"><code>
 # Myeloid 5 markers
 p1 &lt;- VlnPlot(query, c(&quot;FCER1A&quot;, &quot;CD1C&quot;),
         group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2) 
 p1</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-42-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-43-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="plasma-cell-marker-genes" class="section level4">
 <h4>Plasma cell marker genes</h4>
@@ -3722,14 +3265,6 @@ p1</code></pre>
 p2 &lt;- VlnPlot(query, features = c(&quot;IGJ&quot;), 
         group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2) 
 p2</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-43-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="cd8-t-cell-marker-genes" class="section level4">
-<h4>CD8 T cell marker genes</h4>
-<pre class="r"><code># CD8 T Cells
-p3 &lt;- VlnPlot(query, features = c(&quot;CD8A&quot;),
-        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2) + NoLegend()
-p3</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-44-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-44-1">
@@ -3753,6 +3288,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-44-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-44-1.png" target="_blank">b315085</a>
@@ -3791,11 +3337,12 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="t-cell-marker-genes" class="section level4">
-<h4>T cell marker genes</h4>
-<pre class="r"><code># T cells 
-VlnPlot(query, features = c(&quot;IL7R&quot;, &quot;TRAC&quot;),
-        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2)</code></pre>
+<div id="cd8-t-cell-marker-genes" class="section level4">
+<h4>CD8 T cell marker genes</h4>
+<pre class="r"><code># CD8 T Cells
+p3 &lt;- VlnPlot(query, features = c(&quot;CD8A&quot;),
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2) + NoLegend()
+p3</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-45-1">
@@ -3819,6 +3366,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-45-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-45-1.png" target="_blank">b315085</a>
@@ -3857,12 +3415,12 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="nk-cell-marker-genes" class="section level4">
-<h4>NK cell marker genes</h4>
-<pre class="r"><code># NK cells
-VlnPlot(query, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;GZMB&quot;), 
-        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 3)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-46-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<div id="t-cell-marker-genes" class="section level4">
+<h4>T cell marker genes</h4>
+<pre class="r"><code># T cells 
+VlnPlot(query, features = c(&quot;IL7R&quot;, &quot;TRAC&quot;),
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 2)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-46-1">
 Past versions of unnamed-chunk-46-1.png
@@ -3885,6 +3443,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-46-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-46-1.png" target="_blank">b315085</a>
@@ -3923,10 +3492,10 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="b-cell-marker-genes" class="section level4">
-<h4>B cell marker genes</h4>
-<pre class="r"><code># B cells
-VlnPlot(query, features = c(&quot;MS4A1&quot;, &quot;CD79A&quot;, &quot;TCL1A&quot;), 
+<div id="nk-cell-marker-genes" class="section level4">
+<h4>NK cell marker genes</h4>
+<pre class="r"><code># NK cells
+VlnPlot(query, features = c(&quot;NKG7&quot;, &quot;GNLY&quot;, &quot;GZMB&quot;), 
         group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 3)</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-47-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
@@ -3951,6 +3520,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-47-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-47-1.png" target="_blank">b315085</a>
@@ -3989,6 +3569,88 @@ Katharina782
 </div>
 </div>
 </div>
+<div id="b-cell-marker-genes" class="section level4">
+<h4>B cell marker genes</h4>
+<pre class="r"><code># B cells
+VlnPlot(query, features = c(&quot;MS4A1&quot;, &quot;CD79A&quot;, &quot;TCL1A&quot;), 
+        group.by = &quot;predicted.id&quot;, pt.size = .01, ncol = 3)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-48-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-48-1">
+Past versions of unnamed-chunk-48-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-48-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-48-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-48-1.png" target="_blank">b315085</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-48-1.png" target="_blank">5830d4f</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-16
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-48-1.png" target="_blank">dde1097</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr />
+</div>
+</div>
+<div id="section-3" class="section level3 unnumbered">
+<h3 class="unnumbered"></h3>
+</div>
 </div>
 <div id="umap-projection-of-additional-samples" class="section level2">
 <h2>UMAP projection of additional samples</h2>
@@ -4004,7 +3666,7 @@ Warning: The default method for RunUMAP has changed from calling Python UMAP via
 To use Python UMAP via reticulate, set umap.method to &#39;umap-learn&#39; and metric to &#39;correlation&#39;
 This message will be shown once per session
 
-hiv3csf &lt;- MapQuery(anchorset = hiv4.transfer_anchors,
+hiv3csf &lt;- MapQuery(anchorset = hiv4_transfer_anchors,
                     reference = hiv4_test, query = query,
                     refdata = list(celltype = &quot;cell_type&quot;),
                     reference.reduction = &quot;pca&quot;,
@@ -4028,13 +3690,13 @@ Warning: No assay specified, setting assay as RNA by default.
 
 
 
-query &lt;- TransferData(anchorset = hiv4.transfer_anchors,
+query &lt;- TransferData(anchorset = hiv4_transfer_anchors,
                                reference = hiv4_test,
                                query = query,
                                refdata = list(celltype = &quot;cell_type&quot;), 
                       verbose = FALSE)
 
-query &lt;- IntegrateEmbeddings(anchorset = hiv4.transfer_anchors,
+query &lt;- IntegrateEmbeddings(anchorset = hiv4_transfer_anchors,
                                       reference = hiv4_test,
                                       query = query,
                                new.reduction.name = &quot;ref.pca&quot;,
@@ -4079,66 +3741,7 @@ p2 &lt;- DimPlot(query,
    ggtitle(&quot;Transferred Labels&quot;)
 
 p1 + p2</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-49-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-49-1">
-Past versions of unnamed-chunk-49-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-49-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-49-1.png" target="_blank">b315085</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-49-1.png" target="_blank">5830d4f</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-49-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-50-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#save this new Seurat obejct including the SCTransformatin
 
 #saveRDS(hiv_label_transfer, file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds&quot;)</code></pre>
@@ -4169,88 +3772,27 @@ p1 &lt;- ggplot(hiv4@meta.data) +
   labs(title = &quot;Frequecy of cell types from each sample after label transfer&quot;)
 
 ggarrange(p1, p2, ncol = 2, nrow = 1)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-51-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-51-1">
-Past versions of unnamed-chunk-51-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-51-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-51-1.png" target="_blank">b315085</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/5830d4f67d499d645db8566d2cbfe280298bfdae/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-51-1.png" target="_blank">5830d4f</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/dde10972b37ffd997474921968223514c8cb1b1f/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-51-1.png" target="_blank">dde1097</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-52-1.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="independent-annotation-of-myeloid2-and-myeloid5-clusters-as-microglia-like-cells" class="section level1">
 <h1>Independent annotation of Myeloid2 and Myeloid5 clusters as Microglia-like cells</h1>
-<p>Can we identify the microglia-like myeloid2/myeloid5 cluster they found in the paper by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> when using independent genes for annotations?</p>
-<p>Here, I will first use the 881 Microglia marker genes and then also try the list of TFs provided by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
+<p>In the following part we tried to confirm that the Myeloid2 (and maybe the Myeloid5) cluster are microglia-like cells. <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> used 60 genes to characterize Myeloid2 cells, some of which are found in disease-associated microglia. Searching the literature for additional microglia signatures we might be able to independently confirm this microglia-like signature.</p>
+<p>Below you can click on the tabs to see the results of using different gene signatures to confirm the microglia-like signature of Myeloid2 and Myeloid5. The function used to calculate the gene signature score in different cells is <code>AddModuleScore()</code>.</p>
 <div id="function-add-module-score" class="section level4">
 <h4>Function Add Module Score</h4>
-<p>This Function Caluclate the average expression levels of each cluster on single cell level, subtracted by the aggregated expression of control feature sets. The analyzed features are binned based on averaged expression and the control features are randomly selected from each bin.</p>
+<p>This Function calculates the average expression levels of each cluster on single cell level, subtracted by the aggregated expression of control feature sets. The analyzed features are binned based on averaged expression and the control features are randomly selected from each bin.</p>
+<pre class="r"><code># read in Seurat object
+hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)</code></pre>
 </div>
-<div id="read-in-seurat-object" class="section level4">
-<h4>read in Seurat object</h4>
-<pre class="r"><code>hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)</code></pre>
-</div>
-<div id="gene-signature-defined-by-farhadian" class="section level2">
-<h2>Gene signature defined by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span></h2>
-<p>Do we find the 60 signature genes from <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> for myeloid2 among the signature defined by @[Gossselin]?</p>
-<div id="read-in-list-of-microglia-signature-genes-found-in-the-gosselin-paper" class="section level5">
-<h5>Read in list of microglia signature genes found in the Gosselin paper</h5>
-<p>which are also found in the HIV1 and HIV2 samples:</p>
-<pre class="r"><code>microglia_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples&quot;)</code></pre>
-<p>28 of the 60 genes used as microglia signature in the <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> Paper are also found in the 881 microglia signature genes defined by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
+<div id="different-gene-signatures-found-in-the-literature" class="section level2 tabset">
+<h2 class="tabset">Different gene signatures found in the literature</h2>
+<div id="farhadian-et-al." class="section level3">
+<h3>Farhadian et al.</h3>
+<p>60 genes were used by Farhadian et al. to distinguish the Myeloid2 cell type. 28 of the 60 genes used as microglia signature in the <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> Paper are also found in the 881 microglia signature genes defined by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
+<pre class="r"><code>## Read in list of microglia signature genes found in the Gosselin paper
+## which are also found in the HIV1 and HIV2 samples:
+microglia_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples&quot;)</code></pre>
 <pre class="r"><code># Are there any genes overlapping between Farhadian and Glass paper?
 #import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
 paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;, sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
@@ -4262,105 +3804,8 @@ paper &lt;- as.vector(paper[,1])
 #paper %in% as.vector(microglia_genes[[&quot;gene_name&quot;]])
 
 overlap &lt;- as.vector(microglia_genes[[&quot;gene_name&quot;]]) [as.vector(microglia_genes[[&quot;gene_name&quot;]]) %in% paper]
-length(overlap)</code></pre>
-<p>[1] 28</p>
-<pre class="r"><code>overlap %&gt;% kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">x</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">SCIN</td>
-</tr>
-<tr class="even">
-<td align="left">CCR5</td>
-</tr>
-<tr class="odd">
-<td align="left">HLA-DMB</td>
-</tr>
-<tr class="even">
-<td align="left">MSR1</td>
-</tr>
-<tr class="odd">
-<td align="left">HAVCR2</td>
-</tr>
-<tr class="even">
-<td align="left">VSIG4</td>
-</tr>
-<tr class="odd">
-<td align="left">IL18</td>
-</tr>
-<tr class="even">
-<td align="left">C3</td>
-</tr>
-<tr class="odd">
-<td align="left">SLC2A5</td>
-</tr>
-<tr class="even">
-<td align="left">FCGBP</td>
-</tr>
-<tr class="odd">
-<td align="left">CD14</td>
-</tr>
-<tr class="even">
-<td align="left">OLR1</td>
-</tr>
-<tr class="odd">
-<td align="left">TREM2</td>
-</tr>
-<tr class="even">
-<td align="left">FOLR2</td>
-</tr>
-<tr class="odd">
-<td align="left">HLA-DMA</td>
-</tr>
-<tr class="even">
-<td align="left">ZFHX3</td>
-</tr>
-<tr class="odd">
-<td align="left">HLA-DQA1</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DPA1</td>
-</tr>
-<tr class="odd">
-<td align="left">DAB2</td>
-</tr>
-<tr class="even">
-<td align="left">C1QC</td>
-</tr>
-<tr class="odd">
-<td align="left">C1QB</td>
-</tr>
-<tr class="even">
-<td align="left">LYVE1</td>
-</tr>
-<tr class="odd">
-<td align="left">CYFIP1</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DRB1</td>
-</tr>
-<tr class="odd">
-<td align="left">BHLHE41</td>
-</tr>
-<tr class="even">
-<td align="left">MAF</td>
-</tr>
-<tr class="odd">
-<td align="left">C1QA</td>
-</tr>
-<tr class="even">
-<td align="left">HLA-DRA</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="genes-described-by-farhadian-et-al.-to-distinguish-the-myeloid2-cell-type" class="section level4">
-<h4>60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type</h4>
+#length(overlap)
+#overlap %&gt;% kable()</code></pre>
 <pre class="r"><code># get only genes present in the HIV1 and HIV2 samples!
 paper &lt;- paper[paper %in% rownames(hiv4@assays$RNA@counts)]
 
@@ -4372,11 +3817,11 @@ Idents(hiv_farhadian) &lt;- &quot;cell_type&quot;
 FeaturePlot(hiv_farhadian, features = &quot;Cluster1&quot; , pt.size = .5, label = TRUE, repel = TRUE) +
     scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
   labs(title = &quot;Farhadian et al., 2018: Microglia signature genes&quot;)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-55-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-56-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-</div>
-<div id="gene-signature-defined-by-gosselin" class="section level2">
-<h2>Gene signature defined by @[Gosselin]</h2>
+<div id="gosselin-et-al." class="section level3">
+<h3>Gosselin et al. </h3>
+<p>Here, I will first use the 881 microglia marker genes and then also try the list of TFs provided by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
 <p>The Transcription Factors mentioned in the paper do not seem to be specific for the Myeloid2 cluster. Interestingly, there is a very low score<br />
 of these microglia genes in Myeloid5, while there is a higher score in Myeloid1 and Myeloid4 cells.</p>
 <pre class="r"><code>gosselin_tfs &lt;- read.table( &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/TFs_microglia_Glass_paper.txt&quot;)
@@ -4391,21 +3836,6 @@ Idents(hiv4_glass) &lt;- &quot;cell_type&quot;
 FeaturePlot(hiv4_glass, features = &quot;Cluster1&quot;, label = TRUE, repel = TRUE, pt.size = .7) +
     scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
   labs(title = &quot;Gosselin D. et al., 2017: Microglia Transcription Factors&quot;) </code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-56-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="signature-of-hand-hiv-associated-neurodegenerative-disease" class="section level3">
-<h3>signature of HAND (HIV-associated neurodegenerative disease)</h3>
-<p><span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span> defined a group of genes upregulated in microglia from patients with HAND.</p>
-<p>This gene signature can, however not be detected in any of the Myeloid clusters.</p>
-<pre class="r"><code>hand_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/HAND_upregulated_microglia_signature_genes&quot;)
-hand_genes &lt;- as.vector(hand_genes[[&quot;genes&quot;]])
-
-hiv_hand &lt;- AddModuleScore(hiv4,
-                           features = hand_genes)
-
-Idents(hiv_hand) &lt;- &quot;cell_type&quot;
-FeaturePlot(hiv_hand, features = &quot;Cluster1&quot;, pt.size = .01) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
-  labs(title = &quot;microglia signature genes upregulated in HAND&quot;)</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-57-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-57-1">
@@ -4431,6 +3861,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-57-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-57-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -4444,262 +3885,22 @@ Katharina782
 </table>
 </div>
 </div>
-<div id="tfs-downregulated-in-in-vitro-microglia" class="section level5">
-<h5>TFs downregulated in in vitro microglia</h5>
-<p>The list of TFs is derived from <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>:</p>
-<p><strong>Comparison between microglia and primitive yolk sac macrphages:</strong></p>
-<p>In this paper they found:</p>
-<ul>
-<li>a subset of mRNAs was expressed in primitive yolk sac macrophages and maintained expression levels in brain microglia</li>
-<li>a second subset were preferentially expressed in adult mouse/human microglia -&gt; increase in expression from ebryonic to adult stage of brain development</li>
-<li>a majority of the TFs that showed reduced expression after transfer to in <em>in vitro</em> environment were induced following migration of primitive macrophages into the developing brain -&gt; induction by local <strong>environment factors</strong></li>
-</ul>
-<pre class="r"><code># TFs downregulated in in vitro microglia
-tfs_down &lt;- c( &quot;IRF1&quot;, &quot;IRF2&quot;, &quot;IRF3&quot;, &quot;IRF8&quot;, &quot;IRF9&quot;, &quot;CTCF&quot;, &quot;MEF2A&quot;, &quot;MEF2C&quot;, &quot;MEF2D&quot;,&quot;MAF&quot;, &quot;MAF1&quot;, &quot;MAFB&quot;, &quot;MAFF&quot;,&quot;MAFG&quot;, &quot;MAFK&quot;, &quot;RUNX1&quot;, &quot;RUNX2&quot;, &quot;SMAD3&quot;, &quot;CEBPB&quot;, &quot;CEBPA&quot;, &quot;CEBPG&quot;, &quot;JUND&quot;, &quot;JUNB&quot;, &quot;JUN&quot;, &quot;FOS&quot;, &quot;FOSB&quot;, &quot;ARID3A&quot;, &quot;ARID5A&quot;, &quot;BHLHE41&quot;, &quot;BTG2&quot;, &quot;DBP&quot;, &quot;EGR1&quot;, &quot;EGR2&quot;, &quot;EGR3&quot;, &quot;ERF&quot;, &quot;ELF1&quot;, &quot;ELMSAN1&quot;, &quot;ETV6&quot;, &quot;FLI1&quot;, &quot;KLF2&quot;, &quot;KLF4&quot;, &quot;KLF6&quot;, &quot;MLXIPL&quot;, &quot;MNT&quot;, &quot;MYCL&quot;, &quot;NFATC2&quot;, &quot;NFE2L2&quot;,&quot;NR4A1&quot;, &quot;RELA&quot;, &quot;RREB1&quot;, &quot;STAT3&quot;, &quot;TAL1&quot;, &quot;TCF4&quot;, &quot;TFEB&quot;, &quot;USF2&quot;, &quot;ZEB2&quot;, &quot;ZFHX3&quot;, &quot;ZNF217&quot;, &quot;ZNF691&quot;)
+</div>
+<div id="hand-signature" class="section level3">
+<h3>HAND signature</h3>
+<p>(HAND = HIV-associated neurodegenerative disease)</p>
+<p><span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span> defined a group of genes upregulated in microglia from patients with HAND.</p>
+<p>This gene signature can, however not be detected in any of the Myeloid clusters.</p>
+<pre class="r"><code>hand_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/HAND_upregulated_microglia_signature_genes&quot;)
+hand_genes &lt;- as.vector(hand_genes[[&quot;genes&quot;]])
 
-#map(seq.int(1:59), function(n){
- # VlnPlot(hiv4, features = tfs_down[n], group.by = &quot;cell_type&quot;)
-#})
+hiv_hand &lt;- AddModuleScore(hiv4,
+                           features = hand_genes)
 
-tfs_down %in% rownames(hiv4@assays$RNA@counts)
- [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
-[16] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
-[31] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
-[46] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
-
-hiv_down &lt;- AddModuleScore(hiv4,
-                           features = tfs_down)
-hiv_hand@meta.data %&gt;% head
-                orig.ident nCount_RNA nFeature_RNA percent_mt RNA_snn_res.0.8
-1B_CCTTTCCTGTCT   HIV1_Bld       4403         1697  13.203267               6
-1B_GTCGAGTCATGC   HIV1_Bld       5530         2489  10.604148               8
-1B_GCTCGATAGATC   HIV1_Bld       6311         2329   6.147541              14
-1B_GAGCGGAATGTC   HIV1_Bld       5008         2256   9.982068               8
-1B_AGCACTAAATGA   HIV1_Bld       5477         2272   9.848623               8
-1B_AAATACCTCCTT   HIV1_Bld       4856         2067  11.826194               8
-                seurat_clusters   cell_type Condition    Cluster1    Cluster2
-1B_CCTTTCCTGTCT               6      Tcell1     Blood -0.01185150 -0.01185150
-1B_GTCGAGTCATGC               8    Myeloid1     Blood -0.05162929 -0.01032586
-1B_GCTCGATAGATC              14 plasma cell     Blood -0.03326784  0.00000000
-1B_GAGCGGAATGTC               8    Myeloid1     Blood -0.07683537 -0.02195094
-1B_AGCACTAAATGA               8    Myeloid1     Blood -0.01038798  0.00000000
-1B_AAATACCTCCTT               8    Myeloid1     Blood -0.03354566  0.00000000
-                  Cluster3    Cluster4    Cluster5   Cluster6    Cluster7
-1B_CCTTTCCTGTCT -0.1711938 -0.09481203 -0.05267871  0.8129650 -0.04082721
-1B_GTCGAGTCATGC  0.8367329 -0.08757767 -0.19580706  0.5080454 -0.06692596
-1B_GCTCGATAGATC -0.1760869 -0.09495456 -0.05697274 -0.2900837 -0.03798182
-1B_GAGCGGAATGTC -0.1528933 -0.12920008  1.02071849  0.5238480 -0.08704052
-1B_AGCACTAAATGA  0.8389540 -0.07770004 -0.14459255 -0.4540580 -0.06190830
-1B_AAATACCTCCTT  1.0063699 -0.08945510 -0.12887531 -0.4381535 -0.04472755
-                    Cluster8   Cluster9   Cluster10  Cluster11  Cluster12
-1B_CCTTTCCTGTCT  0.109149738 -0.2556897 -0.01185150 -0.2344179 -0.2594270
-1B_GTCGAGTCATGC  1.083696302 -0.5916853 -0.05660010 -0.2198099  1.7947622
-1B_GCTCGATAGATC -0.031303009 -0.4116142 -0.04747728 -0.3022513 -0.2660752
-1B_GAGCGGAATGTC  0.501772959  0.5163614 -0.04390187 -0.2097841  1.4557755
-1B_AGCACTAAATGA -1.144407281  0.5573299 -0.08599533  1.5305484  1.5297456
-1B_AAATACCTCCTT -0.006147703  1.2222966 -0.02236378 -0.2630477 -0.2209738
-                  Cluster13  Cluster14  Cluster15   Cluster16   Cluster17
-1B_CCTTTCCTGTCT -0.10535742 -0.1917523 -0.2238725 -0.04740602 -0.06796459
-1B_GTCGAGTCATGC  0.89834966  0.9024493  1.1869001 -0.10617957 -0.05660010
-1B_GCTCGATAGATC -0.14572067 -0.1362252 -0.2283970 -0.07124966 -0.09824339
-1B_GAGCGGAATGTC -0.13681173  0.9497430  0.8364252 -0.08193440 -0.02195094
-1B_AGCACTAAATGA -0.09638331  1.3664463  0.7920274 -0.07770004 -0.10886396
-1B_AAATACCTCCTT -0.09460206  0.9978417 -0.2390786 -0.11607785 -0.03354566
-                  Cluster18   Cluster19  Cluster20  Cluster21   Cluster22
-1B_CCTTTCCTGTCT -0.09481203 -0.07638172 -0.1172089 -0.3433302 -0.05925752
-1B_GTCGAGTCATGC -0.06692596 -0.09585371  1.6250830  1.2799337  1.37185756
-1B_GCTCGATAGATC -0.04747728 -0.01899091 -0.1077388 -0.4447810 -0.06026156
-1B_GAGCGGAATGTC -0.08780374 -0.09877921  0.8864123  0.6806042 -0.07095893
-1B_AGCACTAAATGA -0.10346020 -0.05692409  2.3814315 -0.4915839  1.75405936
-1B_AAATACCTCCTT -0.06709133 -0.04472755  0.9566267  0.7409743 -0.10578394
-                 Cluster23   Cluster24   Cluster25   Cluster26  Cluster27
-1B_CCTTTCCTGTCT -0.2509493 -0.11851504 -1.15216148 -0.08508879 -0.2172937
-1B_GTCGAGTCATGC  1.2982862 -0.17590541  0.38108650 -0.23299993  0.7424081
-1B_GCTCGATAGATC -0.2140687 -0.11723430 -0.34307750 -0.12357591  0.7500735
-1B_GAGCGGAATGTC  2.6422368 -0.09877921 -0.08850152  1.42995107 -0.3944558
-1B_AGCACTAAATGA  2.4130680 -0.08808801 -0.23350686  1.68938237 -0.2253309
-1B_AAATACCTCCTT  2.4387579 -0.04987450 -1.23274033 -0.13667593 -0.2579007
-                  Cluster28  Cluster29  Cluster30  Cluster31  Cluster32
-1B_CCTTTCCTGTCT -0.02370301 -0.1727292 -0.1012842 -0.1422180 -0.1119362
-1B_GTCGAGTCATGC  0.00000000  1.8499190 -0.2276558  1.6614615 -0.2065630
-1B_GCTCGATAGATC -0.01899091 -0.2021407 -0.1053900 -0.1742070 -0.2075424
-1B_GAGCGGAATGTC -0.01097547  1.6176990 -0.2052651  0.9587215  0.9032500
-1B_AGCACTAAATGA  0.00000000  1.7506792  0.7532265  0.8701180 -0.2597700
-1B_AAATACCTCCTT -0.01118189  1.9353344 -0.1721028 -0.2493567 -0.1977323
-                 Cluster33 Cluster34   Cluster35  Cluster36   Cluster37
-1B_CCTTTCCTGTCT -0.3721854 -1.125850 -0.02897570 -0.2870966 -0.03555451
-1B_GTCGAGTCATGC -0.5647451  2.737049 -0.15985868  2.7042712 -0.05162929
-1B_GCTCGATAGATC  0.4933810 -1.116219 -0.05704023 -0.5267935 -0.11723430
-1B_GAGCGGAATGTC -0.6183499  2.822841 -0.13094239  2.9561573 -0.05487734
-1B_AGCACTAAATGA -0.4939252  3.451155 -0.11163267  1.9075026 -0.07271583
-1B_AAATACCTCCTT -0.3572089  2.484923 -0.06105639  1.5958590 -0.03354566
-                   Cluster38   Cluster39   Cluster40  Cluster41  Cluster42
-1B_CCTTTCCTGTCT  0.000000000  0.13493767 -0.01185150 -1.1829772 -0.3213450
-1B_GTCGAGTCATGC -0.010325858 -0.09277292 -0.05660010  0.4476676 -0.5277103
-1B_GCTCGATAGATC -0.009495456  0.67305550 -0.10396532 -0.2774846 -0.4287091
-1B_GAGCGGAATGTC  0.000000000  0.18601703 -0.08704052 -1.1488277 -0.4549405
-1B_AGCACTAAATGA  0.000000000 -1.01032267 -0.08101112 -1.0408202  0.5870177
-1B_AAATACCTCCTT  0.000000000  0.46748856 -0.03089199 -1.3687689 -0.3249921
-                 Cluster43  Cluster44  Cluster45  Cluster46   Cluster47
-1B_CCTTTCCTGTCT -0.2238725 -0.9900413 -0.4285220 -0.1982705 -0.12935038
-1B_GTCGAGTCATGC -0.2982971  1.2641662 -0.4845284  1.3185883 -0.08222262
-1B_GCTCGATAGATC  0.6000566  0.3007009 -0.3806861 -0.3542705 -0.04747728
-1B_GAGCGGAATGTC -0.2728674  1.4044580 -0.4439579  0.4901317 -0.10388533
-1B_AGCACTAAATGA -0.2231027  1.3671608  0.5616674 -0.3738313 -0.06271839
-1B_AAATACCTCCTT  0.8852764  0.7487823 -0.4555017 -0.4358931 -0.06092504
-                  Cluster48   Cluster49   Cluster50    Cluster51  Cluster52
-1B_CCTTTCCTGTCT -0.02897570 -0.02370301 -0.13776750 -0.093505919 -0.4540209
-1B_GTCGAGTCATGC -0.04130343 -0.06654171  0.84834007 -0.082606866  1.0113769
-1B_GCTCGATAGATC -0.01899091 -0.01899091 -0.14734829 -0.009495456 -0.3771029
-1B_GAGCGGAATGTC -0.04900799 -0.01097547 -0.13170561 -0.098779208  1.9882014
-1B_AGCACTAAATGA -0.07229627 -0.09139910  2.21153126  0.971485482  2.7827850
-1B_AAATACCTCCTT  1.03138734 -0.03869262 -0.07827321 -0.027510729  2.5344562
-                 Cluster53  Cluster54  Cluster55  Cluster56   Cluster57
-1B_CCTTTCCTGTCT -0.1409119  0.6037291 -0.3555921 -0.3491957 -0.05267871
-1B_GTCGAGTCATGC  1.8946643  0.3738071 -0.5557669 -0.5430518 -0.03097757
-1B_GCTCGATAGATC -0.1201293 -1.1744456 -0.3359002 -0.4263089 -0.08545910
-1B_GAGCGGAATGTC -0.1266945  1.1070367 -0.5678757 -0.5849845 -0.08780374
-1B_AGCACTAAATGA -0.1479036  1.1981006 -0.4946537 -0.5641671 -0.06232785
-1B_AAATACCTCCTT  0.9136752 -0.1423067 -0.4513638  0.7052750 -0.04472755
-                 Cluster58   Cluster59  Cluster60  Cluster61   Cluster62
-1B_CCTTTCCTGTCT -1.1373113  0.00000000 -0.1785947 -0.2054421 -0.12378773
-1B_GTCGAGTCATGC  0.7903234 -0.03594838 -0.2507875  1.7872109 -0.18304713
-1B_GCTCGATAGATC  0.2474767 -0.03138141 -0.1879988 -0.3491627 -0.15960381
-1B_GAGCGGAATGTC  0.4903356  1.07559582 -0.3143516  0.7502687 -0.09801599
-1B_AGCACTAAATGA -1.2166026 -0.05193988 -0.2991006 -0.3409670 -0.15163427
-1B_AAATACCTCCTT -1.0861159 -0.02236378 -0.1718559 -0.2390786 -0.14271087
-                  Cluster63  Cluster64  Cluster65   Cluster66   Cluster67
-1B_CCTTTCCTGTCT  0.81672117 -0.1817391 -0.2621110  0.18039554 -1.25034485
-1B_GTCGAGTCATGC  1.43524033  1.1033488  1.4264031  2.21258660  1.96318860
-1B_GCTCGATAGATC -1.08782855 -0.2090350 -0.3318330 -0.91974930 -0.28829958
-1B_GAGCGGAATGTC -0.03249219 -0.4184202 -0.2221099  0.13565848 -0.98699721
-1B_AGCACTAAATGA -0.11431323 -0.3430326 -0.2957895  0.82143600 -0.02969245
-1B_AAATACCTCCTT -1.30370109 -0.2896807 -0.4075242 -0.03488195 -1.35790912
-                 Cluster68   Cluster69   Cluster70 Cluster71  Cluster72
-1B_CCTTTCCTGTCT -0.2681340 -0.03555451 -0.05267871 -1.215753 -0.1303665
-1B_GTCGAGTCATGC  0.6744683 -0.04130343  0.88305300 -1.313267  2.2069444
-1B_GCTCGATAGATC  0.6485413 -0.08874793 -0.15199479  0.823277 -0.3329982
-1B_GAGCGGAATGTC -0.2453111 -0.05487734  1.48482841 -1.078429  1.7231933
-1B_AGCACTAAATGA -0.2908231  1.50107044  1.79062705 -1.059206  2.2326691
-1B_AAATACCTCCTT -0.3205915 -0.03354566 -0.12034709 -1.349252  1.7878411
-                 Cluster73   Cluster74   Cluster75   Cluster76   Cluster77
-1B_CCTTTCCTGTCT -0.2523878  1.33009093 -1.21787218 -0.11193623 -0.10535742
-1B_GTCGAGTCATGC  1.5404264  0.48496090  0.48755674 -0.17018454  1.75693101
-1B_GCTCGATAGATC -0.3734878  1.08436515 -0.02464803 -0.10773884 -0.14422802
-1B_GAGCGGAATGTC -0.2731314 -0.01376322 -0.99466757 -0.10474360 -0.14528167
-1B_AGCACTAAATGA -0.2508056 -1.17079332  0.04049850 -0.05193988 -0.16327582
-1B_AAATACCTCCTT -0.3317546 -0.13631696 -1.16056259 -0.08945510 -0.04472755
-                  Cluster78   Cluster79  Cluster80   Cluster81   Cluster82
-1B_CCTTTCCTGTCT -0.02370301 -0.01185150 -0.1119362 -0.10535742 -0.05925752
-1B_GTCGAGTCATGC  0.98095653 -0.05162929 -0.1908821  0.87031150  0.98095653
-1B_GCTCGATAGATC -0.04747728  0.88967780 -0.1884165 -0.09980352 -0.09980352
-1B_GAGCGGAATGTC -0.03292640 -0.05998346 -0.1562571 -0.16473620  0.97672156
-1B_AGCACTAAATGA -0.05193988 -0.02077595 -0.2259942 -0.18225581 -0.11426773
-1B_AAATACCTCCTT -0.07561954  0.00000000  0.9676773 -0.05590944 -0.06709133
-                 Cluster83   Cluster84  Cluster85   Cluster86  Cluster87
-1B_CCTTTCCTGTCT -1.1084673 -0.12906043  0.6270388 -0.07110902  0.6124116
-1B_GTCGAGTCATGC  0.6994148 -0.21569028  1.7336853 -0.12352605  1.0639570
-1B_GCTCGATAGATC -0.3055906 -0.09675074 -1.0324675 -0.09495456 -1.1153019
-1B_GAGCGGAATGTC  0.7977828 -0.10975468  1.4463889 -0.08780374  1.6497459
-1B_AGCACTAAATGA  1.0123225 -0.21909806  1.4454089 -0.08101112  1.6101716
-1B_AAATACCTCCTT -1.2415499 -0.13329467  0.8322270 -0.10063699  1.3653924
-                 Cluster88    Cluster89  Cluster90  Cluster91  Cluster92
-1B_CCTTTCCTGTCT -1.0273151 -0.011851504 -0.1409119 -0.1066635 -0.1799008
-1B_GTCGAGTCATGC  0.8146881 -0.046274239  0.8698062 -0.1135844 -0.1776662
-1B_GCTCGATAGATC -1.0785523 -0.009495456 -0.1386578 -0.1168405 -0.1299511
-1B_GAGCGGAATGTC  1.1966899 -0.021950935  0.9717105 -0.1419179 -0.1587627
-1B_AGCACTAAATGA -1.0735243 -0.018683271 -0.2151749 -0.1017871 -0.1657590
-1B_AAATACCTCCTT -1.0946856 -0.027510729 -0.1952390 -0.1565464 -0.1505115
-                  Cluster93  Cluster94   Cluster95  Cluster96  Cluster97
-1B_CCTTTCCTGTCT -0.02370301 -0.2602491 -0.07638172 -0.3161928 -0.2768411
-1B_GTCGAGTCATGC -0.06195515  1.7903794  0.84834007 -0.5200312  0.6603221
-1B_GCTCGATAGATC -0.06653568 -0.2598011 -0.18588331 -0.3497250 -0.1837700
-1B_GAGCGGAATGTC -0.03803963  1.3665967 -0.24916700  1.8467934 -0.3982116
-1B_AGCACTAAATGA -0.03116393  1.8657579 -0.22467074  1.6666701 -0.3214288
-1B_AAATACCTCCTT -0.02236378  0.8842571  2.03757985  1.2962593 -0.1916974
-                  Cluster98   Cluster99 Cluster100  Cluster101  Cluster102
-1B_CCTTTCCTGTCT -0.01185150 -0.08823322          0 -0.08296053 -0.02360777
-1B_GTCGAGTCATGC  1.00696330  0.82310180          0 -0.16482949 -0.09946586
-1B_GCTCGATAGATC -0.09446986  0.76099413          0 -0.10773884 -1.17803126
-1B_GAGCGGAATGTC -0.04900799 -0.16723260          0  0.95052278 -1.12727850
-1B_AGCACTAAATGA -0.06232785  0.84685879          0 -0.09760171 -1.15480994
-1B_AAATACCTCCTT -0.05325577 -0.20025465          0 -0.10063699  0.52139808
-                Cluster103 Cluster104 Cluster105  Cluster106 Cluster107
-1B_CCTTTCCTGTCT -0.3352159  1.0034112 -0.2048494 -0.01185150 -1.1166494
-1B_GTCGAGTCATGC -0.5544440  0.7054361 -0.2251649 -0.05162929  0.4630843
-1B_GCTCGATAGATC -0.3462002 -0.2588965 -0.2028284 -0.01899091  1.5239962
-1B_GAGCGGAATGTC -0.4657253  1.2053406  0.8230650  1.08657129  0.9802060
-1B_AGCACTAAATGA  1.0372588 -0.2993294  0.8111012 -0.01038798  2.1795529
-1B_AAATACCTCCTT  1.1307912 -0.3049902  0.8654350 -0.02236378  1.1580833
-                Cluster108  Cluster109 Cluster110  Cluster111 Cluster112
-1B_CCTTTCCTGTCT -0.1356392 -0.02370301  1.1265450 -0.01185150 -0.1422180
-1B_GTCGAGTCATGC -0.1747711 -0.01032586  1.5753559 -0.05162929 -0.1793317
-1B_GCTCGATAGATC -0.1252371  0.00000000 -0.3764991 -0.03798182 -0.1140130
-1B_GAGCGGAATGTC -0.2458032  0.00000000  1.3614005  1.07559582 -0.2078657
-1B_AGCACTAAATGA  0.9353373  0.00000000  1.8433200  1.50605465 -0.1911287
-1B_AAATACCTCCTT -0.0894551 -0.02236378  1.3860165 -0.02236378 -0.1675679
-                 Cluster113 Cluster114 Cluster115 Cluster116  Cluster117
-1B_CCTTTCCTGTCT -0.14091193  0.9235952 -0.2238725 -0.2168332 -0.08296053
-1B_GTCGAGTCATGC  1.71475641  1.8398197  1.3284584  0.5823203  0.84915444
-1B_GCTCGATAGATC -0.08842164  1.0385270 -0.1519948 -0.2090350 -0.09973603
-1B_GAGCGGAATGTC  0.93291474  0.5923622 -0.2669909 -0.2618919 -0.11822461
-1B_AGCACTAAATGA -0.20650084 -0.5321882 -0.2729386 -0.3493561 -0.09097954
-1B_AAATACCTCCTT -0.19949802  0.6372349  0.9298726 -0.2344989 -0.12300076
-                Cluster118  Cluster119 Cluster120  Cluster121 Cluster122
-1B_CCTTTCCTGTCT -1.2076899 -0.07079162 -0.2232797 -0.01185150 -0.1172089
-1B_GTCGAGTCATGC -1.0517050 -1.16952251 -0.6566440 -0.04627424  2.0832844
-1B_GCTCGATAGATC  1.1457948 -0.32503174 -0.4552643 -0.02848637 -0.2099750
-1B_GAGCGGAATGTC  0.1729526 -1.15319221  0.5379019 -0.03042087  1.2803265
-1B_AGCACTAAATGA  0.4877517 -1.07727198 -0.4140552 -0.08310380  1.6063836
-1B_AAATACCTCCTT -0.1686116 -0.30483206 -0.5359407 -0.01118189 -0.2055330
-                Cluster123  Cluster124  Cluster125  Cluster126 Cluster127
-1B_CCTTTCCTGTCT -0.4069647 -0.06453022 -0.11851504 -0.07110902 -0.2067483
-1B_GTCGAGTCATGC  0.5184371 -0.06692596 -0.12888110  1.48339218 -0.3250211
-1B_GCTCGATAGATC -0.3263140 -0.08074512 -0.07736605 -0.09024058 -0.3581957
-1B_GAGCGGAATGTC -0.5266163 -0.10984973 -0.04900799  0.99876755  0.7964394
-1B_AGCACTAAATGA -0.5333348 -0.09349178 -0.06232785  2.01817321 -0.1935984
-1B_AAATACCTCCTT  0.6766841 -0.03354566 -0.13152898 -0.02751073 -0.2158269
-                 Cluster128 Cluster129  Cluster130 Cluster131   Cluster132
-1B_CCTTTCCTGTCT -0.01185150 -1.1065425  0.13435332 -0.2285524 -0.011851504
-1B_GTCGAGTCATGC -0.02065172  0.4514533 -0.90143293 -0.5326558 -0.030977575
-1B_GCTCGATAGATC -0.01899091  0.6326517 -1.02530694 -0.3266565 -0.009495456
-1B_GAGCGGAATGTC -0.03803253 -1.2470763  0.08632263 -0.4966426 -0.010975468
-1B_AGCACTAAATGA -0.01038798 -0.1481001 -0.96904150 -0.5291638 -0.010387975
-1B_AAATACCTCCTT -0.03354566 -0.1361671  1.12277748 -0.4133988  0.000000000
-                Cluster133 Cluster134 Cluster135 Cluster136  Cluster137
-1B_CCTTTCCTGTCT -0.1422180 -0.3066390  0.9731294 -0.1514573 -0.05795141
-1B_GTCGAGTCATGC -0.2879912 -0.3358558  0.6525514  1.2649020 -0.09336284
-1B_GCTCGATAGATC  1.5349016 -0.3265071 -0.3725806 -0.2375214 -0.07124966
-1B_GAGCGGAATGTC -0.2703618  0.7824319  1.3784375  0.7452576 -0.04900799
-1B_AGCACTAAATGA -0.3679807 -0.2778290 -0.2600787  0.8414663 -0.09307222
-1B_AAATACCTCCTT -0.2330437 -0.2605544 -0.2303900 -0.2717363 -0.11093090
-                Cluster138  Cluster139  Cluster140  Cluster141  Cluster142
-1B_CCTTTCCTGTCT -0.1000847 -0.09481203 -0.06453022 -0.08296053  0.00000000
-1B_GTCGAGTCATGC -0.1677505 -0.19337299  0.86700627  1.77261192 -0.06195515
-1B_GCTCGATAGATC -0.1757672  1.48281140 -0.05225875 -0.11401296 -0.01899091
-1B_GAGCGGAATGTC -0.1621265 -0.20786572 -0.13170561 -0.09290986 -0.02195094
-1B_AGCACTAAATGA -0.1894555 -0.23724522 -0.10136752  0.97646969  0.98685767
-1B_AAATACCTCCTT -0.1546391 -0.16507464 -0.15903971 -0.04472755 -0.08680143
-                 Cluster143 Cluster144  Cluster145 Cluster146  Cluster147
-1B_CCTTTCCTGTCT  1.14959588 -0.1290604  0.00000000  0.9213464  0.00000000
-1B_GTCGAGTCATGC -0.06692596  1.3925093 -0.01032586  0.9972166 -0.01032586
-1B_GCTCGATAGATC -0.06497555 -0.1548898 -0.01899091 -0.3829489 -0.01899091
-1B_GAGCGGAATGTC -0.09877921  1.4248378 -0.01097547  0.7730779 -0.02195094
-1B_AGCACTAAATGA -0.12423615 -0.2279818 -0.01038798 -0.5018886 -0.02077595
-1B_AAATACCTCCTT -0.03354566 -0.1771342 -0.02236378 -0.4220874 -0.04472755
-                Cluster148  Cluster149 Cluster150  Cluster151  Cluster152
-1B_CCTTTCCTGTCT          0 -0.09481203  0.9430272 -0.08823322 -0.12064330
-1B_GTCGAGTCATGC          0 -0.16270444  0.5495315 -0.17481697 -0.09546946
-1B_GCTCGATAGATC          0 -0.06175421  0.1512467 -0.22504063 -0.05076611
-1B_GAGCGGAATGTC          0 -0.17484426 -0.1629187  0.90585769 -0.08193440
-1B_AGCACTAAATGA          0 -0.15080641  0.4550047 -0.25598639 -0.05193988
-1B_AAATACCTCCTT          0 -0.09371407  0.5476277 -0.18389676  1.09067804
-
-FeaturePlot(hiv_down, features = &quot;Cluster1&quot;,
-            label = TRUE, 
-            repel = TRUE, pt.size = .1) +
+Idents(hiv_hand) &lt;- &quot;cell_type&quot;
+FeaturePlot(hiv_hand, features = &quot;Cluster1&quot;, pt.size = .01) +
   scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
-  labs(title = &quot;TFs downregulated in in vitro microglia&quot;)</code></pre>
+  labs(title = &quot;microglia signature genes upregulated in HAND&quot;)</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-58-1">
@@ -4725,6 +3926,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-58-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-58-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -4739,11 +3951,9 @@ Katharina782
 </div>
 </div>
 </div>
-</div>
-</div>
-<div id="features-identified-in-a-paper-on-convergence-of-microglia-and-macrophages-grassivaro" class="section level2">
-<h2>Features identified in a paper on convergence of microglia and macrophages <span class="citation">(<a href="#ref-Grassivaro" role="doc-biblioref">Francesca Grassivaro and Martino 2018</a>)</span></h2>
-<p>They identified 14 genes that are conserved in microglia throughout development, but not expressed in myeloid-derived monocytes MDM. Only in the context of neuroinflammation are the 14 genes expressed in macrophages.</p>
+<div id="grassivaro-et-al." class="section level3">
+<h3>Grassivaro et al.</h3>
+<p><span class="citation">(<a href="#ref-Grassivaro" role="doc-biblioref">Francesca Grassivaro and Martino 2018</a>)</span> identified features related to convergence of microglia and macrophages. They identified 14 genes that are conserved in microglia throughout development, but not expressed in myeloid-derived monocytes (MDM). Only in the context of neuroinflammation are the 14 genes expressed in macrophages as well.</p>
 <pre class="r"><code>tfs &lt;- c(&quot;CRYBB1&quot;, &quot;GARNL3&quot;, &quot;GPR34&quot;, &quot;LAG3&quot;, &quot;NUAK1&quot;, &quot;OLFML3&quot;, &quot;RTN1&quot;,  &quot;SALL3&quot;,  &quot;SLC1A3&quot;, &quot;SPARC&quot;, &quot;TNFRSF17&quot;)
 
 tfs %in% rownames(hiv4@assays$RNA@counts)
@@ -4784,6 +3994,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-59-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-59-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -4798,14 +4019,16 @@ Katharina782
 </div>
 </div>
 </div>
-<div id="marker-genes-referred-to-by-farhadian" class="section level2">
-<h2>Marker genes referred to by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span></h2>
-<p>References:</p>
+<div id="keren-shaul-et-al.-kraseman-et-al." class="section level3">
+<h3>Keren-Shaul et al. &amp; Kraseman et al.</h3>
+<p>The marker genes mentioned by <span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Hadas Keren-Shaul 2017</a>)</span> and <span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Susanne Krasemann 2017</a>)</span> were referred to by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> and used as marker genes for microglia associated with neurodegenerative disease.</p>
+<p>Neither of these signatures show a high score for the Myeloid2/5 clusters.</p>
 <ul>
-<li><span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Hadas Keren-Shaul 2017</a>)</span></li>
-<li><span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Susanne Krasemann 2017</a>)</span></li>
+<li>The signature genes defined by <span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Hadas Keren-Shaul 2017</a>)</span> are expressed to some level in all myeloid clusters</li>
+<li>The signature defined by <span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Susanne Krasemann 2017</a>)</span> is also mainly expressed in the Myeloid clusters</li>
+<li>CD9 and SPP1 might be added to the list of microglia marker genes expressed in Myeloid2 cluster</li>
 </ul>
-<p>Neither of these signatures shows a high score for the Myeloid2 clusters.</p>
+<p>It is not clear why <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> used these genes as marker genes.</p>
 <pre class="r"><code># upregulated in disease associated microglia (Keren-Shaul)
 disease &lt;- c(&quot;SPP1&quot;, &quot;ITGAX&quot;, &quot;AXL&quot;, &quot;LILRB4&quot;, &quot;CLEC7A&quot;, &quot;CCL2&quot;, &quot;CSF1&quot;) 
 
@@ -4831,10 +4054,22 @@ mgnd &lt;- mgnd[mgnd %in% rownames(hiv4@assays$RNA@counts)]
 hiv_disease &lt;- AddModuleScore(hiv4,
                            features = disease)
 
-FeaturePlot(hiv_disease, features = &quot;Cluster1&quot;, pt.size = .01) +
+keren &lt;- FeaturePlot(hiv_disease, features = &quot;Cluster1&quot;, pt.size = .01) +
   scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
-  labs(title = &quot;Keren-Shaul et al., Genes upregulated in disease-associated microglia&quot;)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-60-1.png" width="672" style="display: block; margin: auto;" /></p>
+  labs(title = &quot;Keren-Shaul et al., Genes upregulated in disease-associated microglia&quot;)
+
+
+
+hiv_mgnd &lt;- AddModuleScore(hiv4,
+                           features = mgnd)
+
+kraseman &lt;- FeaturePlot(hiv_mgnd, features = &quot;Cluster1&quot;, pt.size = .01) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Kraseman et al., 28 inflammatory genes upregulated in 
+       disease associated microglia&quot;)
+
+ggarrange(keren, kraseman, ncol = 2, nrow = 1)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-60-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-60-1">
 Past versions of unnamed-chunk-60-1.png
@@ -4859,6 +4094,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-60-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-60-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -4872,29 +4118,28 @@ Katharina782
 </table>
 </div>
 </div>
-<pre class="r"><code>
-
-
-hiv_mgnd &lt;- AddModuleScore(hiv4,
-                           features = mgnd)
-
-FeaturePlot(hiv_mgnd, features = &quot;Cluster1&quot;, pt.size = .01) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
-  labs(title = &quot;Kraseman et al., 28 inflammatory genes upregulated in 
-       disease associated microglia&quot;)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-60-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Neither of the signature genes are very specific for the Myeloid2/5 cluster.</p>
-<ul>
-<li>The signature genes defined by <span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Hadas Keren-Shaul 2017</a>)</span> are expressed to some level in all myeloid clusters</li>
-<li>The signature defined by <span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Susanne Krasemann 2017</a>)</span> is also mainly expressed in the Myeloid clusters</li>
-<li>CD9 and SPP1 might be added to the list of microglia marker genes expressed in Myeloid2 cluster</li>
-</ul>
 <pre class="r"><code># Keren Shaul et al. signature
-DotPlot(hiv4, features = disease, group.by = &quot;cell_type&quot;) + 
+p1 &lt;- DotPlot(hiv4, features = disease, group.by = &quot;cell_type&quot;) + 
   coord_flip() +
     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-    labs(title = &quot;Keren-Shaul et al., Genes upregulated in disease-associated microglia&quot;)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-61-1.png" width="672" style="display: block; margin: auto;" /></p>
+    labs(title = &quot;Keren-Shaul et al., Genes upregulated in disease-associated microglia&quot;)
+
+# Kraseman et al. signature
+p2 &lt;- DotPlot(hiv4, features = mgnd, group.by = &quot;cell_type&quot;) + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+    labs(title = &quot;Kraseman et al., 28 inflammatory genes upregulated in 
+       disease associated microglia&quot;)
+
+
+# some genes that might be markers for Myeloid2
+p3 &lt;- DotPlot(hiv4, features = c(&quot;CD9&quot;, &quot;APOE&quot;, &quot;AXL&quot;, &quot;CTSL&quot;, &quot;SPP1&quot;), group.by = &quot;cell_type&quot;) + 
+  coord_flip() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  labs(title = &quot;Genes that might be used as markers for Myeloid2&quot;)
+
+ggarrange(p1, p2, p3, ncol = 3, nrow = 1)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-61-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-61-1">
 Past versions of unnamed-chunk-61-1.png
@@ -4919,6 +4164,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-61-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-61-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -4932,27 +4188,12 @@ Katharina782
 </table>
 </div>
 </div>
-<pre class="r"><code>
-# Kraseman et al. signature
-DotPlot(hiv4, features = mgnd, group.by = &quot;cell_type&quot;) + 
-  coord_flip() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-    labs(title = &quot;Kraseman et al., 28 inflammatory genes upregulated in 
-       disease associated microglia&quot;)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-61-2.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>
-
-# some genes that might be markers for Myeloid2
-DotPlot(hiv4, features = c(&quot;CD9&quot;, &quot;APOE&quot;, &quot;AXL&quot;, &quot;CTSL&quot;, &quot;SPP1&quot;), group.by = &quot;cell_type&quot;) + 
-  coord_flip() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-  labs(title = &quot;Genes that might be used as markers for Myeloid2&quot;)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-61-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="gene-signature-defined-by-esaulova" class="section level2">
-<h2>Gene signature defined by <span class="citation">(<a href="#ref-Esaulova" role="doc-biblioref">Ekaterina Esaulova 2020</a>)</span></h2>
+<div id="esaulova-et-al." class="section level3">
+<h3>Esaulova et al.</h3>
+<p>Gene signature defined by <span class="citation">(<a href="#ref-Esaulova" role="doc-biblioref">Ekaterina Esaulova 2020</a>)</span></p>
 <div id="homeostatic-genes" class="section level5">
-<h5>Homeostatic genes</h5>
+<h5>Homeostatic genes:</h5>
 <ul>
 <li>the homeostatic microglia gene signature is found in all myeloid clusters, not only in the Myeloid 2 (except for SLC2A5 which was also included in the Farhadian paper)</li>
 <li>NK cell cluster also exhibits high scores for this gene signature</li>
@@ -4985,6 +4226,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-62-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-62-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -4998,10 +4250,18 @@ Katharina782
 </table>
 </div>
 </div>
-<pre class="r"><code>DotPlot(hiv4, features = microglia, group.by = &quot;cell_type&quot;) + 
+<pre class="r"><code>dotplot &lt;- DotPlot(hiv4, features = microglia, group.by = &quot;cell_type&quot;) + 
   coord_flip() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-63-1.png" width="672" style="display: block; margin: auto;" /></p>
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+
+hivt &lt;- AddModuleScore(hiv4, features = microglia)
+Idents(hivt) &lt;- &quot;cell_type&quot;
+tsne &lt;- FeaturePlot(hivt, features = &quot;Cluster1&quot;, label =TRUE, repel = TRUE, pt.size = .7) +
+  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+    labs(title = &quot;Homeostatic microglia signature from Esaulova paper&quot;)
+
+ggarrange(dotplot, tsne, ncol =2, nrow = 1)</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-63-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-63-1">
 Past versions of unnamed-chunk-63-1.png
@@ -5026,7 +4286,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-63-1.png" target="_blank">b315085</a>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-63-1.png" target="_blank">2be0932</a>
 </td>
 <td>
 Katharina782
@@ -5035,42 +4295,9 @@ Katharina782
 2021-12-18
 </td>
 </tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>
-hivt &lt;- AddModuleScore(hiv4, features = microglia)
-Idents(hivt) &lt;- &quot;cell_type&quot;
-FeaturePlot(hivt, features = &quot;Cluster1&quot;, label =TRUE, repel = TRUE, pt.size = .7) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
-    labs(title = &quot;Homeostatic microglia signature from Esaulova paper&quot;)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-63-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-63-2">
-Past versions of unnamed-chunk-63-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-63-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
 <tr>
 <td>
-<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-63-2.png" target="_blank">b315085</a>
+<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-63-1.png" target="_blank">b315085</a>
 </td>
 <td>
 Katharina782
@@ -5085,11 +4312,11 @@ Katharina782
 </div>
 </div>
 <div id="microglia-specific-genes" class="section level5">
-<h5>Microglia-specific genes</h5>
+<h5>Microglia-specific genes:</h5>
 <ul>
-<li><strong>GPR34</strong>, <strong>TMEM119</strong> supports the hypothesis that myeloid2 are microglia-like, since they are expressed at higher levels in the myeloid2 cluster</li>
-<li>they use 10 genes to discriminate microglia, four of which have not been inlcude in the Farhadian Paper: <strong>CLEC9A</strong>, <strong>TIMD4</strong>, <strong>TNFSF18</strong>, <strong>CXCL12</strong></li>
-<li>the genes <strong>CLEC9A</strong>, <strong>TIMD4</strong>, <strong>TNFSF18</strong>, <strong>CXCL12</strong> are not included in the 60 genes used by Farhadian et al., but they do not show specific expression for myeloid2 cells</li>
+<li><strong>GPR34</strong>, <strong>TMEM119</strong> supports the hypothesis that myeloid2 are microglia-like, since they are expressed at higher levels in the Myeloid2 cluster</li>
+<li>they use 10 genes to discriminate microglia, four of which have not been inlcuded by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>: <strong>CLEC9A</strong>, <strong>TIMD4</strong>, <strong>TNFSF18</strong>, <strong>CXCL12</strong></li>
+<li>the genes <strong>CLEC9A</strong>, <strong>TIMD4</strong>, <strong>TNFSF18</strong>, <strong>CXCL12</strong> are not included in the 60 genes used by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>, but they do not show specific expression for Myeloid2 cells</li>
 </ul>
 <pre class="r"><code># 10 genes that discriminate microglia
 microglia &lt;- c(&quot;C1QC&quot;, &quot;C1QB&quot;, &quot;C1QA&quot;, &quot;TREM2&quot;, &quot;TIMD4&quot;, &quot;APOC1&quot;, 
@@ -5101,8 +4328,16 @@ microglia &lt;- c(&quot;C1QC&quot;, &quot;C1QB&quot;, &quot;C1QA&quot;, &quot;TR
 Idents(hiv4) &lt;- &quot;cell_type&quot;
 
 #  two genes whcih might support that myeloid2 cluster contains microglia-like cells
-FeaturePlot(hiv4, features = c(&quot;GPR34&quot;, &quot;TMEM119&quot;), label = TRUE, pt.size = .7,
-            repel = TRUE)</code></pre>
+#FeaturePlot(hiv4, features = c(&quot;GPR34&quot;, &quot;TMEM119&quot;), label = TRUE, pt.size = .7,
+       #     repel = TRUE)
+#DotPlot(hiv4, features = c(&quot;TMEM119&quot;, &quot;GPR34&quot;), group.by = &quot;cell_type&quot;) + 
+  #   coord_flip() +
+   #  theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))
+
+# these are not inlcuded in the Farhadian gene signature
+FeaturePlot(hiv4, features = c(&quot;CLEC9A&quot;, &quot;TIMD4&quot;, &quot;TNFSF18&quot;, &quot;CXCL12&quot;, 
+                               &quot;GPR34&quot;, &quot;TMEM119&quot;),
+            pt.size = .7, label = TRUE, repel = TRUE, ncol= 2)</code></pre>
 <p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-64-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-64-1">
@@ -5128,6 +4363,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-64-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-64-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -5141,30 +4387,19 @@ Katharina782
 </table>
 </div>
 </div>
-<pre class="r"><code>DotPlot(hiv4, features = c(&quot;TMEM119&quot;, &quot;GPR34&quot;), group.by = &quot;cell_type&quot;) + 
-     coord_flip() +
-     theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-64-2.png" width="1440" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>
-# these are not inlcuded in the Farhadian gene signature
-FeaturePlot(hiv4, features = c(&quot;CLEC9A&quot;, &quot;TIMD4&quot;, &quot;TNFSF18&quot;, &quot;CXCL12&quot;),
-            pt.size = .7, label = TRUE, repel = TRUE, ncol= 2)</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-64-3.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 </div>
-<div id="microglia-in-human-brain" class="section level2">
-<h2>Microglia in human brain</h2>
-<p>Reference: Sankowski R. et al. 2019. Mapping microglia states in the human brain through the integration of high-dimensional techniques. Nature Neuroscience. Vol 22 <a href="https://www.nature.com/articles/s41593-019-0532-y#Sec29" class="uri">https://www.nature.com/articles/s41593-019-0532-y#Sec29</a></p>
-<p>In the paper microglia cells were obtained through brain surgery. Microglia were defined by the core signature called “microglia signature” below. Sankowski et al. performed unsupervised clustering using Race ID3 which resulted in 9 major sublcusters of the microglia cells. The authors suggested that these subclusters represent the wide spectrum of transcriptional states in human microglia.</p>
-<p><strong>RaceID:</strong> RaceID is a clustering algorithm for the identification of cell types from scRNA-seq data. It was designed to work particularly well for the detection of rare cells. <a href="https://github.com/dgrun/RaceID3_StemID2_package" class="uri">https://github.com/dgrun/RaceID3_StemID2_package</a></p>
+<div id="sankowski-et-al." class="section level3">
+<h3>Sankowski et al.</h3>
+<p><span class="citation">(<a href="#ref-Sankowski" role="doc-biblioref">Roman Sankowski 2019</a>)</span> describe different states of microglia cells from the human brain.</p>
+<p>In the paper microglia cells were obtained through brain surgery. Microglia were defined by a core signature called “microglia signature” below. <span class="citation">(<a href="#ref-Sankowski" role="doc-biblioref">Roman Sankowski 2019</a>)</span> performed unsupervised clustering using Race ID3 which resulted in 9 major subclusters of the microglia cells. The authors suggested that these subclusters represent the wide spectrum of transcriptional states in human microglia.</p>
+<p><strong>RaceID:</strong> RaceID is a clustering algorithm for the identification of cell types from scRNA-seq data. It was designed to work particularly well for the detection of rare cells. See for more details: <a href="https://github.com/dgrun/RaceID3_StemID2_package" class="uri">https://github.com/dgrun/RaceID3_StemID2_package</a></p>
 <ul>
-<li>The microglia signature is most pronounced in Myeloid2 cluster</li>
-<li>The monocyte signature is less pronounced in Myeloid2 cluster and more pronounced in the other Myeloid clsuters</li>
-<li>Homeostatic microglia (core signature genes expressed by all clusters in the paper) gene signature is found in all Myeloid cluster as well as NK cells, with high expression also in Myeloid2
-<ul>
-<li><strong>CSF1R</strong> and <strong>MARCKS</strong> are most highly expressed in Myeloid2</li>
-</ul></li>
+<li>The microglia signature is most pronounced in Myeloid2 cluster which supports the hypothesis that Myeoid2 are microglia-like cells.</li>
+<li>The monocyte signature is less pronounced in Myeloid2 cluster and more pronounced in the other Myeloid clusters which is in line with the assumption that the cells in blood and CSF are monocytes or monocyte-derived macrophages rather than microglia-like cells.</li>
+<li>Homeostatic microglia gene signature (core signature genes expressed by all clusters in the paper) is found in all Myeloid cluster as well as NK cells, with high expression also in Myeloid2. It is not clear why NK cells would express a homeostatic microglia signature. The reason why all Myeloid cluster express this signature might be that homeostatic microlglia have some overlap in gene expression with peripheral macrophages.</li>
 </ul>
+<p>Two potential markers for Myeloid2 are <strong>CSF1R</strong> and <strong>MARCKS</strong> which are most highly expressed in Myeloid2 cells.</p>
 <pre class="r"><code># microglia gene signature from supplementary table 3a
 microglia &lt;- c(&quot;P2RY12&quot;, &quot;CX3CR1&quot;, &quot;CSF1R&quot;, &quot;TMEM119&quot;, &quot;SLC2A5&quot; )
 
@@ -5176,7 +4411,7 @@ homeostatic &lt;- c(&quot;CX3CR1&quot;, &quot;TMEM119&quot;, &quot;CSF1R&quot;, 
                  &quot;P2RY13&quot;,&quot;SELPLG&quot;, &quot;MARCKS&quot;)
 
 
-map(seq.int(1:3), function(n){
+tsne_list &lt;- map(seq.int(1:3), function(n){
   names &lt;- c(&quot;microglia&quot;, &quot;monocyte&quot;, &quot;homeostatic&quot;)
   feature_list &lt;- list(microglia, monocyte, homeostatic)
   features = feature_list[[n]]
@@ -5187,8 +4422,20 @@ map(seq.int(1:3), function(n){
     scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
     labs(title = paste0(names[n],&quot; microglia gene signature&quot;))
 })
-[[1]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-1.png" width="672" style="display: block; margin: auto;" /></p>
+  
+dotplot_list &lt;- map(seq.int(1:3), function(n){
+  names &lt;- c(&quot;microglia&quot;, &quot;monocyte&quot;, &quot;homeostatic&quot;)
+  feature_list &lt;- list(microglia, monocyte, homeostatic)
+  features = feature_list[[n]] 
+  # dot plot
+  DotPlot(hiv4, features = features, group.by = &quot;cell_type&quot;) +
+    coord_flip() +
+        theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
+  labs(title = paste0(names[n],&quot; gene signature&quot;))
+})
+  
+do.call(grid.arrange, c(append(tsne_list, dotplot_list), ncol = 3, nrow = 2))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-65-1">
 Past versions of unnamed-chunk-65-1.png
@@ -5213,6 +4460,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -5226,70 +4484,9 @@ Katharina782
 </table>
 </div>
 </div>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-65-2">
-Past versions of unnamed-chunk-65-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-65-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-2.png" target="_blank">b315085</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>
-[[3]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-3.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>  
-map(seq.int(1:3), function(n){
-  names &lt;- c(&quot;microglia&quot;, &quot;monocyte&quot;, &quot;homeostatic&quot;)
-  feature_list &lt;- list(microglia, monocyte, homeostatic)
-  features = feature_list[[n]] 
-  # dot plot
-  DotPlot(hiv4, features = features, group.by = &quot;cell_type&quot;) +
-    coord_flip() +
-        theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-  labs(title = paste0(names[n],&quot; gene signature&quot;))
-})
-[[1]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-4.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-5.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[3]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-65-6.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Check the clusters across the transcriptional spectrum of microglia:</p>
-<p>Sankowski R. et al., Nature Neuroscience, 2019 defined 9 subclusters within the microglia cell population. Can we find these gene signatures in the CSF-derived Myeloid cells? This could further confirm that Myeloid2 and Myeloid5 are microglia-like cells.</p>
+<div id="clusters-across-the-transcriptional-spectrum-of-microglia" class="section level4">
+<h4>Clusters across the transcriptional spectrum of microglia</h4>
+<p><span class="citation">(<a href="#ref-Sankowski" role="doc-biblioref">Roman Sankowski 2019</a>)</span> defined 9 subclusters within the microglia cell population. Can we find these gene signatures in the CSF-derived Myeloid cells? This could further confirm that Myeloid2 and Myeloid5 are microglia-like cells.</p>
 <ul>
 <li><strong>homeostatic clusters</strong>
 <ul>
@@ -5297,8 +4494,8 @@ map(seq.int(1:3), function(n){
 <li>C3: high expression of microglial core genes CX3CR1, TMEM119<br />
 </li>
 </ul></li>
-<li><strong>antigen processing and peptide antigen presentation</strong> C6 and C7 were characterized by low expression of CX3CR1 and high expression of integrin-receptor binding protein and metabolism genes (SPP1, APOE, LPL)</li>
-<li>** proinflammatory clusters:** C1, C5, C8, C9 were characterized by expression of chemokine and cytokine genes (CCL2, IL1B)</li>
+<li><strong>antigen processing and peptide antigen presentation</strong> C6 and C7 were characterized by low expression of CX3CR1 and high expression of integrin-receptor binding protein and metabolism genes (SPP1, APOE, LPL).</li>
+<li>** proinflammatory clusters:** C1, C5, C8, C9 were characterized by expression of chemokine and cytokine genes (CCL2, IL1B).</li>
 </ul>
 <p>Since Cluster C2 was characterized as a homeostati microglia cluster and showed expression of MHC-II and antivrial immunity genes like IFI44L, HLA-DRA, CD74, this supports the microglia-like identity of Myeloid2 and Myeloid5. However, there is also some expression of this signature in Meloid1 and Myeloid3 which mainly originate from Blood samples and also in B cells.</p>
 <p>There is also a high score for C5 and C8 signature genes, which are both proinflammatory gene signatures.</p>
@@ -5325,7 +4522,7 @@ cluster_list &lt;- map(seq.int(1:8), function(n) {
 })
 
 
-map(seq.int(1:8), function(n){
+cluster_plots &lt;- map(seq.int(1:8), function(n){
   c &lt;- cluster_list[[n]]$cluster
   name &lt;- cluster_list[[n]]$name
   hivc &lt;- AddModuleScore(hiv4, features = c)
@@ -5335,8 +4532,9 @@ map(seq.int(1:8), function(n){
       scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
     labs(title = paste0(&quot;Differentially expressed genes of cluster &quot;, name))
 })
-[[1]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-1.png" width="672" style="display: block; margin: auto;" /></p>
+
+do.call(grid.arrange, c(cluster_plots, ncol = 4, nrow = 2))</code></pre>
+<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-66-1">
 Past versions of unnamed-chunk-66-1.png
@@ -5361,6 +4559,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -5374,104 +4583,7 @@ Katharina782
 </table>
 </div>
 </div>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-66-2">
-Past versions of unnamed-chunk-66-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-66-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-2.png" target="_blank">b315085</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>
-[[3]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-66-3">
-Past versions of unnamed-chunk-66-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-66-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-3.png" target="_blank">b315085</a>
-</td>
-<td>
-Katharina782
-</td>
-<td>
-2021-12-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>
-[[4]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-4.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[5]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-5.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[6]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-6.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[7]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-7.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[8]]</code></pre>
-<p><img src="figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-66-8.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>
-
-
 #map(seq.int(1:8), function(n){
  # c &lt;- cluster_list[[n]]$cluster
   #name &lt;- cluster_list[[n]]$name
@@ -5481,9 +4593,14 @@ Katharina782
   #labs(title = paste0(&quot;Differentially expressed genes of cluster &quot;, name))
 #})</code></pre>
 </div>
-<div id="look-for-genes-which-are-upregulated-in-myeloid2-compared-to-all-other-myeloid" class="section level2">
-<h2>Look for genes which are upregulated in Myeloid2 compared to all other Myeloid</h2>
-<p>clusters</p>
+</div>
+</div>
+<div id="section-4" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
+<hr />
+</div>
+<div id="genes-which-are-upregulated-in-myeloid2-compared-to-all-other-myeloid-clusters" class="section level2">
+<h2>Genes which are upregulated in Myeloid2 compared to all other Myeloid clusters</h2>
 <ul>
 <li><p>overlap of 5 genes with Kraseman microglia -&gt; inflammatory molecules upregulated in disease associated microglia (Krasemann)</p></li>
 <li><p>overlap of 3 genes with disease-associated microglia (Keren-Shaul)</p></li>
@@ -5598,6 +4715,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/2be0932ddfed52b8d9f4a4086763fe9eeb4602b0/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-67-1.png" target="_blank">2be0932</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/b315085a0df3faa48f8d2e2a07393671e6e80b97/docs/figure/HIV_CSF_dataset_analysis.Rmd/unnamed-chunk-67-1.png" target="_blank">b315085</a>
 </td>
 <td>
@@ -5611,6 +4739,10 @@ Katharina782
 </table>
 </div>
 </div>
+</div>
+<div id="conclusions-on-myloid2-cell-type" class="section level2">
+<h2>Conclusions on Myloid2 cell type</h2>
+<p>Taken together the results above do not provide a clear picture on whether the Myeloid2 cluster consists of microglia-like cells. There are several genes which are associated with microglia and disease-associated microglia, several of which referred to by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span>. Nevertheless, there are also many genes which are described to be microglia markers in the literature, but do not show a significantly higher expression in Myeloid2 than in the other Myeloid clusters. Therefore, the cluster will be considered microglia-like for now and the following analysis will provide additional insights on the identity and characteristics of this cluster.</p>
 </div>
 </div>
 <div id="references" class="section level1">
@@ -5627,6 +4759,9 @@ Francesca Grassivaro, Massimo Acquaviva, Ramesh Menon, and Gianvito Martino. 201
 </div>
 <div id="ref-Keren-Shaul" class="csl-entry">
 Hadas Keren-Shaul, Assaf Weiner, Amit Spinrad. 2017. <em>A Unique Microglia Type Associated with Restricting Development of Alzheimer’s Disease</em>. <em>Cell</em>. Vol. 169. <a href="http://dx.doi.org/10.1016/j.cell.2017.05.018">http://dx.doi.org/10.1016/j.cell.2017.05.018</a>.
+</div>
+<div id="ref-Sankowski" class="csl-entry">
+Roman Sankowski, Takahiro Masuda, Chotima Böttcher. 2019. <em>Mapping Microglia States in the Human Brain Through the Integration of High-Dimensional Techniques.</em> <em>Nat. Neurosci.</em> Vol. 22. <a href="https://doi.org/10.1038/s41593-019-0532-y">https://doi.org/10.1038/s41593-019-0532-y</a>.
 </div>
 <div id="ref-Farhadian" class="csl-entry">
 Shelli F. Farhadian, Chrysoula Zografou, Sameet S. Mehta, and Serena S. Spudich. 2018. <em>Single-Cell RNA Sequencing Reveals Microglia-Like Cells in Cerebrospinal Fluid During Virologically Suppressed HIV</em>. <em>JCI Insight</em>. Vol. 3(18):e121718. <a href="https://doi.org/10.1172/jci.insight.121718">https://doi.org/10.1172/jci.insight.121718</a>.
@@ -5674,7 +4809,7 @@ other attached packages:
 [25] SeuratObject_4.0.3    Seurat_4.0.5          forcats_0.5.0        
 [28] stringr_1.4.0         dplyr_1.0.7           purrr_0.3.4          
 [31] readr_1.4.0           tidyr_1.1.2           tibble_3.1.6         
-[34] ggplot2_3.3.5         tidyverse_1.3.0       workflowr_1.6.2      
+[34] ggplot2_3.3.5         tidyverse_1.3.0      
 
 loaded via a namespace (and not attached):
   [1] utf8_1.2.2            reticulate_1.22       tidyselect_1.1.1     
@@ -5692,41 +4827,42 @@ loaded via a namespace (and not attached):
  [37] locfit_1.5-9.4        hdf5r_1.3.3           spatstat.utils_2.2-0 
  [40] assertthat_0.2.1      promises_1.2.0.1      scales_1.1.1         
  [43] multcomp_1.4-15       gtable_0.3.0          globals_0.14.0       
- [46] goftest_1.2-3         sandwich_3.0-0        rlang_0.4.12         
- [49] GlobalOptions_0.1.2   splines_4.0.2         lazyeval_0.2.2       
- [52] spatstat.geom_2.3-0   broom_0.7.2           yaml_2.2.1           
- [55] reshape2_1.4.4        abind_1.4-5           modelr_0.1.8         
- [58] backports_1.2.0       httpuv_1.6.3          tools_4.0.2          
- [61] ellipsis_0.3.2        spatstat.core_2.3-1   ggridges_0.5.2       
- [64] TFisher_0.2.0         plyr_1.8.6            comprehenr_0.6.10    
- [67] rpart_4.1-15          deldir_1.0-6          pbapply_1.5-0        
- [70] GetoptLong_1.0.5      cowplot_1.1.1         S4Vectors_0.28.1     
- [73] zoo_1.8-9             haven_2.3.1           cluster_2.1.0        
- [76] fs_1.5.1              magrittr_2.0.1        RSpectra_0.16-0      
- [79] scattermore_0.7       openxlsx_4.2.3        lmtest_0.9-39        
- [82] reprex_0.3.0          RANN_2.6.1            tmvnsim_1.0-2        
- [85] mvtnorm_1.1-1         whisker_0.4           fitdistrplus_1.1-6   
- [88] matrixStats_0.61.0    hms_1.1.1             mime_0.12            
- [91] evaluate_0.14         xtable_1.8-4          rio_0.5.16           
- [94] IRanges_2.24.1        shape_1.4.6           compiler_4.0.2       
- [97] KernSmooth_2.23-18    crayon_1.4.2          htmltools_0.5.2      
-[100] mgcv_1.8-33           later_1.3.0           lubridate_1.7.9.2    
-[103] DBI_1.1.1             dbplyr_2.0.0          MASS_7.3-53          
-[106] car_3.0-10            cli_3.1.0             rbibutils_2.2.4      
-[109] igraph_1.2.9          pkgconfig_2.0.3       sn_2.0.1             
-[112] numDeriv_2016.8-1.1   foreign_0.8-80        plotly_4.9.2.1       
-[115] spatstat.sparse_2.0-0 xml2_1.3.2            foreach_1.5.1        
-[118] rvest_0.3.6           digest_0.6.29         sctransform_0.3.2    
-[121] RcppAnnoy_0.0.19      spatstat.data_2.1-0   rmarkdown_2.6        
-[124] cellranger_1.1.0      leiden_0.3.5          uwot_0.1.10          
-[127] curl_4.3.2            shiny_1.7.1           rjson_0.2.20         
-[130] lifecycle_1.0.1       nlme_3.1-150          jsonlite_1.7.2       
-[133] carData_3.0-4         viridisLite_0.4.0     fansi_0.5.0          
-[136] pillar_1.6.4          lattice_0.20-41       plotrix_3.8-2        
-[139] fastmap_1.1.0         httr_1.4.2            survival_3.2-7       
-[142] glue_1.5.1            zip_2.1.1             png_0.1-7            
-[145] iterators_1.0.13      bit_4.0.4             stringi_1.7.6        
-[148] mathjaxr_1.4-0        irlba_2.3.3           future.apply_1.8.1   </code></pre>
+ [46] goftest_1.2-3         sandwich_3.0-0        workflowr_1.6.2      
+ [49] rlang_0.4.12          GlobalOptions_0.1.2   splines_4.0.2        
+ [52] lazyeval_0.2.2        spatstat.geom_2.3-0   broom_0.7.2          
+ [55] yaml_2.2.1            reshape2_1.4.4        abind_1.4-5          
+ [58] modelr_0.1.8          backports_1.2.0       httpuv_1.6.3         
+ [61] tools_4.0.2           ellipsis_0.3.2        spatstat.core_2.3-1  
+ [64] ggridges_0.5.2        TFisher_0.2.0         plyr_1.8.6           
+ [67] comprehenr_0.6.10     rpart_4.1-15          deldir_1.0-6         
+ [70] pbapply_1.5-0         GetoptLong_1.0.5      cowplot_1.1.1        
+ [73] S4Vectors_0.28.1      zoo_1.8-9             haven_2.3.1          
+ [76] cluster_2.1.0         fs_1.5.1              magrittr_2.0.1       
+ [79] RSpectra_0.16-0       scattermore_0.7       openxlsx_4.2.3       
+ [82] lmtest_0.9-39         reprex_0.3.0          RANN_2.6.1           
+ [85] tmvnsim_1.0-2         mvtnorm_1.1-1         whisker_0.4          
+ [88] fitdistrplus_1.1-6    matrixStats_0.61.0    hms_1.1.1            
+ [91] mime_0.12             evaluate_0.14         xtable_1.8-4         
+ [94] rio_0.5.16            IRanges_2.24.1        shape_1.4.6          
+ [97] compiler_4.0.2        KernSmooth_2.23-18    crayon_1.4.2         
+[100] htmltools_0.5.2       mgcv_1.8-33           later_1.3.0          
+[103] lubridate_1.7.9.2     DBI_1.1.1             dbplyr_2.0.0         
+[106] MASS_7.3-53           car_3.0-10            cli_3.1.0            
+[109] rbibutils_2.2.4       igraph_1.2.9          pkgconfig_2.0.3      
+[112] sn_2.0.1              numDeriv_2016.8-1.1   foreign_0.8-80       
+[115] plotly_4.9.2.1        spatstat.sparse_2.0-0 xml2_1.3.2           
+[118] foreach_1.5.1         rvest_0.3.6           digest_0.6.29        
+[121] sctransform_0.3.2     RcppAnnoy_0.0.19      spatstat.data_2.1-0  
+[124] rmarkdown_2.6         cellranger_1.1.0      leiden_0.3.5         
+[127] uwot_0.1.10           curl_4.3.2            shiny_1.7.1          
+[130] rjson_0.2.20          lifecycle_1.0.1       nlme_3.1-150         
+[133] jsonlite_1.7.2        carData_3.0-4         viridisLite_0.4.0    
+[136] fansi_0.5.0           pillar_1.6.4          lattice_0.20-41      
+[139] plotrix_3.8-2         fastmap_1.1.0         httr_1.4.2           
+[142] survival_3.2-7        glue_1.5.1            zip_2.1.1            
+[145] png_0.1-7             iterators_1.0.13      bit_4.0.4            
+[148] stringi_1.7.6         mathjaxr_1.4-0        irlba_2.3.3          
+[151] future.apply_1.8.1   </code></pre>
 </div>
 </div>
 

@@ -1,26 +1,26 @@
 name: report
 output_dir: ../docs
 navbar:
-  title: report
+  title: Report
   left:
   - text: Home
     href: index.html
   - text: Introduction
-    href: Introduction.Rmd
-  - text: CSF 
-    href: HIV_CSF_dataset_analysis.html
-  - text: TF activity Myeloid2
-    href: TF_activity_analysis_of_myeloid2_cluster.html
-  - text: Myeloid2 are a microglia-like
-    href: Independent_cell_type_identification_Farhadian_dataset.html
-  - text: Integration CSF & triculture 
-    href: Triculture_datset_analysis_and_integration_Farhadian_dataset.html
-  - text: TF activity iMg
-    href: Triculture_dataset_GRN_with_Scenic.html
+    href: Introduction.html
+  - text: Results
+    menu: 
+    - text: 1. CSF 
+      href: HIV_CSF_dataset_analysis.html
+    - text: 2. TF activity Myeloid2
+      href: TF_activity_analysis_of_myeloid2_cluster.html
+    - text: 3. Integration CSF & triculture 
+      href: Triculture_datset_analysis_and_integration_Farhadian_dataset.html
+    - text: 4. TF activity iMg
+      href: Triculture_dataset_GRN_with_Scenic.html
   - text: Discussion
-    href: Discussion.Rmd
+    href: Discussion.html
   - text: Methods
-    href: Methods.Rmd
+    href: Methods.html
 
   right:
   - icon: fa-github
@@ -36,4 +36,5 @@ output:
     highlight: textmate
 bibliography: references.bib
 link-citations: yes
+csl: apa.csl
     

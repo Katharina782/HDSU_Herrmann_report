@@ -56,47 +56,52 @@ features are binned based on averaged expression and the control features are
 randomly selected from each bin. 
 
 
-#### read in Seurat object
 
+<details>
+  <summary>Click for Answer</summary>
 
-```{r}
-hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
-```
-
-
-
-
-
-## Gene signature defined by [@Farhadian]
-
-Do we find the 60 signature genes from [@Farhadian] for 
-myeloid2 among the signature defined by @[Gossselin]?
-
-##### Read in list of microglia signature genes found in the Gosselin paper
-which are also found in the HIV1 and HIV2 samples:
-
-```{r}
-microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
-```
-
-28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
-found in the 881 microglia signature genes defined by [@Gosselin].
-
-```{r, results = "asis"}
-# Are there any genes overlapping between Farhadian and Glass paper?
-#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
-paper <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv", sep = "\t", header = FALSE, skipNul = TRUE)#, n_max = 60)
-paper[1,] <- "APOC1"
-colnames(paper) <- ""
-paper <- as.vector(paper[,1])
-
-# Are there any genes overlapping between Farhadian and Glass paper?
-#paper %in% as.vector(microglia_genes[["gene_name"]])
-
-overlap <- as.vector(microglia_genes[["gene_name"]]) [as.vector(microglia_genes[["gene_name"]]) %in% paper]
-length(overlap)
-overlap %>% kable()
-```
+    #### read in Seurat object
+    
+    
+    ```{r}
+    hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds")
+    ```
+    
+    
+    
+    
+    
+    ## Gene signature defined by [@Farhadian]
+    
+    Do we find the 60 signature genes from [@Farhadian] for 
+    myeloid2 among the signature defined by @[Gossselin]?
+    
+    ##### Read in list of microglia signature genes found in the Gosselin paper
+    which are also found in the HIV1 and HIV2 samples:
+    
+    ```{r}
+    microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
+    ```
+    
+    28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
+    found in the 881 microglia signature genes defined by [@Gosselin].
+    
+    ```{r, results = "asis"}
+    # Are there any genes overlapping between Farhadian and Glass paper?
+    #import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
+    paper <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv", sep = "\t", header = FALSE, skipNul = TRUE)#, n_max = 60)
+    paper[1,] <- "APOC1"
+    colnames(paper) <- ""
+    paper <- as.vector(paper[,1])
+    
+    # Are there any genes overlapping between Farhadian and Glass paper?
+    #paper %in% as.vector(microglia_genes[["gene_name"]])
+    
+    overlap <- as.vector(microglia_genes[["gene_name"]]) [as.vector(microglia_genes[["gene_name"]]) %in% paper]
+    length(overlap)
+    overlap %>% kable()
+    ```
+</details> 
 
 
 #### 60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type
