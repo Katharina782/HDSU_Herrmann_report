@@ -22,6 +22,7 @@
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -88,6 +89,9 @@ h6 {
 }
 .table th:not([align]) {
   text-align: left;
+}
+#rmd-source-code {
+  display: none;
 }
 </style>
 
@@ -312,13 +316,13 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="HIV_CSF_dataset_analysis.html">1. CSF</a>
+      <a href="HIV_CSF_dataset_analysis.html">1. CSF/Blood samples</a>
     </li>
     <li>
       <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
     </li>
     <li>
-      <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF &amp; triculture</a>
+      <a href="Triculture_dataset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF/Blood &amp; triculture</a>
     </li>
     <li>
       <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
@@ -352,6 +356,8 @@ $(document).ready(function () {
 <ul class="dropdown-menu" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
 </ul>
 </div>
 
@@ -413,16 +419,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree9e2c322b7e27fe7694e862cf4b11ae612816498dtargetblank9e2c322a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/9e2c322b7e27fe7694e862cf4b11ae612816498d" target="_blank">9e2c322</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree9e2c322b7e27fe7694e862cf4b11ae612816498dtargetblank9e2c322a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/9e2c322b7e27fe7694e862cf4b11ae612816498d" target="_blank">9e2c322</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -430,12 +436,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
-    Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
-
-Unstaged changes:
-    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
-    Modified:   analysis/Methods.Rmd
 
 </code></pre>
 <p>
@@ -474,6 +475,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/6783264e95c3864ae6a468bdfed32b21af801b6d/docs/index.html" target="_blank">6783264</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -687,6 +705,7 @@ Start workflowr project.
 </div>
 <p>Welcome to the report of my labrotation.</p>
 
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSG9tZSIKc2l0ZTogd29ya2Zsb3dyOjp3Zmxvd19zaXRlCm91dHB1dDoKICB3b3JrZmxvd3I6OndmbG93X2h0bWw6CiAgICB0b2M6IGZhbHNlCmVkaXRvcl9vcHRpb25zOgogIGNodW5rX291dHB1dF90eXBlOiBjb25zb2xlCi0tLQoKV2VsY29tZSB0byB0aGUgcmVwb3J0IG9mIG15IGxhYnJvdGF0aW9uLg==</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
@@ -736,6 +755,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
+  window.initializeSourceEmbed("index.Rmd");
   window.initializeCodeFolding("hide" === "show");
 });
 </script>

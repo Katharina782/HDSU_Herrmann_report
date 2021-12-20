@@ -22,6 +22,7 @@
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -88,6 +89,9 @@ h6 {
 }
 .table th:not([align]) {
   text-align: left;
+}
+#rmd-source-code {
+  display: none;
 }
 </style>
 
@@ -312,13 +316,13 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="HIV_CSF_dataset_analysis.html">1. CSF</a>
+      <a href="HIV_CSF_dataset_analysis.html">1. CSF/Blood samples</a>
     </li>
     <li>
       <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
     </li>
     <li>
-      <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF &amp; triculture</a>
+      <a href="Triculture_dataset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF/Blood &amp; triculture</a>
     </li>
     <li>
       <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
@@ -352,6 +356,8 @@ $(document).ready(function () {
 <ul class="dropdown-menu" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
 </ul>
 </div>
 
@@ -413,16 +419,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -430,12 +436,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
-    Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
-
-Unstaged changes:
-    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
-    Modified:   analysis/Methods.Rmd
 
 </code></pre>
 <p>
@@ -474,6 +475,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/40651d96647f10219a4aec953c8d618d57bc13f5/docs/license.html" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -587,6 +605,7 @@ Start workflowr project.
 <p>What license are you using for the written content on your site? It is traditional to choose a <a href="https://creativecommons.org/choose/">Creative Commons</a> license for this type of content.</p>
 <p>How should others cite your work? It’s a convention to save a file <code>CITATION</code> in the root of your Git repo that contains the citation information.</p>
 
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTGljZW5zZSIKb3V0cHV0OgogIHdvcmtmbG93cjo6d2Zsb3dfaHRtbDoKICAgIHRvYzogZmFsc2UKZWRpdG9yX29wdGlvbnM6CiAgY2h1bmtfb3V0cHV0X3R5cGU6IGNvbnNvbGUKLS0tCgpXaGF0IGxpY2Vuc2UgYXJlIHlvdSB1c2luZyBmb3IgeW91ciBjb2RlPyBTZWUgW2Nob29zZWFsaWNlbnNlLmNvbV1bY2hvb3NlXSBmb3IKaGVscCBkZWNpZGluZy4gSXQncyBhIGNvbnZlbnRpb24gdG8gc2F2ZSBhIGZpbGUgYExJQ0VOU0VgIGluIHRoZSByb290IG9mIHlvdXIKR2l0IHJlcG8gdGhhdCBjb250YWlucyB0aGUgbGljZW5zZSB0ZXh0LgoKV2hhdCBsaWNlbnNlIGFyZSB5b3UgdXNpbmcgZm9yIHRoZSB3cml0dGVuIGNvbnRlbnQgb24geW91ciBzaXRlPyBJdCBpcwp0cmFkaXRpb25hbCB0byBjaG9vc2UgYSBbQ3JlYXRpdmUgQ29tbW9uc11bY2NdIGxpY2Vuc2UgZm9yIHRoaXMgdHlwZSBvZiBjb250ZW50LgoKW2Nob29zZV06IGh0dHA6Ly9jaG9vc2VhbGljZW5zZS5jb20vCltjY106IGh0dHBzOi8vY3JlYXRpdmVjb21tb25zLm9yZy9jaG9vc2UvCgpIb3cgc2hvdWxkIG90aGVycyBjaXRlIHlvdXIgd29yaz8gSXQncyBhIGNvbnZlbnRpb24gdG8gc2F2ZSBhIGZpbGUgYENJVEFUSU9OYAppbiB0aGUgcm9vdCBvZiB5b3VyIEdpdCByZXBvIHRoYXQgY29udGFpbnMgdGhlIGNpdGF0aW9uIGluZm9ybWF0aW9uLgo=</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
@@ -636,6 +655,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
+  window.initializeSourceEmbed("license.Rmd");
   window.initializeCodeFolding("hide" === "show");
 });
 </script>

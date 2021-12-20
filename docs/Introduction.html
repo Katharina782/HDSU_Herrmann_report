@@ -21,11 +21,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -92,6 +90,9 @@ h6 {
 }
 .table th:not([align]) {
   text-align: left;
+}
+#rmd-source-code {
+  display: none;
 }
 </style>
 
@@ -301,69 +302,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -371,16 +309,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -411,13 +339,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="HIV_CSF_dataset_analysis.html">1. CSF</a>
+      <a href="HIV_CSF_dataset_analysis.html">1. CSF/Blood samples</a>
     </li>
     <li>
       <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
     </li>
     <li>
-      <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF &amp; triculture</a>
+      <a href="Triculture_dataset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF/Blood &amp; triculture</a>
     </li>
     <li>
       <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
@@ -451,6 +379,8 @@ div.tocify {
 <ul class="dropdown-menu" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
 </ul>
 </div>
 
@@ -514,16 +444,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -531,12 +461,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
-    Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
-
-Unstaged changes:
-    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
-    Modified:   analysis/Methods.Rmd
 
 </code></pre>
 <p>
@@ -575,6 +500,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/40651d96647f10219a4aec953c8d618d57bc13f5/docs/Introduction.html" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -908,6 +850,7 @@ Wei J, Su B, Hou J. 2020. <em>The Prevalence of Frascati-Criteria-Based HIV-Asso
 </div>
 </div>
 
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSW50cm9kdWN0aW9uIgphdXRob3I6ICJrbWlrdWxpayIKZGF0ZTogIjE1IDEyIDIwMjEiCm91dHB1dDogaHRtbF9kb2N1bWVudApiaWJsaW9ncmFwaHk6IHJlZmVyZW5jZXMuYmliCmxpbmstY2l0YXRpb25zOiB5ZXMKLS0tCgo8ZGl2IHN0eWxlPSJ0ZXh0LWFsaWduOiBqdXN0aWZ5Ij4gCgpUaGUgV29ybGQgSGVhbHRoIE9yZ2FuaXphdGlvbiAoV0hPKSByZXBvcnRlZCB0aGUgbnVtYmVyIG9mIHBlb3BsZSBsaXZpbmcgd2l0aCAKSElWIGluIDIwMjAgdG8gYmUgYXBwcm94aW1hdGVseSAgMzcuNyBtaWxsaW9uLiBUaGUgdXNlIG9mIGFudGlyZXRyb3ZpcmFsIHRoZXJhcHkoQVJUKSBoYXMgCmluY3JlYXNlZCB0aGUgbGlmZSBleHBlY3RhbmN5IGluIHRoZSBwYXN0IHllYXJzLiBPbmUgb2YgdGhlIG1vc3QgcHJldmFsZW50IApjb21ib3JiaWRpdGllcyB0aGF0IHBlcnNpc3QgZXZlbiBkdXJpbmcgQVJUIGlzIEhJVi1hc3NvY2lhdGVkIApuZXVyb2NvZ25pdGl2ZSBkaXNvcmRlciAoSEFORCkuCgojIyMgSHVtYW4gSW1tdW5vZGVmaWNpZW5jeSBWaXJ1cyAoSElWKSAKCkhJViBpcyBhIGxlbnRpdmlydXMgY29uc2lzdGluZyBvZiB0d28gc2luZ2xlIHN0cmFuZGVkIFJOQSBtb2xlY3VsZXMsIGVuY29kaW5nIApmaWZ0ZWVuIGRpZmZlcmVudCB2aXJhbCBwcm90ZWlucyB3aGljaCBhcmUgZXNzZW50aWFsIGZvciB2aXJhbCByZXBsaWNhdGlvbiAKW0BPc2Jvcm5lXS4gQXQgdGhlIHNhbWUgdGltZSB0aGVzZSBwcm90ZWlucyBhcmUgcG90ZW50aWFsIHRhcmdldHMgZm9yIEFSVCBkcnVncy4KVGhlIFJOQSBtb2xlY3VsZXMgYXJlIGVuY2xvc2VkIGluIGEgY2Fwc2lkIG9mIHAyNCBwcm90ZWluIGFuZCB0aGUgY2Fwc2lkIGlzIApzdXJyb3VuZGVkIGJ5IGEgbGlwaWQgbWVtYnJhbmUgW0BPc2Jvcm5lXS4gVGhlIHZpcmFsIGVudmVsb3BlIGdseWNvcHJvdGVpbiAoRW52KQppcyByZXNwb25zaWJsZSBmb3IgcmVjb2duaXppbmcgdGhlIGhvc3QgY2VsbHMgYW5kIHRoZSBzdWJzZXF1ZW50IGZ1c2lvbiBvZiB0aGUgCnZpdXMgd2l0aCB0aGUgaG9zdCBjZWxsIHBsYXNtYSBtZW1icmFuZSBbQEh1YXJ0ZV0uIFRoZSBnbHljb3Byb3RlaW4gZ3AxMjAgYmluZHMKdG8gdGhlIGNsdXN0ZXIgb2YgZGlmZmVyZW50aWF0aW9uIDQgKENENCkgcmVjZXB0b3JzIG9uIENENCsgVCBjZWxscywgbWFjcm9waGFnZXMKYW5kIG1pY3JvZ2xpYSBjZWxscyBbQE9zYm9ybmVdLiBBIHN0cnVjdHVyZSBvZiB0aGUgdmlydXMgcGFydGljbGUgaXMgc2hvd24gaW4gCmZpZ3VyZSAxIGZyb20gW0BPc2Jvcm5lXS4KCkFSVCBkcnVncyBjaXJjdWxhdGUgdGhlIGJsb29kIGFuZCBzdXBwcmVzcyBISVYgcmVwbGljYXRpb24gb2YgcGVyaXBoZXJhbCBpbW11bmUgCmNlbGxzLiBIb3dldmVyLCBsb25nLWxpdmVkIGNlbGxzIChlZy4gQ0Q0KyBUIGNlbGxzLCBtYWNyb3BoYWdlcywgbWljcm9nbGlhKSBjYW4KYmVjb21lIHBlcnNpc3RlbnQgSElWIHJlc2Vydm9pcnMuIFRoaXMgaXMgY2FsbGVkIGxhdGVudCBpbmZlY3Rpb24uIExhdGVudCBpbmZlY3Rpb24gCm1lYW5zIHRoYXQgY2VsbHMgaG9zdCByZXBsaWNhdGlvbiBjb21wZXRlbnQgSElWIGluIHRoZWlyIGdlbm9tZSwgd2l0aG91dCB2aXJ1cyAKcHJvZHVjdGlvbiBbQEJhbmRlcmFdLiBUaGVzZSByZXNlcnZvaXJzIHdvdWxkIGNhdXNlIHRoZSBpbmNyZWFzZSBpbiBISVYgCnJlcGxpY2F0aW9uIGFzIHNvb24gYXMgdGhlIHRyZWF0bWVudCB3YXMgaW50ZXJydXB0ZWQsIHdoaWNoIGlzIHdoeSBBUlQgaXMgCmNvbnRpbnVlZCBhcyBhIGxpZmVsb25nIHRyZWF0bWVudCBbQFdhbGxldF0uCgoKIVtdKGltYWdlcy9ISVZfdmlydXMuanBnKQoKCjxkZXRhaWxzPgogIDxzdW1tYXJ5PkNsaWNrIGZvciBBbnN3ZXI8L3N1bW1hcnk+CiAgICBgYGB7ciwgZWNobz1GQUxTRSwgZXZhbD1UUlVFfQogICAgaGlzdCgxOjEwKQogICAgYGBgCjwvZGV0YWlscz4gCgoKPGRldGFpbHM+IAo8c3VtbWFyeT5DbGljayB0byBFeHBhbmQ8L3N1bW1hcnk+IAoKIyMjIEFudGlyZXRyb3ZpcmFsIHRoZXJhcHkgKEFSVCkKCkFSVCBkcnVncyB0YXJnZXQgdmlyYWwgZW56eW1lcywgbGlrZSByZXZlcnNlIHRyYW5zY3JpcHRhc2VzLCBwcm90ZWFzZXMgb3IgCmludGVncmFzZXMuIER1ZSB0byB0aGUgYXZhaWxhYmlsaXR5IG9mIGNvbWJpbmF0aW9ucyBBUlQgbW9ydGFsaXR5IHJlc3VsdGluZyBmcm9tIEhJViBpbmZlY3Rpb24KaGFzIGJlZW4gcmVkdWNlZCBpbiB0aGUgcGFzdCB5ZWFycy4gTmV2ZXJ0aGVsZXNzLCB0aGUgZHJ1Z3MgYXJlIG5vdCBhYmxlIHRvIApjdXJlIHRoZSBkaXNlYXNlLCBidXQgb25seSBzdXBwcmVzcyBpdC4gVGhlIHZpcnVzIHBlcnNpc3RzIGluIGxhdGVudGx5IGluZmVjdGVkIApjZWxscy4gT25lIGFkdmFudGFnZSBvZiB0aGUgdmlyYWwgc3VwcHJlc3Npb24gaXMgdGhhdCBkcnVnIHJlc2lzdGFuY2UgbXV0YXRpb25zCmRvIG5vdCBvY2N1ciBbQEJhbmRlcmFdLgoKPC9kZXRhaWxzPgogCiMjIyBNaWNyb2dsaWEgJiBNYWNyb3BoYWdlcwoKTWljcm9nbGlhIGFyaXNlIGVhcmx5IGR1cmluZyBkZXZlbG9wbWVudCBmb3JtIHRoZSB5b2xrIHNhYyBhbmQgdGhleSBlbnRlciB0aGUKQ05TIGV2ZW4gYmVmb3JlIHRoZSBibG9vZC1icmFpbiBiYXJyaWVyIGlzIGZvcm1lZC4gVGhleSBmb3JtIHRoZSB0aXNzdWUtcmVzaWRlbnQgCmltbXVuZSBjZWxscyBvZiB0aGUgYnJhaW4gYW5kIG1haW50YWluIHRoZWlyIGFiaWxpdHkgdG8gcHJvbGlmZXJhdGUgW0BSw6l1XS4gCkNvbnZlcnNlbHksIGJvbmUgbWFycm93IGRlcml2ZWQgbW9ub2N5dGVzIGRpZmZlcmVudGlhdGUgaW50byBtYWNyb3BoYWdlcywgd2hpY2ggCmFyZSBwZXJpcGhlcmFsIGJsb29kLWNpcmN1bGF0aW5nIGltbXVuZSBjZWxscyB3aGljaCBkbyBub3QgcHJvbGlmZXJhdGUgYW55bW9yZQpbQERlUGF1bGEtU2lsdmFdLiAKCk1hY3JvcGhhZ2VzIGNhbiBhZG9wdCB0d28gZGlzdGluY3Qgc3RhdGVzLCBwcm8taW5mbGFtbWF0b3J5IChNMSkgb3IgCmFudGktaW5mbGFtbWF0b3J5IChNMikuIFNpbWlsYXJseSwgaG9tZW9zdGF0aWMgbWljcm9nbGlhIGNhbiBiZWNvbWUgCnByby1pbmZsYW1tdG9yeSBvciBhbnRpLWluZmxhbW1hdG9yeSBpbiByZXNwb25zZSB0byBuZXVyb25hbCBpbmp1cnkgCltARGVQYXVsYS1TaWx2YV0uIER1cmluZyBuZXVyb2luZmxhbW1hdGlvbiBtYWNyb3BoYWdlcyBhbHNvIGVudGVyIHRoZSBicmFpbiwgCmNvbnRyaWJ1dGUgdG8gdGhlIGluZmxhbW1hdG9yeSByZXNwb25zZSBhbmQgCm1pZ2h0IGFjcXVpcmUgbWljcm9nbGlhIG1hcmtlcnMgYW5kIG1pY3JvZ2xpYSBmdW5jdGlvbgpbQERlUGF1bGEtU2lsdmE7IEBHcmFzc2l2YXJvXS4gV2hldGhlciBtYWNyb3BoYWdlcyBrZWVwIHRoaXMgbWljcm9nbGlhLWxpa2UgCnNpZ25hdHVyZSBhZnRlciB0aGV5IGxlYXZlIHRoZSBicmFpbiBpcyBub3QgdW5kZXJzdG9vZC4gSWYgdGhleSBkbywgdGhlcmUgbWlnaHQKYmUgbWljcm9nbGlhLWxpa2UgbWFjcm9waGFnZXMgaW4gdGhlIENTRi4gCgojIyMgSElWIGluZmVjdGlvbiBpbiB0aGUgY2VudHJhbCBuZXJ2b3VzIHN5c3RlbQoKVGhlIGJsb29kLWJyYWluIGJhcnJpZXIgKEJCQikgaXMgc3VwcG9zZWQgdG8gcHJldmVudCBwYXRob2dlbnMgZnJvbSBlbnRlcmluZyB0aGUgQ05TLgpBbW9uZyB0aGUgZmV3IGNlbGxzIHdoaWNoIGNhbiBwYXNzIHRoaXMgYmFycmllciBhcmUgaW1tdW5lIGNlbGxzLiBTaW5jZSBISVYKcHJpbWFyaWx5IGluZmVjdHMgaW1tdW5lIGNlbGxzIGl0IGNhbiBjaXJjdW12ZW50IHRoZSBibG9vZCBicmFpbiBiYXJyaWVyIGFuZCAKZW50ZXIgdGhlIGNlbnRyYWwgbmVydm91cyBzeXN0ZW0gKENOUykuIE9uY2UgSElWIGhhcyBlbnRlcmVkIHRoZSBDTlMgaXQgY2FuCmluZmVjdCBtaWNyb2dsaWEgd2hpY2ggbGl2ZSBmb3Igc2V2ZXJhbCB5ZWFycyBhbmQgYXJlIHRoZXJlZm9yZSBhbiBpZGVhbApyZXNlcnZvaXIgZm9yIHRoZSB2aXJ1cyBbW0BPc2Jvcm5lOyBAQXNhaGNob3A7IEBGYXJoYWRpYW47IEBXYWxsZXQ7IEBSw6l1XS4gCk9uZSBvZiB0aGUgbWFqb3IgcHJvYmxlbXMgdGhhdCBhcmlzZXMgZnJvbSB0aGUgSElWIAppbnZhc2lvbiBvZiB0aGUgYnJhaW4gaXMgdGhhdCBhbnRpcmV0cm92aXJhbCBkcnVncyBhcmUgZWl0aGVyIG5vdCBhYmxlIHRvIGNyb3NzIHRoZQpCQkIgb3IgdGhleSBhcmUgcmVtb3ZlZCBmcm9tIHRoZSBicmFpbiBieSBBVFAtYmluZGluZyBlZmZsdXggcHVtcHMgW0BPc2Jvcm5lXS4KQ29uc2VxdWVudGx5LCBldmVuIHRob3VnaHQgZHJ1Z3MgY2FuIGVudGVyIHRoZSBicmFpbiwgdGhlaXIgY29uY2VudHJhdGlvbnMgYXJlIApsYXJnZWx5IHJlZHVjZWQgaW4gdGhlIENTRiBjb21wYXJlZCB0byBibG9vZCBwbGFzbWEsIGZvciBleGFtcGxlIGVmYXZpcmVuegppbiB0aGUgcGxhc21hIHJlYWNoZXMgY29uY2VudHJhdGlvbnMgb2YgOS4y4oCTMTYuNiDOvG1vbC9tbCwgYnV0IGluIHRoZSBDU0YgaXQgCm9ubHkgcmVhY2hlcyAwLjAwNuKAkzAuMDkgzrxtb2wvbWwgW0BPc2Jvcm5lXS4gSW4gcGF0aWVudHMKcmVjZWl2aW5nIEFSVCB0aGUgSElWIHZpcnVzIGlzIHVzdWFsbHkgbm90IGRldGVjdGFibGUgaW4gYmxvb2QKKHVuZGV0ZWN0YWJsZSBISVYgUk5BIHZpcmFsIGxvYWQgbWVhbnMgPDUwIGNvcGllcy9tbCkgb3IgY2VyZWJyb3NwaW5hbApmbHVpZCAoQ1NGKSwgYnV0IGluIHRoZSBicmFpbiB0aGlzIGlzIGRpZmZpY3VsdCB0byB0ZXN0IGFuZCBpbnZlc3RpZ2F0ZSBhbmQsIAp0aGVyZWZvcmUsIGxhcmdlbHkgdW5rbm93biBbQEFzYWhjaG9wLCBAT3Nib3JuZV0uCgpBbW9uZyBwYXRpZW50cyByZWNlaXZpbmcgQVJUIHRoZXJlIGlzIGEgaGlnaCBwcmV2YWxlbmNlIG9mIEhBTkQsIGNhdXNlZCBieSB0aGUKcGVyc2lzdGVudCBpbmZlY3Rpb24gaW4gdGhlIGJyYWluIGFuZCB0aGUgcmVsYXRlZCBpbW11bmUgcmVzcG9uc2UgW0BTYXlsb3JdLiAKSXQgaGFzIGV2ZW4gYmVlbiBzdWdnZXN0ZWQgdGhhdCBBUlQgbWlnaHQgZHlzcmVndWxhdGUgdGlnaHQganVuY3Rpb24gcHJvdGVpbnMgCm5lY2Vzc2FyeSBmb3IgdGhlIGZ1bmN0aW9uIG9mIEJCQiBhbmQsIHRoZXJlZm9yZSwgY29udHJpYnV0ZXMgdG8gSEFORCAKW0BSYWhpbXksIEBPc2Jvcm5lXS4gQWNjb3JkaW5nIHRvIGEgbWV0YS1hbmFseXNpcyBIQU5EIGhhcyBhbiBvdmVyYWxsIApwcmV2YWxlbmNlIG9mIDQzLjklIGluIEhJVi1pbmZlY3RlZCBwYXRpZW50cyBhbmQgaXMgY2F0ZWdvcml6ZWQgaW50byB0aHJlZSAKc3RhZ2VzIFtAV2VpXToKCiogYXN5bXB0b21hdGljIG5ldXJvY29nbml0aXZlIGltcGFpcm1lbnQgKEFOSSkgLSAyNi4yJSBwcmV2YWxlbmNlCiogbWlsZCBuZXVyb2NvZ25pdGl2ZSBpbXBhaXJtZW50IChNTkQpIC0gOC41JSBwcmV2YWxlbmNlCiogSElWLWFzc29jaWF0ZWQgZGVtZW50aWEgKEhBRCkgLSAyLjEgJSBwcmV2YWxlbmNlCgpFdmVuIHRob3VnaHQgdGhlIHNldmVyaXR5IG9mIEhBTkQgaGFzIGRlY2xpbmVkIGR1ZSB0byBBUlQgdHJlYXRtZW50IGluIHRoZSBwYXN0CnllYXJzLCB0aGVyZSBpcyBhIGxhcmdlIG5lZWQgZm9yIGRlZXBlciB1bmRlcnN0YW5kaW5nIG9mIHRoZSBtb2xlY3VsYXIgbWVjaGFuaXNtcwpiZWhpbmQgdGhlIGRpc2Vhc2UgYXMgd2VsbCBhcyBiZXR0ZXIgZGlhZ25vc3RpYyB0b29scy4gU2luY2UgaW1tdW5lIGNlbGxzIGluIHRoZQpjZXJlYnJvc3BpbmFsIGZsdWlkIHJlZmxlY3QgdGhlIGltbXVuZSBjZWxscyBpbiB0aGUgYnJhaW4sIENTRiBtaWdodCBiZSB1c2VkIGFzCmEgZGlhZ25vc3RpYyB0b29sIGZvciBuZXVyb2NvZ25pdGl2ZSBkaXNvcmRlciBbQEZhcmhhZGlhbl0uIFNpbmdsZSBjZWxsIFJOQQpzZXF1ZW5jaW5nIChzYy1STkFzZXEpIG9uIENTRiBhbmQgYmxvb2QgZnJvbSBISVYtaW5mZWN0ZWQgcGF0aWVudHMgYW5kIGhlYWx0aHkgCmNvbnRyb2xzIGlkZW50aWZpZWQgYSBtaWNyb2dsaWEtbGlrZSBzdWJ0eXBlIG9mIG15ZWxvaWQgY2VsbHMgaW4gQ1NGIHdoaWNoIHdlcmUgCm5vdCBwcmVzZW50IGluIGJsb29kIHNhbXBsZXMgZnJvbSB0aGUgc2FtZSBwYXRpZW50IFtARmFyaGFkaWFuXS4gSEFORCBzdHJvbmdseQpjb3JyZWxhdGVzIHdpdGggbWljcm9nbGlhIGFjdGl2YXRpb24sIHRoZXJlZm9yZSwgdW5kZXJzdGFuZGluZyB0aGUgcm9sZSBvZiAKbWljcm9nbGlhIGluIEhBTkQgbWlnaHQgcHJvdmlkZSBpbnRlcmVzdGluZyBpbnNpZ2h0cy4gCmV4cHJlc3Npb24gc2lnbmF0dXJlIG9mIHRoZXNlIGNlbGxzIHJlc2VtYmxlcyB0aGF0IG9mIGRpc2Vhc2UtYXNzb2NpYXRlZCAKbWljcm9nbGlhIGNlbGxzIGFuZCwgdGhlcmVmb3JlIHdhcyBwcm9wb3NlZCB0byBiZSBhIG1pY3JvZ2xpYS1saWtlIGNlbGwgdHlwZSAKd2hpY2ggbWlnaHQgYmUgdXNlZCBmb3IgZGlhZ25vc2lzIG9mIEhBTkQgZnJvbSBDU0Ygc2FtcGxlcyBbQEZhcmhhZGlhbl0uIAoKIyMjIEhJViBpbmZlY3Rpb24gaW4gbWljcm9nbGlhCgpJbiB0aGUgZm9sbG93aW5nIGFuYWx5c2lzIHRoZSBhaW0gd2FzIHRvIHByb3ZpZGUgZnVydGhlciBldmlkZW5jZSBmb3IgdGhlIAptaWNyb2dsaWEtbGlrZSBuYXR1cmUgb2YgdGhlc2UgY2VsbHMgYnkgcGVyZm9ybWluZyBhZGRpdGlvbmFsIGFuYWx5c2lzIG9uIHRoZQpzYy1STkFzZXEgZGF0YXNldCBhbmQgaW50ZWdyYXRpbmcgaXQgd2l0aCBhZGRpdGlvbmFsIGRhdGFzZXRzIGZyb20sIG9uIHRoZSBvbmUgCmhhbmQgYSBtaWNyb2dsaWEgY2VsbCBsaW5lIGRlcml2ZWQgZnJvbSBhbiBISVYgcGF0aWVudCAoQzIwIGNlbGwpIGFuZCwgb24gdGhlIApvdGhlciBoYW5kLCBhIHRyaWN1bHR1cmUgc3lzdGVtIG9mIGluZHVjZWQgbmV1cm9ucywgYXN0cm9jeXRlcyBhbmQgbWljcm9nbGlhLCAKaW5mZWN0ZWQgd2l0aCBISVYgYW5kIHRyZWF0ZWQgd2l0aCBBUlQgW0BSeWFuOyBAR2FyY2lhLU1lc2FdLiAKClRoZSB0cmljdWx0dXJlIGRhdGFzZXQgdXNlZCBpbiB0aGUgZm9sbG93aW5nIGFuYWx5c2lzIG9yaWdpbmF0ZXMgZnJvbSBhIApodW1hbi1pbmR1Y2VkIHBsdXJpcG90ZW50IHN0ZW0gY2VsbCBtb2RlbCwgaW5jbHVkaW5nIGluZHVjZWQgbmV1cm9ucyAoaU5zKSwKaW51Y2VkIGFzdHJvY3l0ZXMgKGlBc3QpIGFuZCBpbmR1Y2VkIG1pY3JvZ2xpYSAoaU1nKSBjby1jdWx0dXJlZCB3aXRoIG9yIHdpdGhvdXQgCkhJViBpbmZlY3Rpb24gYW5kIGFudGlyZXRyb3ZpcmFsIHRoZXJhcHkgKEFSVCkgd2l0aCBlZmF2aXJlbnogKEVGWikgW0BSeWFuXS4KClRoZSBpbmZlY3RlZCBpTWcgZXhoaWJpdGVkIGEgaGlnaGVyIHByb2R1Y3Rpb24gb2YgcHJvaW5mbGFtbWF0b3J5IGN5dG9raW5lcyB0aGFuIAppbmZlY3RlZCBpTWcgdHJlYXRlZCB3aXRoIEVGWi4gTGV2ZWxzIG9mIElMLTFiLCBJTC0xYSwgSUwtOCBhbmQgVE5GLc6xIHdlcmUKaW5jcmVhc2VkIGluIGluZmVjdGVkICsvLSBFRlosIGNvbXBhcmVkIHRvIHVuaW5mZWN0ZWQgY29uZGl0aW9ucywgd2hpbGUgSUwtMTAgCmFuZCBJTC02IGRpZCBub3QgY2hhbmdlIGluIGFueSBjb25kaXRpb24gW0BSeWFuXS4gCgpTaW5jZSB0aGUgaW5mZWN0aW9uIHN0YXRlcyBvZiB0aGUgY2VsbHMgaW4gdGhpcyBkYXRhc2V0IGFyZSBrbm93biwgd2UgbWlnaHQgYmUgCmFibGUgdG8gZXh0cmFjdCBhIGdlbmUgc2lnbmF0dXJlIG9mIGluZmVjdGlvbiwgaW5mZWN0aW9uICsgQVJUIGNvbXBhcmVkIHRvCnVuaW5mZWN0ZWQgY2VsbHMgb3IgdW5pbmZlY3RlZCBjZWxscyB0cmVhdGVkIHdpdGggQVJULiBUaGlzIGdlbmUgc2lnbmF0dXJlIGNhbiAKdGhlbiBiZSBjb21wYXJlZCB0byB0aGUgbWljcm9nbGlhLWxpa2UgY2VsbHMgb2YgdGhlIENTRiBzYW1wbGVzLiBUaGlzIHdheSB3ZSAKbWlnaHQgYmUgYWJsZSB0byBpZGVudGlmeSBpbmZlY3RlZCBjZWxscyB2cyB1bmluZmVjdGVkIGNlbGxzIGluIHRoZSBDU0YgCm1pY3JvZ2xpYS1saWtlIGNlbGxzLiBUaGlzIGlzIGludGVyZXN0aW5nLCBiZWNhdXNlIGV2ZW4gdGhvdWdoIHRoZSBDU0Ygc2FtcGxlcyAKc3RlbSBmcm9tIEhJVi1pbmZlY3RlZCBwYXRpZW50cywgdGhlcmUgd2lsbCBiZSBzb21lIGNlbGxzIHdoaWNoIGFyZSBpbmZlY3RlZCAKd2l0aCB0aGUgdmlydXMsIHdoaWxlIG90aGVycyBhcmUgbm90IGluZmVjdGVkLiBCZWluZyBhYmxlIHRvIGRpZmZlcmVudGlhdGUgCmJldHdlZW4gaW5mZWN0ZWQgYW5kIHVuaW5mZWN0ZWQgY2VsbHMgd291bGQgYWxsb3cgYWRkaXRpb25hbCBpbmZlcmVuY2VzIGFib3V0CnRoZSBlZmZlY3Qgb2YgSElWIGluZmVjdGlvbiBvbiBtaWNyb2dsaWEuCgpUaGUgaW5mZWN0ZWQgaU1nIGV4aGliaXRlZCBhIGhpZ2hlciBwcm9kdWN0aW9uIG9mIHByb2luZmxhbW1hdG9yeSBjeXRva2luZXMgdGhhbgppbmZlY3RlZCBpTWcgdHJlYXRlZCB3aXRoIEVGWi4gTGV2ZWxzIG9mIElMLTFiLCBJTC0xYSwgSUwtOCBhbmQgVE5GLc6xIHdlcmUgCmluY3JlYXNlZCBpbiBpbmZlY3RlZCArLy0gRUZaLCBjb21wYXJlZCB0byB1bmluZmVjdGVkIGNvbmRpdGlvbnMsIHdoaWxlIElMLTEwCmFuZCBJTC02IGRpZCBub3QgY2hhbmdlIGluIGFueSBjb25kaXRpb24gW0BSeWFuXS4gIApTaW5jZSB0aGUgaW5mZWN0aW9uIHN0YXRlcyBvZiB0aGUgY2VsbHMgaW4gdGhpcyBkYXRhc2V0IGFyZSBrbm93biwgd2UgbWlnaHQgYmUgCmFibGUgdG8gZXh0cmFjdCBhIGdlbmUgc2lnbmF0dXJlIG9mIGluZmVjdGVkIGNlbGxzLCBpbmZlY3RlZCBjZWxscyB0cmVhdGVkIHdpdGggQVJUIGNvbXBhcmVkIHRvIAp1bmluZmVjdGVkIGNlbGxzIG9yIHVuaW5mZWN0ZWQgY2VsbHMgdHJlYXRlZCB3aXRoIEFSVC4gVGhpcyBnZW5lIHNpZ25hdHVyZSAKY291bGQgdGhlbiBiZSBjb21wYXJlZCB0byB0aGUgbWljcm9nbGlhLWxpa2UgY2VsbHMgb2YgdGhlIENTRiBzYW1wbGVzLiBUaGlzIHdheQp3ZSBtaWdodCBiZSBhYmxlIHRvIGlkZW50aWZ5IGluZmVjdGVkIGNlbGxzIHZzIHVuaW5mZWN0ZWQgY2VsbHMgaW4gdGhlIENTRiAKbWljcm9nbGlhLWxpa2UgY2VsbHMuIFRoaXMgaXMgaW50ZXJlc3RpbmcsIGJlY2F1c2UgZXZlbiB0aG91Z2ggdGhlIENTRiBzYW1wbGVzCnN0ZW0gZnJvbSBISVYtaW5mZWN0ZWQgcGF0aWVudHMsIHRoZXJlIHdpbGwgYmUgc29tZSBjZWxscyB3aGljaCBhcmUgaW5mZWN0ZWQgCndpdGggdGhlIHZpcnVzLCB3aGlsZSBvdGhlcnMgYXJlIG5vdCBpbmZlY3RlZC4gQmVpbmcgYWJsZSB0byBkaWZmZXJlbnRpYXRlIApiZXR3ZWVuIGluZmVjdGVkIGFuZCB1bmluZmVjdGVkIGNlbGxzIHdvdWxkIGFsbG93IGFkZGl0aW9uYWwgaW5mZXJlbmNlcyBhYm91dAp0aGUgZWZmZWN0IG9mIEhJViBpbmZlY3Rpb24gb24gbWljcm9nbGlhLgoKIyBSZWZlcmVuY2VzCgo8L2Rpdj4=</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
@@ -924,8 +867,6 @@ footer is added to webpages before the MathJax javascript. -->
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -959,36 +900,11 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
+  window.initializeSourceEmbed("Introduction.Rmd");
   window.initializeCodeFolding("hide" === "show");
 });
 </script>
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

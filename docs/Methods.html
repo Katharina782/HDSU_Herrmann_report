@@ -21,11 +21,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -92,6 +90,9 @@ h6 {
 }
 .table th:not([align]) {
   text-align: left;
+}
+#rmd-source-code {
+  display: none;
 }
 </style>
 
@@ -279,69 +280,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -349,16 +287,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -389,13 +317,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="HIV_CSF_dataset_analysis.html">1. CSF</a>
+      <a href="HIV_CSF_dataset_analysis.html">1. CSF/Blood samples</a>
     </li>
     <li>
       <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
     </li>
     <li>
-      <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF &amp; triculture</a>
+      <a href="Triculture_dataset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF/Blood &amp; triculture</a>
     </li>
     <li>
       <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
@@ -429,6 +357,8 @@ div.tocify {
 <ul class="dropdown-menu" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
 </ul>
 </div>
 
@@ -440,10 +370,24 @@ div.tocify {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#sc-rnaseq-analysis-workflow">sc-RNAseq analysis workflow</a>
+<ul>
+<li><a href="#quality-control">Quality Control</a></li>
+<li><a href="#normalization">Normalization</a></li>
+</ul></li>
+<li><a href="#integration-label-transfer">Integration &amp; Label Transfer</a>
+<ul>
+<li><a href="#integration">Integration</a></li>
+<li><a href="#label-transfer">Label Transfer</a></li>
+</ul></li>
+</ul>
+</div>
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -452,7 +396,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -464,7 +408,7 @@ div.tocify {
 <strong>Last updated:</strong> 2021-12-20
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -480,28 +424,28 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7243f8882ef1868800d5f0e420f83d5e4ba39bbtargetblankf7243f8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f7243f8882ef1868800d5f0e420f83d5e4ba39bb" target="_blank">f7243f8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef7243f8882ef1868800d5f0e420f83d5e4ba39bbtargetblankf7243f8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f7243f8882ef1868800d5f0e420f83d5e4ba39bb" target="_blank">f7243f8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -511,9 +455,6 @@ Ignored files:
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
-
-Unstaged changes:
-    Modified:   analysis/Methods.Rmd
 
 </code></pre>
 <p>
@@ -552,6 +493,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/ea7e899746b03ca612d93ad003c875fc101d2329/analysis/Methods.Rmd" target="_blank">ea7e899</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+wflow_publish(all = TRUE, republish = TRUE, delete_cache = TRUE)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/436b5c2790a0ce492f776915a9e543bf3a84511d/docs/Methods.html" target="_blank">436b5c2</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -627,14 +602,25 @@ new files
 </div>
 </div>
 </div>
+<div id="sc-rnaseq-analysis-workflow" class="section level2">
+<h2>sc-RNAseq analysis workflow</h2>
+<div id="quality-control" class="section level3">
+<h3>Quality Control</h3>
+<p>For Quality Control I used the publications from which the datasets were obtained as an orientation, in order to be able to reproduce the results and findings.</p>
+</div>
+<div id="normalization" class="section level3">
+<h3>Normalization</h3>
+<p>Log normalization was used to normalize count matrices, using the function <code>NormalizeData()</code>from the Seurat package. The counts of a particular features for a particular cell are divided by the total counts for that cell and multiplied by a scaling factor of 10,000. Then the result is natural-log transformed.</p>
+<p>For GRN inference with SCENIC the function <code>SCTransform()</code> from the Seurat package was used, so that the data structure would work with the SCENIC pipeline. This method uses regularized negative binomial regression to normalize the count matrix.</p>
 <ul>
-<li><p>Seurat:</p>
+<li>normalization
 <ul>
-<li>normalization</li>
 <li>PCA</li>
 <li>Clustering</li>
 </ul></li>
 </ul>
+</div>
+</div>
 <div id="integration-label-transfer" class="section level2">
 <h2>Integration &amp; Label Transfer</h2>
 <p>See here for more details on the method and implementation: <span class="citation">[@Stuart]</span></p>
@@ -644,9 +630,8 @@ new files
 <p>First, canonical correlation analysis is performed to reduce dimensionality of both datasets. This method can find shared biological markers, even if batch effects are very large. Second, expression data is L2 normalized. After the projection of distinct datasets into a shared subspace, pairs of MNN in this shared subspace are identified. These MNN correspond to cells which are biologically similar. The MNN serve as integration anchors for the integration, but beforehand the anchors are scored. The score is a measure of how similar the two anchor cells are. Using anchors and their corresponding scores correction vectors are computed for each cell. The correction vectors contain information on the difference between two anchor cells. Using the correction vectors the expression values of each cell are transformed, so that they are part of an integrated dataset. <span class="citation">[@Stuart]</span> This integrated dataset can then be used for further analysis.</p>
 <p>Finding anchors between datasets is not only required for integration of two distinct datasets, but also for label transfer.</p>
 </div>
-</div>
-<div id="label-transfer" class="section level2">
-<h2>Label Transfer</h2>
+<div id="label-transfer" class="section level3">
+<h3>Label Transfer</h3>
 <p>After finding anchors between distinct datasets as described above, it is also possible to transfer information on cell type annotations. This means that instead of de-nove analysis of cell type markers the cell labels are learned from a reference dataset. Instead of using canonical correlation analysis, the PCA computed for the reference dataset is projected onto the query dataset. A binary classification matrix is build with rows corresponding to all possible classes and columns corresponding to reference anchors of the anchor pairs. If a reference anchor belongs to a certain class the entry will be one, otherwise it will be zero. The classification matrix is then multiplied with a weight matrix. This way we get prediction scores for each class and cell in the query dataset. <span class="citation">[@Stuart]</span></p>
 <ul>
 <li><p>correlation</p>
@@ -666,7 +651,9 @@ new files
 </ul></li>
 </ul>
 </div>
+</div>
 
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTWV0aG9kcyIKYXV0aG9yOiAia21pa3VsaWsiCmRhdGU6ICIxNiAxMiAyMDIxIgpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQKLS0tCgoKIyMgc2MtUk5Bc2VxIGFuYWx5c2lzIHdvcmtmbG93CgojIyMgUXVhbGl0eSBDb250cm9sCgpGb3IgUXVhbGl0eSBDb250cm9sIEkgdXNlZCB0aGUgcHVibGljYXRpb25zIGZyb20gd2hpY2ggdGhlIGRhdGFzZXRzIHdlcmUgb2J0YWluZWQKYXMgYW4gb3JpZW50YXRpb24sIGluIG9yZGVyIHRvIGJlIGFibGUgdG8gcmVwcm9kdWNlIHRoZSByZXN1bHRzIGFuZCBmaW5kaW5ncy4KCiMjIyBOb3JtYWxpemF0aW9uCgpMb2cgbm9ybWFsaXphdGlvbiB3YXMgdXNlZCB0byBub3JtYWxpemUgY291bnQgbWF0cmljZXMsIHVzaW5nIHRoZSBmdW5jdGlvbiBgTm9ybWFsaXplRGF0YSgpYGZyb20gdGhlIFNldXJhdCBwYWNrYWdlLiBUaGUgY291bnRzIG9mIGEgcGFydGljdWxhcgpmZWF0dXJlcyBmb3IgYSBwYXJ0aWN1bGFyIGNlbGwgYXJlIGRpdmlkZWQgYnkgdGhlIHRvdGFsIGNvdW50cyBmb3IgdGhhdCBjZWxsIGFuZAptdWx0aXBsaWVkIGJ5IGEgc2NhbGluZyBmYWN0b3Igb2YgMTAsMDAwLiBUaGVuIHRoZSByZXN1bHQgaXMgbmF0dXJhbC1sb2cgCnRyYW5zZm9ybWVkLiAKCkZvciBHUk4gaW5mZXJlbmNlIHdpdGggU0NFTklDIHRoZSBmdW5jdGlvbiBgU0NUcmFuc2Zvcm0oKWAgZnJvbSB0aGUgU2V1cmF0IApwYWNrYWdlIHdhcyB1c2VkLCBzbyB0aGF0IHRoZSBkYXRhIHN0cnVjdHVyZSB3b3VsZCB3b3JrIHdpdGggdGhlIFNDRU5JQyBwaXBlbGluZS4KVGhpcyBtZXRob2QgdXNlcyByZWd1bGFyaXplZCBuZWdhdGl2ZSBiaW5vbWlhbCByZWdyZXNzaW9uIHRvIG5vcm1hbGl6ZSB0aGUKY291bnQgbWF0cml4LiAKCgoKKyBub3JtYWxpemF0aW9uCiAgKyBQQ0EKICArIENsdXN0ZXJpbmcKICAKIyMgSW50ZWdyYXRpb24gJiBMYWJlbCBUcmFuc2ZlcgoKU2VlIGhlcmUgZm9yIG1vcmUgZGV0YWlscyBvbiB0aGUgbWV0aG9kIGFuZCBpbXBsZW1lbnRhdGlvbjoKW0BTdHVhcnRdCgpTZWUgaGVyZSBmb3IgYSB2aWduZXR0ZToKaHR0cHM6Ly9zYXRpamFsYWIub3JnL3NldXJhdC9hcnRpY2xlcy9pbnRlZ3JhdGlvbl9tYXBwaW5nLmh0bWwKCiMjIyBJbnRlZ3JhdGlvbgoKRmlyc3QsIGNhbm9uaWNhbCBjb3JyZWxhdGlvbiBhbmFseXNpcyBpcyBwZXJmb3JtZWQgdG8gcmVkdWNlIGRpbWVuc2lvbmFsaXR5IG9mIGJvdGgKZGF0YXNldHMuIFRoaXMgbWV0aG9kIGNhbiBmaW5kIHNoYXJlZCBiaW9sb2dpY2FsIG1hcmtlcnMsIGV2ZW4gaWYgYmF0Y2ggZWZmZWN0cyAKYXJlIHZlcnkgbGFyZ2UuIFNlY29uZCwgZXhwcmVzc2lvbiBkYXRhIGlzIEwyIG5vcm1hbGl6ZWQuIEFmdGVyIHRoZSAKcHJvamVjdGlvbiBvZiBkaXN0aW5jdCBkYXRhc2V0cyBpbnRvIGEgc2hhcmVkIHN1YnNwYWNlLCBwYWlycyBvZiBNTk4gaW4gdGhpcyBzaGFyZWQgc3Vic3BhY2UgYXJlIGlkZW50aWZpZWQuIFRoZXNlIE1OTiBjb3JyZXNwb25kIHRvIGNlbGxzIHdoaWNoIGFyZSBiaW9sb2dpY2FsbHkKc2ltaWxhci4gVGhlIE1OTiBzZXJ2ZSBhcyBpbnRlZ3JhdGlvbiBhbmNob3JzIGZvciB0aGUgaW50ZWdyYXRpb24sIGJ1dCAKYmVmb3JlaGFuZCB0aGUgYW5jaG9ycyBhcmUgc2NvcmVkLiBUaGUgc2NvcmUgaXMgYSBtZWFzdXJlIG9mIGhvdyBzaW1pbGFyIHRoZSB0d28gCmFuY2hvciBjZWxscyBhcmUuIFVzaW5nIGFuY2hvcnMgYW5kIHRoZWlyIGNvcnJlc3BvbmRpbmcgc2NvcmVzIApjb3JyZWN0aW9uIHZlY3RvcnMgYXJlIGNvbXB1dGVkIGZvciBlYWNoIGNlbGwuIFRoZSBjb3JyZWN0aW9uIHZlY3RvcnMgY29udGFpbiAKaW5mb3JtYXRpb24gb24gdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB0d28gYW5jaG9yIGNlbGxzLiBVc2luZyB0aGUgY29ycmVjdGlvbiB2ZWN0b3JzIAp0aGUgZXhwcmVzc2lvbiB2YWx1ZXMgb2YgZWFjaCBjZWxsIGFyZSB0cmFuc2Zvcm1lZCwgc28gdGhhdCB0aGV5IGFyZSBwYXJ0IG9mIGFuCmludGVncmF0ZWQgZGF0YXNldC4gW0BTdHVhcnRdIFRoaXMgaW50ZWdyYXRlZCBkYXRhc2V0IGNhbiB0aGVuIGJlIHVzZWQgZm9yIApmdXJ0aGVyIGFuYWx5c2lzLgoKRmluZGluZyBhbmNob3JzIGJldHdlZW4gZGF0YXNldHMgaXMgbm90IG9ubHkgcmVxdWlyZWQgZm9yIGludGVncmF0aW9uIG9mIHR3byAKZGlzdGluY3QgZGF0YXNldHMsIGJ1dCBhbHNvIGZvciBsYWJlbCB0cmFuc2Zlci4gCgojIyMgTGFiZWwgVHJhbnNmZXIKCkFmdGVyIGZpbmRpbmcgYW5jaG9ycyBiZXR3ZWVuIGRpc3RpbmN0IGRhdGFzZXRzIGFzIGRlc2NyaWJlZCBhYm92ZSwgaXQgCmlzIGFsc28gcG9zc2libGUgdG8gdHJhbnNmZXIgaW5mb3JtYXRpb24gb24gY2VsbCB0eXBlIGFubm90YXRpb25zLiBUaGlzIG1lYW5zIAp0aGF0IGluc3RlYWQgb2YgZGUtbm92ZSBhbmFseXNpcyBvZiBjZWxsIHR5cGUgbWFya2VycyB0aGUgY2VsbCBsYWJlbHMgYXJlIGxlYXJuZWQgCmZyb20gYSByZWZlcmVuY2UgZGF0YXNldC4gSW5zdGVhZCBvZiB1c2luZyBjYW5vbmljYWwgY29ycmVsYXRpb24gYW5hbHlzaXMsIHRoZQpQQ0EgY29tcHV0ZWQgZm9yIHRoZSByZWZlcmVuY2UgZGF0YXNldCBpcyBwcm9qZWN0ZWQgb250byB0aGUgcXVlcnkgZGF0YXNldC4gCkEgYmluYXJ5IGNsYXNzaWZpY2F0aW9uIG1hdHJpeCBpcyBidWlsZCB3aXRoIHJvd3MgY29ycmVzcG9uZGluZyB0byBhbGwgcG9zc2libGUgCmNsYXNzZXMgYW5kIGNvbHVtbnMgY29ycmVzcG9uZGluZyB0byByZWZlcmVuY2UgYW5jaG9ycyBvZiB0aGUgYW5jaG9yIHBhaXJzLiAKSWYgYSByZWZlcmVuY2UgYW5jaG9yIGJlbG9uZ3MgdG8gYSBjZXJ0YWluIGNsYXNzIHRoZSBlbnRyeSB3aWxsIGJlIG9uZSwgb3RoZXJ3aXNlCml0IHdpbGwgYmUgemVyby4gVGhlIGNsYXNzaWZpY2F0aW9uIG1hdHJpeCBpcyB0aGVuIG11bHRpcGxpZWQgd2l0aCBhIHdlaWdodCBtYXRyaXguClRoaXMgd2F5IHdlIGdldCBwcmVkaWN0aW9uIHNjb3JlcyBmb3IgZWFjaCBjbGFzcyBhbmQgY2VsbCBpbiB0aGUgcXVlcnkgZGF0YXNldC4KW0BTdHVhcnRdCgoqIGNvcnJlbGF0aW9uICAKICAKICArIHRlc3QgZm9yIGNvcnJlbGF0aW9uCiAgKyBQZWFyc29uIHZzIFNwZWFybWFuPwogIAoqIEFkZE1vZHVsZVNjb3JlCgoqIGhpZXJhcmNoaWNhbCBjbHVzdGVyaW5nIAogICsgd3NzIHBsb3QKICAKKiB0ZXN0IGZvciBkaWZmZXJlbnRpYWwgVEYgYWN0aXZpdHkKICArIEtydXNrYWwtV2FsbGlzCiAgKyBwYWlyd2lzZSB3aWxjb3g=</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
@@ -683,8 +670,6 @@ footer is added to webpages before the MathJax javascript. -->
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -718,36 +703,11 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
+  window.initializeSourceEmbed("Methods.Rmd");
   window.initializeCodeFolding("hide" === "show");
 });
 </script>
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

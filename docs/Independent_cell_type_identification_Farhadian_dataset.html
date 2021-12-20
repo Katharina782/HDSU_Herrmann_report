@@ -21,11 +21,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -92,6 +90,9 @@ h6 {
 }
 .table th:not([align]) {
   text-align: left;
+}
+#rmd-source-code {
+  display: none;
 }
 </style>
 
@@ -301,69 +302,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -371,16 +309,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -411,13 +339,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="HIV_CSF_dataset_analysis.html">1. CSF</a>
+      <a href="HIV_CSF_dataset_analysis.html">1. CSF/Blood samples</a>
     </li>
     <li>
       <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
     </li>
     <li>
-      <a href="Triculture_datset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF &amp; triculture</a>
+      <a href="Triculture_dataset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF/Blood &amp; triculture</a>
     </li>
     <li>
       <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
@@ -451,6 +379,8 @@ div.tocify {
 <ul class="dropdown-menu" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
 </ul>
 </div>
 
@@ -465,7 +395,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -474,7 +404,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -486,7 +416,7 @@ div.tocify {
 <strong>Last updated:</strong> 2021-12-20
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -550,69 +480,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
-<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-The following chunks had caches available:
-<ul>
-<li>
-session-info-chunk-inserted-by-workflowr
-</li>
-<li>
-unnamed-chunk-1
-</li>
-<li>
-unnamed-chunk-10
-</li>
-<li>
-unnamed-chunk-11
-</li>
-<li>
-unnamed-chunk-12
-</li>
-<li>
-unnamed-chunk-13
-</li>
-<li>
-unnamed-chunk-14
-</li>
-<li>
-unnamed-chunk-15
-</li>
-<li>
-unnamed-chunk-16
-</li>
-<li>
-unnamed-chunk-17
-</li>
-<li>
-unnamed-chunk-2
-</li>
-<li>
-unnamed-chunk-3
-</li>
-<li>
-unnamed-chunk-4
-</li>
-<li>
-unnamed-chunk-5
-</li>
-<li>
-unnamed-chunk-6
-</li>
-<li>
-unnamed-chunk-7
-</li>
-<li>
-unnamed-chunk-8
-</li>
-<li>
-unnamed-chunk-9
-</li>
-</ul>
-<p>To ensure reproducibility of the results, delete the cache directory <code>Independent_cell_type_identification_Farhadian_dataset_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
 </div>
 </div>
 </div>
@@ -631,29 +504,24 @@ unnamed-chunk-9
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef94eb8c2238df11d56188f301f5c0d8bec07a0cbtargetblankf94eb8ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreeea7e899746b03ca612d93ad003c875fc101d2329targetblankea7e899a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f94eb8c2238df11d56188f301f5c0d8bec07a0cb" target="_blank">f94eb8c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/ea7e899746b03ca612d93ad003c875fc101d2329" target="_blank">ea7e899</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
     Ignored:    analysis/TF_activity_analysis_of_myeloid2_cluster_cache/
     Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
-
-Unstaged changes:
-    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
-    Modified:   analysis/Methods.Rmd
 
 </code></pre>
 <p>
@@ -692,6 +560,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/ea7e899746b03ca612d93ad003c875fc101d2329/analysis/Independent_cell_type_identification_Farhadian_dataset.Rmd" target="_blank">ea7e899</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+wflow_publish(all = TRUE, republish = TRUE, delete_cache = TRUE)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/40651d96647f10219a4aec953c8d618d57bc13f5/docs/Independent_cell_type_identification_Farhadian_dataset.html" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -904,12 +806,6 @@ recent updates
 </div>
 </div>
 <div style="text-align: justify">
-
-
-
-
-
-
 <pre class="r"><code>library(RColorBrewer)
 library(readxl)
 library(tidyverse)
@@ -957,106 +853,140 @@ library(pheatmap)</code></pre>
 <div id="function-add-module-score" class="section level4">
 <h4>Function Add Module Score</h4>
 <p>This Function Caluclate the average expression levels of each cluster on single cell level, subtracted by the aggregated expression of control feature sets. The analyzed features are binned based on averaged expression and the control features are randomly selected from each bin.</p>
-<details>
-<summary>
-Click for Answer
-</summary>
-<p>#### read in Seurat object</p>
-<pre class="r"><code>  hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)
-  ```
-  
-  
-  
-  
-  
-  ## Gene signature defined by [@Farhadian]
-  
-  Do we find the 60 signature genes from [@Farhadian] for 
-  myeloid2 among the signature defined by @[Gossselin]?
-  
-  ##### Read in list of microglia signature genes found in the Gosselin paper
-  which are also found in the HIV1 and HIV2 samples:
-  
-  
-  ```r
-  microglia_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples&quot;)
-  ```
-  
-  28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
-  found in the 881 microglia signature genes defined by [@Gosselin].
-  
-  
-  ```r
-  # Are there any genes overlapping between Farhadian and Glass paper?
-  #import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
-  paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;, sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
-  paper[1,] &lt;- &quot;APOC1&quot;
-  colnames(paper) &lt;- &quot;&quot;
-  paper &lt;- as.vector(paper[,1])
-  
-  # Are there any genes overlapping between Farhadian and Glass paper?
-  #paper %in% as.vector(microglia_genes[[&quot;gene_name&quot;]])
-  
-  overlap &lt;- as.vector(microglia_genes[[&quot;gene_name&quot;]]) [as.vector(microglia_genes[[&quot;gene_name&quot;]]) %in% paper]
-  length(overlap)
-  ```
-  
-  [1] 28
-  
-  ```r
-  overlap %&gt;% kable()
-  ```
-  
-  
-  
-  |x        |
-  |:--------|
-  |SCIN     |
-  |CCR5     |
-  |HLA-DMB  |
-  |MSR1     |
-  |HAVCR2   |
-  |VSIG4    |
-  |IL18     |
-  |C3       |
-  |SLC2A5   |
-  |FCGBP    |
-  |CD14     |
-  |OLR1     |
-  |TREM2    |
-  |FOLR2    |
-  |HLA-DMA  |
-  |ZFHX3    |
-  |HLA-DQA1 |
-  |HLA-DPA1 |
-  |DAB2     |
-  |C1QC     |
-  |C1QB     |
-  |LYVE1    |
-  |CYFIP1   |
-  |HLA-DRB1 |
-  |BHLHE41  |
-  |MAF      |
-  |C1QA     |
-  |HLA-DRA  |
-&lt;/details&gt; 
+</div>
+<div id="read-in-seurat-object" class="section level4">
+<h4>read in Seurat object</h4>
+<pre class="r"><code>hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)</code></pre>
+</div>
+<div id="gene-signature-defined-by-farhadian" class="section level2">
+<h2>Gene signature defined by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span></h2>
+<p>Do we find the 60 signature genes from <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> for myeloid2 among the signature defined by @[Gossselin]?</p>
+<div id="read-in-list-of-microglia-signature-genes-found-in-the-gosselin-paper" class="section level5">
+<h5>Read in list of microglia signature genes found in the Gosselin paper</h5>
+<p>which are also found in the HIV1 and HIV2 samples:</p>
+<pre class="r"><code>microglia_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples&quot;)</code></pre>
+<p>28 of the 60 genes used as microglia signature in the <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> Paper are also found in the 881 microglia signature genes defined by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
+<pre class="r"><code># Are there any genes overlapping between Farhadian and Glass paper?
+#import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
+paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;, sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
+paper[1,] &lt;- &quot;APOC1&quot;
+colnames(paper) &lt;- &quot;&quot;
+paper &lt;- as.vector(paper[,1])
 
+# Are there any genes overlapping between Farhadian and Glass paper?
+#paper %in% as.vector(microglia_genes[[&quot;gene_name&quot;]])
 
-#### 60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type
-
-
-```r
-# get only genes present in the HIV1 and HIV2 samples!
+overlap &lt;- as.vector(microglia_genes[[&quot;gene_name&quot;]]) [as.vector(microglia_genes[[&quot;gene_name&quot;]]) %in% paper]
+length(overlap)</code></pre>
+<p>[1] 28</p>
+<pre class="r"><code>overlap %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">SCIN</td>
+</tr>
+<tr class="even">
+<td align="left">CCR5</td>
+</tr>
+<tr class="odd">
+<td align="left">HLA-DMB</td>
+</tr>
+<tr class="even">
+<td align="left">MSR1</td>
+</tr>
+<tr class="odd">
+<td align="left">HAVCR2</td>
+</tr>
+<tr class="even">
+<td align="left">VSIG4</td>
+</tr>
+<tr class="odd">
+<td align="left">IL18</td>
+</tr>
+<tr class="even">
+<td align="left">C3</td>
+</tr>
+<tr class="odd">
+<td align="left">SLC2A5</td>
+</tr>
+<tr class="even">
+<td align="left">FCGBP</td>
+</tr>
+<tr class="odd">
+<td align="left">CD14</td>
+</tr>
+<tr class="even">
+<td align="left">OLR1</td>
+</tr>
+<tr class="odd">
+<td align="left">TREM2</td>
+</tr>
+<tr class="even">
+<td align="left">FOLR2</td>
+</tr>
+<tr class="odd">
+<td align="left">HLA-DMA</td>
+</tr>
+<tr class="even">
+<td align="left">ZFHX3</td>
+</tr>
+<tr class="odd">
+<td align="left">HLA-DQA1</td>
+</tr>
+<tr class="even">
+<td align="left">HLA-DPA1</td>
+</tr>
+<tr class="odd">
+<td align="left">DAB2</td>
+</tr>
+<tr class="even">
+<td align="left">C1QC</td>
+</tr>
+<tr class="odd">
+<td align="left">C1QB</td>
+</tr>
+<tr class="even">
+<td align="left">LYVE1</td>
+</tr>
+<tr class="odd">
+<td align="left">CYFIP1</td>
+</tr>
+<tr class="even">
+<td align="left">HLA-DRB1</td>
+</tr>
+<tr class="odd">
+<td align="left">BHLHE41</td>
+</tr>
+<tr class="even">
+<td align="left">MAF</td>
+</tr>
+<tr class="odd">
+<td align="left">C1QA</td>
+</tr>
+<tr class="even">
+<td align="left">HLA-DRA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="genes-described-by-farhadian-et-al.-to-distinguish-the-myeloid2-cell-type" class="section level4">
+<h4>60 genes described by Farhadian et al. to distinguish the Myeloid2 cell type</h4>
+<pre class="r"><code># get only genes present in the HIV1 and HIV2 samples!
 paper &lt;- paper[paper %in% rownames(hiv4@assays$RNA@counts)]
 
 
 hiv_farhadian &lt;- AddModuleScore(hiv4, 
-                         features = paper)
+                           features = paper)
 
 Idents(hiv_farhadian) &lt;- &quot;cell_type&quot;
 FeaturePlot(hiv_farhadian, features = &quot;Cluster1&quot; , pt.size = .5, label = TRUE, repel = TRUE) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
-labs(title = &quot;Farhadian et al., 2018: Microglia signature genes&quot;)
+    scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = &quot;RdBu&quot;))) +
+  labs(title = &quot;Farhadian et al., 2018: Microglia signature genes&quot;)
 Scale for &#39;colour&#39; is already present. Adding another scale for &#39;colour&#39;,
 which will replace the existing scale.</code></pre>
 <p><img src="figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -1082,6 +1012,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-5-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-5-1.png" target="_blank">fc8e61c</a>
@@ -1117,6 +1058,7 @@ Katharina782
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 </div>
@@ -1161,6 +1103,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-6-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-6-1.png" target="_blank">fc8e61c</a>
@@ -1237,6 +1190,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-7-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-7-1.png" target="_blank">fc8e61c</a>
@@ -1557,6 +1521,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-8-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-8-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -1638,6 +1613,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-9-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-9-1.png" target="_blank">fc8e61c</a>
@@ -1739,6 +1725,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -1809,6 +1806,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-2.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-10-2.png" target="_blank">fc8e61c</a>
@@ -1882,6 +1890,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -1949,6 +1968,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-2.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-2.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -2014,6 +2044,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-3.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-11-3.png" target="_blank">fc8e61c</a>
@@ -2088,6 +2129,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-12-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-12-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -2149,6 +2201,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-1.png" target="_blank">fc8e61c</a>
@@ -2217,6 +2280,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-2.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-13-2.png" target="_blank">fc8e61c</a>
@@ -2299,6 +2373,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-14-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-14-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -2360,6 +2445,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-14-2.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-14-2.png" target="_blank">fc8e61c</a>
@@ -2424,6 +2520,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-14-3.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-14-3.png" target="_blank">fc8e61c</a>
@@ -2530,6 +2637,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -2592,6 +2710,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-2.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-2.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -2652,6 +2781,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-3.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-3.png" target="_blank">fc8e61c</a>
@@ -2726,6 +2866,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-4.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-4.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -2788,6 +2939,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-5.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-5.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -2848,6 +3010,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-6.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-15-6.png" target="_blank">fc8e61c</a>
@@ -2974,6 +3147,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -3034,6 +3218,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-2.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-2.png" target="_blank">fc8e61c</a>
@@ -3098,6 +3293,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-3.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-3.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -3158,6 +3364,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-4.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-4.png" target="_blank">fc8e61c</a>
@@ -3222,6 +3439,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-5.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-5.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -3282,6 +3510,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-6.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-6.png" target="_blank">fc8e61c</a>
@@ -3346,6 +3585,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-7.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-7.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -3406,6 +3656,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-8.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-16-8.png" target="_blank">fc8e61c</a>
@@ -3574,6 +3835,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/40651d96647f10219a4aec953c8d618d57bc13f5/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-17-1.png" target="_blank">40651d9</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/fc8e61c092efb1fe97e7df525f578fb5b23a5a58/docs/figure/Independent_cell_type_identification_Farhadian_dataset.Rmd/unnamed-chunk-17-1.png" target="_blank">fc8e61c</a>
 </td>
 <td>
@@ -3613,6 +3885,7 @@ Katharina782
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
+</div>
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Gosselin" class="csl-entry">
@@ -3709,8 +3982,8 @@ loaded via a namespace (and not attached):
 [112] rmarkdown_2.6         Rtsne_0.15            git2r_0.27.1         
 [115] shiny_1.7.1           lubridate_1.7.9.2    </code></pre>
 </div>
-</div>
 
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSW5kZXBlbmRlbnRfY2VsbF90eXBlX2lkZW50aWZpY2F0aW9uX0ZhcmhhZGlhbl9kYXRhc2V0IgphdXRob3I6ICJrbWlrdWxpayIKZGF0ZTogIjE0IDEwIDIwMjEiCm91dHB1dDogCiAgaHRtbF9kb2N1bWVudDoKICAgIHRvYzogdHJ1ZQogICAgdG9jX2RlcHRoOiAzCiAgICBjb2RlX2ZvbGRpbmc6IGhpZGUKYmlibGlvZ3JhcGh5OiByZWZlcmVuY2VzLmJpYgpsaW5rLWNpdGF0aW9uczogeWVzCi0tLQoKPGRpdiBzdHlsZT0idGV4dC1hbGlnbjoganVzdGlmeSI+IAoKCmBgYHtyIHNldHVwLCBpbmNsdWRlID0gRkFMU0V9CmtuaXRyOjpvcHRzX2NodW5rJHNldChjYWNoZSA9IFRSVUUsIGNhY2hlLmxhenkgPSBGQUxTRSwgYXV0b2RlcCA9IFRSVUUsCiAgICAgICAgICAgICAgICAgICAgICBjb2xsYXBzZSA9IFRSVUUpCgpzZXQuc2VlZCg0MikKYGBgCgoKYGBge3J9CmxpYnJhcnkoUkNvbG9yQnJld2VyKQpsaWJyYXJ5KHJlYWR4bCkKbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkoU2V1cmF0KQpsaWJyYXJ5KGVkZ2VSKQpsaWJyYXJ5KE1hdHJpeCkKbGlicmFyeShkYXRhLnRhYmxlKQpsaWJyYXJ5KGdncGxvdDIpCmxpYnJhcnkoZHBseXIpCmxpYnJhcnkoZ2dyZXBlbCkKbGlicmFyeShoYXJtb255KQpsaWJyYXJ5KGtuaXRyKQpsaWJyYXJ5KHBoZWF0bWFwKQpgYGAKCgojIEluZGVwZW5kZW50IGFubm90YXRpb24gb2YgTXllbG9pZDIgYW5kIE15ZWxvaWQ1IGNsdXN0ZXJzIGFzIE1pY3JvZ2xpYS1saWtlIGNlbGxzCgpDYW4gd2UgaWRlbnRpZnkgdGhlIG1pY3JvZ2xpYS1saWtlIG15ZWxvaWQyL215ZWxvaWQ1IGNsdXN0ZXIgdGhleSBmb3VuZCBpbiB0aGUgCnBhcGVyIGJ5IFtARmFyaGFkaWFuXSB3aGVuIHVzaW5nIGluZGVwZW5kZW50IGdlbmVzIGZvciBhbm5vdGF0aW9ucz8KCgpIZXJlLCBJIHdpbGwgZmlyc3QgdXNlIHRoZSA4ODEgTWljcm9nbGlhIG1hcmtlciBnZW5lcyBhbmQgdGhlbiBhbHNvIHRyeSB0aGUgbGlzdApvZiBURnMgcHJvdmlkZWQgYnkgW0BHb3NzZWxpbl0uCgojIyMjIEZ1bmN0aW9uIEFkZCBNb2R1bGUgU2NvcmUKClRoaXMgRnVuY3Rpb24gQ2FsdWNsYXRlIHRoZSBhdmVyYWdlIGV4cHJlc3Npb24gbGV2ZWxzIG9mIGVhY2ggY2x1c3RlciBvbiBzaW5nbGUgY2VsbCBsZXZlbCwgCnN1YnRyYWN0ZWQgYnkgdGhlIGFnZ3JlZ2F0ZWQgZXhwcmVzc2lvbiBvZiBjb250cm9sIGZlYXR1cmUgc2V0cy4gVGhlIGFuYWx5emVkCmZlYXR1cmVzIGFyZSBiaW5uZWQgYmFzZWQgb24gYXZlcmFnZWQgZXhwcmVzc2lvbiBhbmQgdGhlIGNvbnRyb2wgZmVhdHVyZXMgYXJlIApyYW5kb21seSBzZWxlY3RlZCBmcm9tIGVhY2ggYmluLiAKCgojIyMjIHJlYWQgaW4gU2V1cmF0IG9iamVjdAoKCmBgYHtyfQpoaXY0IDwtIHJlYWRSRFMoIi9tZWRpYS9hZy1jaGVycm1hbm4va21pa3VsaWsvSElWX21pY3JvZ2xpYS9zcmMvUmVwcm9kdWNlX0ZhcmhhZGlhbl9QYXBlci9TZXVyYXRfb2JqZWN0cy9ub25faW50ZWdyYXRlZF9ISVYxX0hJVjJfNHNhbXBsZXNfc2V1cmF0X29iamVjdC5yZHMiKQpgYGAKCgoKCgojIyBHZW5lIHNpZ25hdHVyZSBkZWZpbmVkIGJ5IFtARmFyaGFkaWFuXQoKRG8gd2UgZmluZCB0aGUgNjAgc2lnbmF0dXJlIGdlbmVzIGZyb20gW0BGYXJoYWRpYW5dIGZvciAKbXllbG9pZDIgYW1vbmcgdGhlIHNpZ25hdHVyZSBkZWZpbmVkIGJ5IEBbR29zc3NlbGluXT8KCiMjIyMjIFJlYWQgaW4gbGlzdCBvZiBtaWNyb2dsaWEgc2lnbmF0dXJlIGdlbmVzIGZvdW5kIGluIHRoZSBHb3NzZWxpbiBwYXBlcgp3aGljaCBhcmUgYWxzbyBmb3VuZCBpbiB0aGUgSElWMSBhbmQgSElWMiBzYW1wbGVzOgoKYGBge3J9Cm1pY3JvZ2xpYV9nZW5lcyA8LSByZWFkLnRhYmxlKCIvbWVkaWEvYWctY2hlcnJtYW5uL2ttaWt1bGlrL0hJVl9taWNyb2dsaWEvZGF0YS9NaWNyb2dsaWFfZ2VuZV9zaWduYXR1cl9mb3VuZF9pbl9ISVYxX0hJVjJfc2FtcGxlcyIpCmBgYAoKMjggb2YgdGhlIDYwIGdlbmVzIHVzZWQgYXMgbWljcm9nbGlhIHNpZ25hdHVyZSBpbiB0aGUgW0BGYXJoYWRpYW5dIFBhcGVyIGFyZSBhbHNvIApmb3VuZCBpbiB0aGUgODgxIG1pY3JvZ2xpYSBzaWduYXR1cmUgZ2VuZXMgZGVmaW5lZCBieSBbQEdvc3NlbGluXS4KCmBgYHtyLCByZXN1bHRzID0gImFzaXMifQojIEFyZSB0aGVyZSBhbnkgZ2VuZXMgb3ZlcmxhcHBpbmcgYmV0d2VlbiBGYXJoYWRpYW4gYW5kIEdsYXNzIHBhcGVyPwojaW1wb3J0IHRoZSA2MCBnZW5lcyB0aGF0IHdlcmUgdXByZWd1bGF0ZWQgaW4gTXllbG9pZC0yIGluIHRoZSBwYXBlciBjb21wYXJlZCB0byB0aGUgZm91ciBvdGhlciBteWVsb2lkIHN1YnNldHMKcGFwZXIgPC0gcmVhZC50YWJsZShmaWxlID0gIi9tZWRpYS9hZy1jaGVycm1hbm4va21pa3VsaWsvSElWX21pY3JvZ2xpYS9kYXRhL015ZWxvaWQtMl9nZW5lc19wYXBlci5jc3YiLCBzZXAgPSAiXHQiLCBoZWFkZXIgPSBGQUxTRSwgc2tpcE51bCA9IFRSVUUpIywgbl9tYXggPSA2MCkKcGFwZXJbMSxdIDwtICJBUE9DMSIKY29sbmFtZXMocGFwZXIpIDwtICIiCnBhcGVyIDwtIGFzLnZlY3RvcihwYXBlclssMV0pCgojIEFyZSB0aGVyZSBhbnkgZ2VuZXMgb3ZlcmxhcHBpbmcgYmV0d2VlbiBGYXJoYWRpYW4gYW5kIEdsYXNzIHBhcGVyPwojcGFwZXIgJWluJSBhcy52ZWN0b3IobWljcm9nbGlhX2dlbmVzW1siZ2VuZV9uYW1lIl1dKQoKb3ZlcmxhcCA8LSBhcy52ZWN0b3IobWljcm9nbGlhX2dlbmVzW1siZ2VuZV9uYW1lIl1dKSBbYXMudmVjdG9yKG1pY3JvZ2xpYV9nZW5lc1tbImdlbmVfbmFtZSJdXSkgJWluJSBwYXBlcl0KbGVuZ3RoKG92ZXJsYXApCm92ZXJsYXAgJT4lIGthYmxlKCkKYGBgCgoKIyMjIyA2MCBnZW5lcyBkZXNjcmliZWQgYnkgRmFyaGFkaWFuIGV0IGFsLiB0byBkaXN0aW5ndWlzaCB0aGUgTXllbG9pZDIgY2VsbCB0eXBlCgpgYGB7cn0KIyBnZXQgb25seSBnZW5lcyBwcmVzZW50IGluIHRoZSBISVYxIGFuZCBISVYyIHNhbXBsZXMhCnBhcGVyIDwtIHBhcGVyW3BhcGVyICVpbiUgcm93bmFtZXMoaGl2NEBhc3NheXMkUk5BQGNvdW50cyldCgoKaGl2X2ZhcmhhZGlhbiA8LSBBZGRNb2R1bGVTY29yZShoaXY0LCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgZmVhdHVyZXMgPSBwYXBlcikKCklkZW50cyhoaXZfZmFyaGFkaWFuKSA8LSAiY2VsbF90eXBlIgpGZWF0dXJlUGxvdChoaXZfZmFyaGFkaWFuLCBmZWF0dXJlcyA9ICJDbHVzdGVyMSIgLCBwdC5zaXplID0gLjUsIGxhYmVsID0gVFJVRSwgcmVwZWwgPSBUUlVFKSArCiAgICBzY2FsZV9jb2xvdXJfZ3JhZGllbnRuKGNvbG91cnMgPSByZXYoYnJld2VyLnBhbChuID0gMTEsIG5hbWUgPSAiUmRCdSIpKSkgKwogIGxhYnModGl0bGUgPSAiRmFyaGFkaWFuIGV0IGFsLiwgMjAxODogTWljcm9nbGlhIHNpZ25hdHVyZSBnZW5lcyIpCgpgYGAKCiMjIEdlbmUgc2lnbmF0dXJlIGRlZmluZWQgYnkgQFtHb3NzZWxpbl0KClRoZSBUcmFuc2NyaXB0aW9uIEZhY3RvcnMgbWVudGlvbmVkIGluIHRoZSBwYXBlciBkbyBub3Qgc2VlbSB0byBiZSAKc3BlY2lmaWMgZm9yIHRoZSBNeWVsb2lkMiBjbHVzdGVyLiBJbnRlcmVzdGluZ2x5LCB0aGVyZSBpcyBhIHZlcnkgbG93IHNjb3JlICAKb2YgdGhlc2UgbWljcm9nbGlhIGdlbmVzIGluIE15ZWxvaWQ1LCB3aGlsZSB0aGVyZSBpcyBhIGhpZ2hlciBzY29yZSBpbiBNeWVsb2lkMSAKYW5kIE15ZWxvaWQ0IGNlbGxzLiAKCmBgYHtyfQpnb3NzZWxpbl90ZnMgPC0gcmVhZC50YWJsZSggIi9tZWRpYS9hZy1jaGVycm1hbm4va21pa3VsaWsvSElWX21pY3JvZ2xpYS9kYXRhL1RGc19taWNyb2dsaWFfR2xhc3NfcGFwZXIudHh0IikKCgpoaXY0X2dsYXNzIDwtIEFkZE1vZHVsZVNjb3JlKGhpdjQsIAogICAgICAgICAgICAgICAgICAgICAgICAgICBmZWF0dXJlcyA9IGFzLnZlY3Rvcihnb3NzZWxpbl90ZnMpKQoKSWRlbnRzKGhpdjRfZ2xhc3MpIDwtICJjZWxsX3R5cGUiCkZlYXR1cmVQbG90KGhpdjRfZ2xhc3MsIGZlYXR1cmVzID0gIkNsdXN0ZXIxIiwgbGFiZWwgPSBUUlVFLCByZXBlbCA9IFRSVUUsIHB0LnNpemUgPSAuNykgKwogICAgc2NhbGVfY29sb3VyX2dyYWRpZW50bihjb2xvdXJzID0gcmV2KGJyZXdlci5wYWwobiA9IDExLCBuYW1lID0gIlJkQnUiKSkpICsKICBsYWJzKHRpdGxlID0gIkdvc3NlbGluIEQuIGV0IGFsLiwgMjAxNzogTWljcm9nbGlhIFRyYW5zY3JpcHRpb24gRmFjdG9ycyIpIAoKYGBgCgojIyMgc2lnbmF0dXJlIG9mIEhBTkQgKEhJVi1hc3NvY2lhdGVkIG5ldXJvZGVnZW5lcmF0aXZlIGRpc2Vhc2UpCgpbQEdvc3NlbGluXSBkZWZpbmVkIGEgZ3JvdXAgb2YgZ2VuZXMgdXByZWd1bGF0ZWQKaW4gbWljcm9nbGlhIGZyb20gcGF0aWVudHMgd2l0aCBIQU5ELiAKClRoaXMgZ2VuZSBzaWduYXR1cmUgY2FuLCBob3dldmVyIG5vdCBiZSBkZXRlY3RlZCBpbiBhbnkgb2YgdGhlIE15ZWxvaWQgY2x1c3RlcnMuCgpgYGB7cn0KaGFuZF9nZW5lcyA8LSByZWFkLnRhYmxlKCIvbWVkaWEvYWctY2hlcnJtYW5uL2ttaWt1bGlrL0hJVl9taWNyb2dsaWEvZGF0YS9IQU5EX3VwcmVndWxhdGVkX21pY3JvZ2xpYV9zaWduYXR1cmVfZ2VuZXMiKQpoYW5kX2dlbmVzIDwtIGFzLnZlY3RvcihoYW5kX2dlbmVzW1siZ2VuZXMiXV0pCgpoaXZfaGFuZCA8LSBBZGRNb2R1bGVTY29yZShoaXY0LAogICAgICAgICAgICAgICAgICAgICAgICAgICBmZWF0dXJlcyA9IGhhbmRfZ2VuZXMpCgpJZGVudHMoaGl2X2hhbmQpIDwtICJjZWxsX3R5cGUiCkZlYXR1cmVQbG90KGhpdl9oYW5kLCBmZWF0dXJlcyA9ICJDbHVzdGVyMSIsIHB0LnNpemUgPSAuMDEpICsKICBzY2FsZV9jb2xvdXJfZ3JhZGllbnRuKGNvbG91cnMgPSByZXYoYnJld2VyLnBhbChuID0gMTEsIG5hbWUgPSAiUmRCdSIpKSkgKwogIGxhYnModGl0bGUgPSAibWljcm9nbGlhIHNpZ25hdHVyZSBnZW5lcyB1cHJlZ3VsYXRlZCBpbiBIQU5EIikKCgpgYGAKCiMjIyMjIFRGcyBkb3ducmVndWxhdGVkIGluIGluIHZpdHJvIG1pY3JvZ2xpYQoKVGhlIGxpc3Qgb2YgVEZzIGlzIGRlcml2ZWQgZnJvbSBbQEdvc3NlbGluXToKCioqQ29tcGFyaXNvbiBiZXR3ZWVuIG1pY3JvZ2xpYSBhbmQgcHJpbWl0aXZlIHlvbGsgc2FjIG1hY3JwaGFnZXM6KioKCkluIHRoaXMgcGFwZXIgdGhleSBmb3VuZDoKCiogYSBzdWJzZXQgb2YgbVJOQXMgd2FzIGV4cHJlc3NlZCBpbiBwcmltaXRpdmUgeW9sayBzYWMgbWFjcm9waGFnZXMgYW5kIAptYWludGFpbmVkIGV4cHJlc3Npb24gbGV2ZWxzIGluIGJyYWluIG1pY3JvZ2xpYQoqIGEgc2Vjb25kIHN1YnNldCB3ZXJlIHByZWZlcmVudGlhbGx5IGV4cHJlc3NlZCBpbiBhZHVsdCBtb3VzZS9odW1hbiBtaWNyb2dsaWEKLT4gaW5jcmVhc2UgaW4gZXhwcmVzc2lvbiBmcm9tIGVicnlvbmljIHRvIGFkdWx0IHN0YWdlIG9mIGJyYWluIGRldmVsb3BtZW50CiogYSBtYWpvcml0eSBvZiB0aGUgVEZzIHRoYXQgc2hvd2VkIHJlZHVjZWQgZXhwcmVzc2lvbiBhZnRlciB0cmFuc2ZlciB0byBpbiAKKmluIHZpdHJvKiBlbnZpcm9ubWVudCB3ZXJlIGluZHVjZWQgZm9sbG93aW5nIG1pZ3JhdGlvbiBvZiBwcmltaXRpdmUgbWFjcm9waGFnZXMKaW50byB0aGUgZGV2ZWxvcGluZyBicmFpbiAtPiBpbmR1Y3Rpb24gYnkgbG9jYWwgKiplbnZpcm9ubWVudCBmYWN0b3JzKioKCgpgYGB7cn0KIyBURnMgZG93bnJlZ3VsYXRlZCBpbiBpbiB2aXRybyBtaWNyb2dsaWEKdGZzX2Rvd24gPC0gYyggIklSRjEiLCAiSVJGMiIsICJJUkYzIiwgIklSRjgiLCAiSVJGOSIsICJDVENGIiwgIk1FRjJBIiwgIk1FRjJDIiwgIk1FRjJEIiwiTUFGIiwgIk1BRjEiLCAiTUFGQiIsICJNQUZGIiwiTUFGRyIsICJNQUZLIiwgIlJVTlgxIiwgIlJVTlgyIiwgIlNNQUQzIiwgIkNFQlBCIiwgIkNFQlBBIiwgIkNFQlBHIiwgIkpVTkQiLCAiSlVOQiIsICJKVU4iLCAiRk9TIiwgIkZPU0IiLCAiQVJJRDNBIiwgIkFSSUQ1QSIsICJCSExIRTQxIiwgIkJURzIiLCAiREJQIiwgIkVHUjEiLCAiRUdSMiIsICJFR1IzIiwgIkVSRiIsICJFTEYxIiwgIkVMTVNBTjEiLCAiRVRWNiIsICJGTEkxIiwgIktMRjIiLCAiS0xGNCIsICJLTEY2IiwgIk1MWElQTCIsICJNTlQiLCAiTVlDTCIsICJORkFUQzIiLCAiTkZFMkwyIiwiTlI0QTEiLCAiUkVMQSIsICJSUkVCMSIsICJTVEFUMyIsICJUQUwxIiwgIlRDRjQiLCAiVEZFQiIsICJVU0YyIiwgIlpFQjIiLCAiWkZIWDMiLCAiWk5GMjE3IiwgIlpORjY5MSIpCgojbWFwKHNlcS5pbnQoMTo1OSksIGZ1bmN0aW9uKG4pewogIyBWbG5QbG90KGhpdjQsIGZlYXR1cmVzID0gdGZzX2Rvd25bbl0sIGdyb3VwLmJ5ID0gImNlbGxfdHlwZSIpCiN9KQoKdGZzX2Rvd24gJWluJSByb3duYW1lcyhoaXY0QGFzc2F5cyRSTkFAY291bnRzKQoKaGl2X2Rvd24gPC0gQWRkTW9kdWxlU2NvcmUoaGl2NCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgZmVhdHVyZXMgPSB0ZnNfZG93bikKaGl2X2hhbmRAbWV0YS5kYXRhICU+JSBoZWFkCgpGZWF0dXJlUGxvdChoaXZfZG93biwgZmVhdHVyZXMgPSAiQ2x1c3RlcjEiLAogICAgICAgICAgICBsYWJlbCA9IFRSVUUsIAogICAgICAgICAgICByZXBlbCA9IFRSVUUsIHB0LnNpemUgPSAuMSkgKwogIHNjYWxlX2NvbG91cl9ncmFkaWVudG4oY29sb3VycyA9IHJldihicmV3ZXIucGFsKG4gPSAxMSwgbmFtZSA9ICJSZEJ1IikpKSArCiAgbGFicyh0aXRsZSA9ICJURnMgZG93bnJlZ3VsYXRlZCBpbiBpbiB2aXRybyBtaWNyb2dsaWEiKQoKYGBgCgoKCiMjIEZlYXR1cmVzIGlkZW50aWZpZWQgaW4gYSBwYXBlciBvbiBjb252ZXJnZW5jZSBvZiBtaWNyb2dsaWEgYW5kIG1hY3JvcGhhZ2VzIFtAR3Jhc3NpdmFyb10KClRoZXkgaWRlbnRpZmllZCAxNCBnZW5lcyB0aGF0IGFyZSBjb25zZXJ2ZWQgaW4gbWljcm9nbGlhIHRocm91Z2hvdXQgZGV2ZWxvcG1lbnQsCmJ1dCBub3QgZXhwcmVzc2VkIGluIG15ZWxvaWQtZGVyaXZlZCBtb25vY3l0ZXMKTURNLiBPbmx5IGluIHRoZSBjb250ZXh0IG9mIG5ldXJvaW5mbGFtbWF0aW9uIGFyZSB0aGUKMTQgZ2VuZXMgZXhwcmVzc2VkIGluIG1hY3JvcGhhZ2VzLgoKYGBge3J9CnRmcyA8LSBjKCJDUllCQjEiLCAiR0FSTkwzIiwgIkdQUjM0IiwgIkxBRzMiLCAiTlVBSzEiLCAiT0xGTUwzIiwgIlJUTjEiLCAgIlNBTEwzIiwgICJTTEMxQTMiLCAiU1BBUkMiLCAiVE5GUlNGMTciKQoKdGZzICVpbiUgcm93bmFtZXMoaGl2NEBhc3NheXMkUk5BQGNvdW50cykKCgpoaXZ0IDwtIEFkZE1vZHVsZVNjb3JlKGhpdjQsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGZlYXR1cmVzID0gdGZzKQoKSWRlbnRzKGhpdnQpIDwtICJjZWxsX3R5cGUiCkZlYXR1cmVQbG90KGhpdnQsIGZlYXR1cmVzID0gIkNsdXN0ZXIyIiwKICAgICAgICAgICAgbGFiZWwgPSBUUlVFLCAKICAgICAgICAgICAgcmVwZWwgPSBUUlVFLCBwdC5zaXplID0gLjEpICsKICBzY2FsZV9jb2xvdXJfZ3JhZGllbnRuKGNvbG91cnMgPSByZXYoYnJld2VyLnBhbChuID0gMTEsIG5hbWUgPSAiUmRCdSIpKSkgKwogIGxhYnModGl0bGUgPSAiMTQgZ2VuZXMgZXhwcmVzc2VkIGluIG1pY3JvZ2xpYSAmIG1hY3JvcGhhZ2VzIGluIG5ldXJvaW5mbC4iKQoKCmBgYAoKCiMjIE1hcmtlciBnZW5lcyByZWZlcnJlZCB0byBieSBbQEZhcmhhZGlhbl0gCgpSZWZlcmVuY2VzOgoKKiBbQEtlcmVuLVNoYXVsXQoqIFtAS3Jhc2VtYW5dCgpOZWl0aGVyIG9mIHRoZXNlIHNpZ25hdHVyZXMgc2hvd3MgYSBoaWdoIHNjb3JlIGZvciB0aGUgTXllbG9pZDIgY2x1c3RlcnMuCgpgYGB7cn0KIyB1cHJlZ3VsYXRlZCBpbiBkaXNlYXNlIGFzc29jaWF0ZWQgbWljcm9nbGlhIChLZXJlbi1TaGF1bCkKZGlzZWFzZSA8LSBjKCJTUFAxIiwgIklUR0FYIiwgIkFYTCIsICJMSUxSQjQiLCAiQ0xFQzdBIiwgIkNDTDIiLCAiQ1NGMSIpIAoKIzI4IGluZmxhbW1hdG9yeSBtb2xlY3VsZXMgdXByZWd1bGF0ZWQgaW4gZGlzZWFzZSBhc3NvY2lhdGVkIG1pY3JvZ2xpYSAoS3Jhc2VtYW5uKQptZ25kIDwtIGMoIkFQT0UiLCAiQVhMIiwgIkNDTDIiLCAiVExSMiIsICJTUFAxIiwgIkNZQkIiLCAiTVNSMSIsICJJVEdBWCIsCiAgICAgICAgICAiQ0xFQzdBIiwgIkNISTNMMyIsICJBUkcxIiwgIlNJR0xFQzEiLCAiQ0ZQIiwgIkNYQ0wxMCIsICJBTENBTSIsIAogICAgICAgICAgIkZFUjFMMyIsICJMSUxSQjQiLCAiR1BYMyIsICJHQVM3IiwgIkNDUkwyIiwiQ1hDTDE2IiwgIkNYQ1I0IiwKICAgICAgICAgICJHUE5NQiIsICJMR0FMUzMiLCAiSUZJMjAyQiIsICJDU0YxIiwgIkxJUkI0IiwgIkxBRzMiKQojIG9ubHkgQVBPRSwgQVhMIGFuZCBNU1IxIG92ZXJsYXAsIGJ1dCB0aGVzZSBhcmUgdGhlIG1vc3QgaW1wb3J0YW50IGdlbmVzCgojIHJlbW92ZSB0aGUgZ2VuZXMgdGhhdCBhcmUgYWxzbyB1c2VkIGJ5IHRoZSBGYXJoYWRpYW4gUGFwZXIKbWduZCA8LSBjKCJDQ0wyIiwgIlRMUjIiLCAiU1BQMSIsICJDWUJCIiwgICJJVEdBWCIsCiAgICAgICAgICAiQ0xFQzdBIiwgIkNISTNMMyIsICJBUkcxIiwgIlNJR0xFQzEiLCAiQ0ZQIiwgIkNYQ0wxMCIsICJBTENBTSIsIAogICAgICAgICAgIkZFUjFMMyIsICJMSUxSQjQiLCAiR1BYMyIsICJHQVM3IiwgIkNDUkwyIiwiQ1hDTDE2IiwgIkNYQ1I0IiwKICAgICAgICAgICJHUE5NQiIsICJMR0FMUzMiLCAiSUZJMjAyQiIsICJDU0YxIiwgIkxJUkI0IiwgIkxBRzMiKQoKI2hpdjQgPC0gcmVhZFJEUygiL21lZGlhL2FnLWNoZXJybWFubi9rbWlrdWxpay9ISVZfbWljcm9nbGlhL3NyYy9SZXByb2R1Y2VfRmFyaGFkaWFuX1BhcGVyL1NldXJhdF9vYmplY3RzL25vbl9pbnRlZ3JhdGVkX0hJVjFfSElWMl80c2FtcGxlc19zZXVyYXRfb2JqZWN0LnJkcyIpCgojZ2V0IGdlbmVzIGFsc28gcHJlc2VudCBpbiB0aGUgSElWIHNhbXBsZXMKbWduZCA8LSBtZ25kW21nbmQgJWluJSByb3duYW1lcyhoaXY0QGFzc2F5cyRSTkFAY291bnRzKV0KCgpoaXZfZGlzZWFzZSA8LSBBZGRNb2R1bGVTY29yZShoaXY0LAogICAgICAgICAgICAgICAgICAgICAgICAgICBmZWF0dXJlcyA9IGRpc2Vhc2UpCgpGZWF0dXJlUGxvdChoaXZfZGlzZWFzZSwgZmVhdHVyZXMgPSAiQ2x1c3RlcjEiLCBwdC5zaXplID0gLjAxKSArCiAgc2NhbGVfY29sb3VyX2dyYWRpZW50bihjb2xvdXJzID0gcmV2KGJyZXdlci5wYWwobiA9IDExLCBuYW1lID0gIlJkQnUiKSkpICsKICBsYWJzKHRpdGxlID0gIktlcmVuLVNoYXVsIGV0IGFsLiwgR2VuZXMgdXByZWd1bGF0ZWQgaW4gZGlzZWFzZS1hc3NvY2lhdGVkIG1pY3JvZ2xpYSIpCgoKCmhpdl9tZ25kIDwtIEFkZE1vZHVsZVNjb3JlKGhpdjQsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIGZlYXR1cmVzID0gbWduZCkKCkZlYXR1cmVQbG90KGhpdl9tZ25kLCBmZWF0dXJlcyA9ICJDbHVzdGVyMSIsIHB0LnNpemUgPSAuMDEpICsKICBzY2FsZV9jb2xvdXJfZ3JhZGllbnRuKGNvbG91cnMgPSByZXYoYnJld2VyLnBhbChuID0gMTEsIG5hbWUgPSAiUmRCdSIpKSkgKwogIGxhYnModGl0bGUgPSAiS3Jhc2VtYW4gZXQgYWwuLCAyOCBpbmZsYW1tYXRvcnkgZ2VuZXMgdXByZWd1bGF0ZWQgaW4gCiAgICAgICBkaXNlYXNlIGFzc29jaWF0ZWQgbWljcm9nbGlhIikKYGBgCgpOZWl0aGVyIG9mIHRoZSBzaWduYXR1cmUgZ2VuZXMgYXJlIHZlcnkgc3BlY2lmaWMgZm9yIHRoZSBNeWVsb2lkMi81IGNsdXN0ZXIuCgoqIFRoZSBzaWduYXR1cmUgZ2VuZXMgZGVmaW5lZCBieSBbQEtlcmVuLVNoYXVsXSBhcmUgZXhwcmVzc2VkIHRvIHNvbWUgbGV2ZWwgCmluIGFsbCBteWVsb2lkIGNsdXN0ZXJzCiogVGhlIHNpZ25hdHVyZSBkZWZpbmVkIGJ5IFtAS3Jhc2VtYW5dIGlzIGFsc28gbWFpbmx5IGV4cHJlc3NlZCBpbiB0aGUgCk15ZWxvaWQgY2x1c3RlcnMKKiBDRDkgYW5kIFNQUDEgbWlnaHQgYmUgYWRkZWQgdG8gdGhlIGxpc3Qgb2YgbWljcm9nbGlhIG1hcmtlciBnZW5lcyBleHByZXNzZWQKaW4gTXllbG9pZDIgY2x1c3RlcgoKYGBge3J9CiMgS2VyZW4gU2hhdWwgZXQgYWwuIHNpZ25hdHVyZQpEb3RQbG90KGhpdjQsIGZlYXR1cmVzID0gZGlzZWFzZSwgZ3JvdXAuYnkgPSAiY2VsbF90eXBlIikgKyAKICBjb29yZF9mbGlwKCkgKwogICAgdGhlbWUoYXhpcy50ZXh0LnggPSBlbGVtZW50X3RleHQoYW5nbGUgPSA0NSwgdmp1c3QgPSAwLjgsIGhqdXN0PTEpKSArCiAgICBsYWJzKHRpdGxlID0gIktlcmVuLVNoYXVsIGV0IGFsLiwgR2VuZXMgdXByZWd1bGF0ZWQgaW4gZGlzZWFzZS1hc3NvY2lhdGVkIG1pY3JvZ2xpYSIpCgojIEtyYXNlbWFuIGV0IGFsLiBzaWduYXR1cmUKRG90UGxvdChoaXY0LCBmZWF0dXJlcyA9IG1nbmQsIGdyb3VwLmJ5ID0gImNlbGxfdHlwZSIpICsgCiAgY29vcmRfZmxpcCgpICsKICAgIHRoZW1lKGF4aXMudGV4dC54ID0gZWxlbWVudF90ZXh0KGFuZ2xlID0gNDUsIHZqdXN0ID0gMC44LCBoanVzdD0xKSkgKwogICAgbGFicyh0aXRsZSA9ICJLcmFzZW1hbiBldCBhbC4sIDI4IGluZmxhbW1hdG9yeSBnZW5lcyB1cHJlZ3VsYXRlZCBpbiAKICAgICAgIGRpc2Vhc2UgYXNzb2NpYXRlZCBtaWNyb2dsaWEiKQoKCiMgc29tZSBnZW5lcyB0aGF0IG1pZ2h0IGJlIG1hcmtlcnMgZm9yIE15ZWxvaWQyCkRvdFBsb3QoaGl2NCwgZmVhdHVyZXMgPSBjKCJDRDkiLCAiQVBPRSIsICJBWEwiLCAiQ1RTTCIsICJTUFAxIiksIGdyb3VwLmJ5ID0gImNlbGxfdHlwZSIpICsgCiAgY29vcmRfZmxpcCgpICsKICAgIHRoZW1lKGF4aXMudGV4dC54ID0gZWxlbWVudF90ZXh0KGFuZ2xlID0gNDUsIHZqdXN0ID0gMC44LCBoanVzdD0xKSkgKwogIGxhYnModGl0bGUgPSAiR2VuZXMgdGhhdCBtaWdodCBiZSB1c2VkIGFzIG1hcmtlcnMgZm9yIE15ZWxvaWQyIikKCgpgYGAKCgojIyBHZW5lIHNpZ25hdHVyZSBkZWZpbmVkIGJ5IFtARXNhdWxvdmFdCgoKIyMjIyMgSG9tZW9zdGF0aWMgZ2VuZXMKCiogdGhlIGhvbWVvc3RhdGljIG1pY3JvZ2xpYSBnZW5lIHNpZ25hdHVyZSBpcyBmb3VuZCBpbiBhbGwgbXllbG9pZCBjbHVzdGVycywgCm5vdCBvbmx5IGluIHRoZSBNeWVsb2lkIDIgKGV4Y2VwdCBmb3IgU0xDMkE1IHdoaWNoIHdhcyBhbHNvIGluY2x1ZGVkIGluIHRoZSAKRmFyaGFkaWFuIHBhcGVyKQoqIE5LIGNlbGwgY2x1c3RlciBhbHNvIGV4aGliaXRzIGhpZ2ggc2NvcmVzIGZvciB0aGlzIGdlbmUgc2lnbmF0dXJlCgpgYGB7ciwgZmlnLndpZHRoPTE1fQojaG9tZW9zdGF0aWMgbWljcm9nbGlhIGdlbmUgc2lnbmF0dXJlCm1pY3JvZ2xpYSA8LSBjKCJDWDNDUjEiLCJDU0YxUiIsICJTTEMyQTUiLCAiTUFSQ0tTIiwgIlAyUlkxMyIpCkZlYXR1cmVQbG90KGhpdjQsIGZlYXR1cmVzID0gbWljcm9nbGlhLCBuY29sID0gMykKYGBgCgoKCmBgYHtyfQpEb3RQbG90KGhpdjQsIGZlYXR1cmVzID0gbWljcm9nbGlhLCBncm91cC5ieSA9ICJjZWxsX3R5cGUiKSArIAogIGNvb3JkX2ZsaXAoKSArCiAgICB0aGVtZShheGlzLnRleHQueCA9IGVsZW1lbnRfdGV4dChhbmdsZSA9IDQ1LCB2anVzdCA9IDAuOCwgaGp1c3Q9MSkpCgpoaXZ0IDwtIEFkZE1vZHVsZVNjb3JlKGhpdjQsIGZlYXR1cmVzID0gbWljcm9nbGlhKQpJZGVudHMoaGl2dCkgPC0gImNlbGxfdHlwZSIKRmVhdHVyZVBsb3QoaGl2dCwgZmVhdHVyZXMgPSAiQ2x1c3RlcjEiLCBsYWJlbCA9VFJVRSwgcmVwZWwgPSBUUlVFLCBwdC5zaXplID0gLjcpICsKICBzY2FsZV9jb2xvdXJfZ3JhZGllbnRuKGNvbG91cnMgPSByZXYoYnJld2VyLnBhbChuID0gMTEsIG5hbWUgPSAiUmRCdSIpKSkgKwogICAgbGFicyh0aXRsZSA9ICJIb21lb3N0YXRpYyBtaWNyb2dsaWEgc2lnbmF0dXJlIGZyb20gRXNhdWxvdmEgcGFwZXIiKQpgYGAKCiMjIyMjIE1pY3JvZ2xpYS1zcGVjaWZpYyBnZW5lcwoKKiAqKkdQUjM0KiosICoqVE1FTTExOSoqIHN1cHBvcnRzIHRoZSBoeXBvdGhlc2lzIHRoYXQgbXllbG9pZDIgYXJlIG1pY3JvZ2xpYS1saWtlLApzaW5jZSB0aGV5IGFyZSBleHByZXNzZWQgYXQgaGlnaGVyIGxldmVscyBpbiB0aGUgbXllbG9pZDIgY2x1c3RlcgoqIHRoZXkgdXNlIDEwIGdlbmVzIHRvIGRpc2NyaW1pbmF0ZSBtaWNyb2dsaWEsIGZvdXIgb2Ygd2hpY2ggaGF2ZSBub3QgYmVlbiAKaW5sY3VkZSBpbiB0aGUgRmFyaGFkaWFuIFBhcGVyOiAqKkNMRUM5QSoqLCAqKlRJTUQ0KiosICoqVE5GU0YxOCoqLCAqKkNYQ0wxMioqCiogdGhlIGdlbmVzICoqQ0xFQzlBKiosICoqVElNRDQqKiwgKipUTkZTRjE4KiosICoqQ1hDTDEyKiogYXJlIG5vdCBpbmNsdWRlZCBpbgp0aGUgNjAgZ2VuZXMgdXNlZCBieSBGYXJoYWRpYW4gZXQgYWwuLCBidXQgdGhleSBkbyBub3Qgc2hvdyBzcGVjaWZpYyBleHByZXNzaW9uCmZvciBteWVsb2lkMiBjZWxscwoKCgpgYGB7ciwgZmlnLndpZHRoPTE1fQojIDEwIGdlbmVzIHRoYXQgZGlzY3JpbWluYXRlIG1pY3JvZ2xpYQptaWNyb2dsaWEgPC0gYygiQzFRQyIsICJDMVFCIiwgIkMxUUEiLCAiVFJFTTIiLCAiVElNRDQiLCAiQVBPQzEiLCAKICAgICAgICAgICAgICAgIkFQT0UiLCAiVE5GU0YxOCIsICJDTEVDOUEiLCAiQ1hDTDEyIikKI0ZlYXR1cmVQbG90KGhpdjQsIGZlYXR1cmVzID0gbWljcm9nbGlhLCBuY29sID0gMykKCiNtaWNyb2dsaWEgJWluJSBwYXBlcgoKSWRlbnRzKGhpdjQpIDwtICJjZWxsX3R5cGUiCgojICB0d28gZ2VuZXMgd2hjaWggbWlnaHQgc3VwcG9ydCB0aGF0IG15ZWxvaWQyIGNsdXN0ZXIgY29udGFpbnMgbWljcm9nbGlhLWxpa2UgY2VsbHMKRmVhdHVyZVBsb3QoaGl2NCwgZmVhdHVyZXMgPSBjKCJHUFIzNCIsICJUTUVNMTE5IiksIGxhYmVsID0gVFJVRSwgcHQuc2l6ZSA9IC43LAogICAgICAgICAgICByZXBlbCA9IFRSVUUpCkRvdFBsb3QoaGl2NCwgZmVhdHVyZXMgPSBjKCJUTUVNMTE5IiwgIkdQUjM0IiksIGdyb3VwLmJ5ID0gImNlbGxfdHlwZSIpICsgCiAgICAgY29vcmRfZmxpcCgpICsKICAgICB0aGVtZShheGlzLnRleHQueCA9IGVsZW1lbnRfdGV4dChhbmdsZSA9IDQ1LCB2anVzdCA9IDAuOCwgaGp1c3Q9MSkpCgojIHRoZXNlIGFyZSBub3QgaW5sY3VkZWQgaW4gdGhlIEZhcmhhZGlhbiBnZW5lIHNpZ25hdHVyZQpGZWF0dXJlUGxvdChoaXY0LCBmZWF0dXJlcyA9IGMoIkNMRUM5QSIsICJUSU1ENCIsICJUTkZTRjE4IiwgIkNYQ0wxMiIpLAogICAgICAgICAgICBwdC5zaXplID0gLjcsIGxhYmVsID0gVFJVRSwgcmVwZWwgPSBUUlVFLCBuY29sPSAyKQoKCgpgYGAKCiMjIE1pY3JvZ2xpYSBpbiBodW1hbiBicmFpbgoKUmVmZXJlbmNlOgpTYW5rb3dza2kgUi4gZXQgYWwuIDIwMTkuIE1hcHBpbmcgbWljcm9nbGlhIHN0YXRlcyBpbiB0aGUgaHVtYW4gYnJhaW4gdGhyb3VnaCB0aGUKaW50ZWdyYXRpb24gb2YgaGlnaC1kaW1lbnNpb25hbCB0ZWNobmlxdWVzLiBOYXR1cmUgTmV1cm9zY2llbmNlLiBWb2wgMjIKaHR0cHM6Ly93d3cubmF0dXJlLmNvbS9hcnRpY2xlcy9zNDE1OTMtMDE5LTA1MzIteSNTZWMyOQoKSW4gdGhlIHBhcGVyIG1pY3JvZ2xpYSBjZWxscyB3ZXJlIG9idGFpbmVkIHRocm91Z2ggYnJhaW4gc3VyZ2VyeS4KTWljcm9nbGlhIHdlcmUgZGVmaW5lZCBieSB0aGUgY29yZSBzaWduYXR1cmUgY2FsbGVkICJtaWNyb2dsaWEgc2lnbmF0dXJlIiBiZWxvdy4KU2Fua293c2tpIGV0IGFsLiBwZXJmb3JtZWQgdW5zdXBlcnZpc2VkIGNsdXN0ZXJpbmcgdXNpbmcgUmFjZSBJRDMgd2hpY2ggcmVzdWx0ZWQKaW4gOSBtYWpvciBzdWJsY3VzdGVycyBvZiB0aGUgbWljcm9nbGlhIGNlbGxzLiBUaGUgYXV0aG9ycyBzdWdnZXN0ZWQgdGhhdCB0aGVzZQpzdWJjbHVzdGVycyByZXByZXNlbnQgdGhlIHdpZGUgc3BlY3RydW0gb2YgdHJhbnNjcmlwdGlvbmFsIHN0YXRlcyBpbiBodW1hbiAKbWljcm9nbGlhLgoKKipSYWNlSUQ6KioKUmFjZUlEIGlzIGEgY2x1c3RlcmluZyBhbGdvcml0aG0gZm9yIHRoZSBpZGVudGlmaWNhdGlvbiBvZiBjZWxsIHR5cGVzIGZyb20gCnNjUk5BLXNlcSBkYXRhLiBJdCB3YXMgZGVzaWduZWQgdG8gd29yayBwYXJ0aWN1bGFybHkgd2VsbCBmb3IgdGhlIGRldGVjdGlvbiBvZgpyYXJlIGNlbGxzLiAKaHR0cHM6Ly9naXRodWIuY29tL2RncnVuL1JhY2VJRDNfU3RlbUlEMl9wYWNrYWdlCgoKKiBUaGUgbWljcm9nbGlhIHNpZ25hdHVyZSBpcyBtb3N0IHByb25vdW5jZWQgaW4gTXllbG9pZDIgY2x1c3RlcgoqIFRoZSBtb25vY3l0ZSBzaWduYXR1cmUgaXMgbGVzcyBwcm9ub3VuY2VkIGluIE15ZWxvaWQyIGNsdXN0ZXIgYW5kIG1vcmUgCnByb25vdW5jZWQgaW4gdGhlIG90aGVyIE15ZWxvaWQgY2xzdXRlcnMKKiBIb21lb3N0YXRpYyBtaWNyb2dsaWEgKGNvcmUgc2lnbmF0dXJlIGdlbmVzIGV4cHJlc3NlZCBieSBhbGwgY2x1c3RlcnMgaW4gdGhlIApwYXBlcikgZ2VuZSBzaWduYXR1cmUgaXMgZm91bmQgaW4gYWxsIE15ZWxvaWQgY2x1c3RlciBhcyB3ZWxsIAphcyBOSyBjZWxscywgd2l0aCBoaWdoIGV4cHJlc3Npb24gYWxzbyBpbiBNeWVsb2lkMiAKICArICoqQ1NGMVIqKiBhbmQgKipNQVJDS1MqKiBhcmUgbW9zdCBoaWdobHkgZXhwcmVzc2VkIGluIE15ZWxvaWQyCgpgYGB7cn0KIyBtaWNyb2dsaWEgZ2VuZSBzaWduYXR1cmUgZnJvbSBzdXBwbGVtZW50YXJ5IHRhYmxlIDNhCm1pY3JvZ2xpYSA8LSBjKCJQMlJZMTIiLCAiQ1gzQ1IxIiwgIkNTRjFSIiwgIlRNRU0xMTkiLCAiU0xDMkE1IiApCgojIG1vbm9jeXRlIGdlbmUgc2lnbmF0dXJlIGZyb20gc3VwcGxlbWVudGFyeSB0YWJsZSAzYSAKbW9ub2N5dGUgPC0gYygiQ0NSMiIsICJDTEVDMTJBIiwgIlBMQUM4IiwgIkZDTjEiLCAiUzEwMEE5IikKCiMgaG9tZW9zdGF0aWMgbWljcm9sZ2lhIGdlbmUgc2lnYW50dXJlCmhvbWVvc3RhdGljIDwtIGMoIkNYM0NSMSIsICJUTUVNMTE5IiwgIkNTRjFSIiwgIlAyUlkxMiIsCiAgICAgICAgICAgICAgICAgIlAyUlkxMyIsIlNFTFBMRyIsICJNQVJDS1MiKQoKCm1hcChzZXEuaW50KDE6MyksIGZ1bmN0aW9uKG4pewogIG5hbWVzIDwtIGMoIm1pY3JvZ2xpYSIsICJtb25vY3l0ZSIsICJob21lb3N0YXRpYyIpCiAgZmVhdHVyZV9saXN0IDwtIGxpc3QobWljcm9nbGlhLCBtb25vY3l0ZSwgaG9tZW9zdGF0aWMpCiAgZmVhdHVyZXMgPSBmZWF0dXJlX2xpc3RbW25dXQogIGhpdiA8LSBBZGRNb2R1bGVTY29yZShoaXY0LCBmZWF0dXJlcyA9IGZlYXR1cmVzKQogICMgZmVhdHVyZSBwbG90CiAgSWRlbnRzKGhpdikgPC0gImNlbGxfdHlwZSIKICBGZWF0dXJlUGxvdChoaXYsIGZlYXR1cmVzID0gIkNsdXN0ZXIxIiwgcHQuc2l6ZSA9IC41LCBsYWJlbCA9IFRSVUUsIHJlcGVsPVRSVUUpKwogICAgc2NhbGVfY29sb3VyX2dyYWRpZW50bihjb2xvdXJzID0gcmV2KGJyZXdlci5wYWwobiA9IDExLCBuYW1lID0gIlJkQnUiKSkpICsKICAgIGxhYnModGl0bGUgPSBwYXN0ZTAobmFtZXNbbl0sIiBtaWNyb2dsaWEgZ2VuZSBzaWduYXR1cmUiKSkKfSkKICAKbWFwKHNlcS5pbnQoMTozKSwgZnVuY3Rpb24obil7CiAgbmFtZXMgPC0gYygibWljcm9nbGlhIiwgIm1vbm9jeXRlIiwgImhvbWVvc3RhdGljIikKICBmZWF0dXJlX2xpc3QgPC0gbGlzdChtaWNyb2dsaWEsIG1vbm9jeXRlLCBob21lb3N0YXRpYykKICBmZWF0dXJlcyA9IGZlYXR1cmVfbGlzdFtbbl1dIAogICMgZG90IHBsb3QKICBEb3RQbG90KGhpdjQsIGZlYXR1cmVzID0gZmVhdHVyZXMsIGdyb3VwLmJ5ID0gImNlbGxfdHlwZSIpICsKICAgIGNvb3JkX2ZsaXAoKSArCiAgICAgICAgdGhlbWUoYXhpcy50ZXh0LnggPSBlbGVtZW50X3RleHQoYW5nbGUgPSA0NSwgdmp1c3QgPSAwLjgsIGhqdXN0PTEpKSArCiAgbGFicyh0aXRsZSA9IHBhc3RlMChuYW1lc1tuXSwiIGdlbmUgc2lnbmF0dXJlIikpCn0pCiAgCmBgYAoKQ2hlY2sgdGhlIGNsdXN0ZXJzIGFjcm9zcyB0aGUgdHJhbnNjcmlwdGlvbmFsIHNwZWN0cnVtIG9mIG1pY3JvZ2xpYToKClNhbmtvd3NraSBSLiBldCBhbC4sIE5hdHVyZSBOZXVyb3NjaWVuY2UsIDIwMTkgZGVmaW5lZCA5IHN1YmNsdXN0ZXJzIHdpdGhpbiB0aGUgCm1pY3JvZ2xpYSBjZWxsIHBvcHVsYXRpb24uIENhbiB3ZSBmaW5kIHRoZXNlIGdlbmUgc2lnbmF0dXJlcyBpbiB0aGUgQ1NGLWRlcml2ZWQKTXllbG9pZCBjZWxscz8gVGhpcyBjb3VsZCBmdXJ0aGVyIGNvbmZpcm0gdGhhdCBNeWVsb2lkMiBhbmQgTXllbG9pZDUgYXJlIAptaWNyb2dsaWEtbGlrZSBjZWxscy4gCgoqICoqaG9tZW9zdGF0aWMgY2x1c3RlcnMqKgogICsgQzI6IHN0cm9uZyBleHByZXNzc2lvbiBvZiBNQ0gtSUkgYW5kIGFudGl2aXJhbCBpbW11bml0eSBnZW5lcyAKKEhMQS1EUkEsIENENzQsIElGSTQ0TCkKICArIEMzOiBoaWdoIGV4cHJlc3Npb24gb2YgbWljcm9nbGlhbCBjb3JlIGdlbmVzIENYM0NSMSwgVE1FTTExOSAgIAoqICoqYW50aWdlbiBwcm9jZXNzaW5nIGFuZCBwZXB0aWRlIGFudGlnZW4gcHJlc2VudGF0aW9uKioKQzYgYW5kIEM3IHdlcmUgY2hhcmFjdGVyaXplZCBieSBsb3cgZXhwcmVzc2lvbiBvZiBDWDNDUjEgYW5kIGhpZ2ggZXhwcmVzc2lvbgpvZiBpbnRlZ3Jpbi1yZWNlcHRvciBiaW5kaW5nIHByb3RlaW4gYW5kIG1ldGFib2xpc20gZ2VuZXMgKFNQUDEsIEFQT0UsIExQTCkKKiAqKiBwcm9pbmZsYW1tYXRvcnkgY2x1c3RlcnM6KiogCkMxLCBDNSwgQzgsIEM5IHdlcmUgY2hhcmFjdGVyaXplZCBieSBleHByZXNzaW9uIG9mIGNoZW1va2luZSBhbmQgY3l0b2tpbmUgCmdlbmVzIChDQ0wyLCBJTDFCKQoKU2luY2UgQ2x1c3RlciBDMiB3YXMgY2hhcmFjdGVyaXplZCBhcyBhIGhvbWVvc3RhdGkgbWljcm9nbGlhIGNsdXN0ZXIgYW5kIHNob3dlZApleHByZXNzaW9uIG9mIE1IQy1JSSBhbmQgYW50aXZyaWFsIGltbXVuaXR5IGdlbmVzIGxpa2UgSUZJNDRMLCBITEEtRFJBLCBDRDc0LCAKdGhpcyBzdXBwb3J0cyB0aGUgbWljcm9nbGlhLWxpa2UgaWRlbnRpdHkgb2YgTXllbG9pZDIgYW5kIE15ZWxvaWQ1LiBIb3dldmVyLCAKdGhlcmUgaXMgYWxzbyBzb21lIGV4cHJlc3Npb24gb2YgdGhpcyBzaWduYXR1cmUgaW4gTWVsb2lkMSBhbmQgTXllbG9pZDMgd2hpY2gKbWFpbmx5IG9yaWdpbmF0ZSBmcm9tIEJsb29kIHNhbXBsZXMgYW5kIGFsc28gaW4gQiBjZWxscy4gCgpUaGVyZSBpcyBhbHNvIGEgaGlnaCBzY29yZSBmb3IgQzUgYW5kIEM4IHNpZ25hdHVyZSBnZW5lcywgd2hpY2ggYXJlIGJvdGggCnByb2luZmxhbW1hdG9yeSBnZW5lIHNpZ25hdHVyZXMuCgpgYGB7cn0KIyBnZXQgZGlmZmVyZW50aWFsbHkgZXhwcmVzc2VkIGdlbmVzIHBlciBjbHVzdGVyIGFjcm9zcyB0aGUgdHJhbnNjcmlwdGlvbmFsIAojIHNwZWN0cnVtIG9mIG1pY3JvZ2xpYSAKZXhjZWxfc2hlZXRzKCIvbWVkaWEvYWctY2hlcnJtYW5uL2ttaWt1bGlrL0hJVl9taWNyb2dsaWEvZGF0YS8yMDE5X1Nhbmtvd3NraV9NYXBwaW5nX21pY3JvZ2xpYXN0YXRlc19pbl90aGVfaHVtYW5fYnJhaW5fU3VwcGxlbWVudGFyeV90YWJsZXMueGxzeCIpCmNsdXN0ZXJfZ2VuZXMgPC0gcmVhZF9leGNlbCgiL21lZGlhL2FnLWNoZXJybWFubi9rbWlrdWxpay9ISVZfbWljcm9nbGlhL2RhdGEvMjAxOV9TYW5rb3dza2lfTWFwcGluZ19taWNyb2dsaWFzdGF0ZXNfaW5fdGhlX2h1bWFuX2JyYWluX1N1cHBsZW1lbnRhcnlfdGFibGVzLnhsc3giLCBzaGVldCA9ICJTdXBwbC4gdGFibGUgMyIpCiNuYW1lcyhtaWNyb2dsaWFfc2lnbl9kZikgWzFdIDwtICJnZW5lX25hbWUiCiNtaWNyb2dsaWFfc2lnbiA8LSBtaWNyb2dsaWFfc2lnbl9kZlssImdlbmVfbmFtZSJdCgojIEMzCgpjbHVzdGVyX2xpc3QgPC0gbWFwKHNlcS5pbnQoMTo4KSwgZnVuY3Rpb24obikgewogIG5hbWVzIDwtIGMoImMxIiwgImMyIiwgImMzIiwgImM1IiwgImM2IiwgImM3IiwgImM4IiwgImM5IikKICBuYW1lIDwtIG5hbWVzW25dCiAgY2x1c3RlciA8LSBjKDEsMiwzLDUsNiw3LDgsOSkKICBjbHVzdGVyX251bWJlciA8LSBjbHVzdGVyW25dCiAgYyA8LSBwdWxsKGNsdXN0ZXJfZ2VuZXMgJT4lIGZpbHRlcihDbHVzdGVyID09IGNsdXN0ZXJfbnVtYmVyKSwgR0VORUlEKQogIGMgPC0gY1tjICVpbiUgcm93bmFtZXMoaGl2NEBhc3NheXMkUk5BQGNvdW50cyldCiAgY2x1c3Rlcl9saXN0IDwtIGxpc3QobmFtZSA9IG5hbWUsIGNsdXN0ZXIgPSBjKQp9KQoKCm1hcChzZXEuaW50KDE6OCksIGZ1bmN0aW9uKG4pewogIGMgPC0gY2x1c3Rlcl9saXN0W1tuXV0kY2x1c3RlcgogIG5hbWUgPC0gY2x1c3Rlcl9saXN0W1tuXV0kbmFtZQogIGhpdmMgPC0gQWRkTW9kdWxlU2NvcmUoaGl2NCwgZmVhdHVyZXMgPSBjKQogIElkZW50cyhoaXZjKSA8LSAiY2VsbF90eXBlIgogIEZlYXR1cmVQbG90KGhpdmMsIGZlYXR1cmVzID0gIkNsdXN0ZXIxIiwgcHQuc2l6ZSA9IC41LCBsYWJlbCA9IFRSVUUsCiAgICAgICAgICAgICAgcmVwZWwgPSBUUlVFKSArCiAgICAgIHNjYWxlX2NvbG91cl9ncmFkaWVudG4oY29sb3VycyA9IHJldihicmV3ZXIucGFsKG4gPSAxMSwgbmFtZSA9ICJSZEJ1IikpKSArCiAgICBsYWJzKHRpdGxlID0gcGFzdGUwKCJEaWZmZXJlbnRpYWxseSBleHByZXNzZWQgZ2VuZXMgb2YgY2x1c3RlciAiLCBuYW1lKSkKfSkKCgoKI21hcChzZXEuaW50KDE6OCksIGZ1bmN0aW9uKG4pewogIyBjIDwtIGNsdXN0ZXJfbGlzdFtbbl1dJGNsdXN0ZXIKICAjbmFtZSA8LSBjbHVzdGVyX2xpc3RbW25dXSRuYW1lCiAgI0RvdFBsb3QoaGl2NCwgZmVhdHVyZXMgPSBjLCBncm91cC5ieSA9ICJjZWxsX3R5cGUiKSArCiAgI2Nvb3JkX2ZsaXAoKSArCiAgIyAgICAgIHRoZW1lKGF4aXMudGV4dC54ID0gZWxlbWVudF90ZXh0KGFuZ2xlID0gNDUsIHZqdXN0ID0gMC44LCBoanVzdD0xKSkgKwogICNsYWJzKHRpdGxlID0gcGFzdGUwKCJEaWZmZXJlbnRpYWxseSBleHByZXNzZWQgZ2VuZXMgb2YgY2x1c3RlciAiLCBuYW1lKSkKI30pCmBgYAoKCiMjIExvb2sgZm9yIGdlbmVzIHdoaWNoIGFyZSB1cHJlZ3VsYXRlZCBpbiBNeWVsb2lkMiBjb21wYXJlZCB0byBhbGwgb3RoZXIgTXllbG9pZApjbHVzdGVycwoKKiBvdmVybGFwIG9mIDUgZ2VuZXMgd2l0aCBLcmFzZW1hbiBtaWNyb2dsaWEgLT4gaW5mbGFtbWF0b3J5IG1vbGVjdWxlcyAKdXByZWd1bGF0ZWQgaW4gZGlzZWFzZSBhc3NvY2lhdGVkIG1pY3JvZ2xpYSAoS3Jhc2VtYW5uKQoqIG92ZXJsYXAgb2YgMyBnZW5lcyB3aXRoIGRpc2Vhc2UtYXNzb2NpYXRlZCBtaWNyb2dsaWEgKEtlcmVuLVNoYXVsKQoqIFNhbmtvd3NraSBzaWduYXR1cmUKCiAgKyA0IGdlbmVzIG92ZXJsYXAgd2l0aCBtaWNyb2dsaWEgc2lnbmF0dXJlCiAgKyAqKnplcm8gb3ZlcmxhcCB3aXRoIG1vbm9jeXRlIGdlbmUgc2lnbmF0dXJlKioKICArIDQgZ2VuZXMgb3ZlcmxhcCB3aXRoIGhvbWVvc3RhdGljIG1pY3JvZ2xpYSBzaWduYXR1cmUKICAKKiBFc2F1bG92YSBwYXBlciAtPiA4IG9mIDEwIGdlbmVzIHRoYXQgZGlzY3JpbWluYXRlIG1pY3JvZ2xpYSBhcmUgZm91bmQgdXByZWd1bGF0ZWQKaW4gTXllbG9pZDIgY2x1c3RlcgoqIEdsYXNzIHBhcGVyIC0+IDEzMiBvZiB0aGUgbWljcm9nbGlhIHNpZ25hdHVyZSBhcmUgZm91bmQgaW4gdGhlIGdlbmVzIAp1cHJlZ3VsYXRlZCBpbiBNeWVsb2lkMiwgMjggb2YgdGhlc2UgYXJlIGFsc28gaW5jbHVkZWQgaW4gdGhlIEZhcmhhZGlhbiBQYXBlciAKc2lnbmF0dXJlLCAxMDQgYXJlIG5ldyBtYXJla3IgZ2VuZXMgCgpgYGB7cn0KSWRlbnRzKGhpdjQpIDwtICJjZWxsX3R5cGUiCiMgRmluZCBNYXJrZXJzIHRoYXQgZGlzdGluZ3Vpc2ggTXkyIGZyb20gdGhlIG90aGVyIE15ZWxvaWQgY2x1c3RlcnMKbXkyX21hcmtlcnMgPC0gRmluZE1hcmtlcnMoaGl2NCwgaWRlbnQuMSAgPSAiTXllbG9pZDIiLAogICAgICAgICAgICBpZGVudC4yICA9IGMoIk15ZWxvaWQxIiwgIk15ZWxvaWQzIiwgIk15ZWxvaWQ0IiwgIk15ZWxvaWQ1IikpCm15Ml9tYXJrZXJzIDwtIG15Ml9tYXJrZXJzICU+JSByb3duYW1lc190b19jb2x1bW4odmFyID0gImdlbmUiKQojIENhbiB3ZSBmaW5kIG1nbmQgZ2VuZXM/IChLcmFzZW1hbm4pCm15Ml9tYXJrZXJzICU+JSBmaWx0ZXIoZ2VuZSAlaW4lIG1nbmQgJiBhdmdfbG9nMkZDID4gMCkKIyBnZW5lcyBpbiBkaXNlYXNlLWFzc29jYWl0ZWQgbWljcm9nbGlhIChLZXJlbi1TaGF1bCkKbXkyX21hcmtlcnMgJT4lIGZpbHRlcihnZW5lICVpbiUgZGlzZWFzZSAmIGF2Z19sb2cyRkMgPiAwKQoKIyBTYW5rb3dza2kKIyBtaWNyb2dsaWEgZ2VuZSBzaWduYXR1cmUKbWljcm9nbGlhIDwtIGMoIlAyUlkxMiIsICJDWDNDUjEiLCAiQ1NGMVIiLCAiVE1FTTExOSIsICJTTEMyQTUiICkKCiMgbW9ub2N5dGUgZ2VuZSBzaWduYXR1cmUKbW9ub2N5dGUgPC0gYygiQ0NSMiIsICJDTEVDMTJBIiwgIlBMQUM4IiwgIkZDTjEiLCAiUzEwMEE5IikKCiMgaG9tZW9zdGF0aWMgbWljcm9sZ2lhIGdlbmUgc2lnYW50dXJlCmhvbWVvc3RhdGljIDwtIGMoIkNYM0NSMSIsICJUTUVNMTE5IiwgIkNTRjFSIiwgIlAyUlkxMiIsCiAgICAgICAgICAgICAgICAgIlAyUlkxMyIsIlNFTFBMRyIsICJNQVJDS1MiKQoKCm15Ml9tYXJrZXJzICU+JSBmaWx0ZXIoZ2VuZSAlaW4lIG1pY3JvZ2xpYSAmIGF2Z19sb2cyRkMgPiAwKQpteTJfbWFya2VycyAlPiUgZmlsdGVyKGdlbmUgJWluJSBtb25vY3l0ZSAmIGF2Z19sb2cyRkMgPiAwKQpteTJfbWFya2VycyAlPiUgZmlsdGVyKGdlbmUgJWluJSBob21lb3N0YXRpYyAmIGF2Z19sb2cyRkMgPiAwKQoKCiMgRXNhdWxvdmEKIyAxMCBnZW5lcyB0aGF0IGRpc2NyaW1pbmF0ZSBtaWNyb2dsaWEKbWljcm9nbGlhIDwtIGMoIkMxUUMiLCAiQzFRQiIsICJDMVFBIiwgIlRSRU0yIiwgIlRJTUQ0IiwgIkFQT0MxIiwgCiAgICAgICAgICAgICAgICJBUE9FIiwgIlRORlNGMTgiLCAiQ0xFQzlBIiwgIkNYQ0wxMiIpCiMgQ2FuIHdlIGZpbmQgdGhlc2UgMTAgZ2VuZXMgaW4gdGhlIE15ZWxvaWQyIHVwcmVndWxhdGVkIGdlbmVzPwpteTJfbWFya2VycyAlPiUgZmlsdGVyKGdlbmUgJWluJSBtaWNyb2dsaWEgJiBhdmdfbG9nMkZDID4gMCkKCgojIEdsYXNzCiMgODQgb2YgdGhlIG1pY3JvZ2xpYSBzaWduYXR1cmUgZ2VuZXMgYXJlIG1vcmUgaGlnaGx5IGV4cHJlc3NlZCBpbiB0aGUgCm1pY3JvZ2xpYV9nZW5lcyA8LSByZWFkLnRhYmxlKCIvbWVkaWEvYWctY2hlcnJtYW5uL2ttaWt1bGlrL0hJVl9taWNyb2dsaWEvZGF0YS9NaWNyb2dsaWFfZ2VuZV9zaWduYXR1cl9mb3VuZF9pbl9ISVYxX0hJVjJfc2FtcGxlcyIpCm0xIDwtIG15Ml9tYXJrZXJzICU+JSBmaWx0ZXIoZ2VuZSAlaW4lIG1pY3JvZ2xpYV9nZW5lcyBbWyJnZW5lX25hbWUiXV0gJiBhdmdfbG9nMkZDID4wKQojIHJlbW92ZSB0aGUgZ2VuZXMgdGhhdCB3ZXJlIGFscmVhZHkgdXNlZCBieSB0aGUgRmFyaGFkaWFuIHBhcGVyCm0xIDwtIG0xW1siZ2VuZSJdXVttMVtbImdlbmUiXV0gJWluJSBwYXBlciA9PSBGQUxTRV0KCmhpdl9uZXcgPC0gQWRkTW9kdWxlU2NvcmUoaGl2NCwgZmVhdHVyZXMgPSBtMSkKRmVhdHVyZVBsb3QoaGl2X25ldywgZmVhdHVyZXMgPSAiQ2x1c3RlcjEiKSArCiAgc2NhbGVfY29sb3VyX2dyYWRpZW50bihjb2xvdXJzID0gcmV2KGJyZXdlci5wYWwobiA9IDExLCBuYW1lID0gIlJkQnUiKSkpICsKICAgIGxhYnModGl0bGUgPSAiU2VsZWN0ZWQgc2lnbmF0dXJlIGdlbmVzIGZyb20gdGhlIEdsYXNzIHBhcGVyIikKCmBgYAoKCgojIFJlZmVyZW5jZXMKCjwvZGl2Pg==</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
@@ -3727,8 +4000,6 @@ footer is added to webpages before the MathJax javascript. -->
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -3762,36 +4033,11 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
+  window.initializeSourceEmbed("Independent_cell_type_identification_Farhadian_dataset.Rmd");
   window.initializeCodeFolding("hide" === "show");
 });
 </script>
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
