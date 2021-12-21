@@ -1,7 +1,6 @@
 ---
 title: "Triculture dataset"
-author: "kmikulik"
-date: "9 11 2021"
+author: "Katharina Mikulik"
 bibliography: references.bib
 link-citations: yes
 ---
@@ -1156,7 +1155,7 @@ p1 <- as.data.frame(rowSums(t(counts_up))) %>%
   ylim(0,100) +
   labs(title = "Sum of feature counts of genes upregulated in Inf+EFZ vs. Uninf+EFZ")
 
-y#normalize counts of downregulated genes
+#normalize counts of downregulated genes
 counts_down <- (hivmy2@assays$RNA@data)
 counts_down <- t(t(counts_down)) / colSums(counts_down)
 counts_down <- log1p(counts_down)
@@ -1339,7 +1338,7 @@ sign <- adj_p_values[adj_p_values < 0.05]
 ```
 
 
-# Abstract
+# Appendix
 
 ## Inflammatory Pathways
 

@@ -568,8 +568,7 @@ ggarrange(p1,p2,p3,p4, ncol = 2, nrow = 2)
 ```
 
 
-# Frequency of cell types in CSF and blood samples
-
+# Contribution of CSF and blood samples to each cluster
 
 The histogram below shows that Myeloid2 and Myeloid5 are predominantly composed of CSF
 cells, while Myeloid1, Myeloid3 and Myeloid4 are predominantly composed of Blood
@@ -585,7 +584,7 @@ ggplot(hiv4@meta.data) +
   scale_fill_manual( values = custom_color) +
   ylab("Number of cells in each cluster") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-  labs(title = "Relative contribution of CSF and blood samples to each cluster")
+  labs(title = "Cell types per sample")
 ```
 
 
@@ -1014,8 +1013,7 @@ p1 + p2
 ```
 
 
-
-## Frequency of cell types in CSF and blood samples after label transfer
+## Contribution of CSF and blood samples to each cluster after label transfer
 
 How are cell types distributed across samples, considering also the additional
 HIV+ CSF sample and the two uninfected samples which were annotated using label 
@@ -1026,23 +1024,33 @@ hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhad
 
 custom_color <- c("#C3D7A4", "#4E84C4", "#52854C", "#293352", "lightskyblue", "orangered2", "orange2")
 
+#ordering
+lvls <- c("Myeloid2", "Myeloid5", "Myeloid1", "Myeloid3", "Myeloid4", 
+          "plasma cell", "NKcell1", "NKcell2", "Bcell", "CD8", "CD81", 
+          "Tcell1", "Tcell2", "Tcell3", "Tcell4", "mixed"
+          )
+
 #plot a barplot of the proportions of samples and cell types
-p2 <- ggplot(hiv7@meta.data) +
+p2 <- hiv7@meta.data %>%
+  mutate(cell_type = factor(cell_type, levels=lvls)) %>%
+  ggplot() +
   geom_bar(aes(x = cell_type, fill = orig.ident)) +
   scale_fill_manual( values = custom_color) +
   ylab("Number of cells in each cluster") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-  labs(title = "Frequency of cell types from each sample after label transfer")
+  labs(title = "Cell types per sample after label transfer")
 
 custom_color <- c("#C3D7A4", "#4E84C4", "#52854C", "#293352")
 
 #plot a barplot of the proportions of samples and cell types
-p1 <- ggplot(hiv4@meta.data) +
+p1 <- hiv4@meta.data %>%
+  mutate(cell_type = factor(cell_type, levels=lvls)) %>%
+  ggplot() +
   geom_bar(aes(x = cell_type, fill = orig.ident)) +
   scale_fill_manual( values = custom_color) +
   ylab("Number of cells in each cluster") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-  labs(title = "Frequecy of cell types from each sample after label transfer")
+  labs(title = "Cell types per sample after label transfer")
 
 ggarrange(p1, p2, ncol = 2, nrow = 1)
 
