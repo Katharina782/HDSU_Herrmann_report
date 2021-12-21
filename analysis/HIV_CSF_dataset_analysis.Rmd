@@ -1,7 +1,6 @@
 ---
 title: "Analysis of HIV CSF/Blood dataset"
-author: "kmikulik"
-date: "3 12 2021"
+author: "Katharina Mikulik"
 bibliography: references.bib
 link-citations: yes
 ---
@@ -50,6 +49,8 @@ library(harmony)
 library(SeuratDisk)
 library(patchwork)
 ```
+
+# Description of dataset
 
 First, the analysis done by [@Farhadian] was reproduced and then more extended
 analysis of the dataset was performed. The microglia-like cell cluster identified
@@ -150,7 +151,7 @@ hiv[["percent_mt"]] <- PercentageFeatureSet(hiv, pattern = "^MT-")
 </details>
 
 <details> 
-<summary>Importing files & creating Seurat objects</summary>
+<summary>Quality control</summary>
 
 **Quality control was performed on every individual object.**
 
@@ -291,7 +292,7 @@ hiv4 <- RunTSNE(hiv4, dims = 1:10, verbose = FALSE)
 </details>
 
 
-# Visualization of sample quality in tSNE plot
+# Sample quality
 
 After performing quality control and removing cells with low number of features and
 high percentage of mitochondrial genes it does not seem that there is any 
@@ -339,8 +340,6 @@ ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
 ```
 marker_genes <- FindAllMarkers(hiv4, logfc.threshold = .01, min.pct = .01)
 ```
-### Top marker genes
-
 The function `FindAllMarkers()` identifies differentially expressed genes between
 two groups of cells, in this case I compared one group of cells at a time against
 the rest of cells using a Wilcoxon Rank Sum test. 
@@ -359,7 +358,7 @@ sign_marker_genes <- read.table(file = "/media/ag-cherrmann/kmikulik/HIV_microgl
 ```
 
 
-### Cell type annotation with canonical marker genes {.tabset}
+## Cell type annotation with canonical marker genes {.tabset}
 
 
 ### B cell markers
@@ -487,8 +486,6 @@ ggarrange(p1, p2, p3, p4, ncol = 1, nrow = 4)
 
 ```
 
-## {-}
-
 ---
 
 * Why is the mixed population primarily composed of cells from HIV1 
@@ -595,8 +592,7 @@ ggplot(hiv4@meta.data) +
 **Question**: Myeloid1, Myeloid2 are mainly found in Blood cells, 
 Myeloid4 is only found in Blood cells from HIV1 patient. What does that mean?
 
-
-### How big are Myeloid2 and Myeloid5 clusters and where do cells come from?
+### Number of Myeloid2 and Myeloid5 cells per sample
 
 Myeloid2 cells originate from the CSF samples of HIV infected patients, while
 a few cells (thirteen) classified as Myeloid5 cells originate from Blood samples. 
@@ -666,7 +662,7 @@ DotPlot(hiv4, features = c(paper)) +
 
 
 
-### Percentage of Myeloid2 transcripts per Cell in Blood, CSF and Uninfected samples
+### Frequency of Myeloid2 transcripts in Blood, CSF and Uninfected samples
 
 First, it is important to mention, that after quality control the number of cells
 is significantly lower in the two uninfected CSF samples, 216 and 340 respectively,
@@ -809,8 +805,6 @@ to the remaining samples (query):
 * 1 CSF smaple from HIV-1 infected patient
 * 2 CSF samples from uninfected patients
 
-
-
 Myeloid1, Myeloid3 and Myeloid4 are not or hardly present in the CSF samples, 
 because they originated exclusively from the blood samples in the reference 
 dataset. However, there are 132 cells annotated as Myeloid2 and 43 cells 
@@ -852,15 +846,29 @@ predictions <- TransferData(anchorset = hiv4_transfer_anchors,
 
 query <- AddMetaData(query, metadata = predictions)
 #saveRDS(query, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/query_seurat_object_label_transfer")
-table(query$predicted.id) %>% kable()
 ```
 
-### Check the gene expression levels of the predicted cell types {.tabset}
+</details>
+
+<details> 
+<summary>Frequency of eac cell type</summary>
+
+```{r}
+as.data.frame(table(query$predicted.id)) %>% 
+  column_to_rownames("Var1") %>% 
+  kable(caption = "Frequency of each cell type in query samples")
+
+```
+
+---
+</details>
+
+## Marker gene expression of the predicted cell types {.tabset}
 
 The Label Transfer seems to work nicely, judging from the correct expression of
 common cell type markers for the individual cell types.
 
-#### Myeloid2 marker genes
+### Myeloid2 marker genes
 
 ```{r, fig.width=12, fig.height = 10}
 # ceck the Myeloid2 markers
@@ -877,7 +885,7 @@ figure <- ggarrange(p1, p2, ncol = 1, nrow = 2)
 annotate_figure(figure, top = text_grob("Myeloid2 marker genes"))
 ```
 
-#### Myeloid5 marker genes
+### Myeloid5 marker genes
 ```{r}
 
 # Myeloid 5 markers
@@ -887,7 +895,7 @@ p1
 ```
 
 
-#### Plasma cell marker genes
+### Plasma cell marker genes
 ```{r}
 # plasma cell markers
 p2 <- VlnPlot(query, features = c("IGJ"), 
@@ -895,7 +903,7 @@ p2 <- VlnPlot(query, features = c("IGJ"),
 p2
 ```
 
-#### CD8 T cell marker genes
+### CD8 T cell marker genes
 
 ```{r}
 # CD8 T Cells
@@ -904,7 +912,7 @@ p3 <- VlnPlot(query, features = c("CD8A"),
 p3
 ```
 
-#### T cell marker genes
+### T cell marker genes
 
 ```{r}
 # T cells 
@@ -912,7 +920,7 @@ VlnPlot(query, features = c("IL7R", "TRAC"),
         group.by = "predicted.id", pt.size = .01, ncol = 2)
 ```
 
-#### NK cell marker genes
+### NK cell marker genes
 
 ```{r, fig.width=15}
 # NK cells
@@ -921,7 +929,7 @@ VlnPlot(query, features = c("NKG7", "GNLY", "GZMB"),
 ```
 
 
-#### B cell marker genes
+### B cell marker genes
 
 ```{r, fig.width=15}
 # B cells
@@ -931,12 +939,10 @@ VlnPlot(query, features = c("MS4A1", "CD79A", "TCL1A"),
 
 ```
 
-
-### {-}
 ---
 
 
-### UMAP projection of additional samples
+## UMAP projection after label transfer
 
 A UMAP embedding of the four reference samples was calculated (figure below, left)
 and the annotated qery sample is shown in embedded in the same space (figure below, right.
@@ -1009,7 +1015,7 @@ p1 + p2
 
 
 
-## Frequency of cell types in CSF and blood samples
+## Frequency of cell types in CSF and blood samples after label transfer
 
 How are cell types distributed across samples, considering also the additional
 HIV+ CSF sample and the two uninfected samples which were annotated using label 
@@ -1503,8 +1509,6 @@ do.call(grid.arrange, c(cluster_plots, ncol = 2, nrow = 4))
 #})
 ```
 
-## {-}
-
 ---
 
 ## Genes which are upregulated in Myeloid2 compared to all other Myeloid clusters
@@ -1574,7 +1578,7 @@ FeaturePlot(hiv_new, features = "Cluster1") +
 
 ```
 
-##  Conclusions on Myloid2 cell type
+###  Conclusions on Myloid2 cell type
 
 Taken together the results above do not provide a clear picture on whether the
 Myeloid2 cluster consists of microglia-like cells. There are several genes which 
@@ -1724,7 +1728,7 @@ hiv@meta.data %>%
 
 ```
 
-## {-}
+---
 
 ## Quality of the different samples after quality control {.tabset}
 
@@ -1840,7 +1844,6 @@ hiv_filt@meta.data %>%
 
 ```
 
-## {-}
 ---
 
 
