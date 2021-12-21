@@ -1,7 +1,6 @@
 ---
 title: "TF activity in iMg from triculture dataset"
-author: "kmikulik"
-date: "2 12 2021"
+author: "Katharina Mikulik"
 output: html_document
 ---
 
@@ -14,7 +13,6 @@ text-align: justify}
 knitr::opts_chunk$set(cache = FALSE, autodep = TRUE, 
                       collapse = TRUE, message = FALSE)
 
-set.seed(42)
 ```
 
 
@@ -43,7 +41,7 @@ library(multtest)
 library(readxl)
 ```
 
-## Gene regulatory network (GRN) inference with SCENIC
+## Gene regulatory network inference with SCENIC
 
 To infer GRNs from iMg cells from the triculture dataset [@Ryan] (4333 cells in 
 total) I again used SCENIC.
@@ -201,12 +199,16 @@ top_tfs %>%
 ---
 </details>
 
-## TF activity in iMg
+# TF activity in iMg 
 
-### Heatmap for all TFs
+## Heatmap for all TFs
 
 In the heatmap of TF activities below you can already see a trend towards a separation of 
 cells treated with EFZ (blue and green) from untreated cells (red and orange).
+
+<details>
+<summary>**Heatmap of 232 TFs and their activity in iMg**</summary>
+
 
 ```{r, fig.width=15, fig.height=25}
 conditions <- tri_mg@meta.data %>%
@@ -228,14 +230,17 @@ ht <- Heatmap(t(auc_mtx),
 ht
 ```
 
+---
+</details>
 
-### Heatmap of 25 TFs with differential binding score
+
+## Heatmap of 25 TFs with differential binding score
 
 We will now investigate if we can find activity patterns which resemble
 the differential binding score patterns found in 25 TFs.
 
 
-#### Hierarchical clustering with different k {.tabset}
+### Hierarchical clustering with different k {.tabset}
 
 Using hierarchical clustering we migth be able to identify clusters with certain
 patterns of TF activity. Judging from the different heatmaps, k = 4 might be the
@@ -273,7 +278,7 @@ TCF4 distinguishes a third cluster.
 Is there a biological meaning behind that? Maybe we can associate them with 
 a particular condition?
 
-##### wss plot
+#### wss plot
 
 ```{r}
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
@@ -290,7 +295,7 @@ plot(2:15, wss, type = "b",
      ylab = "Total within-clusters sum of square")
 ```
 
-##### different k
+#### different k
 
 ```{r, fig.width=15, fig.height=10}
 
@@ -317,7 +322,7 @@ draw(ht_list, column_title = "Hierarchical clustering with different k", ht_gap 
 ```
 
 
-##### k = 4
+#### k = 4
 
 ```{r, fig.width = 15, fig.height=10}
 ht <- draw(Heatmap(t(auc_mtx[, atac_tfs_df$name]), 
@@ -473,11 +478,10 @@ ht_list <- ht_tfs1 + ht_tfs2
 draw(ht_list, ht_gap = unit(2, "cm"))
 
 ```
-### {-}
 
 ---
 
-### Statistical Tests to find TF activity differences between clusters
+## Statistical Tests to find TF activity differences between clusters
 
 To quantitatively investigate whether we can find TFs which have significantly
 different activity between clusters we can use Kruskal-Wallis test and 
@@ -505,9 +509,9 @@ adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
 
 ```
 
-### Posthoc analysis {.tabset}
+## Posthoc analysis {.tabset}
 
-#### more bound in latent infection
+### more bound in latent infection
 
 **Boxplots of TFs activity across conditions of TFs more bound in latent infection**
 
@@ -534,7 +538,7 @@ boxplot_list <- map(up_latent, function(tf) {
 do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 3, nrow = 2))
 ```
 
-#### more bound in uninfected 
+### more bound in uninfected 
 
 **Boxplots of TFs activity across conditions of TFs more bound in uninfected primary microglia**
 
@@ -579,12 +583,15 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))
  #               top = text_grob("TFs activity across conditions for TFs more bound in uninfected primary microglia", size = 20))
 
 ```
-### {-}
 
 ---
 
 
-## Correlations between conditions
+## Correlations between conditions {.tabset}
+
+**Interpretation here**
+
+### Correlation matrix
 
 ```{r}
 cor_mtx <- tri_mg@meta.data %>% 
@@ -613,6 +620,8 @@ corrplot(cor_mtx,
 
 ```
 
+### Scatter matrix
+
 ```{r, fig.width=12, fig.height=8}
 tri_mg@meta.data %>% 
   rownames_to_column("cell") %>%
@@ -625,8 +634,10 @@ tri_mg@meta.data %>%
     labs(title = "Scatter matrix for different conditions")
 ```
 
+---
 
-### TFs differntiating Myeloid2 clusters
+
+## Correlation between TFs differentiating Myeloid2 clusters {.tabset}
 
 These TFs were differntially active between the three hierarchical clusters in
 Myeloid2 cells from HIV-infected patients. Across three different patients
@@ -634,6 +645,8 @@ they showed correlated changes in activity. YY1, ETS1 and REST were positively
 correlated with each other and negatively
 correlated with MEF2A, ETV6, JUNB, MEF2C, MXI1 and CEBPB. The pattern observed for the iMg from the triculture dataset does not
 resemble the pattern observed in Myeloid2 cells. 
+
+### Correlation Matrix
 
 ```{r}
 intersect_csf <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_intersect_TFs_different_across_patients_3_clusters")
@@ -656,6 +669,7 @@ corrplot(cor_mtx,
          insig = "p-value")
 ```
 
+### Scatter Matrix
 
 ```{r, fig.height=10, fig.width=15}
 tri_mg@meta.data %>% 
@@ -668,5 +682,6 @@ tri_mg@meta.data %>%
   labs(title = "Scatter Matrix for different TFs")
 ```
 
+---
 
-
+# References
