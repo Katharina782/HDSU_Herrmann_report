@@ -329,7 +329,9 @@ triculture <- AddMetaData(triculture, cell_types, col.name = "cell_type")
 </details>
 
 # {-}
+---
 
+# Exploring the dataset
 
 ### Remove undesignated cells
 
@@ -399,7 +401,7 @@ triculture_clean@meta.data %>% group_by(cell_type, orig.ident) %>%
 </details>
 
 
-## Different infection and treatment conditions
+### Different infection and treatment conditions & gene expression
 
 Interestingly, the infected cells treated with EFZ (Inf+EFZ) clearly separate 
 from the infected, but untreated cells (Inf) and the the uninfected cells
@@ -423,7 +425,10 @@ DimPlot(triculture_clean, reduction = "tsne", group.by = "orig.ident", pt.size =
 ```
 
 
-## Inflammatory gene expression in iMg
+<details>
+<summary>**Inflammatory gene expression in iMg**</summary>
+
+**Inflammatory gene expression in iMg**
 
 The largest change in gene expression related to inflammation was found in iMg
 among the 3 cell types [@Ryan]. Shown are only inflammatory genes. 
@@ -441,6 +446,8 @@ inflamm_genes <- c("TNF", "ACSL1", "MGST3", "B2M", "IFNGR2", "GRINA", "TLR2",
 DoHeatmap(triculture_clean, features = inflamm_genes)
 ```
 
+---
+</details>
 
 <details>
 <summary>**Differences of inflammatory gene expression between conditions**</summary>
@@ -578,19 +585,6 @@ ggarrange(p1, p2, p3,p4, a1, a2, ncol = 2, nrow = 3)
 
 ```
 
-```#{r, fig.width=15, fig.height=5}
-
-a1 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
-        group.by = "seurat_clusters", label = TRUE, repel =TRUE) +
-  NoLegend() +
-  labs(title = "Clusters split into datasets")
-
-a2 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
-              group.by = "orig.ident") +
-  labs(title = "Sample origin split into datasets")
-ggarrange(a1, a2, ncol = 2, nrow = 1)
-```
-
 
 ## Myeloid lineage cluster
 
@@ -633,9 +627,12 @@ subset_infected <- subset(combined, orig.ident %in% c("HIV1_CSF", "HIV2_CSF", "H
                                                             "iMg"))
 
 
-p1 <- DimPlot(subset_infected, group.by = "orig.ident")
-p2 <- DimPlot(subset_infected, group.by = "orig.ident")
-p3 <- DimPlot(subset_infected, group.by = "seurat_clusters")
+p1 <- DimPlot(subset_infected, group.by = "cell_type") +
+  labs(title = "Cell Type")
+p2 <- DimPlot(subset_infected, group.by = "orig.ident") +
+  labs(title = "Sample origin")
+p3 <- DimPlot(subset_infected, group.by = "seurat_clusters") +
+  labs(title = "Clusters")
 fig <- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
 annotate_figure(fig, top = text_grob("Infected CSF/Blood Myeloid cells & Inf+EFZ iMg"))
 ```
@@ -668,7 +665,7 @@ DimPlot(subset_monocytes, group.by = "seurat_clusters",
 ```
 
 
-## Subcluster the Myeloid-Lineage Cluster of the integrated dataset
+## De-nove clustering of the myeloid-lineage cluster of the integrated dataset
 
 Isolating the iMg and all Myeloid cell clusters from the integrated dataset and
 normalizing, scaling and re-clustering these isolated cells might give us
@@ -722,7 +719,10 @@ a4 <- DimPlot(microglia_recluster, reduction = "tsne",
               group.by = "orig.ident", pt.size = .4) +
   labs(title = "Sample origin")
 
-ggarrange(a1, a2, a3, a4, ncol = 2, nrow = 2)
+fig <- ggarrange(a1, a2, a3, a4, ncol = 2, nrow = 2)
+annotate_figure(fig, 
+                top = text_grob("De-novo clustering of myeloid-lineage clusters", 
+               color = "black", face = "bold", size = 20))
 ```
 
 
@@ -735,7 +735,8 @@ independently found clusters correlate.
 
 ```{r, fig.width=15, fig.height=10}
 a5 <- DimPlot(microglia_recluster, reduction ="tsne", 
-              split.by = "cell_type", pt.size = .4, ncol=3)
+              split.by = "cell_type", pt.size = .4, ncol=3) +
+  labs(title = "Contribution of different cell types to different myeloid clusters")
 a5
 ```
 
@@ -760,7 +761,8 @@ a4 <- DimPlot(subset(microglia_recluster, cell_type != "iMg"), reduction = "tsne
               group.by = "seurat_clusters", pt.size = .4) +
   labs(title = "Cluster")
 fig <- ggarrange(a2, a4, ncol = 2, nrow = 1)
-annotate_figure(fig, top = text_grob("CSF/Blood Myeloid cells"))
+annotate_figure(fig, top = text_grob("CSF/Blood Myeloid cells", 
+                                     face = "bold", size = 20))
 ```
 
 Since the segregation into two clusters seems to be related to the sample origin
@@ -785,7 +787,7 @@ p3 <- DimPlot(my2, group.by = "orig.ident") +
   labs(title = "Sample origin")
 figure <- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
 annotate_figure(figure, 
-                top = text_grob("Comparison with clusters with different TF acitivty", 
+                top = text_grob("Comparison with clusters of different TF acitivty", 
                color = "black", face = "bold", size = 20))
 #my25 <- subset(microglia, seurat_clusters %in% c(6,7) &cell_type %in% c("Myeloid2", "Myeloid5"))
 
@@ -809,6 +811,9 @@ cells not treated with EFZ, we can define a signature for both treatment
 conditions separately and then see if there is an overlap between the gene 
 signatures of infected cells +/- EFZ. Finding genes which overlap independently 
 of treamtent condition increases the confidence in the results
+
+<details>
+<summary>**List if top up- or downregulated genes in Inf+EFZ vs Uninf+EFZ**</summary>
 
 ```{r, results = "asis"}
 # isolate iMg cells
@@ -903,7 +908,7 @@ ggarrange(p1, p2, ncol = 2)
 Interestingly, the genes downregulatd in Inf+EFZ vs. Uninfected cells show
 a higher average log fold change with higher significance (p-values). 
 
-```{r, fig.height=8, fig.width=10}
+```{r, fig.height=8, fig.width=12}
 inf_uninf_art_marker %>% 
   rownames_to_column("gene") %>%
   filter(gene %in% c(up_inf_art$gene, down_inf_art$gene)) %>% 
@@ -1003,7 +1008,7 @@ ggarrange(p1, p2, ncol = 2)
 
 ##### Volcano Plot of Treatment signature
 
-```{r,fig.height=8, fig.width=10}
+```{r,fig.height=8, fig.width=12}
 treatment_marker_uninf %>% 
   rownames_to_column("gene") %>%
   filter(gene %in% treatment_marker) %>% 
@@ -1029,7 +1034,6 @@ treatment_marker_uninf %>%
 
 # Infected vs Uninfected gene signatures 
 
-### Investigate gene signatures in Myeloid cells from CSF
 
 Checking the differentially expressed genes and trying to identify a signature 
 through literature search turned out to be very difficult. Therefore, 
@@ -1046,7 +1050,7 @@ down_inf_filt <- down_inf_art$gene[down_inf_art$gene %in% rownames(hivmy2@assays
 ```
 
 
-## Gene signature scoring
+## Gene signature scoring in Myeloid2 cells
 
 Using the signature genes from differential gene expression analysis between
 Inf+EFZ and Uninf+EFZ we can compute a score of activity of these gene sets in 
@@ -1149,9 +1153,10 @@ p1 <- as.data.frame(rowSums(t(counts_up))) %>%
   geom_histogram(bins = 70, color = "olivedrab4", fill = "olivedrab4") +
   xlab("normalized feature counts") +
   ylab("number of cells") +
+  ylim(0,100) +
   labs(title = "Sum of feature counts of genes upregulated in Inf+EFZ vs. Uninf+EFZ")
 
-#normalize counts of downregulated genes
+y#normalize counts of downregulated genes
 counts_down <- (hivmy2@assays$RNA@data)
 counts_down <- t(t(counts_down)) / colSums(counts_down)
 counts_down <- log1p(counts_down)
@@ -1171,29 +1176,6 @@ p2 <- as.data.frame(rowSums(t(counts_down))) %>%
 
 ```{r, fig.width=15}
 p1 + p2
-```
-
-
-#### Percentage of cells with positive Inf gene signature score (no treatment)
-
-```#{r}
-inf_sign <- AddModuleScore(hivmy2,
-                           features = up_inf_no$gene)
-
-
-p3 <- FeaturePlot(subset(inf_sign, ht_cluster == "c1"), 
-                  features = "Cluster1", pt.size = 1) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Myeloid2 Cluster c1")
-  
-p4 <- FeaturePlot(subset(inf_sign, ht_cluster == "c2"),
-                  features = "Cluster1", pt.size = 1) +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-  labs(title = "Myeloid2 Cluster c1")
-
-figure <- ggarrange(p3, p4, ncol = 2)#, nrow = 2)
-annotate_figure(figure, top = text_grob("Signature score of genes upregulated in Inf+EFZ iMg applied to CSF Myeloid2 cells", 
-               color = "black", face = "bold", size = 20))
 ```
 
 #### Scores of gene signature upregulated in cells treated with EFZ independently of infection condition.
@@ -1220,12 +1202,14 @@ annotate_figure(figure, top = text_grob("Signature score of genes upregulated in
 
 
 
-## Overlay Inf+EFZ signature with the TF activity heatmap
+## Overlay Inf+EFZ signature with the TF activity heatmap of Myeloid2 cells {.tabset}
 
 There are a few cells which express the Inf+EFZ signature and they are highlighted
 with an orange colour in the heatmap below. However, they are spread
 across all clusters and patients and since there are so few cells drawing a 
 conclusion or finding a pattern is not feasible.
+
+### k = 3 hierarchical clustering
 
 ```{r}
 # calculate scores for genes upregualted in Inf+EFZ iMg
@@ -1282,6 +1266,8 @@ ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap
 
 When you group the cells according to their different gene signatures as in the heatmap below, you do not really see a difference between the groups. 
 
+### group according to infection condition
+
 ```{r, fig.width=15, fig.height=20}
 # filter the dataset for only Myeloid2 cells 
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
@@ -1317,7 +1303,10 @@ ht <- draw(Heatmap(t(mtx),
              ))
 ```
 
-## Are some TFs differentially active between the infection conditions?
+## {-}
+---
+
+## Are some TFs in Myeloid2 differentially active between the infection conditions?
 
 After having identified a few cells with high scores for the infection signature
 we can now check if some of the TFs show significantly different activity between
@@ -1350,7 +1339,9 @@ sign <- adj_p_values[adj_p_values < 0.05]
 ```
 
 
-# Inflammatory Pathways 
+# Abstract
+
+## Inflammatory Pathways
 
 [@Ryan] showed that two pathways are specifically activated in the Inf+EFZ 
 condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen in Uninf+EFZ, so it does not seem to be caused by EFZ alone, but rather a combination of infection and EFZ treatment [@Ryan].
@@ -1362,8 +1353,8 @@ condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen 
   + FOS was upregulated
   + NFKBIA, ICAM1, TFNAIP3 were downregulated 
   
-The question was whether we could find similar patterns in the Myeloid2 clusters
-with different TF activity. 
+To answer question was whether we could find similar patterns in the Myeloid2 clusters
+with different TF activity, we had a look at the gene expression.
 
 ##### Myeloid2 cells 
 
