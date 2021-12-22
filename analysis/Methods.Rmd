@@ -1,12 +1,10 @@
 ---
 title: "Methods"
-author: "kmikulik"
-date: "16 12 2021"
+author: "Katharina Mikulik"
 output: html_document
 ---
 
 
-## sc-RNAseq analysis workflow
 
 ### Quality Control
 
@@ -25,11 +23,16 @@ package was used, so that the data structure would work with the SCENIC pipeline
 This method uses regularized negative binomial regression to normalize the
 count matrix. 
 
+### Clustering
 
+After calculating a PCA the cells were clustered based on their nearest neighbors.
+For clustering the functions `FindNeigbors()` and `FindClusters()` from the 
+Seurat package were used. First, a k nearest neighbor (KNN) graph is built
+based on the PCA space. Then, the Louvian algorithm is used, which iteratively 
+optimizes the standard modularity function. Modularity measures the strength of division 
+of a network into modules. High modularity is equivalent to dense connections 
+within modules and sparse connections between nodes in different modules. 
 
-+ normalization
-  + PCA
-  + Clustering
   
 ## Integration & Label Transfer
 
@@ -76,7 +79,17 @@ This way we get prediction scores for each class and cell in the query dataset.
   + test for correlation
   + Pearson vs Spearman?
   
-* AddModuleScore
+## AddModuleScore
+
+The average relative expression of genes  which 
+
+The quality of each cell`s counts might have an effect on the gene signature score, 
+therefore control genes are defined. The average relative expression of the 
+control genes were defined as the control scores and are are subtracted from the
+signature scores of each cell. Control genes are defined by creating bins and 
+putting all analyzed genes in their respective bins depending on the expression 
+levels. For each signature gene,  100 genes are drawn from the same expression
+bin. The resulting 
 
 * hierarchical clustering 
   + wss plot

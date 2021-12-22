@@ -945,14 +945,15 @@ annotate_figure(fig, top = text_grob("TFs with significantly different activity 
 
 
 
-# 2. Transfer the 3 cluster identitites to patient2 and patient3 {.tabset}
+# 2. Transfer the 3 cluster identitites to patient2 and patient3 
 
 The cluster identities from patient 1 were transferred to patient 2 and patient 3
 to assign each cell to one of the 3 clusters. 
 
-## Label Transfer
 
-**Cluster annotation using an integrated reference**
+<details>
+<summary>**Cluster annotation using an integrated referenc**</summary>
+## Label Transfer
 
 Here we do not integrate the datasets beforehand and we do not modify the query
 expression data.
@@ -1032,6 +1033,9 @@ hiv3_scenic <- AddMetaData(hiv3, metadata = auc_mtx,
                            col.name = colnames(auc_mtx))
 ```
 
+---
+</details>
+
 ## Predicted cluster labels
 
 The heatmaps below show the predicted clusters from label transfer for
@@ -1099,8 +1103,6 @@ ht_list <- ht_hiv2_label + ht_hiv3_label
 draw(ht_list, ht_gap= unit(2, "cm"))
 ```
 
-# {-}
---- 
 
 # 3. Hierarchical clustering for all 3 patients separately {.tabset}
 

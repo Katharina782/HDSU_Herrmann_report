@@ -258,7 +258,7 @@ triculture <- readRDS("seurat_objects/triculture_seurat_object")
 
 #triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
 
-DimPlot(triculture, reduction = "tsne", pt.size = .01, label = TRUE,
+DimPlot(triculture, reduction = "tsne", pt.size = .01,label = TRUE,
         group.by = "seurat_clusters")
 ```
 
@@ -327,7 +327,6 @@ triculture <- AddMetaData(triculture, cell_types, col.name = "cell_type")
 ---
 </details>
 
-# {-}
 ---
 
 # Exploring the dataset
@@ -862,7 +861,7 @@ down_inf_no<- inf_uninf_marker %>%
 #down_inf_no%>% kable()
 ```
 
-Only 3% of genes which are upregulated and only 14% of genes which are 
+Only 3% of genes which are upregulated and only 11% of genes which are 
 downregulated in infected vs. uninfected cells 
 overlap between the treatment conditions. This means, that the gene expression response defining 
 the infection might differ between cells with and without treatment. This
@@ -950,7 +949,7 @@ other ART drugs which probably have a slightly different effect on cells.
 
 ```{r}
 treatment_marker_uninf <- FindMarkers(microglia, ident.1 = "Uninf+EFZ", 
-                                ident.2 = "Uninf")
+                                ident.2 = "Uninf", verbose = FALSE)
 
 # find marker genes between Inf+EFZ and Inf
 treatment_marker_inf <- FindMarkers(microglia, ident.1 = "Inf+EFZ", ident.2 = "Inf")
@@ -1302,32 +1301,125 @@ ht <- draw(Heatmap(t(mtx),
              ))
 ```
 
+
+
+
 ## {-}
 ---
 
-## Are some TFs in Myeloid2 differentially active between the infection conditions?
 
-After having identified a few cells with high scores for the infection signature
+## Overlay EFZ treatment signature with the TF activity heatmap of Myeloid2 cells {.tabset}
+
+```{r}
+# extract the Myeloid2 cells which have a positive score for the treatment signature
+treat_cells <- rownames(up_treat@meta.data %>% filter(Cluster1 > 0))
+```
+
+### k = 3 hierarchical clustering
+
+```{r,fig.width=15, fig.height=20}
+
+# 3 heatmaps with all Scenic TFs
+ht_list <- map(seq.int(1:3), function(n) {
+  patients <- c ("HIV1_CSF", "HIV2_CSF", "HIV3_CSF") # 3 different patients
+  # filter the dataset for only Myeloid2 cells and iteratively one of the patients
+  df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                  orig.ident == patients[n])
+  # select only the cells of the activity matrix which are myeloid2 and the correct patient
+  mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df),]
+  # heatmap
+  ht <- Heatmap(t(mtx), 
+               column_title = paste0("patient: ", patients[n]), 
+               top_annotation = HeatmapAnnotation(signature = case_when(
+                 rownames(mtx) %in% treat_cells ~ "EFZ_treatment_signature",
+                 #rownames(mtx) %in% uninf_efz_cells ~ "Uninf_EFZ_signature",
+                 #rownames(mtx) %in% uninf_cells ~ "Uninf_signature",
+                 TRUE ~ "no_signature"),
+                 name = "signature",
+                 col = list(signature = c("EFZ_treatment_signature" = "olivedrab3",
+                                          #"Uninf_EFZ_signature" = "lightblue",
+                                          #"Uninf_signature" = "orange",
+                                          "no_signature" = "navy"))),
+               column_km = 3,
+               #row_km = n, 
+               show_column_names = FALSE,
+               col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
+               show_row_names = TRUE
+               ) 
+               #top_annotation = column_annotation) 
+  list(name = patients[n], heatmap = ht)
+})
+
+ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap 
+```
+
+### Group by treatment condition
+
+```{r, fig.width=15, fig.height=20}
+# filter the dataset for only Myeloid2 cells 
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                orig.ident %in% c ("HIV1_CSF", "HIV2_CSF", "HIV3_CSF"))
+# select only the cells of the activity matrix which are myeloid2 and the correct patient
+mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df),]
+
+# add signature column to dataframe
+signature <- df %>%
+  rownames_to_column("cell") %>% 
+  mutate(signature = case_when(cell %in% treat_cells ~ "EFZ_treatment_signature",
+                                #cell %in% uninf_efz_cells ~"Uninf_EFZ_signature",
+                                #cell %in% uninf_cells ~ "Uninf_signature",
+                               TRUE ~ "no_signature"))
+
+
+ht <- draw(Heatmap(t(mtx), 
+             column_title = "All patients split according to gene signature scores", 
+             top_annotation = HeatmapAnnotation(signature = case_when(
+               rownames(mtx) %in% treat_cells ~ "EFZ_treatment_signature",
+               #rownames(mtx) %in% uninf_efz_cells ~ "Uninf_EFZ_signature",
+               #rownames(mtx) %in% uninf_cells ~ "Uninf_signature",
+               TRUE ~ "no_signature"),
+               name = "signature",
+               col = list(signature = c("EFZ_treatment_signature" = "olivedrab3",
+                                        #"Uninf_EFZ_signature" = "lightblue",
+                                        #"Uninf_signature" = "orange",
+                                        "no_signature" = "navy"))),       
+             column_split = signature$signature,
+             show_column_names = FALSE,
+             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
+             show_row_names = TRUE
+             ))
+```
+
+
+
+# Differential TF activity {.tabset}
+
+After having identified a few cells with a high scores for the infection signature
+(Inf+EFZ), as well as cells with a high score for the EFZ treatment signatures,
 we can now check if some of the TFs show significantly different activity between
 the two conditions. For this we can use a pairwise Wilcox Test. 
 
-```#{r}
+## Are some TFs in Myeloid2 differentially active between the infection conditions?
+
+There are no significant differences in TF activity between the cells with 
+high scores for the Inf+EFZ signature compared to cells without the signature.
+Since no significant differences were found with the Kruskal-Wallis test, no 
+further posthoc analysis was performed.
+
+```{r}
 hivmy2_scenic <- AddMetaData(hivmy2, 
                     metadata = auc_mtx, 
                     col.name = colnames(auc_mtx))
 
-df <- hivmy2_scenic@meta.data %>% 
+inf_sign_df <- hivmy2_scenic@meta.data %>% 
   rownames_to_column("cell") %>% 
-         filter(cell %in% c(inf_efz_cells, uninf_efz_cells, uninf_cells)) %>% 
-  mutate(signature = case_when(cell %in% inf_efz_cells ~ "Inf_efz_signature",
-                                cell %in% uninf_efz_cells ~ "Uninf_efz_signature",
-                                cell %in% uninf_cells ~ "Uninf_signature"))
+  mutate(signature = case_when(cell %in% inf_efz_cells ~ "Inf_EFZ_signature",
+                                TRUE ~ "no_signature"))
 
 # check all TFs 
 p_values <- map(seq.int(1:125), function(n){
   tf <- colnames(auc_mtx)[n]
-  p_values <- unlist(kruskal.test(pull(df[tf]) ~ signature, df))["p.value"]
-  #list(tf = tf, p_value = p_values)
+  p_values <- unlist(kruskal.test(pull(inf_sign_df[tf]) ~ signature, inf_sign_df))["p.value"]
 })
 
 # adjust for multiple testing with FDR
@@ -1338,12 +1430,12 @@ sign <- adj_p_values[adj_p_values < 0.05]
 ```
 
 
-# Appendix
-
-## Inflammatory Pathways
+## Gene expression of inflammatory genes 
 
 [@Ryan] showed that two pathways are specifically activated in the Inf+EFZ 
-condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen in Uninf+EFZ, so it does not seem to be caused by EFZ alone, but rather a combination of infection and EFZ treatment [@Ryan].
+condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen 
+in Uninf+EFZ, so it does not seem to be caused by EFZ alone, 
+but rather a combination of infection and EFZ treatment [@Ryan].
 
 * RhoGDI signaling:
   + PP1R12A was upregulated 
@@ -1352,16 +1444,126 @@ condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen 
   + FOS was upregulated
   + NFKBIA, ICAM1, TFNAIP3 were downregulated 
   
-To answer question was whether we could find similar patterns in the Myeloid2 clusters
+Here, we would like to see if cell with high scores for the Inf+EFZ signature
+show gene expression patterns that are in line with the findings by [@Ryan]. 
+The gene expression for each gene is shown in the figure below.
+We would expect only PP1R12A and FOS to be more highly expressed in the cells
+with Inf+EFZ signature, while all other genes should be less highly expressed.
+This pattern in gene expression is, however, not observed. 
+
+```{r, fig.width=15, fig.height=8}
+# read in Seurat object containing Myeloid2 cells
+hivmy2_scenic <- AddMetaData(hivmy2_scenic, metadata = inf_sign_df$signature, col.name = "signature")
+
+# RhoGDI signaling in myeloid2
+p1 <- VlnPlot(hivmy2_scenic, features = c("RND3", "CD44", "ACTG1", "PPP1R12A"), 
+              group.by = "signature", ncol = 2)
+
+# CD40 signaling in myeloid2
+p2 <- VlnPlot(hivmy2_scenic, features =c("NFKBIA", "ICAM1", "TNFAIP3", "FOS"), 
+              group.by = "signature", ncol = 2)
+
+# RhoGDI signaling in iMg
+p3 <- VlnPlot(microglia, features = c("RND3", "CD44", "ACTG1", "PPP1R12A"), 
+        ncol = 2, pt.size = 0, group.by = "orig.ident")
+
+# CD40 signaling in iMg
+p4 <- VlnPlot(microglia, features = c("NFKBIA", "ICAM1", "TNFAIP3", "FOS"), 
+        ncol = 2, pt.size = 0, group.by = "orig.ident")
+
+fig <- ggarrange(p1, p3, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob("Expression of four genes of the RhoGDI signaling pathway in Myeloid2 (left column) and iMg (right column)",
+                                     size = 20 , face = "bold"))
+
+fig <- ggarrange(p2, p4, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob("Expression of four genes of the CD40 signaling pathway in Myeloid2 (left column) and iMg (right column)",
+                                     size = 20 , face = "bold"))
+
+```
+
+Only FOS which encodes a TF is found in the TF activity matrix, so for FOS 
+the TF acivity is shown as well. Judging from the figure below FOS seems to be 
+more active in cells with high score for Inf+EFZ signature, but this difference
+is not statistically significant.
+
+```{r}
+inf_sign_df %>% ggplot(aes(x = signature, y = FOS)) +
+  geom_violin(aes(fill = signature, alpha = .6)) +
+  geom_boxplot(alpha = 0) +
+  stat_pvalue_manual(inf_sign_df %>% 
+                       pairwise_wilcox_test(FOS ~ signature) %>% 
+  add_xy_position())
+
+```
+
+
+## Are some TFs in Myeloid2 differentially active between the treatment conditions?
+
+There are no significant differences in TF activity between the cells with 
+high scores for EFZ treatment signature compared to cells without the signature.
+Therefore, no posthoc analysis was performed.
+
+
+```{r}
+df <- hivmy2_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+        # filter(cell %in% c(inf_efz_cells, uninf_efz_cells, uninf_cells)) %>% 
+  mutate(signature = case_when(cell %in% treat_cells ~ "treatment_signature",
+                                TRUE ~ "no_signature"))
+
+# check all TFs 
+p_values <- map(seq.int(1:125), function(n){
+  tf <- colnames(auc_mtx)[n]
+  p_values <- unlist(kruskal.test(pull(df[tf]) ~ signature, df))["p.value"]
+})
+
+# adjust for multiple testing with FDR
+adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
+
+# how many transcription factors are significantly different between the clusters?
+sign <- adj_p_values[adj_p_values < 0.05]
+```
+
+
+# {-}
+---
+
+# Appendix
+
+## Inflammatory Pathways
+
+As already mentioned above [@Ryan] showed that two pathways are specifically activated in the Inf+EFZ 
+condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen 
+in Uninf+EFZ, so it does not seem to be caused by EFZ alone, 
+but rather a combination of infection and EFZ treatment [@Ryan].
+
+* RhoGDI signaling:
+  + PP1R12A was upregulated 
+  + RND3, CD44, ACTG1 were downregulated
+* CD40 signaling:
+  + FOS was upregulated
+  + NFKBIA, ICAM1, TFNAIP3 were downregulated 
+  
+To answer the question whether we could find similar patterns in the two Myeloid2 clusters
 with different TF activity, we had a look at the gene expression.
 
 ##### Myeloid2 cells 
 
+Two genes of the RhoGDI signaling pathway were found among the differentially
+expressed genes between Inf+EFZ and Uninf+EFZ. Both of them were downregulated
+in Inf+EFZ compared to Uninf+EFZ iMg as can be seen in the table below.
+
 ```{r, results = "asis"}
 inf_uninf_art_marker %>% 
   rownames_to_column("gene") %>%
-  filter(gene %in% c("RND3", "CD44", "ACTG1", "PPP1R12A")) %>% kable()
+  filter(gene %in% c("RND3", "CD44", "ACTG1", "PPP1R12A")) %>%
+  kable(caption = "Genes of the RhoGDI signaling pathway found among genes differentially expressed between Inf+EFZ and Uninf+EFZ")
 ```
+
+All four genes of the CD40 signaling were found among the differentially expressed
+genes between Inf+EFZ and Uninf+EFZ. FOS was upregulated, while NFKBIA, ICAM1 and 
+TFNAIP3 were downregulated in Inf+EFZ compared to Uninf+EFZ as can be seen in the
+table below. 
 
 ```{r, results = "asis"}
 inf_uninf_art_marker %>% 
@@ -1370,7 +1572,25 @@ inf_uninf_art_marker %>%
 
 ```
 
-```{r, fig.width=15, fig.height=12}
+
+The changes in gene expression of both pathways are in line with the findings 
+by [@Ryan]. 
+
+Additionally, we were interested whether this pattern in gene expression 
+correlated with the two clusters identified in Myeloid2 which exhibit different
+TF activities. The figure below show the gene expression of the four genes of 
+the respective pathways both in Myeloid2 cells (left column) and in iMg (right 
+column).
+
+FOS is the only gene which shows a high expression in Myeloid2 cluster c1. 
+This supports our hypothesis that c1 might be a latently infected reactive microglia 
+cell state. However then we would expect to see a similar pattern for the RhoGDI
+signaling, meaning PPP1R12A should be the only gene which is
+highly expressed in c1. This is not the case, but rather CD44 and ACTG1 also 
+show higher expression in c1 compared to c2. Consequently, our hypothesis is not 
+clearly supported by the expression patterns of these inflammatory genes.
+
+```{r, fig.width=15, fig.height=6}
 # isolate microglia cells
 microglia <- subset(combined, cell_type == "iMg")
 
@@ -1390,8 +1610,13 @@ p3 <- VlnPlot(microglia, features = c("RND3", "CD44", "ACTG1", "PPP1R12A"),
 p4 <- VlnPlot(microglia, features = c("NFKBIA", "ICAM1", "TNFAIP3", "FOS"), 
         ncol = 2, pt.size = 0, group.by = "orig.ident")
 
-ggarrange(p2, p4, p1, p3, ncol = 2, nrow = 2)
+fig <- ggarrange(p1, p3, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob("Expression of four genes of the RhoGDI signaling pathway in Myeloid2 (left column) and iMg (right column)",
+                                     size = 20 , face = "bold"))
 
+fig <- ggarrange(p2, p4, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob("Expression of four genes of the CD40 signaling pathway in Myeloid2 (left column) and iMg (right column)",
+                                     size = 20 , face = "bold"))
 ```
 
 
