@@ -1,13 +1,15 @@
 ---
 title: "Introduction"
-author: "kmikulik"
-date: "15 12 2021"
+author: "Katharina Mikulik"
 output: html_document
 bibliography: references.bib
 link-citations: yes
 ---
 
-<div style="text-align: justify"> 
+<style>
+body {
+text-align: justify}
+</style>
 
 The World Health Organization (WHO) reported the number of people living with 
 HIV in 2020 to be approximately  37.7 million. The use of antiretroviral therapy(ART) has 
@@ -40,17 +42,6 @@ continued as a lifelong treatment [@Wallet].
 ![](images/HIV_virus.jpg)
 
 
-<details>
-  <summary>Click for Answer</summary>
-    ```{r, echo=FALSE, eval=TRUE}
-    hist(1:10)
-    ```
-</details> 
-
-
-<details> 
-<summary>Click to Expand</summary> 
-
 ### Antiretroviral therapy (ART)
 
 ART drugs target viral enzymes, like reverse transcriptases, proteases or 
@@ -60,8 +51,6 @@ cure the disease, but only suppress it. The virus persists in latently infected
 cells. One advantage of the viral suppression is that drug resistance mutations
 do not occur [@Bandera].
 
-</details>
- 
 ### Microglia & Macrophages
 
 Microglia arise early during development form the yolk sac and they enter the
@@ -174,4 +163,3 @@ the effect of HIV infection on microglia.
 
 # References
 
-</div>

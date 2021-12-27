@@ -89,7 +89,9 @@ control genes were defined as the control scores and are are subtracted from the
 signature scores of each cell. Control genes are defined by creating bins and 
 putting all analyzed genes in their respective bins depending on the expression 
 levels. For each signature gene,  100 genes are drawn from the same expression
-bin. The resulting 
+bin. This results in comparible expression levels. The control gene set is 
+100-fold larger which means that the average expression of the control gene set 
+is like taking an average over 100 randomly drawn gene signature sets. 
 
 * hierarchical clustering 
   + wss plot

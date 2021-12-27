@@ -1,7 +1,6 @@
 ---
 title: "Discussion"
-author: "kmikulik"
-date: "16 12 2021"
+author: "Katharina Mikulik"
 output: html_document
 ---
 

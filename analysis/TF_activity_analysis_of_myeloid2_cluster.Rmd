@@ -486,6 +486,8 @@ wilcox_list <- map(seq.int(1:length(hiv1_atac)), function(i){
 ---
 </details>
 
+---
+
 ## K = 4 Hierarchical clustering
 
 ### Heatmap for patient 1
@@ -644,8 +646,9 @@ wilcox_list <- map(seq.int(1:length(diff4_atac)), function(i){
 ---
 </details>
 
+---
 
-## K = 5 Hierarchical Clustering
+## k = 5 Hierarchical Clustering
 
 ### Heatmap for patient 1
 
@@ -803,7 +806,6 @@ wilcox_list <- map(seq.int(1:length(diff5_atac)), function(i){
 ---
 </details>
 
-# {-}
 ---
 
 
@@ -817,7 +819,7 @@ the data are not normally distributed and, therefore, non-parametric tests,
 like the Kruskal-Wallis-Test and pairwise Wilcox-Test were used.
 
 
-### k = 3?
+### k = 3
 
 ```{r, fig.height=20, fig.width=25}
 
@@ -888,7 +890,7 @@ test.list <- map(diff5_atac, function(tf) {
 do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
 ```
 
-# {-}
+---
 
 ## Conclusion on how many k's to use for hierarchical clustering
 
@@ -1425,6 +1427,8 @@ ctcf1 <- ggplot(df, aes(x = ht_cluster, y = CTCF)) +
 ctcf1 <- ctcf1 + labs(title = "CTCF activity in patient 1")
 ```
 
+---
+
 ### Patient 2
 
 ```{r, fig.width=25, fig.height=10}
@@ -1460,6 +1464,8 @@ ctcf2 <- ggplot(df, aes(x = ht_cluster, y = CTCF)) +
 ctcf2 <- ctcf2 + labs(title = "CTCF activity in patient 2")
 ```
 
+---
+
 ### Patient 3
 
 ```{r, fig.width=25, fig.height=10}
@@ -1486,8 +1492,8 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 4, nrow = 3))
  #              color = "black", face = "bold", size = 25))
 ```
 
-## {-}
 
+---
 
 ## CTCF expression across patients
 
@@ -1619,6 +1625,8 @@ GGally::ggpairs(df) + theme_bw() +
   labs(title = "Scatter matrix for all conditions")
 ```
 
+---
+
 #### Correlation matrix
 
 ```{r}
@@ -1633,7 +1641,6 @@ corrplot(cor_mtx,
          tl.col = "black")
 ```
 
-### {-}
 ---
 
 <details>
@@ -1752,6 +1759,7 @@ GGally::ggpairs(df) + theme_bw() +
 
 ```
 
+---
 
 #### Correlation matrix 
 
@@ -1768,7 +1776,6 @@ p1 <- corrplot(cor_mtx,
 
 ```
 
-### {-}
 ---
 
 # Gene expression analysis

@@ -3,7 +3,7 @@ output_dir: ../docs
 navbar:
   title: Report
   left:
-  - text: Home
+  - text: Abstract
     href: index.html
   - text: Introduction
     href: Introduction.html
@@ -31,7 +31,7 @@ output:
     toc: yes
     toc_depth: 4
     code_folding: hide
-    toc_float: no
+    toc_float: yes
     code_download: true
     theme: cosmo
     highlight: textmate

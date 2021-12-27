@@ -850,7 +850,7 @@ query <- AddMetaData(query, metadata = predictions)
 </details>
 
 <details> 
-<summary>Frequency of eac cell type</summary>
+<summary>Frequency of each cell type</summary>
 
 ```{r}
 as.data.frame(table(query$predicted.id)) %>% 
@@ -884,6 +884,8 @@ figure <- ggarrange(p1, p2, ncol = 1, nrow = 2)
 annotate_figure(figure, top = text_grob("Myeloid2 marker genes"))
 ```
 
+---
+
 ### Myeloid5 marker genes
 ```{r}
 
@@ -893,6 +895,7 @@ p1 <- VlnPlot(query, c("FCER1A", "CD1C"),
 p1
 ```
 
+---
 
 ### Plasma cell marker genes
 ```{r}
@@ -901,6 +904,8 @@ p2 <- VlnPlot(query, features = c("IGJ"),
         group.by = "predicted.id", pt.size = .01, ncol = 2) 
 p2
 ```
+
+---
 
 ### CD8 T cell marker genes
 
@@ -911,6 +916,8 @@ p3 <- VlnPlot(query, features = c("CD8A"),
 p3
 ```
 
+---
+
 ### T cell marker genes
 
 ```{r}
@@ -919,6 +926,9 @@ VlnPlot(query, features = c("IL7R", "TRAC"),
         group.by = "predicted.id", pt.size = .01, ncol = 2)
 ```
 
+---
+
+
 ### NK cell marker genes
 
 ```{r, fig.width=15}
@@ -926,6 +936,8 @@ VlnPlot(query, features = c("IL7R", "TRAC"),
 VlnPlot(query, features = c("NKG7", "GNLY", "GZMB"), 
         group.by = "predicted.id", pt.size = .01, ncol = 3)
 ```
+
+---
 
 
 ### B cell marker genes
@@ -1038,7 +1050,7 @@ p2 <- hiv7@meta.data %>%
   scale_fill_manual( values = custom_color) +
   ylab("Number of cells in each cluster") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1)) +
-  labs(title = "Cell types per sample after label transfer")
+  labs(title = "Cell types per sample before label transfer")
 
 custom_color <- c("#C3D7A4", "#4E84C4", "#52854C", "#293352")
 
@@ -1206,6 +1218,8 @@ FeaturePlot(hiv_farhadian, features = "Cluster1" , pt.size = .5, label = TRUE, r
 
 ```
 
+---
+
 ### Gosselin et al. 
 
 
@@ -1231,6 +1245,7 @@ FeaturePlot(hiv4_glass, features = "Cluster1", label = TRUE, repel = TRUE, pt.si
 
 ```
 
+---
 
 ### Grassivaro et al.
 
@@ -1260,6 +1275,8 @@ FeaturePlot(hivt, features = "Cluster2",
 
 ```
 
+---
+
 ### HAND signature
 
 (HAND = HIV-associated neurodegenerative disease)
@@ -1284,7 +1301,7 @@ FeaturePlot(hiv_hand, features = "Cluster1", pt.size = .01) +
 
 ```
 
-
+---
 
 ### Keren-Shaul et al. & Kraseman et al.
 
@@ -1375,7 +1392,7 @@ p3 <- DotPlot(hiv4, features = c("CD9", "APOE", "AXL", "CTSL", "SPP1"), group.by
 ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 ```
 
-
+---
 
 ### Sankowski et al.
 
@@ -1600,6 +1617,7 @@ Therefore, the cluster will be considered microglia-like for now and the
 following analysis will provide additional insights on the identity and 
 characteristics of this cluster.  
 
+---
 
 ## Quality of different samples before quality control {.tabset}
 
@@ -1649,6 +1667,7 @@ hiv@meta.data %>%
 
 ```
 
+---
 
 ### Library Size
 
@@ -1692,6 +1711,8 @@ hiv@meta.data %>%
     kable(caption = "Library size per sample")
 
 ```
+
+---
 
 
 ### Percentage of Mitochondrial genes
@@ -1784,6 +1805,8 @@ hiv_filt@meta.data %>%
 
 ```
 
+---
+
 ### Library size 
 
 ```{r, results = "asis", fig.width=15, fig.height=12}
@@ -1818,6 +1841,8 @@ hiv_filt@meta.data %>%
   kable(caption = "Library size per sample after quality control")
 
 ```
+
+---
 
 ### Percentage of Mitochondrial genes 
 
