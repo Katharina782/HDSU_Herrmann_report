@@ -11,6 +11,15 @@ output: html_document
 For Quality Control I used the publications from which the datasets were obtained
 as an orientation, in order to be able to reproduce the results and findings.
 
+For the dataset from [@Farhadian] genes expressed in less than 3 cells were 
+removed. Additionally, the ten percent of cell swith the highest percentage
+of mitochondrial genes and cells with a number of features below 500 or above 
+2500 was removed.
+
+For the dataset from [@Ryan] cells with a percentage of mitochondrial genes
+above 20% were removed, as well as, cells with a number of Features below 200 
+and above 5000. 
+
 ### Normalization
 
 Log normalization was used to normalize count matrices, using the function `NormalizeData()`from the Seurat package. The counts of a particular
@@ -74,28 +83,97 @@ it will be zero. The classification matrix is then multiplied with a weight matr
 This way we get prediction scores for each class and cell in the query dataset.
 [@Stuart]
 
-* correlation  
+## Correlation  
+
+Since the TF activity is not normally distributed, instead of using
+the Pearson correlation coefficient which assumes normally distributed data,
+I will use the Spearman correlation coefficient which is rank-based and 
+non-parametric. The Spearman correlation is a measure of strength and direction 
+of a monotonic association.
+The null hypothesis of the Spearman correlation is that there is no association 
+between the two variables. Statistical significance does not give any information
+on the strength of correlation. 
+
+Spearman's rank order correlation:
+$$
+\rho = \frac{\sum_{i} (x_{i} - \overline{x}) (y_{i} - \overline{y})}
+{\sqrt{\sum_{i}(x_{i} - \overline{x})^2\sum_{i}(y_{i} - \overline{y})^2}}
+
+$$
+
+### Pearson d
   
   + test for correlation
   + Pearson vs Spearman?
   
 ## AddModuleScore
 
-The average relative expression of genes  which 
+The function `AddModuleScore()` from the Seurat package calculates gene expression
+scores for a particular set of signature genes. For example, I calculated 
+scores for the genes defining the infected iMg from the triculture dataset in 
+Myeloid2. Calculating the gene signature score for each cell provides information 
+on which cells show a higher/unchanged/lower express of a particular set of 
+genes (signature for a particular cell tpye).
 
-The quality of each cell`s counts might have an effect on the gene signature score, 
-therefore control genes are defined. The average relative expression of the 
-control genes were defined as the control scores and are are subtracted from the
-signature scores of each cell. Control genes are defined by creating bins and 
-putting all analyzed genes in their respective bins depending on the expression 
-levels. For each signature gene,  100 genes are drawn from the same expression
-bin. This results in comparible expression levels. The control gene set is 
-100-fold larger which means that the average expression of the control gene set 
-is like taking an average over 100 randomly drawn gene signature sets. 
+First, the average expression of each gene across all cells is calculated and 
+the genes are ordered according to their average expression values. Next, genes
+are sorted into bins of equal size. For each gene of the signature gene set, 
+100 genes are drawn from the same expression bin as a control group. This way, 
+it is ensured that the control genes have a similar distribution of expression
+levels as the signature gene. Finally, the average expression of control genes
+and signature genes is computed in each cell. The resulting average control 
+gene expression is subtracted from the average signature gene expression in 
+each cell. This yields a score in each cell, which if close to zero can be 
+interpreted as no enrichment or depletion of the signature genes. If the score 
+in a particular cell is bigger than zero this means that there is an 
+enrichment for the signature genes in this particular cell. Conversely,w the score is 
+smaller than zero this means that there is a depletion. [@Tirosh; @Muskovic]
 
-* hierarchical clustering 
-  + wss plot
+## K-means clustering
+
+The algorithm starts with k randomly selected centroids. All data points are 
+assigned to one of the datapoints depending on the distance between them. 
+The process of defining centroids, assigning each point to one centroid and 
+updating the centroids is repeated until the clusters stabilize or a maximum 
+number of iterations has been reached.
+
+### Determine k with the elbow method
+
+To determine the optimal k for k-means clustering I computed the within sum of
+square (WSS) distance. More precisely, I computed the sum of all pairwise 
+distances between points in the same cluster. If a cluster would only contain one 
+point, then WSS would be zero. With increasing k the WSS decreases. The 
+elbow/kink in the plot shows at which k adding additional clusters does not 
+improve the WSS anymore. 
   
-* test for differential TF activity
-  + Kruskal-Wallis
-  + pairwise wilcox
+  
+## Test for differential TF activity
+
+To determine whether there is a significant difference between the clusters 
+computed with k-means clustering a Kruskal Wallis Test was performed for all
+TFs between the different clusters. In contrast to ANOVA, the Kruskal Wallis Test
+is non-paramteric and, therefore, better suited for the data at hand, which is 
+not normally distributed. Using the FDR method I corrected for 
+multiple hypothesis testing. For TFs with different activity between clusters I 
+then did a posthoc analysis to determine which clusters are different exactly. 
+A pairwise wilcox test was used for this, again a non-parametric alternative to 
+the t-test. 
+
+## Differential gene expression
+
+The Seurat functions `FindAllMarkers()` and `FindMarkers()` uses a Wilcoxon Rank
+Sum test to identify differentially expressed genes between two groups. 
+
+For the dataset from [@Farhadian] to find also genes with small log-fold changes
+I set the threshold to 0.01 and 
+the minimum fraction of cells in which the gene is detected to 0.01. This 
+increased the computation time, but made it possible to also include
+very infrequently expressed genes, which might for example be the case for 
+Myeloid2-specific genes. 
+In contrast, for the datset from [@Ryan] I used the default settings with a 
+minimum log-fold change of 0.25 and a minimum fraction of cells which express
+the gene of 0.1.
+
+For the minimum number of cells expressing the feature in at least one of the 
+two compared groups I used the default of 3. Similarly, for the minimum number 
+of cells in a group I used the default of 3. 
