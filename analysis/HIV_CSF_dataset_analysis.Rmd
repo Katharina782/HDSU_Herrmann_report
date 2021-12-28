@@ -1218,7 +1218,6 @@ FeaturePlot(hiv4, features = c("CLEC9A", "TIMD4", "TNFSF18", "CXCL12",
 ```
 
 ---
----
 
 #### Farhadian et al.
 
@@ -1265,7 +1264,6 @@ FeaturePlot(hiv_farhadian, features = "Cluster1" , pt.size = .5, label = TRUE, r
 ```
 
 ---
----
 
 #### Gosselin et al. 
 
@@ -1292,7 +1290,6 @@ FeaturePlot(hiv4_glass, features = "Cluster1", label = TRUE, repel = TRUE, pt.si
 
 ```
 
----
 ---
 
 #### Grassivaro et al.
@@ -1324,7 +1321,6 @@ FeaturePlot(hivt, features = "Cluster2",
 ```
 
 ---
---- 
 
 #### HAND signature
 
@@ -1351,7 +1347,7 @@ FeaturePlot(hiv_hand, features = "Cluster1", pt.size = .01) +
 ```
 
 ---
----
+
 
 #### Keren-Shaul et al. & Kraseman et al.
 
@@ -1443,7 +1439,7 @@ ggarrange(p1, p2, p3, ncol = 2, nrow = 2)
 ```
 
 ---
----
+
 
 #### Sankowski et al.
 
@@ -1588,9 +1584,8 @@ do.call(grid.arrange, c(cluster_plots, ncol = 2, nrow = 4))
 ```
 
 ---
----
 
-#### Genes which are upregulated in Myeloid2 compared to all other Myeloid clusters
+### Genes which are upregulated in Myeloid2 compared to all other Myeloid clusters
 
 * overlap of 5 genes with Kraseman microglia -> inflammatory molecules 
 upregulated in disease associated microglia (Krasemann)
