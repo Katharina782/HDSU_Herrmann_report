@@ -29,7 +29,7 @@ navbar:
 output:
   workflowr::wflow_html:
     toc: yes
-    toc_depth: 4
+    toc_depth: 3
     code_folding: hide
     toc_float: yes
     code_download: true
