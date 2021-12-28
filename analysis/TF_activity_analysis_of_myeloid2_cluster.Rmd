@@ -43,10 +43,11 @@ library(future)
 
 # GRN inference with Scenic
 
-Using Scenic I tried to infer Gene regulatory networks from the gene expression
-data. The output is a matrix of TF (Transcription Factor) activity per cell. In this case the activity
-matrix contains activity of 125 different transcription factors.
-
+Using Scenic we tried to infer Gene regulatory networks from the gene expression
+data. The output is a matrix of TF (Transcription Factor) activity per cell. 
+The input matrix for SCENIC included the 10,000 most highly variable genes of 
+the Myeloid2 cell cluster. The resulting activity matrix contains activity scores
+of 125 different transcription factors.
 
 First, we wanted to see if we can identify patterns in the TF activity in the
 Myeloid2 cells. We compared the TF activity to TFs shown to have differential 
@@ -55,9 +56,16 @@ active infection) in primary microglia (bulk ATACseq). For the comparison
 with the TF activity in Myeloid2 cells we focused on the TF with differential 
 binding scores between **uninfected** and **latently infected** states.
 
-Can we see patterns of increased/decreased TF activity in the Myeloid2 cells that
-might correspond to the binding scores between infection states in primary
-microglia?
+The question we wanted to answer is:
+Can we see patterns of increased/decreased TF activity in Myeloid2 cells that
+correlate with the binding scores between infection states in primary
+microglia?    
+
+
+</details>
+
+<details> 
+<summary>TF activity matrix and HIV CSF/Blood dataset</summary>
 
 
 * read in Seurat object
@@ -71,6 +79,8 @@ hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhad
 
 ```{r}
 auc_mtx <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/aucell_matrix_10k_hvg.tsv", sep = "\t")
+
+auc_mtx %>% head %>%  kable(caption = "TF activity matrix (output from SCENIC)")
 ```
 
 
@@ -84,11 +94,12 @@ hiv7_scenic <- AddMetaData(hiv7,
                     col.name = colnames(auc_mtx))
 ```
 
-
+---
+</details>
 
 # Bulk ATACseq footprinting, C20 cell line
 
-Using bulk ATACseq data from primary microglia at three different conditions,
+Using bulk ATACseq data from primary microglia with three different conditions,
 active infection, latent infection, uninfected, differential binding scores were
 obtained using TOBIAS. Here, I will use the TFs which were previously shown to 
 have differential binding scores in these primary microglia. Since I expect the 
@@ -97,20 +108,19 @@ patients receiving ART, I will use the TFs with differential binding scores
 between latent infection and uninfected. We would like to know if the TF activity
 inferred from RNAseq data of Myeloid2 cells correlates with these differential 
 binding scores. In other words, we want to know if the patterns of differential 
-TF activity are similar as the patterns of differential TF binding scores. 
+TF activity are similar to the patterns of differential TF binding scores. 
 For example, if a TF was shown to be more bound in latently infected primary
 microglia compared to uninfected primary microglia, we would expect the TF to be
 more active in a group of Myeloid2 cells which are latently infected compared
 to a group of Myeloid2 cells which are uninfected. 
 
-When you overlap the TF from the TF activity matrix obtained by running SCNEIC 
-on the 10.000 most highly variable genes with the differntially bound TFs, 24 of 
-the TFs overlap.
+Comparing the TFs from the TF activity matrix with the differentially
+bound TFs from the footprinting, twentyfour of the TFs overlap.
 
-Using less than 10.000 most highly variable genes as an input matrix for SCENIC 
-results in a lower number of TFs which overlap. Increasing the number of input 
-features for SCENIC increases the number of TFs included in the TF activity 
-matrix
+Using less than 10,000 most highly variable genes as an input matrix for SCENIC 
+resulted in a lower number of TFs which overlap. Increasing the number of input 
+features for SCENIC increased the number of TFs included in the TF activity 
+matrix. Therefore, 10,000 most highly variable genes were used.
 
 ```{r}
 # read in dataframe containing differntial binding scores between conditions
@@ -136,7 +146,7 @@ up_uninf <- overlap_atac$name[overlap_atac$uninf_red_change > 0]
 
 ## Volcano Plot ATAC-seq footprinting
 
-Interestingly, only four TFs found in the TF activity matrix of Myeloid2 cells 
+Only four TFs found in the TF activity matrix of Myeloid2 cells 
 are more bound in latent infection than in uninfected primary microglia.
 
 ```{r, fig.height=8, fig.width=12}
@@ -164,28 +174,15 @@ top_tfs %>%
 
 # Compare TF activities between clusters and look for patterns
 
-The idea was to cluster the Myeloid2 cells based on their TF activity using
-Hierarchical clustering. To do this I perofrmed hierarchical clustering on 
-Myeloid2 cells from patient1 (HIV1_CSF) with k=3/4/5. The idea for using only 
-patient 1 was that the other two patients might be used for validation of the 
-clustering later on. If the clusters are biological, I might be able to transfer
-the clusters onto the Myeloid2 cells from patient2 (HIV2_CSF) and patient3 (HIV3_CSF).
-If the clusters also separate the Myeloid2 cells of the other two patients nicely, 
-this would validate that there is a biological meaning behind the clusters.
+Judging from the heatmaps below no TFs clearly separate the clusters or
+show a pattern of activity which is similar to the footprinting binding scores. 
+If the pattern was similar to the footprinting binding scores we would expect to
+see one cluster where REST, KLF4, PAX5 and MXI1 are upregulated. This cannot be
+seen in the plots below. 
 
-However, as we will see the label transfer of the cluster identities did not 
-work, probably due to the small sample size. There are only 146 in total in the 
-Myeloid2 cluster of infected patients.
+## Split Heatmap into 3 separate heatmaps according to the different patients {.tabset}
 
-The alternative strategy was to perform independent hierarchical clustering 
-across all patients and compare the TF activity between clusters. 
-Can we find TF activities which differentiate clusters across patients and find
-correlations between clusters across patients?
-
-1. Determine k for k-means hierarchical clustering
-2. Transfer the cluster identities to patient2 and patient3
-3. Hierarchical Clustering for all 3 patients separately
-
+### all 125 TFs
 
 ```{r}
 
@@ -202,9 +199,6 @@ la <- rowAnnotation(type_TF =
   
 ```
 
-
-
-## Split Heatmap into 3 separate heatmaps according to the different patients
 
 ```{r, fig.width=13, fig.height=14}
 # 3 heatmaps with all Scenic TFs
@@ -235,7 +229,7 @@ ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap + la
 
 ```
 
-## Heatmap containing only TFs found by ATAC-seq footprinting
+### 24 TFs found by ATAC-seq footprinting
 
 ```{r, fig.width=13, fig.height=8}
 # 3 heatmaps, but only the TFs which overlap with Anas analysis
@@ -267,22 +261,40 @@ ht_list = ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap
 draw(ht_list, ht_gap = unit(1, "cm"))
 ```
 
+## Different approaches
+
+The next idea was to cluster the Myeloid2 cells based on their TF activity using
+k-means clustering. To do this I performed k-means clustering on 
+Myeloid2 cells from patient one (HIV1_CSF) with k=3/4/5. The reason why I used only
+patient one was that the other two patients might be used for validation of the 
+clustering later on. If the clusters have a biological meaning, it should be 
+possible to transfer the clusters onto the Myeloid2 cells from patient2 
+(HIV2_CSF) and patient3 (HIV3_CSF).
+If the clusters also separate the Myeloid2 cells of the other two patients in 
+an interpretable and meaningful way this would validate that there is a biological meaning behind the clusters.
+
+However, as we will see the label transfer of the cluster identities did not 
+work, probably due to the small sample size. There are only 146 in total in the 
+Myeloid2 cluster of infected patients.
+
+The alternative strategy was to perform independent k-means clustering 
+across all patients and compare the TF activities between clusters. 
+Can we find TF activities which differentiate clusters across patients and find
+correlations between clusters across patients?
+
+1. Determine k for k-means k-means clustering
+2. Transfer the cluster identities to patient2 and patient3
+3. K-means Clustering for all 3 patients separately
 
 
+# 1. Determine k for k-means clustering {.tabset}
 
-
-# 1. Determine k for k-means hierarchical clustering {.tabset}
-
-The plot of within-cluster som of squares shows that the sweet spot for the 
+The plot of within cluster sum of squares shows that the sweet spot for the 
 value of k is somewhere between 3 and 5. To determine the best k for k-means
 clustering k = 3, k = 4 and k = 5 were tried and the different outcomes compared.
-Since k = 4 and k = 5 does not yield an increased number of TFs which differntiate
-the different clusters, and therefore do not add any insights we proceeded with
+Since k = 4 and k = 5 does not yield an increased number of TFs which differentiate
+the different clusters and, therefore, do not add any insights we proceeded with
 k = 3 in the following analysis.
-
-The results of each k can be seen below. Click on the tabs to see heatmaps of 
-the hierarchical clustering, as well as statistical test on different TF
-acitivity between clusters.
 
 ```{r}
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
@@ -299,7 +311,10 @@ plot(2:15, wss, type = "b",
      ylab = "Total within-clusters sum of square")
 ```
 
-## K = 3 Hierarchical Clustering
+The results of using differnet k can be seen below. Click on the tabs to see heatmaps of the k-means clustering, as well as statistical test on different TF
+acitivities between clusters.
+
+## k-means Clustering with k = 3
 
 ### Heatmap for patient 1
 
@@ -324,7 +339,8 @@ ht_pat1 <-draw(Heatmap(t(mtx),
 ```
 
 
-### Extract cells from each cluster
+After performing k-means cluster we extract the cells from each cluster. 
+In the table below you can see the number of cells in each cluster. 
 
 ```{r}
 ### Extract cells from each cluster
@@ -355,39 +371,34 @@ hiv7_scenic@meta.data %>%
   rownames_to_column("cell") %>% 
   filter(orig.ident == "HIV1_CSF",
          cell_type == "Myeloid2",
-         cell %in% c(c1,c2,c3)) %>% 
-  mutate(ht_cluster = ifelse(cell %in% c1, "c1", ifelse(cell %in% c2, "c2", "c3"))) %>% 
-  #group_by(ht_cluster) %>% 
-  select(ht_cluster, CTCF) %>% 
+         cell %in% c(c1,c2,c3))%>% 
+  mutate(ht_cluster = case_when(cell %in% c1 ~ "c1", 
+                                cell %in% c2 ~ "c2",
+                                cell %in% c3 ~ "c3")) %>%
   group_by(ht_cluster) %>% 
-  summarise(
-    count = n(),
-    mean = mean(CTCF),
-    sd = sd(CTCF)) %>% kable()
+  summarize(count = n()) %>% 
+  kable(caption = "number of cells in each cluster")
 
 ```
 
 #### Are there significant differences in TF activity between the three clusters?
 
 
-ANOVA test is parametric and assumes normally distributed data, while
+The ANOVA test is parametric and assumes normally distributed data, while
 Kruskal-Wallis-Test compares the mean of one or more groups, but is 
-non-parametric. As can be seen in the boxplots above the data is not normally 
-distributed, therefore Kruskal-Wallis-Test is more appropriate in this case.
-In both cases the Null-Hypothesis is that there is no difference
+non-parametric. Since the data is not normally 
+distributed in this case, the Kruskal-Wallis-Test is more appropriate.
+The Null-Hypothesis of the Kruskal-Wallis-Test is that there is no difference
 between the groups.
 
-Since I am repeating the test 125 times, I adjust the p-values with the
-FDR method. This methods is more powerful than more conservative methdos, like
-bonferroni, Holm or Hochberg. 
+Since the test is repeated 125 times, the p-values are adjusted with the
+FDR method. This methods is more powerful than more conservative methods, like
+Bonferroni, Holm or Hochberg. 
 
-Performing Kruskal-Wallis-Test to find differences between the three clusters in patient1
-yields 54 TFs of all 125 TFs which are differentially active between the three clusters
-(p-value < 0.05). Of the 24 TFs with differential binding scores in the C20 cell 
-line, sixteen have significantly different activity between the clusters.
+Performing Kruskal-Wallis-Test to find differences between the three clusters in patient one yields 54 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the twentyfour TFs with differential binding scores in the C20 cell line, sixteen have significantly different activity between the clusters.
 
-Now that we know that there are significant differences between clusters, we 
-want to identify which cluster/s are different from which other cluster/s.
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other cluster/s.
 
 Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because 
 we repeat the test we will correct for multiple hypothesis testing using the 
@@ -423,11 +434,6 @@ hist(as.numeric(unname(unlist(p_values))),
 
 # adjust for multiple testing with FDR
 adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
-
-hist((adj_p_values), 
-     main = "distribution of p_values",
-     xlab = "p_values",
-     breaks = 20)
 
 
 # how many transcription factors are significantly different between the clusters?
@@ -466,7 +472,7 @@ hiv1_atac <- overlap_atac$name[adj_p_values < .05]
 * **Posthoc tests for k = 3**
 
 
-For the 16 TFs with significantly different activity between the 3 clusters:
+The posthoc test was performed for the 16 TFs with significantly different activity between the 3 clusters.
 
 ```{r, warning = FALSE}
 # We perform a posthoc test
@@ -488,7 +494,7 @@ wilcox_list <- map(seq.int(1:length(hiv1_atac)), function(i){
 
 ---
 
-## K = 4 Hierarchical clustering
+## K-means clustering with k = 4
 
 ### Heatmap for patient 1
 
@@ -532,32 +538,31 @@ cl4 <- colnames(t(mtx[column_order(ht)[[4]],]))
 ```
 
 
+```{r, results = "asis"}
+# summary staticstics
+hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(c1,c2,c3)) %>% 
+  mutate(ht_cluster = case_when(cell %in% cl1 ~ "c1", 
+                                cell %in% cl2 ~ "c2",
+                                cell %in% cl3 ~ "c3",
+                                cell %in% cl4 ~ "c4")) %>% 
+  group_by(ht_cluster) %>% 
+  summarize(count = n()) %>% 
+  kable(caption = "number of cells in each cluster")
+
+```
 
 #### Are there significant differences in TF activity between the four clusters?
 
 
-ANOVA test is parametric and assumes normally distributed data, while
-Kruskal-Wallis-Test compares the mean of one or more groups, but is 
-non-parametric. As can be seen in the boxplots above the data is not normally 
-distributed, therefore Kruskal-Wallis-Test is more appropriate in this case.
-In both cases the Null-Hypothesis is that there is no difference
-between the groups.
+Performing Kruskal-Wallis-Test to find differences between the four clusters in patient one yields 51 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the twentyfour TFs with differential binding scores in the C20 cell line, fourteen have significantly different activity between the clusters.
 
-Since I am repeating the test 125 times, I adjust the p-values with the
-FDR method. This methods is more powerful than more conservative methdos, like
-bonferroni, Holm or Hochberg. 
-
-Performing Kruskal-Wallis-Test to find differences between the four clusters in patient1
-yields 51 TFs of all 125 TFs which are differentially active between the three clusters
-(p-value < 0.05). Of the 24 TFs with differential binding scores in the C20 cell 
-line, fourteen have significantly different activity between the clusters.
-
-Now that we know that there are significant differences between clusters, we 
-want to identify which cluster/s are different from which other cluster/s.
-
-Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because 
-we repeat the test we will correct for multiple hypothesis testing using the 
-FDR method. The results are shown in boxplots below.
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other 
+cluster/s. For this pairwise Wilcox test was used.
 
 
 </details>
@@ -627,7 +632,7 @@ diff4_atac <- overlap_atac$name[adj_p_values < .05]
 
 * **Pairwise-Wilcox_Test for k = 4**
 
-For the 16 TFs with significantly different activity between the four clusters:
+Posthoc test for the 16 TFs with significantly different activity between the four clusters.
 
 ```{r, warning = FALSE}
 # We perform a posthoc test
@@ -648,7 +653,7 @@ wilcox_list <- map(seq.int(1:length(diff4_atac)), function(i){
 
 ---
 
-## k = 5 Hierarchical Clustering
+## K-means Clustering with k = 5
 
 ### Heatmap for patient 1
 
@@ -693,32 +698,31 @@ clu5 <- colnames(t(mtx[column_order(ht)[[5]], ]))
 ```
 
 
+```{r, results = "asis"}
+# summary staticstics
+hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(c1,c2,c3)) %>% 
+  mutate(ht_cluster = case_when(cell %in% clu1 ~ "c1", 
+                                cell %in% clu2 ~ "c2",
+                                cell %in% clu3 ~ "c3",
+                                cell %in% clu4 ~ "c4",
+                                cell %in% clu5 ~ "c5")) %>% 
+  group_by(ht_cluster) %>% 
+  summarize(count = n()) %>% 
+  kable(caption = "number of cells in each cluster")
+
+```
 
 #### Are there significant differences in TF activity between the four clusters?
 
+Performing Kruskal-Wallis-Test to find differences between the four clusters in patient one yields 59 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the twentyfour TFs with differential binding scores in the C20 cell line, fifteen have significantly different activity between the clusters.
 
-ANOVA test is parametric and assumes normally distributed data, while
-Kruskal-Wallis-Test compares the mean of one or more groups, but is 
-non-parametric. As can be seen in the boxplots above the data is not normally 
-distributed, therefore Kruskal-Wallis-Test is more appropriate in this case.
-In both cases the Null-Hypothesis is that there is no difference
-between the groups.
-
-Since I am repeating the test 125 times, I adjust the p-values with the
-FDR method. This methods is more powerful than more conservative methdos, like
-bonferroni, Holm or Hochberg. 
-
-Performing Kruskal-Wallis-Test to find differences between the five clusters in patient1
-yields 59 TFs of all 125 TFs which are differentially active between the three clusters
-(p-value < 0.05). Of the 24 TFs with differential binding scores in the C20 cell 
-line, fifteen have significantly different activity between the clusters.
-
-Now that we know that there are significant differences between clusters, we 
-want to identify which cluster/s are different from which other cluster/s.
-
-Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because 
-we repeat the test we will correct for multiple hypothesis testing using the 
-FDR method. The results are shown in boxplots below.
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other 
+cluster/s. For this pairwise Wilcox test was used.
 
 
 </details>
@@ -786,7 +790,7 @@ diff5_atac <- overlap_atac$name[adj_p_values < .05]
 
 * **Pairwise-Wilcox_Test for k = 5**
 
-For the 15 TFs with significantly different activity between the four clusters:
+Posthoc test for the 15 TFs with significantly different activity between the four clusters.
 
 ```{r, warning = FALSE}
 # We perform a posthoc test
@@ -892,7 +896,7 @@ do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
 
 ---
 
-## Conclusion on how many k's to use for hierarchical clustering
+## Conclusion on how many k's to use for k-means clustering
 
 As mentioned, k = 3 was used for the subsequent analysis, since more clusters 
 did not add additional insights.
@@ -1106,10 +1110,10 @@ draw(ht_list, ht_gap= unit(2, "cm"))
 ```
 
 
-# 3. Hierarchical clustering for all 3 patients separately {.tabset}
+# 3. K-means clustering for all 3 patients separately {.tabset}
 
 Since the label transfer of the 3 cluster identities from patient1 did not seem
-to work very well, we next tried to perform hierarchical clustering using k = 3
+to work very well, we next tried to perform k-means clustering using k = 3
 for all 3 patients separately. This way we might be able to see if the TF
 activities in the 3 clusters show similar patterns across the different patients.
 
@@ -1324,13 +1328,12 @@ draw(ht_list, ht_gap= unit(2, "cm"),
      column_title_gp = gpar(fontsize = 20) )
 ```
 
-# {-}
 ---
 
 
 # Which TFs show significantly different activity between the clusters across patients?
 
-Since the independent hierarchical clustering for all three patients yields 
+Since the independent k-means clustering for all three patients yields 
 clusters which look more reasonable, we will compare the three clusters we obtain 
 across the three patients to see if there is a pattern between them. 
 
@@ -1567,17 +1570,26 @@ auc_df <- auc_df %>%
 
 ### Correlation between clusters based on all 125 TFs {.tabset}
 
-For every cluster the correlation is calculated based on the TF activities of
-all 125 TFs  identified by SCENIC.
+The average TF activity of all 125 TFs was computed for every cluster. Based on 
+the average TF activity in each cluster, the correlation between clusters was 
+computed.
 
+The scatter plot below shows the average expression for each TF across all 
+three clusters in all three patients and the  corresponding correlation 
+coefficients. The correlation matrix visualizes the Spearman correlation coefficient between all clusters with black numbers indicating the p-values which are not 
+significant. Clusters two and three of all patients seem to be highly 
+correlated, with cluster two of patient three being the exception. Cluster one of 
+patient one and patient three are highly correlated with each other, but less correlated 
+with clusters two and three. Cluster one of patient two is again an exception, because it 
+is not as highly correlated with clusters one of patient two and patient three, but still
+more correlated than with clusters two and three. 
 
-**Conclusions:**
+Seeing these results, the hypothesis is that the cluster one, which showed different 
+TF activity from clusters two and three correspond to a different infection state. 
+Cells of cluster one could be latently infected cells. This hypothesis would be
+supported by having a look at the role of TFs with different activity in 
+cluster one. 
 
-* Cluster 3 from patient 3 seems to be very different
-* Cluster 2 from patient 3 is also only weakly correlated
-* Cluster 1 of all patients seems correlated, however, the p_values for 
-correlation of cluster1 of patient two with all other clusters are not significant
-* Clusters 2 and 3 of patient 1 and 2 seem highly correlated
 
 
 <details>
@@ -1590,29 +1602,28 @@ Dataframe of average activity value for each TF in each patient and clusters.
 # correlation matrix
 df <- auc_df %>%
   group_by(ht_cluster) %>%
-  summarize_if(is.numeric, mean) %>% 
-  #column_to_rownames("ht_cluster") %>% 
-  #add_rownames() %>% 
+  summarize_if(is.numeric, mean) %>% # calculate mean TF activity for each cluster
   gather(TF, value, -ht_cluster) %>% 
   spread(ht_cluster, value) %>% 
-  column_to_rownames("TF")
+  column_to_rownames("TF") 
 
-df %>% 
-  head %>% 
-  kable ()
+df %>% head %>% kable (caption = "Average TF activity for each cluster") 
+
 ```
 Correlation matrix: 
 
 ```{r, results = "asis"}
-df %>% cor %>% kable()
+# save correlation matrix
+cor_mtx <- df%>% cor(method = "spearman")
 
-cor_mtx <- df %>% cor()
+# show the correlation matrix
+cor_mtx %>% kable(caption = "Correlation matrix of average TF acivity between all clusters")
 
 # calculate confidence intervals and p_values
 # function produces p-values and confidence intervals for each pair of input features
 # returns a matrix each
 # of p_values, upper confidence interval, lower confidence interval
-testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
+testCor <- cor.mtest(cor_mtx, conf.level = 0.95, method = "spearman")
 ```
 
 ---
@@ -1621,6 +1632,7 @@ testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 #### Scatter matrix
 
 ```{r, fig.width = 15, fig.height=15}
+
 GGally::ggpairs(df) + theme_bw() +
   labs(title = "Scatter matrix for all conditions")
 ```
@@ -1630,15 +1642,14 @@ GGally::ggpairs(df) + theme_bw() +
 #### Correlation matrix
 
 ```{r}
-# plot correlations
-corrplot(cor_mtx,
-         #method = "color",
-         order = "hclust", 
-         addrect = 4, # add boxes 
-         p.mat = testCor$p, 
-         #sig.level = .05,
-         insig = "p-value", 
-         tl.col = "black")
+df %>%
+  cor(method = "spearman") %>%
+  corrplot(
+     order = "hclust", # hierarchical cluster order
+     addrect = 4, # add boxes 
+     p.mat = testCor$p, # add matrix of p-values
+     insig = "p-value", # adds p-values as digits, not crosses
+     tl.col = "black") # make labels black
 ```
 
 ---
@@ -1647,7 +1658,7 @@ corrplot(cor_mtx,
 *<summary>Additional correlation plots which do not aid the interpretation much</summary>*
   
 
-### Correlation between clusters based on all TFs with differential activity between clusters
+Correlation between clusters based on all TFs with differential activity between clusters
 
 ```{r}
 intersect_total <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_intersect_TFs_different_across_patients_3_clusters"))[["x"]]
@@ -1659,27 +1670,23 @@ cor_mtx <- auc_df %>%
   select(ht_cluster, intersect_total) %>% 
   group_by(ht_cluster) %>%
   summarize_if(is.numeric, mean) %>% 
-  #column_to_rownames("ht_cluster") %>% 
-  #add_rownames() %>% 
   gather(TF, value, -ht_cluster) %>% 
   spread(ht_cluster, value) %>% 
-  column_to_rownames("TF") %>% cor()
+  column_to_rownames("TF") %>% cor(method = "spearman")
 
 # calculate confidence intervals and p_values
 # function produces p-values and confidence intervals for each pair of input features
 # returns a matrix each
 # of p_values, upper confidence interval, lower confidence interval
-testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
+testCor <- cor.mtest(cor_mtx, conf.level = 0.95, method = "spearman")
 ```
 
 
 ```{r}
 corrplot(cor_mtx,
-         #method = "color", 
          order = "hclust", 
          addrect = 4, # add boxes 
          p.mat = testCor$p, 
-         #sig.level = .05,
          insig = "p-value", 
          tl.col = "black")
 ```
@@ -1688,61 +1695,51 @@ corrplot(cor_mtx,
 ---
 </details>
 
+---
+
 ### TF correlation across clusters {.tabset}
 
-Eleven TFs which differentiate the clusters seem to correlate between the clusters.
+For the eleven TFs with different activity between clusters, the correlation 
+was computed for the TF activities. 
 
-For these eleven TFs with different activity between the clusters the activity 
-correlates between across all three patients. This means, that the three TFs
-YY1, REST, MXI1 are positively correlated, but negatively correlated with the 
-rest of the TFs.
-
-The fact that these TF activities correlate across all patients indicates that 
-there might be a biological meaning behind the pattern of activity. 
-
+The scatter matrix and correlation plot below show very nicely, that the
+three TFs YY1, REST, MXI1 are positively correlated, but negatively correlated
+with the rest of the TFs and vice versa. The fact that these TF activities 
+correlate across all patients indicates that there might be a biological meaning 
+behind the different clusters. Having a look at the TFs which are up- or
+downregulated in cluster one compared to the other clusters could provide 
+further insights. 
 
 <details>
 <summary>**Correlation computation**</summary>
 
-Dataframe used as input for the correlation:
 
 ```{r}
 intersect_atac <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_intersect_TFs_different_across_patients_3_clusters"))[["x"]]
 ```
 
 
-```{r}
-cor_mtx <- auc_df %>%
-  select(ht_cluster, intersect_atac) %>% 
-  group_by(ht_cluster) %>%
-  summarize_if(is.numeric, mean) %>% 
-  column_to_rownames("ht_cluster") %>% cor()
-```
-
-
 ```{r, results = "asis"}
 # correlation matrix
-df <- auc_df %>%
-  select(ht_cluster,intersect_atac) %>% 
-  group_by(ht_cluster) %>%
-  summarize_if(is.numeric, mean) %>% 
-  column_to_rownames("ht_cluster") 
-
-df %>% head %>% kable()
-
+auc_df %>%
+  select(intersect_atac) %>% head() %>% kable(caption = "TF activity of 11 TFs with different activity between clusters across all cells")
 ```
 
 Correlation matrix for TFs:
 
 ```{r, results = "asis"}
-cor_mtx <- df %>% cor()
-cor_mtx %>% kable
+# compute correlation matrix
+cor_mtx <- auc_df %>%
+  select(intersect_atac) %>% 
+  cor(method = "spearman")
+# show correlation matrix
+cor_mtx %>% head() %>% kable(caption = "Correlation matrix for 11 TFs with different activity between clusters")
 
 # calculate confidence intervals and p_values
 # function produces p-values and confidence intervals for each pair of input features
 # returns a matrix each
 # of p_values, upper confidence interval, lower confidence interval
-testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
+testCor <- cor.mtest(cor_mtx, conf.level = 0.95, method = "spearman")
 ```
 
 ---
@@ -1752,10 +1749,10 @@ testCor <- cor.mtest(cor_mtx, conf.level = 0.95)
 #### Scatter matrix
 
 ```{r, fig.width=15, fig.height=15}
-GGally::ggpairs(df) + theme_bw() +
-    labs(title = "Scatter matrix for all TFs with different activity between clusters")
-
-  
+GGally::ggpairs(auc_df %>%
+  select(intersect_atac)) + 
+  theme_bw() +
+  labs(title = "Scatter matrix for all TFs with different activity between clusters")
 
 ```
 
@@ -1764,16 +1761,15 @@ GGally::ggpairs(df) + theme_bw() +
 #### Correlation matrix 
 
 ```{r}
-# plot correlations
-# p.mat = matrix of p_values
-p1 <- corrplot(cor_mtx,
-               #method = "color",
-               order = "hclust", 
-               addrect = 2, # add boxes 
-               p.mat = testCor$p, 
-               insig = "p-value",
-               tl.col = "black")
-
+df <- auc_df %>%
+  select(intersect_atac) %>% 
+  cor(method = "spearman") %>%
+  corrplot(
+  order = "hclust", 
+  addrect = 2, # add boxes 
+  p.mat = testCor$p, 
+  insig = "p-value",
+  tl.col = "black") 
 ```
 
 ---
@@ -1787,7 +1783,7 @@ clusters). The gene expression might give a hint about the identity of these
 two Myeloid2 clusters. 
 
 
-```{r}
+```#{r}
 # 3 Clusters for each of the 3 HIV+ patients
 
 # HIV1_CSF
