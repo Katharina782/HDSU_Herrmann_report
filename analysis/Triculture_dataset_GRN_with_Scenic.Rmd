@@ -531,10 +531,8 @@ more bound in the uninfected iMg than in infected iMg.
 One assumption is that TFs which are markers of microglia cells might 
 be more or less active depending on whether the cells were treated with EFZ or 
 not. An argument against this assumption is that both CEBPB and MEF2C are 
-typically expressed in microglia, yet we observe an opposite trend. 
-CEBPB is more active in Inf and Uninf cells than in Inf+EFZ and Uninf+EFZ cells,
-while MEF2C is more active in Inf+EFZ and Uninf+EFZ cells than in Inf and Uninf
-cells.
+typically expressed in microglia, yet we observe an opposite trend. CEBPB is more active in Inf and Uninf cells than in Inf+EFZ and Uninf+EFZ cells, while MEF2C is more active in Inf+EFZ and Uninf+EFZ cells than 
+in Inf and Uninf cells.
 
 
 ```{r, fig.width=20, fig.height=15}
@@ -565,7 +563,12 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))
 
 ## Correlations between conditions {.tabset}
 
-**Interpretation here**
+The correlation plot and scatter matrix below further emphasizes what has
+already become evident from the previous analysis. Inf and Uninf iMg show a 
+higher correlation with each other than for example Uninf+EFZ and Uninf. The 
+Inf+EFZ iMg hardly correlate with the Inf iMg, but show a higher correlation 
+with the Uninf+EFZ. The effect of EFZ treatment seems to be stronger than the 
+effect of the infection.
 
 ### Correlation matrix
 
