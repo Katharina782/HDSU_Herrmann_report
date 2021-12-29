@@ -1402,9 +1402,9 @@ df <- k3_df
 
 boxplot_list <- map(intersect, function(tf) {
   ggplot() +
-    geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
-                     fill = test %>% pull("ht_cluster"), alpha = .6)) +
-    geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
+    geom_violin(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf), 
+                     fill = df %>% pull("ht_cluster"), alpha = .6)) +
+    geom_boxplot(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf)), 
                  alpha = 0) +
     stat_pvalue_manual(df %>% 
                         pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>% 
@@ -1439,9 +1439,9 @@ df <- pat2
 
 boxplot_list <- map(intersect, function(tf) {
   ggplot() +
-    geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
-                     fill = test %>% pull("ht_cluster"), alpha = .6)) +
-    geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
+    geom_violin(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf), 
+                     fill = df %>% pull("ht_cluster"), alpha = .6)) +
+    geom_boxplot(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf)), 
                  alpha = 0) +
     stat_pvalue_manual(df %>% 
                         pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>% 
@@ -1476,9 +1476,9 @@ df <- pat3
 
 boxplot_list <- map(intersect, function(tf) {
   ggplot() +
-    geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
-                     fill = test %>% pull("ht_cluster"), alpha = .6)) +
-    geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
+    geom_violin(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf), 
+                     fill = df %>% pull("ht_cluster"), alpha = .6)) +
+    geom_boxplot(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(tf)), 
                  alpha = 0) +
     stat_pvalue_manual(df %>% 
                         pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>% 
@@ -1495,6 +1495,15 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 4, nrow = 3))
  #              color = "black", face = "bold", size = 25))
 ```
 
+```{r}
+ctcf3 <- ggplot(df, aes(x = ht_cluster, y = CTCF)) +
+  geom_violin(aes(fill = ht_cluster, alpha = .6)) +
+  geom_boxplot(alpha = 0) +
+  stat_pvalue_manual(df %>% 
+                       pairwise_wilcox_test(CTCF ~ ht_cluster) %>% 
+                       add_xy_position())
+ctcf3 <- ctcf3 + labs(title = "CTCF activity in patient 3")
+```
 
 ---
 
@@ -1506,16 +1515,6 @@ cluster and the other two clusters in patient1 and patient2. Similarly in
 patient3 there is a difference, however the difference is not as significant.
 This might imply that cluster contains a group of cells which are latently 
 infected and therefore CTCF is more active.
-
-```{r}
-ctcf3 <- ggplot(df, aes(x = ht_cluster, y = CTCF)) +
-  geom_violin(aes(fill = ht_cluster, alpha = .6)) +
-  geom_boxplot(alpha = 0) +
-  stat_pvalue_manual(df %>% 
-                       pairwise_wilcox_test(CTCF ~ ht_cluster) %>% 
-                       add_xy_position())
-ctcf3 <- ctcf3 + labs(title = "CTCF activity in patient 3")
-```
 
 ```{r, fig.width=15, fig.height=5}
 ggarrange(ctcf1, ctcf2, ctcf3, ncol = 3, nrow = 1)
