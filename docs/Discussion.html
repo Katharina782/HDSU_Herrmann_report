@@ -399,7 +399,7 @@ div.tocify {
       <a href="TF_activity_analysis_of_myeloid2_cluster.html">2. TF activity Myeloid2</a>
     </li>
     <li>
-      <a href="Triculture_dataset_analysis_and_integration_Farhadian_dataset.html">3. Integration CSF/Blood &amp; triculture</a>
+      <a href="Triculture_csf_integration.html">3. Integration CSF/Blood &amp; triculture</a>
     </li>
     <li>
       <a href="Triculture_dataset_GRN_with_Scenic.html">4. TF activity iMg</a>
@@ -466,7 +466,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-12-27
+<strong>Last updated:</strong> 2021-12-30
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -497,16 +497,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreed2f59b2d133fb7c2394b97182e5052ef1e4aadd5targetblankd2f59b2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/d2f59b2d133fb7c2394b97182e5052ef1e4aadd5" target="_blank">d2f59b2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreec38fcb6fc45ce5f318ef7bc20c4cfdfbedda8697targetblankc38fcb6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/c38fcb6fc45ce5f318ef7bc20c4cfdfbedda8697" target="_blank">c38fcb6</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreed2f59b2d133fb7c2394b97182e5052ef1e4aadd5targetblankd2f59b2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreec38fcb6fc45ce5f318ef7bc20c4cfdfbedda8697targetblankc38fcb6a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/d2f59b2d133fb7c2394b97182e5052ef1e4aadd5" target="_blank">d2f59b2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/c38fcb6fc45ce5f318ef7bc20c4cfdfbedda8697" target="_blank">c38fcb6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -514,11 +514,28 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
-    Ignored:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset_cache/
-    Ignored:    analysis/figure/
+    Ignored:    analysis/Triculture_csf_integration_cache/
 
 Untracked files:
     Untracked:  README.html
+    Untracked:  analysis/Triculture_csf_integration.Rmd
+    Untracked:  analysis/Triculture_csf_integration/
+    Untracked:  data/triculture_seurat_object
+    Untracked:  rebuild file.Rmd
+    Untracked:  rebuild-file.Rmd
+    Untracked:  rebuild-file.html
+    Untracked:  rebuild-file_cache/
+    Untracked:  rebuild-file_files/
+
+Unstaged changes:
+    Modified:   analysis/Introduction.Rmd
+    Modified:   analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd
+    Modified:   analysis/Triculture_dataset_GRN_with_Scenic.Rmd
+    Deleted:    analysis/Triculture_dataset_analysis_and_integration_Farhadian_dataset.Rmd
+    Modified:   analysis/_site.yml
+    Deleted:    analysis/html_test.Rmd
+    Modified:   analysis/index.Rmd
+    Modified:   analysis/references.bib
 
 </code></pre>
 <p>
@@ -557,6 +574,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/c38fcb6fc45ce5f318ef7bc20c4cfdfbedda8697/analysis/Discussion.Rmd" target="_blank">c38fcb6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-30
+</td>
+<td>
+wflow_publish(“analysis/Discussion.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/6c5f3b175db2cc63caa1ba67e59c08e1a22f412b/docs/Discussion.html" target="_blank">6c5f3b1</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-27
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -734,11 +785,22 @@ new files
 </div>
 </div>
 </div>
+<p>GRN-inference on the Myeloid2 cells identified eleven TFs with different activity between three cell clusters in all three patients, which were also shown to have different binding scores in the C20 cell line. Of these 11 TFs the three TFs ETS1, REST and YY1 were positively correlated with each other and negatively correlated with the other eight TF. In all three patients there was one cluster which was different from the other two clusters. In this cluster of interest ETS1, REST and YY1 had an increased activity, while the other TFs had a decreased activity.</p>
+<p>Since YY1 represses HIV1 transcription it promotes latent infection <span class="citation">[@He; @Romerio; @Lee]</span>. ETS1 binds to HIV promoter to decrease HIV transcription <span class="citation">[@Zhang]</span>. REST acts as a repressor of cell migration in microglia [@.</p>
+<p>Conversely, transcription factors with decreased activity, like for example MEF2C and MEF2A suppress the inflammatory response, meaning that if they are less active in this cluster, the cell might be in a more reactive state [<span class="citation">@Deczkowska</span>; Butovsky]. MEF2A is downregulated in disease and loosing MEF2C might prime microglia to increased sensitivity to immune stimuli <span class="citation">[@Butovsky; @Deczkowska; @Li]</span>. The MEF2 Family is<br />
+expressed primarily in microglia <span class="citation">[@Li]</span>. Lower activity of members of the MEF family does not necessarily mean that the cells are not microglia, but could be associated with the disease state.</p>
+<p>CEBPB also had decreased TF activity in the first clusters. CEBPB regulates proinflammatory gene expression and has been shown to be upregulated in microglia activation <span class="citation">[@Ejarque-Ortiz; @Ndoja]</span>. Dysregulated CEBPB is observed during HAND, with an overall decrease of CEBPB in the brain. While neurons slightly decrease CEBPB expression, astrocytes and likely other brain cells increase their expression of CEBPB <span class="citation">[@Canchi]</span>. However, there is no data from microlgia cells. An increased expression in the brain might be caused by an increased response to inflammation, because CEBPB is involved in the inflammatory response.</p>
+<p>The TF KLF4 is also proposed to be involved in neuroinflammation <span class="citation">[@Rickert]</span>. Additionally, JUNB, CEBPB, MEF2A, MEF2C, ETV6 and KLF4 are used as specific TFs characterizing microglia cells <span class="citation">[@Gosselin]</span>.</p>
+<p>Because of the functions of TFs listed above the hypothesis is that the cells in the first cluster of each patient are latently infected microglia-like cells. TFs which show decreased activity are involved in inflammation. Conversely, they show increased expression of two TFs which have been related to latent HIV infection, YY1 and ETS1. These microglia-like cells could be cells which entered the brain as macrophages and acquired microglia markers and functions which they kept when leaving the brain and migrating into CSF <span class="citation">[@Grassivaro]</span>.</p>
+<p>Analysing the TF activity of iMg and comparing it to the footprinting binding scores of the C20 cell was interesting, because in this case the infection status of each cell is known, as well as the treatment condition. It was shown that the treatment has a very large effect on the TF activity and therefore on gene expresssion. The effect of the treatment seems to largely overshadow the effect of latent or active infection in iMg. The two TFs RUNX3 and JUNB were more active in treated cells, while NFAT5, TCF7L and CEBPB were more active in not treated cells, independently of the infection status. An important insight to keep in mind for any further analysis is this huge effect that the treatment has on the cells. Comparing latently infected cells which are affected by a drug to non-infected cells which are affected by a drug might yield very different results than comparing them with non-infected cells which are not affected by a drug.</p>
+<p>Finding a pattern of activity which corresponds to the infection status or resembles the footprinting binding scores was more difficult and even though some TFs followed the footprinting pattern it was usually only the case for either non-treated cells or treated cells, but not for both treatment conditions. The reason for this remains unclear.</p>
+<p>Comparing the activities in iMg to the activities in Myeloid2 cells from CSF, there are only five transcription factors which are found to have differential TF activities in both model systems. Transferring the information from the iMg where the infection status is known to the Myeloid2 cells could support the hypothesis that the group of Myeloid2 cells described above are latently infected. YY1 is more active in the cluster of interest in Myeloid2 and more active in infected + EFZ than in uninfected + EFZ iMg. CEBPB is less active in the cluster of interest and more active in uninfected + EFZ than infected + EFZ iMg. Similarly, JUNB is less active in the cluster of interest and more active uninfected + EFZ than infected + EFZ iMg. This wouls suggest that the cluster of interest are indeed latently infected microglia-like cells. However, MEF2A and MEF2C are suggesting the opposite. No clear conclusion can be drawn from these five TFs alone.</p>
+<p>Integrating the triculture dataset and the CSF/Blood dataset it became evident that iMg and all Myeloid clusters, not only the Myeloid2 share some similarities, because they are from the same cell lineage. Using the up- and downregulated gene signature of infected and treated iMg, 51 Myeloid2 cells were identified with high scores for the signatures. These cells probably represent latently infected cells, however, they did not correspond to the cells in the cluster of interest (see above) hypothesized to be latently infected cells. Consequently, two different approaches yielded two different groups of cells which are potentially latently infected. Since the infection status of the iMg cells is known and, therefore the identified gene signatures most likely related to the infection, this result is more reliable. Interpretation of the cluster of interest from k-means clustering of Myeloid2 cells was based on TFs with different activities between the clusters. Literature search of the functions of these TFs hinted that these cells might be latently infected. Yet, the role of these TFs was not entirely clear, the number of them probably too small and only relying on TF activity cannot result in a reliable conclusion. Since the infection status of the iMg cells is known and, therefore, the identified gene signatures most likely related to the infection, this result is more reliable. wflow</p>
 <div id="references" class="section level1">
 <h1>References</h1>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGlzY3Vzc2lvbiIKYXV0aG9yOiAiS2F0aGFyaW5hIE1pa3VsaWsiCm91dHB1dDogaHRtbF9kb2N1bWVudAotLS0KCgojIFJlZmVyZW5jZXMg</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGlzY3Vzc2lvbiIKYXV0aG9yOiAiS2F0aGFyaW5hIE1pa3VsaWsiCm91dHB1dDogaHRtbF9kb2N1bWVudAotLS0KCgpHUk4taW5mZXJlbmNlIG9uIHRoZSBNeWVsb2lkMiBjZWxscyBpZGVudGlmaWVkIGVsZXZlbiBURnMgd2l0aCBkaWZmZXJlbnQgYWN0aXZpdHkKYmV0d2VlbiB0aHJlZSBjZWxsIGNsdXN0ZXJzIGluIGFsbCB0aHJlZSBwYXRpZW50cywgd2hpY2ggd2VyZSBhbHNvIHNob3duIHRvIApoYXZlIGRpZmZlcmVudCBiaW5kaW5nIHNjb3JlcyBpbiB0aGUgQzIwIGNlbGwgbGluZS4gT2YgdGhlc2UgMTEgVEZzIHRoZQp0aHJlZSBURnMgRVRTMSwgUkVTVCBhbmQgWVkxIHdlcmUgcG9zaXRpdmVseSBjb3JyZWxhdGVkIHdpdGggZWFjaCBvdGhlciBhbmQgCm5lZ2F0aXZlbHkgY29ycmVsYXRlZCB3aXRoIHRoZSBvdGhlciBlaWdodCBURi4gSW4gYWxsIHRocmVlIHBhdGllbnRzIHRoZXJlIHdhcyAKb25lIGNsdXN0ZXIgd2hpY2ggd2FzIGRpZmZlcmVudCBmcm9tIHRoZSBvdGhlciB0d28gY2x1c3RlcnMuIEluIHRoaXMgY2x1c3RlciBvZgppbnRlcmVzdCBFVFMxLCBSRVNUIGFuZCBZWTEgaGFkIGFuIGluY3JlYXNlZCBhY3Rpdml0eSwgd2hpbGUgdGhlIG90aGVyIFRGcyBoYWQgYQpkZWNyZWFzZWQgYWN0aXZpdHkuCgpTaW5jZSBZWTEgcmVwcmVzc2VzIEhJVjEgdHJhbnNjcmlwdGlvbiBpdCBwcm9tb3RlcyBsYXRlbnQgaW5mZWN0aW9uIApbQEhlOyBAUm9tZXJpbzsgQExlZV0uIEVUUzEgYmluZHMgdG8gSElWIHByb21vdGVyIHRvIGRlY3JlYXNlIEhJViB0cmFuc2NyaXB0aW9uCltAWmhhbmddLiBSRVNUIGFjdHMgYXMgYSByZXByZXNzb3Igb2YgY2VsbCBtaWdyYXRpb24gaW4gbWljcm9nbGlhIFtALgoKQ29udmVyc2VseSwgdHJhbnNjcmlwdGlvbiBmYWN0b3JzIHdpdGggZGVjcmVhc2VkIGFjdGl2aXR5LCBsaWtlIGZvciBleGFtcGxlCk1FRjJDIGFuZCBNRUYyQSBzdXBwcmVzcyB0aGUgaW5mbGFtbWF0b3J5IHJlc3BvbnNlLCBtZWFuaW5nIHRoYXQgaWYgdGhleSBhcmUgbGVzcyBhY3RpdmUgaW4gdGhpcyBjbHVzdGVyLCB0aGUgY2VsbCBtaWdodCBiZSBpbiBhIG1vcmUgcmVhY3RpdmUgc3RhdGUgW0BEZWN6a293c2thOyBCdXRvdnNreV0uCk1FRjJBIGlzIGRvd25yZWd1bGF0ZWQgaW4gZGlzZWFzZSBhbmQgbG9vc2luZyBNRUYyQyBtaWdodCBwcmltZSBtaWNyb2dsaWEgdG8gaW5jcmVhc2VkIHNlbnNpdGl2aXR5IHRvIGltbXVuZSBzdGltdWxpIFtAQnV0b3Zza3k7IEBEZWN6a293c2thOyBATGldLiBUaGUgTUVGMiBGYW1pbHkgaXMgIApleHByZXNzZWQgcHJpbWFyaWx5IGluIG1pY3JvZ2xpYSBbQExpXS4gTG93ZXIgYWN0aXZpdHkgb2YgbWVtYmVycyBvZiB0aGUgTUVGIApmYW1pbHkgZG9lcyBub3QgbmVjZXNzYXJpbHkgbWVhbiB0aGF0IHRoZSBjZWxscyBhcmUgbm90IG1pY3JvZ2xpYSwgYnV0IGNvdWxkCmJlIGFzc29jaWF0ZWQgd2l0aCB0aGUgZGlzZWFzZSBzdGF0ZS4KCkNFQlBCIGFsc28gaGFkIGRlY3JlYXNlZCBURiBhY3Rpdml0eSBpbiB0aGUgZmlyc3QgY2x1c3RlcnMuIENFQlBCIHJlZ3VsYXRlcyAKcHJvaW5mbGFtbWF0b3J5IGdlbmUgZXhwcmVzc2lvbiBhbmQgaGFzIGJlZW4gc2hvd24gdG8gYmUgdXByZWd1bGF0ZWQgaW4gbWljcm9nbGlhCmFjdGl2YXRpb24gW0BFamFycXVlLU9ydGl6OyBATmRvamFdLiBEeXNyZWd1bGF0ZWQgQ0VCUEIgaXMgCm9ic2VydmVkIGR1cmluZyBIQU5ELCB3aXRoIGFuIG92ZXJhbGwgZGVjcmVhc2Ugb2YgQ0VCUEIgaW4gdGhlIGJyYWluLiBXaGlsZQpuZXVyb25zIHNsaWdodGx5IGRlY3JlYXNlIENFQlBCIGV4cHJlc3Npb24sIGFzdHJvY3l0ZXMgYW5kIGxpa2VseSBvdGhlciBicmFpbiAKY2VsbHMgaW5jcmVhc2UgdGhlaXIgZXhwcmVzc2lvbiBvZiBDRUJQQiBbQENhbmNoaV0uIEhvd2V2ZXIsIHRoZXJlIGlzIG5vIGRhdGEgZnJvbSAKbWljcm9sZ2lhIGNlbGxzLiBBbiBpbmNyZWFzZWQgZXhwcmVzc2lvbiBpbiB0aGUgYnJhaW4gbWlnaHQgYmUgY2F1c2VkIGJ5IGFuCmluY3JlYXNlZCByZXNwb25zZSB0byBpbmZsYW1tYXRpb24sIGJlY2F1c2UgQ0VCUEIgaXMgaW52b2x2ZWQgaW4gdGhlCmluZmxhbW1hdG9yeSByZXNwb25zZS4KIApUaGUgVEYgS0xGNCBpcyBhbHNvIHByb3Bvc2VkIHRvIGJlIGludm9sdmVkIGluIG5ldXJvaW5mbGFtbWF0aW9uIFtAUmlja2VydF0uCkFkZGl0aW9uYWxseSwgSlVOQiwgQ0VCUEIsIE1FRjJBLCBNRUYyQywgRVRWNiBhbmQgS0xGNCBhcmUgdXNlZCBhcyBzcGVjaWZpYyAKVEZzIGNoYXJhY3Rlcml6aW5nIG1pY3JvZ2xpYSBjZWxscyBbQEdvc3NlbGluXS4KCkJlY2F1c2Ugb2YgdGhlIGZ1bmN0aW9ucyBvZiBURnMgbGlzdGVkIGFib3ZlIHRoZSBoeXBvdGhlc2lzIGlzIHRoYXQgdGhlIGNlbGxzIAppbiB0aGUgZmlyc3QgY2x1c3RlciBvZiBlYWNoIHBhdGllbnQgYXJlIGxhdGVudGx5IGluZmVjdGVkIG1pY3JvZ2xpYS1saWtlIGNlbGxzLiAKVEZzIHdoaWNoIHNob3cgZGVjcmVhc2VkIGFjdGl2aXR5IAphcmUgaW52b2x2ZWQgaW4gaW5mbGFtbWF0aW9uLiBDb252ZXJzZWx5LCB0aGV5IHNob3cgaW5jcmVhc2VkIGV4cHJlc3Npb24gCm9mIHR3byBURnMgd2hpY2ggaGF2ZSBiZWVuIHJlbGF0ZWQgdG8gbGF0ZW50IEhJViBpbmZlY3Rpb24sIFlZMSBhbmQgRVRTMS4gVGhlc2UKbWljcm9nbGlhLWxpa2UgY2VsbHMgY291bGQgYmUgY2VsbHMgd2hpY2ggZW50ZXJlZCB0aGUgYnJhaW4gYXMgbWFjcm9waGFnZXMgYW5kCmFjcXVpcmVkIG1pY3JvZ2xpYSBtYXJrZXJzIGFuZCBmdW5jdGlvbnMgd2hpY2ggdGhleSBrZXB0IHdoZW4gbGVhdmluZyB0aGUgYnJhaW4gCmFuZCBtaWdyYXRpbmcgaW50byBDU0YgW0BHcmFzc2l2YXJvXS4KCkFuYWx5c2luZyB0aGUgVEYgYWN0aXZpdHkgb2YgaU1nIGFuZCBjb21wYXJpbmcgaXQgdG8gdGhlIGZvb3RwcmludGluZyBiaW5kaW5nCnNjb3JlcyBvZiB0aGUgQzIwIGNlbGwgd2FzIGludGVyZXN0aW5nLCBiZWNhdXNlIGluIHRoaXMgY2FzZSB0aGUgaW5mZWN0aW9uIHN0YXR1cyAKb2YgZWFjaCBjZWxsIGlzIGtub3duLCBhcyB3ZWxsIGFzIHRoZSB0cmVhdG1lbnQgY29uZGl0aW9uLiBJdCB3YXMgc2hvd24gdGhhdCB0aGUgdHJlYXRtZW50IGhhcyBhIHZlcnkgbGFyZ2UgZWZmZWN0IG9uIHRoZSBURiBhY3Rpdml0eSBhbmQgdGhlcmVmb3JlIG9uIGdlbmUgZXhwcmVzc3Npb24uIFRoZSBlZmZlY3Qgb2YgdGhlIHRyZWF0bWVudCBzZWVtcyB0byBsYXJnZWx5IG92ZXJzaGFkb3cgdGhlIGVmZmVjdCBvZiBsYXRlbnQgb3IgYWN0aXZlIGluZmVjdGlvbiBpbiBpTWcuIFRoZSB0d28gClRGcyBSVU5YMyBhbmQgSlVOQiB3ZXJlIG1vcmUgYWN0aXZlIGluIHRyZWF0ZWQgY2VsbHMsIHdoaWxlIE5GQVQ1LCBUQ0Y3TCBhbmQgQ0VCUEIgCndlcmUgbW9yZSBhY3RpdmUgaW4gbm90IHRyZWF0ZWQgY2VsbHMsIGluZGVwZW5kZW50bHkgb2YgdGhlIGluZmVjdGlvbiBzdGF0dXMuIEFuIAppbXBvcnRhbnQgaW5zaWdodCB0byBrZWVwIGluIG1pbmQgZm9yIGFueSBmdXJ0aGVyIGFuYWx5c2lzIGlzIHRoaXMgaHVnZSBlZmZlY3QgdGhhdAp0aGUgdHJlYXRtZW50IGhhcyBvbiB0aGUgY2VsbHMuIENvbXBhcmluZyBsYXRlbnRseSBpbmZlY3RlZCBjZWxscyB3aGljaCBhcmUgYWZmZWN0ZWQKYnkgYSBkcnVnIHRvIG5vbi1pbmZlY3RlZCBjZWxscyB3aGljaCBhcmUgYWZmZWN0ZWQgYnkgYSBkcnVnIG1pZ2h0IHlpZWxkIHZlcnkgCmRpZmZlcmVudCByZXN1bHRzIHRoYW4gY29tcGFyaW5nIHRoZW0gd2l0aCBub24taW5mZWN0ZWQgY2VsbHMgd2hpY2ggYXJlIG5vdCAKYWZmZWN0ZWQgYnkgYSBkcnVnLiAKCkZpbmRpbmcgYSBwYXR0ZXJuIG9mIGFjdGl2aXR5IHdoaWNoIGNvcnJlc3BvbmRzIHRvIHRoZSBpbmZlY3Rpb24gc3RhdHVzIG9yIHJlc2VtYmxlcyB0aGUgZm9vdHByaW50aW5nIGJpbmRpbmcgc2NvcmVzIHdhcyBtb3JlIGRpZmZpY3VsdCBhbmQgZXZlbiB0aG91Z2ggc29tZSBURnMgZm9sbG93ZWQKdGhlIGZvb3RwcmludGluZyBwYXR0ZXJuIGl0IHdhcyB1c3VhbGx5IG9ubHkgdGhlIGNhc2UgZm9yIGVpdGhlciBub24tdHJlYXRlZCBjZWxscwpvciB0cmVhdGVkIGNlbGxzLCBidXQgbm90IGZvciBib3RoIHRyZWF0bWVudCBjb25kaXRpb25zLiBUaGUgcmVhc29uIGZvciB0aGlzIApyZW1haW5zIHVuY2xlYXIuCgpDb21wYXJpbmcgdGhlIGFjdGl2aXRpZXMgaW4gaU1nIHRvIHRoZSBhY3Rpdml0aWVzIGluIE15ZWxvaWQyIGNlbGxzIGZyb20gQ1NGLAp0aGVyZSBhcmUgb25seSBmaXZlIHRyYW5zY3JpcHRpb24gZmFjdG9ycyB3aGljaCBhcmUgZm91bmQgdG8gaGF2ZSBkaWZmZXJlbnRpYWwgVEYgYWN0aXZpdGllcyBpbiBib3RoIG1vZGVsIHN5c3RlbXMuIFRyYW5zZmVycmluZyB0aGUgaW5mb3JtYXRpb24gZnJvbSB0aGUgaU1nIHdoZXJlIAp0aGUgaW5mZWN0aW9uIHN0YXR1cyBpcyBrbm93biB0byB0aGUgTXllbG9pZDIgY2VsbHMgY291bGQgc3VwcG9ydCB0aGUgaHlwb3RoZXNpcwp0aGF0IHRoZSBncm91cCBvZiBNeWVsb2lkMiBjZWxscyBkZXNjcmliZWQgYWJvdmUgYXJlIGxhdGVudGx5IGluZmVjdGVkLiBZWTEgaXMgCm1vcmUgYWN0aXZlIGluIHRoZSBjbHVzdGVyIG9mIGludGVyZXN0IGluIE15ZWxvaWQyIGFuZCBtb3JlIGFjdGl2ZSBpbiBpbmZlY3RlZCArCkVGWiB0aGFuIGluIHVuaW5mZWN0ZWQgKyBFRlogaU1nLiBDRUJQQiBpcyBsZXNzIGFjdGl2ZSBpbiB0aGUgY2x1c3RlciBvZiBpbnRlcmVzdAphbmQgbW9yZSBhY3RpdmUgaW4gdW5pbmZlY3RlZCArIEVGWiB0aGFuIGluZmVjdGVkICsgRUZaIGlNZy4gU2ltaWxhcmx5LCBKVU5CIGlzIApsZXNzIGFjdGl2ZSBpbiB0aGUgY2x1c3RlciBvZiBpbnRlcmVzdCBhbmQgbW9yZSBhY3RpdmUgdW5pbmZlY3RlZCArIEVGWiB0aGFuIAppbmZlY3RlZCArIEVGWiBpTWcuIFRoaXMgd291bHMgc3VnZ2VzdCB0aGF0IHRoZSBjbHVzdGVyIG9mIGludGVyZXN0IGFyZSBpbmRlZWQgCmxhdGVudGx5IGluZmVjdGVkIG1pY3JvZ2xpYS1saWtlIGNlbGxzLiBIb3dldmVyLCBNRUYyQSBhbmQgTUVGMkMgYXJlIHN1Z2dlc3RpbmcKdGhlIG9wcG9zaXRlLiBObyBjbGVhciBjb25jbHVzaW9uIGNhbiBiZSBkcmF3biBmcm9tIHRoZXNlIGZpdmUgVEZzIGFsb25lLgoKSW50ZWdyYXRpbmcgdGhlIHRyaWN1bHR1cmUgZGF0YXNldCBhbmQgdGhlIENTRi9CbG9vZCBkYXRhc2V0IGl0IGJlY2FtZSBldmlkZW50IAp0aGF0IGlNZyBhbmQgYWxsIE15ZWxvaWQgY2x1c3RlcnMsIG5vdCBvbmx5IHRoZSBNeWVsb2lkMiBzaGFyZSBzb21lIHNpbWlsYXJpdGllcywKYmVjYXVzZSB0aGV5IGFyZSBmcm9tIHRoZSBzYW1lIGNlbGwgbGluZWFnZS4gVXNpbmcgdGhlIHVwLSBhbmQgZG93bnJlZ3VsYXRlZApnZW5lIHNpZ25hdHVyZSBvZiBpbmZlY3RlZCBhbmQgdHJlYXRlZCBpTWcsIDUxIE15ZWxvaWQyIGNlbGxzIHdlcmUgaWRlbnRpZmllZCB3aXRoIGhpZ2ggc2NvcmVzIGZvciB0aGUgc2lnbmF0dXJlcy4gVGhlc2UgY2VsbHMgcHJvYmFibHkgcmVwcmVzZW50IGxhdGVudGx5IGluZmVjdGVkIGNlbGxzLApob3dldmVyLCB0aGV5IGRpZCBub3QgY29ycmVzcG9uZCB0byB0aGUgY2VsbHMgaW4gdGhlIGNsdXN0ZXIgb2YgaW50ZXJlc3QgKHNlZSAKYWJvdmUpIGh5cG90aGVzaXplZCB0byBiZSBsYXRlbnRseSBpbmZlY3RlZCBjZWxscy4gQ29uc2VxdWVudGx5LCB0d28gCmRpZmZlcmVudCBhcHByb2FjaGVzIHlpZWxkZWQgdHdvIGRpZmZlcmVudCBncm91cHMgb2YgY2VsbHMgd2hpY2ggYXJlIHBvdGVudGlhbGx5CmxhdGVudGx5IGluZmVjdGVkLiBTaW5jZSB0aGUgaW5mZWN0aW9uIHN0YXR1cyBvZiB0aGUgaU1nIGNlbGxzIGlzIGtub3duIGFuZCwgCnRoZXJlZm9yZSB0aGUgaWRlbnRpZmllZCBnZW5lIHNpZ25hdHVyZXMgbW9zdCBsaWtlbHkgcmVsYXRlZCB0byB0aGUgaW5mZWN0aW9uLCAKdGhpcyByZXN1bHQgaXMgbW9yZSByZWxpYWJsZS4gSW50ZXJwcmV0YXRpb24gb2YgdGhlIGNsdXN0ZXIgb2YgaW50ZXJlc3QgZnJvbQprLW1lYW5zIGNsdXN0ZXJpbmcgb2YgTXllbG9pZDIgY2VsbHMgd2FzIGJhc2VkIG9uIFRGcyB3aXRoIGRpZmZlcmVudCBhY3Rpdml0aWVzIApiZXR3ZWVuIHRoZSBjbHVzdGVycy4gTGl0ZXJhdHVyZSBzZWFyY2ggb2YgdGhlIGZ1bmN0aW9ucyBvZiB0aGVzZSBURnMgaGludGVkIHRoYXQKdGhlc2UgY2VsbHMgbWlnaHQgYmUgbGF0ZW50bHkgaW5mZWN0ZWQuIFlldCwgdGhlIHJvbGUgb2YgdGhlc2UgVEZzIHdhcyBub3QgCmVudGlyZWx5IGNsZWFyLCB0aGUgbnVtYmVyIG9mIHRoZW0gcHJvYmFibHkgdG9vIHNtYWxsIGFuZCBvbmx5IHJlbHlpbmcgb24gVEYgCmFjdGl2aXR5IGNhbm5vdCByZXN1bHQgaW4gYSByZWxpYWJsZSBjb25jbHVzaW9uLiBTaW5jZSB0aGUgaW5mZWN0aW9uIHN0YXR1cyBvZgp0aGUgaU1nIGNlbGxzIGlzIGtub3duIGFuZCwgdGhlcmVmb3JlLCB0aGUgaWRlbnRpZmllZCBnZW5lIHNpZ25hdHVyZXMgbW9zdCAKbGlrZWx5IHJlbGF0ZWQgdG8gdGhlIGluZmVjdGlvbiwgdGhpcyByZXN1bHQgaXMgbW9yZSByZWxpYWJsZS4gd2Zsb3cKCiMgUmVmZXJlbmNlcyA=</div>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
@@ -805,7 +867,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2,h3,h4",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
