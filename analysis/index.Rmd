@@ -8,4 +8,18 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to the report of my labrotation.
+# Microglial cell heterogeneity in HIV
+
+Microglia cells are highly susceptible to HIV infection. In patients
+receiving antiretroviral therapy active viral replication is suppressed, but 
+latently infected microglia form a virus reservoir in the brain which would 
+quickly lead to a rebound as soon as the treatment was stopped. HIV associated
+neurocognitive disorder (HAND) is prevalent among HIV infected patients. So far,
+little is known about what the role of microglia cells is in HAND. Because it 
+is difficult to gain access to microglia cells of the brain, several models have
+been used, like immortalized microglia in cell culture or microglia cells derived
+form human induced pluripotent stem cells. It has also been proposed that
+cells in the cerebrospinal fluid could be microglia-like and, therefore, be used
+as a model. Comparing cells form the different models it becomes evident that 
+they are very different and not always showing similar gene expression patterns.
+Two different approaches have led to 

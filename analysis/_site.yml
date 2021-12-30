@@ -14,7 +14,7 @@ navbar:
     - text: 2. TF activity Myeloid2
       href: TF_activity_analysis_of_myeloid2_cluster.html
     - text: 3. Integration CSF/Blood & triculture 
-      href: Triculture_dataset_analysis_and_integration_Farhadian_dataset.html
+      href: Triculture_csf_integration.html
     - text: 4. TF activity iMg
       href: Triculture_dataset_GRN_with_Scenic.html
   - text: Discussion

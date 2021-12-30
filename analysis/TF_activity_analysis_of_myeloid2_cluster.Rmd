@@ -1,7 +1,7 @@
 ---
 title: "TF activity in myeloid2 cells"
 author: "Katharina Mikulik"
-output: html_document
+output: html
 ---
 <style>
 body {
@@ -959,7 +959,8 @@ to assign each cell to one of the 3 clusters.
 
 <details>
 <summary>**Cluster annotation using an integrated referenc**</summary>
-## Label Transfer
+
+Label Transfer
 
 Here we do not integrate the datasets beforehand and we do not modify the query
 expression data.
@@ -1110,7 +1111,8 @@ draw(ht_list, ht_gap= unit(2, "cm"))
 ```
 
 
-# 3. K-means clustering for all 3 patients separately {.tabset}
+
+# 3. K-means clustering for all 3 patients separately 
 
 Since the label transfer of the 3 cluster identities from patient1 did not seem
 to work very well, we next tried to perform k-means clustering using k = 3
@@ -1120,11 +1122,13 @@ activities in the 3 clusters show similar patterns across the different patients
 In the two heatmaps below the clusters look more sensible than the clusters
 observed after cluster label transfer.
 
-## Patient 2
+## k = 3 {.tabset}
 
-### K-means clustering with k = 3 for patient 2 
+### Patient 2
 
-#### 1. Draw Heatmap for Patient 2
+#### K-means clustering with k = 3 for patient 2 
+
+##### 1. Draw Heatmap for Patient 2
 
 
 ```{r, fig.width=15, fig.height=20}
@@ -1151,7 +1155,7 @@ ht_pat2 <- draw(ht2)
 
 ```
 
-#### 2. Kruskal_Wallis Test Patient 2 
+##### 2. Kruskal_Wallis Test Patient 2 
 
 ```{r}
 # extract the cells from the 3 clusters 
@@ -1209,11 +1213,11 @@ length(adj_p_values[adj_p_values<0.05])
 hiv2_atac <- overlap_atac$name[adj_p_values < .05]
 ```
 
-## Patient 3
+### Patient 3
 
-### K-means clustering with k = 3 for patient 3
+#### K-means clustering with k = 3 for patient 3
 
-#### 1. Draw Heatmap for Patient 3
+##### 1. Draw Heatmap for Patient 3
 
 ```{r, fig.width=15, fig.height=20}
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
@@ -1238,7 +1242,7 @@ ht_pat3 <- draw(ht3)
 ```
 
 
-#### 2. Kruskal-Wallis test Patient 3
+##### 2. Kruskal-Wallis test Patient 3
 
 ```{r}
 # extract the cells from the 3 clusters 
@@ -1297,9 +1301,9 @@ hiv3_atac <- overlap_atac$name[adj_p_values < .05]
 ```
 
 
-## comparison between all 3 patients
+### comparison between all 3 patients
 
-#### Heatmaps of k-means clustering with k = 3 for all three patients
+##### Heatmaps of k-means clustering with k = 3 for all three patients
 
 ```{r, fig.width=15, fig.height=17}
 # patient 1
@@ -1384,7 +1388,7 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 ```
 
 
-## 11 TFs show different activity in one of the three clusters {.tabset}
+## Eleven TFs with different activities {.tabset}
 
 In the boxplots below it can be seen that in all three patients there seems to
 be one cluster which is different from two other clusters. 

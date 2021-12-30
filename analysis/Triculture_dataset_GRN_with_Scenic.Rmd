@@ -2,6 +2,8 @@
 title: "TF activity in iMg from triculture dataset"
 author: "Katharina Mikulik"
 output: html_document
+bibliography: references.bib
+link-citations: yes
 ---
 
 <style>
@@ -334,19 +336,12 @@ Uninf (orange) show very similar TF activity patterns. These findings
 recapitulate the findings from above.
 
 
-Two TFs seem to be more active in Inf+EFZ and Uninf+EFZ (compared to Inf and Uninf):
-
-* **RUNX3**
-* **JUNB**
-
-Three TFs seem to be more active in Inf and Uninf (compared to Inf+EFZ and Uninf+EFZ):
-
-* **NFAT5:** In microglia cells inflammatory signals trigger NFAT5 expression. 
-(Yang X.L. et al., Dev Neurosci, 2018)
-* **TCF7L2**
-* **CEBPB** regulates pro-inflammatory gene expression,
-increased expression in HAND (HIV-associated neurocognitive disorder), 
-BUT no data from microglia (Canchi S. et al. J Neuroinflammation, 2020)
+Two TFs seem to be more active in Inf+EFZ and Uninf+EFZ compared to Inf and 
+Uninf, namely RUNX3 and JUNB. Three TFs seem to be more active in Inf and Uninf
+compared to Inf+EFZ and Uninf+EFZ, namely NFAT5, TCF7L2 and CEBPB. In microglia 
+cells inflammatory signals trigger NFAT5 expression [@Yang]. CEBPB regulates pro-inflammatory gene expression and its expression is 
+increased in the brain during HAND, however, there is no data from microglia 
+cells [@Canchi]. 
 
 ```{r, fig.width=15, fig.height=10}
 ht_conditions <- Heatmap(t(auc_mtx[, atac_tfs_df$name]), 
@@ -458,7 +453,7 @@ draw(ht_list, ht_gap = unit(2, "cm"))
 
 ---
 
-## Statistical Tests to find TF activity differences between clusters
+## TF activity differences between clusters
 
 To quantitatively investigate whether we can find TFs which have significantly
 different activity between clusters we can use Kruskal-Wallis test and 
@@ -485,9 +480,9 @@ adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
 
 ```
 
-## Posthoc analysis {.tabset}
+### Posthoc analysis {.tabset}
 
-### more bound in latent infection
+#### more bound in latent infection
 
 **Boxplots of TFs activity across conditions of TFs more bound in latent infection**
 
@@ -514,19 +509,23 @@ boxplot_list <- map(up_latent, function(tf) {
 do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 3, nrow = 2))
 ```
 
-### more bound in uninfected 
+#### more bound in uninfected 
 
 **Boxplots of TFs activity across conditions of TFs more bound in uninfected primary microglia**
 
 In the plots below the trend of TF activity being negatively correlated between
-treated and untreated cells, independent of the infection status can be seen for
+treated and untreated cells, independently of the infection status can be seen for
 some TFs, for example CEBPB and MEF2C. For other TFs there is no difference 
 between either infection status or treatment, for example CREB1 and ETS1.
 
 Yet, even though the effect of treatment is most prominent, some TFs are 
-additionally following the pattern of the footprinting. For example, MEF2C is
-more bound in the uninfected iMg than in infected iMg.
-
+additionally following the pattern of the footprinting. For example, RUNX3, CUX1, MEF2A, YY1 and MEF2C are more active uninfected cells than in infected cells, but more active in infected + EFZ cells than uninfected + EFZ cells. These TFs, therefore, follow the footprining pattern at least in the untreated conditon. Conversely, NFAT5, TCF7L2 and CEBPB are 
+more active in infected than in uninfected cells, but more bound in uninfected +
+EFZ cells than in infected + EFZ cells. It is unclear why the patterns are contrary
+to each other between the treatment conditions. JUNB and NFYB are the only two 
+TFs which are more bound in uninfected +/- EFZ compared to infected +/- EFZ, which
+means they are following the footprinting pattern independently of the treatment
+condition.
 
 One assumption is that TFs which are markers of microglia cells might 
 be more or less active depending on whether the cells were treated with EFZ or 
