@@ -20,6 +20,7 @@ is difficult to gain access to microglia cells of the brain, several models have
 been used, like immortalized microglia in cell culture or microglia cells derived
 form human induced pluripotent stem cells. It has also been proposed that
 cells in the cerebrospinal fluid could be microglia-like and, therefore, be used
-as a model. Comparing cells form the different models it becomes evident that 
-they are very different and not always showing similar gene expression patterns.
-Two different approaches have led to 
+as a model. Since the infection status of cells from cell culture is known, we
+were able to define a gene signature of infection and transfer it to CSF cells
+in order to identify infected CSF cells. This way it will be possible to learn
+more about the role of microglia cells in HAND. 

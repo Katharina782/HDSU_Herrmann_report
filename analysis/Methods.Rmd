@@ -2,45 +2,40 @@
 title: "Methods"
 author: "Katharina Mikulik"
 output: html_document
+bibliography: references.bib
+link-citations: yes
 ---
 
 
 
-### Quality Control
+## Quality Control
 
 For Quality Control I used the publications from which the datasets were obtained
-as an orientation, in order to be able to reproduce the results and findings.
-
-For the dataset from [@Farhadian] genes expressed in less than 3 cells were 
-removed. Additionally, the ten percent of cell swith the highest percentage
+as an orientation, in order to be able to reproduce the results and findings. For
+the dataset from [@Farhadian] genes expressed in less than 3 cells were 
+removed. Additionally, the ten percent of cells with the highest percentage
 of mitochondrial genes and cells with a number of features below 500 or above 
-2500 was removed.
-
-For the dataset from [@Ryan] cells with a percentage of mitochondrial genes
-above 20% were removed, as well as, cells with a number of Features below 200 
+2500 was removed. For the dataset from [@Ryan] cells with a percentage of mitochondrial genes above 20% were removed, as well as, cells with a number of features below 200 
 and above 5000. 
 
-### Normalization
+## Normalization
 
 Log normalization was used to normalize count matrices, using the function `NormalizeData()`from the Seurat package. The counts of a particular
-features for a particular cell are divided by the total counts for that cell and
+feature for a particular cell are divided by the total counts for that cell and
 multiplied by a scaling factor of 10,000. Then the result is natural-log 
-transformed. 
+transformed. For GRN inference with SCENIC the function `SCTransform()` from the 
+Seurat package was used, so that the data structure would work with the SCENIC pipeline. This method uses regularized negative binomial regression to normalize 
+the count matrix. 
 
-For GRN inference with SCENIC the function `SCTransform()` from the Seurat 
-package was used, so that the data structure would work with the SCENIC pipeline.
-This method uses regularized negative binomial regression to normalize the
-count matrix. 
-
-### Clustering
+## Clustering
 
 After calculating a PCA the cells were clustered based on their nearest neighbors.
 For clustering the functions `FindNeigbors()` and `FindClusters()` from the 
 Seurat package were used. First, a k nearest neighbor (KNN) graph is built
-based on the PCA space. Then, the Louvian algorithm is used, which iteratively 
-optimizes the standard modularity function. Modularity measures the strength of division 
-of a network into modules. High modularity is equivalent to dense connections 
-within modules and sparse connections between nodes in different modules. 
+based on the PCA space. Then, the Louvain algorithm is used, which iteratively 
+optimizes the standard modularity function. Modularity measures the strength of division of a network into modules. High modularity is equivalent to dense 
+connections within modules and sparse connections between nodes in different
+modules. 
 
   
 ## Integration & Label Transfer
@@ -59,35 +54,33 @@ are very large. Second, expression data is L2 normalized. After the
 projection of distinct datasets into a shared subspace, pairs of MNN in this shared subspace are identified. These MNN correspond to cells which are biologically
 similar. The MNN serve as integration anchors for the integration, but 
 beforehand the anchors are scored. The score is a measure of how similar the two 
-anchor cells are. Using anchors and their corresponding scores 
+anchor cells are. Using anchors and their corresponding scores, 
 correction vectors are computed for each cell. The correction vectors contain 
 information on the difference between two anchor cells. Using the correction vectors 
 the expression values of each cell are transformed, so that they are part of an
-integrated dataset. [@Stuart] This integrated dataset can then be used for 
-further analysis.
-
-Finding anchors between datasets is not only required for integration of two 
-distinct datasets, but also for label transfer. 
+integrated dataset [@Stuart]. This integrated dataset can then be used for 
+further analysis. Finding anchors between datasets is not only required for 
+integration of two distinct datasets, but also for label transfer. 
 
 ### Label Transfer
 
 After finding anchors between distinct datasets as described above, it 
-is also possible to transfer information on cell type annotations. This means 
-that instead of de-nove analysis of cell type markers the cell labels are learned 
-from a reference dataset. Instead of using canonical correlation analysis, the
+is also possible to transfer information, for example cell type annotations. This
+means that instead of de-nove analysis of cell type markers the cell labels are 
+learned from a reference dataset. Instead of using canonical correlation analysis, the
 PCA computed for the reference dataset is projected onto the query dataset. 
 A binary classification matrix is build with rows corresponding to all possible 
 classes and columns corresponding to reference anchors of the anchor pairs. 
 If a reference anchor belongs to a certain class the entry will be one, otherwise
 it will be zero. The classification matrix is then multiplied with a weight matrix.
-This way we get prediction scores for each class and cell in the query dataset.
-[@Stuart]
+This way we get prediction scores for each class and cell in the query dataset
+[@Stuart].
 
 ## Correlation  
 
 Since the TF activity is not normally distributed, instead of using
 the Pearson correlation coefficient which assumes normally distributed data,
-I will use the Spearman correlation coefficient which is rank-based and 
+the Spearman correlation coefficient was used, which is rank-based and 
 non-parametric. The Spearman correlation is a measure of strength and direction 
 of a monotonic association.
 The null hypothesis of the Spearman correlation is that there is no association 
@@ -95,25 +88,19 @@ between the two variables. Statistical significance does not give any informatio
 on the strength of correlation. 
 
 Spearman's rank order correlation:
-$$
-\rho = \frac{\sum_{i} (x_{i} - \overline{x}) (y_{i} - \overline{y})}
-{\sqrt{\sum_{i}(x_{i} - \overline{x})^2\sum_{i}(y_{i} - \overline{y})^2}}
 
-$$
 
-### Pearson d
+$\rho = \frac{\sum_{i} (x_{i} - \overline{x}) (y_{i} - \overline{y})}
+{\sqrt{\sum_{i}(x_{i} - \overline{x})^2\sum_{i}(y_{i} - \overline{y})^2}}$
   
-  + test for correlation
-  + Pearson vs Spearman?
-  
-## AddModuleScore
+## Gene signature scores
 
 The function `AddModuleScore()` from the Seurat package calculates gene expression
 scores for a particular set of signature genes. For example, I calculated 
 scores for the genes defining the infected iMg from the triculture dataset in 
 Myeloid2. Calculating the gene signature score for each cell provides information 
-on which cells show a higher/unchanged/lower express of a particular set of 
-genes (signature for a particular cell tpye).
+on whether a particular cell shows a higher/unchanged/lower expression of a
+particular set of genes (signature for a particular cell tpye).
 
 First, the average expression of each gene across all cells is calculated and 
 the genes are ordered according to their average expression values. Next, genes
@@ -123,11 +110,11 @@ it is ensured that the control genes have a similar distribution of expression
 levels as the signature gene. Finally, the average expression of control genes
 and signature genes is computed in each cell. The resulting average control 
 gene expression is subtracted from the average signature gene expression in 
-each cell. This yields a score in each cell, which if close to zero can be 
+each cell. This yields a score in each cell, which, if close to zero, can be 
 interpreted as no enrichment or depletion of the signature genes. If the score 
 in a particular cell is bigger than zero this means that there is an 
-enrichment for the signature genes in this particular cell. Conversely,w the score is 
-smaller than zero this means that there is a depletion. [@Tirosh; @Muskovic]
+enrichment for the signature genes in this particular cell. Conversely, if the
+score is smaller than zero this means that there is a depletion. [@Tirosh; @Muskovic]
 
 ## K-means clustering
 
@@ -150,21 +137,20 @@ improve the WSS anymore.
 ## Test for differential TF activity
 
 To determine whether there is a significant difference between the clusters 
-computed with k-means clustering a Kruskal Wallis Test was performed for all
+computed with k-means clustering, a Kruskal Wallis Test was performed for all
 TFs between the different clusters. In contrast to ANOVA, the Kruskal Wallis Test
 is non-paramteric and, therefore, better suited for the data at hand, which is 
 not normally distributed. Using the FDR method I corrected for 
 multiple hypothesis testing. For TFs with different activity between clusters I 
 then did a posthoc analysis to determine which clusters are different exactly. 
-A pairwise wilcox test was used for this, again a non-parametric alternative to 
+A pairwise wilcox test was used, which again, is a non-parametric alternative to 
 the t-test. 
 
 ## Differential gene expression
 
 The Seurat functions `FindAllMarkers()` and `FindMarkers()` uses a Wilcoxon Rank
-Sum test to identify differentially expressed genes between two groups. 
-
-For the dataset from [@Farhadian] to find also genes with small log-fold changes
+Sum test to identify differentially expressed genes between two groups. For the
+dataset from [@Farhadian] to find also genes with small log-fold changes,
 I set the threshold to 0.01 and 
 the minimum fraction of cells in which the gene is detected to 0.01. This 
 increased the computation time, but made it possible to also include
@@ -172,8 +158,8 @@ very infrequently expressed genes, which might for example be the case for
 Myeloid2-specific genes. 
 In contrast, for the datset from [@Ryan] I used the default settings with a 
 minimum log-fold change of 0.25 and a minimum fraction of cells which express
-the gene of 0.1.
-
-For the minimum number of cells expressing the feature in at least one of the 
-two compared groups I used the default of 3. Similarly, for the minimum number 
+the gene of 0.1. For the minimum number of cells expressing the feature in at least one of the two compared groups I used the default of 3. Similarly, for the minimum number 
 of cells in a group I used the default of 3. 
+
+
+# References

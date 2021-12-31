@@ -1,5 +1,5 @@
 ---
-title: "TF activity in myeloid2 cells"
+title: "TF activity in Myeloid2 cells"
 author: "Katharina Mikulik"
 output: html
 bibliography: references.bib
@@ -99,9 +99,9 @@ hiv7_scenic <- AddMetaData(hiv7,
 ---
 </details>
 
-# Bulk ATACseq footprinting, C20 cell line
+# Bulk ATACseq footprinting
 
-Using bulk ATACseq data from primary microglia with three different conditions,
+Using bulk ATACseq data from the C20 cell line (immortalized microglia) with three different conditions,
 active infection, latent infection, uninfected, differential binding scores were
 obtained using TOBIAS. Here, I will use the TFs which were previously shown to 
 have differential binding scores in these primary microglia. Since I expect the 
@@ -289,7 +289,7 @@ correlations between clusters across patients?
 3. K-means Clustering for all 3 patients separately
 
 
-# 1. Determine k for k-means clustering {.tabset}
+# 1. Determine k {.tabset}
 
 The plot of within cluster sum of squares shows that the sweet spot for the 
 value of k is somewhere between 3 and 5. To determine the best k for k-means
@@ -953,7 +953,7 @@ annotate_figure(fig, top = text_grob("TFs with significantly different activity 
 
 
 
-# 2. Transfer the 3 cluster identitites to patient2 and patient3 
+# 2. Transfer cluster identitites 
 
 The cluster identities from patient 1 were transferred to patient 2 and patient 3
 to assign each cell to one of the 3 clusters. 
@@ -1114,7 +1114,7 @@ draw(ht_list, ht_gap= unit(2, "cm"))
 
 
 
-# 3. K-means clustering for all 3 patients separately 
+# 3. Independent Clustering 
 
 Since the label transfer of the 3 cluster identities from patient1 did not seem
 to work very well, we next tried to perform k-means clustering using k = 3
@@ -1337,9 +1337,10 @@ draw(ht_list, ht_gap= unit(2, "cm"),
 ---
 
 
-# Which TFs show significantly different activity between the clusters across patients?
+# Different activities between clusters
 
-Since the independent k-means clustering for all three patients yields 
+Which TFs show significantly different activity between the clusters across 
+patients? Since the independent k-means clustering for all three patients yields 
 clusters which look more reasonable, we will compare the three clusters we obtain 
 across the three patients to see if there is a pattern between them. 
 
@@ -1788,29 +1789,6 @@ clusters). The gene expression might give a hint about the identity of these
 two Myeloid2 clusters. 
 
 
-```#{r}
-# 3 Clusters for each of the 3 HIV+ patients
-
-# HIV1_CSF
-hiv1_c1 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster1.tsv", sep = "\t"))[["x"]]
-hiv1_c2 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster2.tsv", sep = "\t"))[["x"]]
-hiv1_c3 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster3.tsv", sep = "\t"))[["x"]]
-
-# HIV2_CSF
-hiv2_c1 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv2_cluster1.tsv", sep = "\t"))[["x"]]
-hiv2_c2 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv2_cluster2.tsv", sep = "\t"))[["x"]]
-hiv2_c3 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv2_cluster3.tsv", sep = "\t"))[["x"]]
-
-# HIV3_CSF
-hiv3_c1 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv3_cluster1.tsv", sep = "\t"))[["x"]]
-hiv3_c2 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv3_cluster2.tsv", sep = "\t"))[["x"]]
-hiv3_c3 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv3_cluster3.tsv", sep = "\t"))[["x"]]
-
-cluster_anno <- c(hiv1_c1, hiv1_c2, hiv1_c3, hiv2_c1, hiv2_c2, hiv2_c3, hiv3_c1, hiv3_c2, hiv3_c3)
-```
-
-
-
 ### TF gene expression of the 11 TFs with different activity between clusters
 
 ```{r}
@@ -1861,7 +1839,7 @@ p2 <- hivmy2@meta.data %>%
   theme(axis.text.x = element_text(angle = 45, vjust = 0.8, hjust = 1))
 
 fig <- ggarrange(p1, p2, ncol = 2, nrow = 1)
-annotate_figure(fig, top = text_grob("Quality of Clsuters"))
+annotate_figure(fig, top = text_grob("Quality of Clusters"))
 ```
 
 ## Housekeeping genes
@@ -1876,7 +1854,7 @@ interpretation.
 
 
 <details>
-*<summary>Boxplots of housekeeping gene expression</summary>*
+<summary>**Boxplots of housekeeping gene expression**</summary>
 
 ```{r}
 hk_genes <- (read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/HK_genes.txt"))[["V1"]]
@@ -1897,9 +1875,35 @@ hk_diff %>% head
 
 ```
 
-```{r, fig.width=15, fig.height=30}
-test <- hk_genes_filt[1:30]
-VlnPlot(hivmy2, features = test, group.by = "ht_cluster", ncol = 4)
+
+
+```{r, fig.width=15, fig.height=10}
+test <- hk_genes_filt[1:20]
+#VlnPlot(hivmy2, features = test, group.by = "ht_cluster", ncol = 4)
+
+df <- as.data.frame(t(as.matrix((hivmy2@assays$RNA@data)))) %>%
+  select(test) %>% 
+  rownames_to_column("cell") %>%
+  mutate(ht_cluster = case_when(cell %in% c(hiv1_c1, hiv2_c1, hiv3_c3) ~ "c1",
+                                TRUE ~ "c2")) %>%
+  column_to_rownames("cell")
+
+boxplot_list <- map(test, function(gene){
+  ggplot() +
+    geom_violin(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(gene), 
+                     fill = df %>% pull("ht_cluster"))) +
+    geom_boxplot(aes(x = df %>% pull("ht_cluster"), y = df %>% pull(gene)), 
+                 alpha = 0) +
+    stat_pvalue_manual(df %>% 
+                        pairwise_wilcox_test(as.formula(paste0(gene, " ~ ht_cluster"))) %>% 
+                         add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(gene)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
+
+
+do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))
 ```
 
 ---
@@ -1909,10 +1913,10 @@ VlnPlot(hivmy2, features = test, group.by = "ht_cluster", ncol = 4)
 
 ## Gene expression analysis of the two Myeloid2 subclusters
 
-#### TF from the Farhadian et al.
+#### TF from Farhadian et al.
 
-These TFs were used as marker genes for the microlgia like Myeloid2 cell cluster.
-Is there a group of cells which has a higher expression of these markers?
+These TFs were used as marker genes for the microlgia like Myeloid2 cell cluster
+[@Farhadian. Is there a group of cells which has a higher expression of these markers?
 No clear difference in gene expression can be seen.
 
 
@@ -1989,7 +1993,7 @@ VlnPlot(hivmy2, features = m1, group.by = "ht_cluster", ncol = 5)
 ---
 </details>
 
-#### Which of the 11 TFs are mentioned by Gosselin et al?
+#### Which of the 11 TFs are mentioned by Gosselin et al.?
 
 <details>
 <summary>TFs also mentioned by Gosselin et al.</summary>

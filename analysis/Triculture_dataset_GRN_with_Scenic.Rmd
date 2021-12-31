@@ -519,7 +519,7 @@ some TFs, for example CEBPB and MEF2C. For other TFs there is no difference
 between either infection status or treatment, for example CREB1 and ETS1.
 
 Yet, even though the effect of treatment is most prominent, some TFs are 
-additionally following the pattern of the footprinting. For example, RUNX3, CUX1, MEF2A, YY1 and MEF2C are more active uninfected cells than in infected cells, but more active in infected + EFZ cells than uninfected + EFZ cells. These TFs, therefore, follow the footprining pattern at least in the untreated conditon. Conversely, NFAT5, TCF7L2 and CEBPB are 
+additionally following the pattern of the footprinting. For example, RUNX3, CUX1, MEF2A, YY1 and MEF2C are more active in uninfected cells than in infected cells, but more active in infected + EFZ cells than uninfected + EFZ cells. These TFs, therefore, follow the footprining pattern at least in the untreated conditon. Conversely, NFAT5, TCF7L2 and CEBPB are 
 more active in infected than in uninfected cells, but more bound in uninfected +
 EFZ cells than in infected + EFZ cells. It is unclear why the patterns are contrary
 to each other between the treatment conditions. JUNB and NFYB are the only two 
@@ -617,12 +617,14 @@ tri_mg@meta.data %>%
 
 ## Correlation between TFs differentiating Myeloid2 clusters {.tabset}
 
-These TFs were differntially active between the three k-means clusters in
+These TFs were differentially active between the three k-means clusters in
 Myeloid2 cells from HIV-infected patients. Across three different patients
 they showed correlated changes in activity. YY1, ETS1 and REST were positively
 correlated with each other and negatively
 correlated with MEF2A, ETV6, JUNB, MEF2C, MXI1 and CEBPB. The pattern observed for the iMg from the triculture dataset does not
-resemble the pattern observed in Myeloid2 cells. 
+resemble the pattern observed in Myeloid2 cells. A suprising observation is that
+there is pairs of TFs which are highly correlated, for example ETS1 and ETV6 or 
+REST and CEBPB. 
 
 ### Correlation Matrix
 
