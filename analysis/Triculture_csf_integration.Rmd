@@ -3,6 +3,8 @@ title: "Analysis of Triculture dataset and integration with CSF/Blood dataset"
 author: "kmikulik"
 date: "28 12 2021"
 output: html_document
+bibliography: references.bib
+link-citations: yes
 ---
 
 <style>
