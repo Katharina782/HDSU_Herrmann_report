@@ -2,6 +2,8 @@
 title: "TF activity in myeloid2 cells"
 author: "Katharina Mikulik"
 output: html
+bibliography: references.bib
+link-citations: yes
 ---
 <style>
 body {
