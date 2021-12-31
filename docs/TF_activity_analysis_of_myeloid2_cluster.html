@@ -470,7 +470,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -479,7 +479,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -491,7 +491,7 @@ div.tocify {
 <strong>Last updated:</strong> 2021-12-31
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -507,12 +507,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -579,16 +579,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree3d3c73318704913e8bd8fd6101547ea25899045ftargetblank3d3c733a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/3d3c73318704913e8bd8fd6101547ea25899045f" target="_blank">3d3c733</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreedfcd540d3a574f3ad19196570abd4c6c51bd0aa3targetblankdfcd540a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/dfcd540d3a574f3ad19196570abd4c6c51bd0aa3" target="_blank">dfcd540</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree3d3c73318704913e8bd8fd6101547ea25899045ftargetblank3d3c733a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreedfcd540d3a574f3ad19196570abd4c6c51bd0aa3targetblankdfcd540a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/3d3c73318704913e8bd8fd6101547ea25899045f" target="_blank">3d3c733</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/dfcd540d3a574f3ad19196570abd4c6c51bd0aa3" target="_blank">dfcd540</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -607,11 +607,6 @@ Untracked files:
     Untracked:  rebuild-file.html
     Untracked:  rebuild-file_cache/
     Untracked:  rebuild-file_files/
-
-Unstaged changes:
-    Modified:   README.md
-    Modified:   analysis/Methods.Rmd
-    Modified:   analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd
 
 </code></pre>
 <p>
@@ -650,6 +645,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/dfcd540d3a574f3ad19196570abd4c6c51bd0aa3/analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd" target="_blank">dfcd540</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-31
+</td>
+<td>
+wflow_publish(all = TRUE, republish = TRUE, delete_cache = TRUE)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/dfcd540d3a574f3ad19196570abd4c6c51bd0aa3/docs/TF_activity_analysis_of_myeloid2_cluster.html" target="_blank">dfcd540</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-31
+</td>
+<td>
+wflow_publish(all = TRUE, republish = TRUE, delete_cache = TRUE)
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -6707,6 +6736,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/dfcd540d3a574f3ad19196570abd4c6c51bd0aa3/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-70-1.png" target="_blank">dfcd540</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-31
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/d0fdb768719231ff1aad5dbf5161957e35112d9c/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-70-1.png" target="_blank">d0fdb76</a>
 </td>
 <td>
@@ -6843,6 +6883,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/dfcd540d3a574f3ad19196570abd4c6c51bd0aa3/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-73-1.png" target="_blank">dfcd540</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-31
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/9597c36bc5a6df5f071249d97949566b2c7db870/docs/figure/TF_activity_analysis_of_myeloid2_cluster.Rmd/unnamed-chunk-73-1.png" target="_blank">9597c36</a>
@@ -7469,7 +7520,7 @@ other attached packages:
 [19] Seurat_4.0.5         forcats_0.5.0        stringr_1.4.0       
 [22] dplyr_1.0.7          purrr_0.3.4          readr_1.4.0         
 [25] tidyr_1.1.2          tibble_3.1.6         ggplot2_3.3.5       
-[28] tidyverse_1.3.0     
+[28] tidyverse_1.3.0      workflowr_1.6.2     
 
 loaded via a namespace (and not attached):
   [1] utf8_1.2.2            reticulate_1.22       tidyselect_1.1.1     
@@ -7485,42 +7536,41 @@ loaded via a namespace (and not attached):
  [31] clue_0.3-60           locfit_1.5-9.4        RVenn_1.1.0          
  [34] reshape_0.8.8         spatstat.utils_2.2-0  assertthat_0.2.1     
  [37] promises_1.2.0.1      scales_1.1.1          gtable_0.3.0         
- [40] globals_0.14.0        goftest_1.2-3         workflowr_1.6.2      
- [43] rlang_0.4.12          GlobalOptions_0.1.2   splines_4.0.2        
- [46] lazyeval_0.2.2        spatstat.geom_2.3-0   broom_0.7.2          
- [49] yaml_2.2.1            reshape2_1.4.4        abind_1.4-5          
- [52] modelr_0.1.8          backports_1.2.0       httpuv_1.6.3         
- [55] tools_4.0.2           ellipsis_0.3.2        spatstat.core_2.3-1  
- [58] BiocGenerics_0.36.1   ggridges_0.5.2        Rcpp_1.0.7           
- [61] plyr_1.8.6            classInt_0.4-3        rpart_4.1-15         
- [64] deldir_1.0-6          pbapply_1.5-0         GetoptLong_1.0.5     
- [67] cowplot_1.1.1         S4Vectors_0.28.1      zoo_1.8-9            
- [70] haven_2.3.1           cluster_2.1.0         fs_1.5.1             
- [73] magrittr_2.0.1        magick_2.5.2          scattermore_0.7      
- [76] openxlsx_4.2.3        lmtest_0.9-39         reprex_0.3.0         
- [79] RANN_2.6.1            whisker_0.4           fitdistrplus_1.1-6   
- [82] matrixStats_0.61.0    hms_1.1.1             patchwork_1.1.1      
- [85] mime_0.12             evaluate_0.14         xtable_1.8-4         
- [88] rio_0.5.16            readxl_1.3.1          IRanges_2.24.1       
- [91] shape_1.4.6           compiler_4.0.2        KernSmooth_2.23-18   
- [94] crayon_1.4.2          htmltools_0.5.2       mgcv_1.8-33          
- [97] later_1.3.0           lubridate_1.7.9.2     DBI_1.1.1            
-[100] dbplyr_2.0.0          MASS_7.3-53           sf_0.9-6             
-[103] car_3.0-10            cli_3.1.0             parallel_4.0.2       
-[106] igraph_1.2.9          pkgconfig_2.0.3       foreign_0.8-80       
-[109] plotly_4.9.2.1        spatstat.sparse_2.0-0 xml2_1.3.2           
-[112] foreach_1.5.1         rvest_0.3.6           digest_0.6.29        
-[115] sctransform_0.3.2     RcppAnnoy_0.0.19      spatstat.data_2.1-0  
-[118] rmarkdown_2.6         cellranger_1.1.0      leiden_0.3.5         
-[121] uwot_0.1.10           curl_4.3.2            shiny_1.7.1          
-[124] rjson_0.2.20          lifecycle_1.0.1       nlme_3.1-150         
-[127] jsonlite_1.7.2        carData_3.0-4         viridisLite_0.4.0    
-[130] fansi_0.5.0           pillar_1.6.4          GGally_2.0.0         
-[133] lattice_0.20-41       fastmap_1.1.0         httr_1.4.2           
-[136] survival_3.2-7        glue_1.6.0            zip_2.1.1            
-[139] png_0.1-7             iterators_1.0.13      class_7.3-17         
-[142] stringi_1.7.6         e1071_1.7-4           irlba_2.3.3          
-[145] future.apply_1.8.1   </code></pre>
+ [40] globals_0.14.0        goftest_1.2-3         rlang_0.4.12         
+ [43] GlobalOptions_0.1.2   splines_4.0.2         lazyeval_0.2.2       
+ [46] spatstat.geom_2.3-0   broom_0.7.2           yaml_2.2.1           
+ [49] reshape2_1.4.4        abind_1.4-5           modelr_0.1.8         
+ [52] backports_1.2.0       httpuv_1.6.3          tools_4.0.2          
+ [55] ellipsis_0.3.2        spatstat.core_2.3-1   BiocGenerics_0.36.1  
+ [58] ggridges_0.5.2        Rcpp_1.0.7            plyr_1.8.6           
+ [61] classInt_0.4-3        rpart_4.1-15          deldir_1.0-6         
+ [64] pbapply_1.5-0         GetoptLong_1.0.5      cowplot_1.1.1        
+ [67] S4Vectors_0.28.1      zoo_1.8-9             haven_2.3.1          
+ [70] cluster_2.1.0         fs_1.5.1              magrittr_2.0.1       
+ [73] magick_2.5.2          scattermore_0.7       openxlsx_4.2.3       
+ [76] lmtest_0.9-39         reprex_0.3.0          RANN_2.6.1           
+ [79] whisker_0.4           fitdistrplus_1.1-6    matrixStats_0.61.0   
+ [82] hms_1.1.1             patchwork_1.1.1       mime_0.12            
+ [85] evaluate_0.14         xtable_1.8-4          rio_0.5.16           
+ [88] readxl_1.3.1          IRanges_2.24.1        shape_1.4.6          
+ [91] compiler_4.0.2        KernSmooth_2.23-18    crayon_1.4.2         
+ [94] htmltools_0.5.2       mgcv_1.8-33           later_1.3.0          
+ [97] lubridate_1.7.9.2     DBI_1.1.1             dbplyr_2.0.0         
+[100] MASS_7.3-53           sf_0.9-6              car_3.0-10           
+[103] cli_3.1.0             parallel_4.0.2        igraph_1.2.9         
+[106] pkgconfig_2.0.3       foreign_0.8-80        plotly_4.9.2.1       
+[109] spatstat.sparse_2.0-0 xml2_1.3.2            foreach_1.5.1        
+[112] rvest_0.3.6           digest_0.6.29         sctransform_0.3.2    
+[115] RcppAnnoy_0.0.19      spatstat.data_2.1-0   rmarkdown_2.6        
+[118] cellranger_1.1.0      leiden_0.3.5          uwot_0.1.10          
+[121] curl_4.3.2            shiny_1.7.1           rjson_0.2.20         
+[124] lifecycle_1.0.1       nlme_3.1-150          jsonlite_1.7.2       
+[127] carData_3.0-4         viridisLite_0.4.0     fansi_0.5.0          
+[130] pillar_1.6.4          GGally_2.0.0          lattice_0.20-41      
+[133] fastmap_1.1.0         httr_1.4.2            survival_3.2-7       
+[136] glue_1.6.0            zip_2.1.1             png_0.1-7            
+[139] iterators_1.0.13      class_7.3-17          stringi_1.7.6        
+[142] e1071_1.7-4           irlba_2.3.3           future.apply_1.8.1   </code></pre>
 </div>
 </div>
 
