@@ -471,7 +471,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -480,7 +480,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -489,10 +489,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-01-07
+<strong>Last updated:</strong> 2022-01-08
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 5 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 2
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>report/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -508,12 +508,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -556,156 +556,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
-<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-The following chunks had caches available:
-<ul>
-<li>
-session-info-chunk-inserted-by-workflowr
-</li>
-<li>
-unnamed-chunk-1
-</li>
-<li>
-unnamed-chunk-10
-</li>
-<li>
-unnamed-chunk-11
-</li>
-<li>
-unnamed-chunk-12
-</li>
-<li>
-unnamed-chunk-13
-</li>
-<li>
-unnamed-chunk-14
-</li>
-<li>
-unnamed-chunk-15
-</li>
-<li>
-unnamed-chunk-16
-</li>
-<li>
-unnamed-chunk-17
-</li>
-<li>
-unnamed-chunk-18
-</li>
-<li>
-unnamed-chunk-19
-</li>
-<li>
-unnamed-chunk-2
-</li>
-<li>
-unnamed-chunk-20
-</li>
-<li>
-unnamed-chunk-21
-</li>
-<li>
-unnamed-chunk-22
-</li>
-<li>
-unnamed-chunk-23
-</li>
-<li>
-unnamed-chunk-24
-</li>
-<li>
-unnamed-chunk-25
-</li>
-<li>
-unnamed-chunk-26
-</li>
-<li>
-unnamed-chunk-27
-</li>
-<li>
-unnamed-chunk-28
-</li>
-<li>
-unnamed-chunk-29
-</li>
-<li>
-unnamed-chunk-3
-</li>
-<li>
-unnamed-chunk-30
-</li>
-<li>
-unnamed-chunk-31
-</li>
-<li>
-unnamed-chunk-32
-</li>
-<li>
-unnamed-chunk-33
-</li>
-<li>
-unnamed-chunk-4
-</li>
-<li>
-unnamed-chunk-40
-</li>
-<li>
-unnamed-chunk-42
-</li>
-<li>
-unnamed-chunk-47
-</li>
-<li>
-unnamed-chunk-48
-</li>
-<li>
-unnamed-chunk-49
-</li>
-<li>
-unnamed-chunk-5
-</li>
-<li>
-unnamed-chunk-50
-</li>
-<li>
-unnamed-chunk-51
-</li>
-<li>
-unnamed-chunk-53
-</li>
-<li>
-unnamed-chunk-54
-</li>
-<li>
-unnamed-chunk-56
-</li>
-<li>
-unnamed-chunk-59
-</li>
-<li>
-unnamed-chunk-6
-</li>
-<li>
-unnamed-chunk-60
-</li>
-<li>
-unnamed-chunk-61
-</li>
-<li>
-unnamed-chunk-7
-</li>
-<li>
-unnamed-chunk-8
-</li>
-<li>
-unnamed-chunk-9
-</li>
-</ul>
-<p>To ensure reproducibility of the results, delete the cache directory <code>Triculture_csf_integration_cache</code> and re-run the analysis. To have workflowr automatically delete the cache directory prior to building the file, set <code>delete_cache = TRUE</code> when running <code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
 </div>
 </div>
 </div>
@@ -724,16 +580,16 @@ unnamed-chunk-9
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef35ba45536a8b7546c4144a569fe908ce206aa4dtargetblankf35ba45a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/f35ba45536a8b7546c4144a569fe908ce206aa4d" target="_blank">f35ba45</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree270aca65f4da298bf474a0f567f84d05abd61650targetblank270aca6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/270aca65f4da298bf474a0f567f84d05abd61650" target="_blank">270aca6</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttreef35ba45536a8b7546c4144a569fe908ce206aa4dtargetblankf35ba45a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree270aca65f4da298bf474a0f567f84d05abd61650targetblank270aca6a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/f35ba45536a8b7546c4144a569fe908ce206aa4d" target="_blank">f35ba45</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/270aca65f4da298bf474a0f567f84d05abd61650" target="_blank">270aca6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -741,8 +597,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/Independent_cell_type_identification_Farhadian_dataset_cache/
-    Ignored:    analysis/Triculture_csf_integration_cache/
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  README.html
@@ -753,15 +607,6 @@ Untracked files:
     Untracked:  rebuild-file.html
     Untracked:  rebuild-file_cache/
     Untracked:  rebuild-file_files/
-
-Unstaged changes:
-    Modified:   analysis/Discussion.Rmd
-    Modified:   analysis/HIV_CSF_dataset_analysis.Rmd
-    Modified:   analysis/Introduction.Rmd
-    Modified:   analysis/TF_activity_analysis_of_myeloid2_cluster.Rmd
-    Modified:   analysis/Triculture_csf_integration.Rmd
-    Modified:   analysis/_site.yml
-    Modified:   analysis/references.bib
 
 </code></pre>
 <p>
@@ -800,6 +645,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/analysis/Triculture_csf_integration.Rmd" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+<td>
+wflow_publish(all = TRUE, delete_cache = TRUE)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/270aca65f4da298bf474a0f567f84d05abd61650/docs/Triculture_csf_integration.html" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+<td>
+wflow_publish(all = TRUE, delete_cache = TRUE)
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -2434,6 +2313,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-33-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-33-1.png" target="_blank">75af25c</a>
 </td>
 <td>
@@ -2523,6 +2413,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-36-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-36-1.png" target="_blank">75af25c</a>
@@ -2615,6 +2516,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-39-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-39-1.png" target="_blank">75af25c</a>
 </td>
 <td>
@@ -2692,6 +2604,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-41-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-41-1.png" target="_blank">75af25c</a>
@@ -2824,6 +2747,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-44-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-44-1.png" target="_blank">75af25c</a>
 </td>
 <td>
@@ -2903,6 +2837,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-45-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-45-1.png" target="_blank">75af25c</a>
 </td>
 <td>
@@ -2975,6 +2920,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-46-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-46-1.png" target="_blank">75af25c</a>
@@ -3083,6 +3039,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-48-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-48-1.png" target="_blank">75af25c</a>
 </td>
 <td>
@@ -3189,6 +3156,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-50-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-50-1.png" target="_blank">75af25c</a>
 </td>
 <td>
@@ -3237,6 +3215,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-51-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-51-1.png" target="_blank">75af25c</a>
@@ -3331,6 +3320,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-53-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-53-1.png" target="_blank">75af25c</a>
 </td>
 <td>
@@ -3401,6 +3401,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/Katharina782/report/blob/270aca65f4da298bf474a0f567f84d05abd61650/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-55-1.png" target="_blank">270aca6</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2022-01-08
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/Katharina782/report/blob/75af25c571d2f255bb408c63df6ee70c423b892a/docs/figure/Triculture_csf_integration.Rmd/unnamed-chunk-55-1.png" target="_blank">75af25c</a>
