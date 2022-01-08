@@ -117,7 +117,7 @@ more active in a group of Myeloid2 cells which are latently infected compared
 to a group of Myeloid2 cells which are uninfected. 
 
 Comparing the TFs from the TF activity matrix with the differentially
-bound TFs from the footprinting, twentyfour of the TFs overlap.
+bound TFs from the footprinting, 24 of the TFs overlap.
 
 Using less than 10,000 most highly variable genes as an input matrix for SCENIC 
 resulted in a lower number of TFs which overlap. Increasing the number of input 
@@ -176,15 +176,13 @@ top_tfs %>%
 
 # Compare TF activities between clusters and look for patterns
 
-Judging from the heatmaps below no TFs clearly separate the clusters or
+The heatmaps below were split into 3 separate heatmaps, one for each patient. Shown are
+the 24 TFs found by ATAC-seq footprinting as rows and cells as columns. Judging from the plots no TFs clearly separate the clusters or
 show a pattern of activity which is similar to the footprinting binding scores. 
 If the pattern was similar to the footprinting binding scores we would expect to
 see one cluster where REST, KLF4, PAX5 and MXI1 are upregulated. This cannot be
 seen in the plots below. 
 
-## Split Heatmap into 3 separate heatmaps according to the different patients {.tabset}
-
-### all 125 TFs
 
 ```{r}
 
@@ -200,38 +198,6 @@ la <- rowAnnotation(type_TF =
                                             "unknown" = "forestgreen")))
   
 ```
-
-
-```{r, fig.width=13, fig.height=14}
-# 3 heatmaps with all Scenic TFs
-ht_list <- map(seq.int(1:3), function(n) {
-  patients <- c ("HIV1_CSF", "HIV2_CSF", "HIV3_CSF") # 3 different patients
-  # filter the dataset for only Myeloid2 cells and iteratively one of the patients
-  df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
-                                  orig.ident == patients[n])
-  # select only the cells of the activity matrix which are myeloid2 and the correct patient
-  mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df),]
-  # heatmap
-  ht <- Heatmap(t(mtx), 
-               column_title = paste0("patient: ", patients[n]), 
-
-               column_km = 3,
-               #row_km = n, 
-               show_column_names = FALSE,
-               col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
-               show_row_names = TRUE
-               ) 
-               #top_annotation = column_annotation) 
-  list(name = patients[n], heatmap = ht)
-})
-
-
-ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap + la
-
-
-```
-
-### 24 TFs found by ATAC-seq footprinting
 
 ```{r, fig.width=13, fig.height=8}
 # 3 heatmaps, but only the TFs which overlap with Anas analysis
@@ -265,60 +231,47 @@ draw(ht_list, ht_gap = unit(1, "cm"))
 
 ## Different approaches
 
-The next idea was to cluster the Myeloid2 cells based on their TF activity using
-k-means clustering. To do this I performed k-means clustering on 
-Myeloid2 cells from patient one (HIV1_CSF) with k=3/4/5. The reason why I used only
-patient one was that the other two patients might be used for validation of the 
+We tried to cluster the Myeloid2 cells based on their TF activity using
+k-means clustering. To do this k-means clustering was performed on 
+Myeloid2 cells from patient one (HIV1_CSF) with k=3/4/5. The reason why only 
+patient one was used, is that the other two patients might be used for validation of the 
 clustering later on. If the clusters have a biological meaning, it should be 
 possible to transfer the clusters onto the Myeloid2 cells from patient2 
-(HIV2_CSF) and patient3 (HIV3_CSF).
-If the clusters also separate the Myeloid2 cells of the other two patients in 
-an interpretable and meaningful way this would validate that there is a biological meaning behind the clusters.
+(HIV2_CSF) and patient3 (HIV3_CSF). Also, if the clusters separate the Myeloid2 
+cells of the other two patients in an interpretable and meaningful way this
+would validate that there is a biological meaning behind the clusters.
 
-However, as we will see the label transfer of the cluster identities did not 
-work, probably due to the small sample size. There are only 146 in total in the 
-Myeloid2 cluster of infected patients.
+However, the label transfer of the cluster identities did not 
+work, probably due to the small sample size. There are only 146 cells in total in the 
+Myeloid2 cluster of infected patients. A more detailed description of this step
+and corresponding results can be found in the appendix under "Determine k for 
+k-means clustering" and "Transfer the cluster identities to patient2 and patient3".
 
-The alternative strategy was to perform independent k-means clustering 
-across all patients and compare the TF activities between clusters. 
-Can we find TF activities which differentiate clusters across patients and find
-correlations between clusters across patients?
-
-1. Determine k for k-means k-means clustering
-2. Transfer the cluster identities to patient2 and patient3
-3. K-means Clustering for all 3 patients separately
+Since the approach described did not yield any interesting results, an 
+alternative strategy was used, namely, performing independent k-means clustering
+across all patients and comparing the TF activities between clusters. 
+This way we might find TF activities which differentiate clusters across 
+patients and find correlations between clusters across patients.
 
 
-# 1. Determine k {.tabset}
 
-The plot of within cluster sum of squares shows that the sweet spot for the 
-value of k is somewhere between 3 and 5. To determine the best k for k-means
-clustering k = 3, k = 4 and k = 5 were tried and the different outcomes compared.
-Since k = 4 and k = 5 does not yield an increased number of TFs which differentiate
-the different clusters and, therefore, do not add any insights we proceeded with
-k = 3 in the following analysis.
+## K-means clustering with k = 3 {.tabset}
 
-```{r}
-df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
-                                    orig.ident == "HIV1_CSF")
-mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
+Using k = 3, k-means clustering was performed for all 3 patients separately. This
+way it might be possible to find TFs with different activities between the
+three clusters. The clusters in the heatmaps below look more sensible than the
+clusters observed after cluster label transfer (see appendix).
 
-# Decide on a k for clustering
-wss = sapply(2:15, function(k) {
-  kmeans(x = t(mtx), centers = k)$tot.withinss
-})
+Since the data is not normally distributed, the Kruskal-Wallis-Test is more
+appropriate than ANOVA. The Null-Hypothesis of the Kruskal-Wallis-Test is that 
+there is no difference between the groups. Since the test is repeated 125 times, 
+the p-values are adjusted with the
+FDR method. This methods is more powerful than more conservative methods, like
+Bonferroni, Holm or Hochberg. 
 
-plot(2:15, wss, type = "b", 
-     xlab = "Number of clusters k", 
-     ylab = "Total within-clusters sum of square")
-```
 
-The results of using differnet k can be seen below. Click on the tabs to see heatmaps of the k-means clustering, as well as statistical test on different TF
-acitivities between clusters.
+### Patient 1
 
-## k-means Clustering with k = 3
-
-### Heatmap for patient 1
 
 ```{r, fig.width=15, fig.height=17}
 #map(seq.int(1:5), function(k){
@@ -340,17 +293,25 @@ ht_pat1 <-draw(Heatmap(t(mtx),
              #top_annotation = column_annotation) 
 ```
 
+<details>
+<summary>**Kruskal_Wallis test & Pairwise-Wilcox test for Patient 1**</summary>
 
-After performing k-means cluster we extract the cells from each cluster. 
-In the table below you can see the number of cells in each cluster. 
+Performing Kruskal-Wallis-Test to find differences between the three clusters in
+patient one yields 64 TFs out of all 125 TFs which are differentially active 
+between the three clusters(p-value < 0.05). Of the 24 TFs with 
+differential binding scores in the C20 cell line, sixteen have significantly
+different activity between the clusters.
+
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other
+cluster/s, using Pairwise-Wilcox-Test, a non-parametric test. Again, because 
+we repeat the test we will correct for multiple hypothesis testing using the 
+FDR method. 
+
 
 ```{r}
 ### Extract cells from each cluster
 
-
-# if you draw the heatmap, the results of th eclustering will not change anymore
-#png("/media/ag-cherrmann/kmikulik/HIV_microglia/analysis/Myeloid2_cluster/Myeloid2_3clusters.png", width = 15, height = 17, res = 1200)
-#ht <- draw(ht_pat1)
 # get the columns names of cluster one
 c1 <- colnames(t(mtx[column_order(ht_pat1)[[1]],]))
 #write.table(c1, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster1.tsv", sep = "\t")
@@ -362,58 +323,8 @@ c2 <- colnames(t(mtx[column_order(ht_pat1)[[2]],]))
 # get the column names of cluster 3
 c3 <- colnames(t(mtx[column_order(ht_pat1)[[3]],]))
 #write.table(c3, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster3.tsv", sep = "\t")
-```
 
 
-#### number of cells in each cluster 
-
-```{r, results = "asis"}
-# summary staticstics
-hiv7_scenic@meta.data %>% 
-  rownames_to_column("cell") %>% 
-  filter(orig.ident == "HIV1_CSF",
-         cell_type == "Myeloid2",
-         cell %in% c(c1,c2,c3))%>% 
-  mutate(ht_cluster = case_when(cell %in% c1 ~ "c1", 
-                                cell %in% c2 ~ "c2",
-                                cell %in% c3 ~ "c3")) %>%
-  group_by(ht_cluster) %>% 
-  summarize(count = n()) %>% 
-  kable(caption = "number of cells in each cluster")
-
-```
-
-#### Are there significant differences in TF activity between the three clusters?
-
-
-The ANOVA test is parametric and assumes normally distributed data, while
-Kruskal-Wallis-Test compares the mean of one or more groups, but is 
-non-parametric. Since the data is not normally 
-distributed in this case, the Kruskal-Wallis-Test is more appropriate.
-The Null-Hypothesis of the Kruskal-Wallis-Test is that there is no difference
-between the groups.
-
-Since the test is repeated 125 times, the p-values are adjusted with the
-FDR method. This methods is more powerful than more conservative methods, like
-Bonferroni, Holm or Hochberg. 
-
-Performing Kruskal-Wallis-Test to find differences between the three clusters in patient one yields 54 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the twentyfour TFs with differential binding scores in the C20 cell line, sixteen have significantly different activity between the clusters.
-
-Now that it is known that there are significant differences between clusters, 
-the next step is to identify which cluster/s are different from which other cluster/s.
-
-Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because 
-we repeat the test we will correct for multiple hypothesis testing using the 
-FDR method. The results are shown in boxplots below.
-
-</details>
-
-<details> 
-<summary>Kruskal-Wallis-Test, p-value adjustment, posthoc tests</summary>
-
-**Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
-
-```{r}
 # non-parametric alternative to ANOVA -> Kruskal_wallis test
 k3_df <- hiv7_scenic@meta.data %>% 
   rownames_to_column("cell") %>% 
@@ -428,11 +339,7 @@ p_values <- map(seq.int(1:125), function(n){
   #list(tf = tf, p_value = p_values)
 })
 
-# plot distribution of p_values
-hist(as.numeric(unname(unlist(p_values))), 
-     main = "distribution of p_values",
-     xlab = "p_values",
-     breaks = 20)
+
 
 # adjust for multiple testing with FDR
 adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
@@ -446,12 +353,11 @@ length(adj_p_values[adj_p_values<0.05])
 hiv1_diff <- colnames(auc_mtx)[adj_p_values < .05]
 
 #write.table(diff3, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1")
-```
-
-* **Kruskal-Wallis test and p-value adjustment  for 24 TFs also identified by ATAC-seq**
 
 
-```{r}
+
+## 24 TFs also identified by ATAC-se
+
 # check 24 TFs with Kruskal Wallis test
 p_values <- map(seq.int(1:24), function(n){
   tf <- overlap_atac$name[n]
@@ -469,14 +375,7 @@ length(adj_p_values[adj_p_values<0.05])
 # get TFs that are differentially expressed
 hiv1_atac <- overlap_atac$name[adj_p_values < .05]
 #write.table(diff3_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1")
-```
 
-* **Posthoc tests for k = 3**
-
-
-The posthoc test was performed for the 16 TFs with significantly different activity between the 3 clusters.
-
-```{r, warning = FALSE}
 # We perform a posthoc test
 #wilcox_list = list()
 wilcox_list <- map(seq.int(1:length(hiv1_atac)), function(i){
@@ -496,642 +395,8 @@ wilcox_list <- map(seq.int(1:length(hiv1_atac)), function(i){
 
 ---
 
-## K-means clustering with k = 4
-
-### Heatmap for patient 1
-
-```{r, fig.width=15, fig.height=17}
-#map(seq.int(1:5), function(k){
-df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
-                                  orig.ident == "HIV1_CSF")
-# select only the cells of the activity matrix which are myeloid2 and the correct patient
-mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
-# heatmap
-set.seed(123)
-ht <- draw(Heatmap(t(mtx), 
-             column_title = "Myeloid2 cells from patient 2, k = 4", 
-
-             column_km = 4,
-             column_km_repeats = 100,
-             show_column_names = FALSE,
-             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
-             right_annotation = la
-             )) 
-             #top_annotation = column_annotation) 
-
-
-```
-
-
-```{r}
-### Extract cells from each cluster of k = 4
-
-# get the columns names of cluster one
-cl1 <- colnames(t(mtx[column_order(ht)[[1]],]))
-
-# get the column names of cluster two
-cl2 <- colnames(t(mtx[column_order(ht)[[2]],]))
-
-
-# get the column names of cluster 3
-cl3 <- colnames(t(mtx[column_order(ht)[[3]],]))
-
-cl4 <- colnames(t(mtx[column_order(ht)[[4]],]))
-```
-
-
-```{r, results = "asis"}
-# summary staticstics
-hiv7_scenic@meta.data %>% 
-  rownames_to_column("cell") %>% 
-  filter(orig.ident == "HIV1_CSF",
-         cell_type == "Myeloid2",
-         cell %in% c(c1,c2,c3)) %>% 
-  mutate(ht_cluster = case_when(cell %in% cl1 ~ "c1", 
-                                cell %in% cl2 ~ "c2",
-                                cell %in% cl3 ~ "c3",
-                                cell %in% cl4 ~ "c4")) %>% 
-  group_by(ht_cluster) %>% 
-  summarize(count = n()) %>% 
-  kable(caption = "number of cells in each cluster")
-
-```
-
-#### Are there significant differences in TF activity between the four clusters?
-
-
-Performing Kruskal-Wallis-Test to find differences between the four clusters in patient one yields 51 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the twentyfour TFs with differential binding scores in the C20 cell line, fourteen have significantly different activity between the clusters.
-
-Now that it is known that there are significant differences between clusters, 
-the next step is to identify which cluster/s are different from which other 
-cluster/s. For this pairwise Wilcox test was used.
-
-
-</details>
-
-<details> 
-<summary>Kruskal-Wallis-Test, p-value adjustment, posthoc tests</summary>
-
-* **Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
-
-```{r}
-
-k4_df <- hiv7_scenic@meta.data %>% 
-  rownames_to_column("cell") %>% 
-  filter(orig.ident == "HIV1_CSF",
-         cell_type == "Myeloid2",
-         cell %in% c(cl1,cl2,cl3,cl4)) %>% 
-  mutate(ht_cluster = ifelse(cell %in% cl1, "cl1", 
-                             ifelse(cell %in% cl2, "cl2", 
-                                    ifelse(cell %in% cl3, "cl3", "cl4"))))
-
-# check all TFs 
-p_values <- map(seq.int(1:125), function(n){
-  tf <- colnames(auc_mtx)[n]
-  p_values <- unlist(kruskal.test(pull(k4_df[tf]) ~ ht_cluster, k4_df))["p.value"]
-  #list(tf = tf, p_value = p_values)
-})
-
-# adjust for multiple testing with FDR
-adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
-
-# how many transcription factors are significantly different between the clusters?
-sign <- adj_p_values[adj_p_values < 0.05]
-length(adj_p_values[adj_p_values<0.05])
-
-
-# get the TFs that are differentially expressed
-diff4 <- colnames(auc_mtx)[adj_p_values < 0.05]
-
-#write.table(diff4, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=4")
-
-```
-
-* **Kruskal-Wallis Test and p-value adjustments for 14 TFs with differential binding scores**
-
-
-```{r}
-# check 24 TFs with Kruskal Wallis test
-p_values <- map(seq.int(1:24), function(n){
-  tf <- overlap_atac$name[n]
-  p_values <- unlist(kruskal.test(pull(k4_df[tf]) ~ ht_cluster, k4_df))["p.value"]
-})
-#sign_p_values <- p_values[p_values < 0.01]
-
-# adjust for multiple hypothesis testing
-adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
-
-
-# how many transcription factors are significantly different between the clusters?
-length(adj_p_values[adj_p_values<0.05])
-
-# get the TFs that are differentially expressed
-diff4_atac <- overlap_atac$name[adj_p_values < .05]
-
-#write.table(diff4_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=4")
-
-```
-
-* **Pairwise-Wilcox_Test for k = 4**
-
-Posthoc test for the 16 TFs with significantly different activity between the four clusters.
-
-```{r, warning = FALSE}
-# We perform a posthoc test
-#wilcox_list = list()
-wilcox_list <- map(seq.int(1:length(diff4_atac)), function(i){
-  tf <- diff4_atac[i]
-  print(tf)
-  wilcox <- pairwise.wilcox.test(pull(k4_df[tf]), pull(k4_df["ht_cluster"]), 
-                                 p.adjust.method = "fdr")
-  list(TF = tf, wilcox = wilcox)
-})
-  
-#length(wilcox_list)
-#wilcox_list
-```
----
-</details>
-
----
-
-## K-means Clustering with k = 5
-
-### Heatmap for patient 1
-
-```{r, fig.width=15, fig.height=17}
-#map(seq.int(1:5), function(k){
-df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
-                                  orig.ident == "HIV1_CSF")
-# select only the cells of the activity matrix which are myeloid2 and the correct patient
-mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
-# heatmap
-set.seed(123)
-ht <- draw(Heatmap(t(mtx), 
-             column_title = "Myeloid2 cells from patient 1, k = 5", 
-
-             column_km = 5,
-             column_km_repeats = 100,
-             show_column_names = FALSE,
-             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
-             right_annotation = la
-             )) 
-
-```
-
-
-```{r}
-##### Extract cells from each cluster for k= 5
-
-# get the columns names of cluster one
-clu1 <- colnames(t(mtx[column_order(ht)[[1]],]))
-
-# get the column names of cluster two
-clu2 <- colnames(t(mtx[column_order(ht)[[2]],]))
-
-
-# get the column names of cluster 3
-clu3 <- colnames(t(mtx[column_order(ht)[[3]],]))
-
-clu4 <- colnames(t(mtx[column_order(ht)[[4]],]))
-
-clu5 <- colnames(t(mtx[column_order(ht)[[5]], ]))
-
-```
-
-
-```{r, results = "asis"}
-# summary staticstics
-hiv7_scenic@meta.data %>% 
-  rownames_to_column("cell") %>% 
-  filter(orig.ident == "HIV1_CSF",
-         cell_type == "Myeloid2",
-         cell %in% c(c1,c2,c3)) %>% 
-  mutate(ht_cluster = case_when(cell %in% clu1 ~ "c1", 
-                                cell %in% clu2 ~ "c2",
-                                cell %in% clu3 ~ "c3",
-                                cell %in% clu4 ~ "c4",
-                                cell %in% clu5 ~ "c5")) %>% 
-  group_by(ht_cluster) %>% 
-  summarize(count = n()) %>% 
-  kable(caption = "number of cells in each cluster")
-
-```
-
-#### Are there significant differences in TF activity between the four clusters?
-
-Performing Kruskal-Wallis-Test to find differences between the four clusters in patient one yields 59 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the twentyfour TFs with differential binding scores in the C20 cell line, fifteen have significantly different activity between the clusters.
-
-Now that it is known that there are significant differences between clusters, 
-the next step is to identify which cluster/s are different from which other 
-cluster/s. For this pairwise Wilcox test was used.
-
-
-</details>
-
-<details> 
-<summary>Kruskal-Wallis-Test, p-value adjustment, posthoc tests</summary>
-
-* **Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
-
-```{r}
-# all TFs
-k5_df <- hiv7_scenic@meta.data %>% 
-  rownames_to_column("cell") %>% 
-  filter(orig.ident == "HIV1_CSF",
-         cell_type == "Myeloid2",
-         cell %in% c(clu1,clu2,clu3,clu4, clu5)) %>% 
-  mutate(ht_cluster = ifelse(cell %in% clu1, "clu1", 
-                             ifelse(cell %in% clu2, "clu2", 
-                                    ifelse(cell %in% clu3, "clu3",
-                                           ifelse(cell %in% clu4, "clu4", "clu5")))))
-n = 1
-# check all TFs 
-p_values <- map(seq.int(1:125), function(n){
-  tf <- colnames(auc_mtx)[n]
-  p_values <- unlist(kruskal.test(pull(k5_df[tf]) ~ ht_cluster, k5_df))["p.value"]
-  #list(tf = tf, p_value = p_values)
-})
-
-# adjust for multiple testing with FDR
-adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
-
-# how many transcription factors are significantly different between the clusters?
-sign <- adj_p_values[adj_p_values < 0.05]
-length(adj_p_values[adj_p_values<0.05])
-
-
-# get the TFs that are differentially expressed
-diff5 <- colnames(auc_mtx)[adj_p_values < 0.05]
-
-#write.table(diff5, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=5")
-```
-
-* **Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
-
-```{r}
-# check 24 TFs with Kruskal Wallis test
-p_values <- map(seq.int(1:24), function(n){
-  tf <- overlap_atac$name[n]
-  p_values <- unlist(kruskal.test(pull(k5_df[tf]) ~ ht_cluster, k5_df))["p.value"]
-})
-#sign_p_values <- p_values[p_values < 0.01]
-
-# adjust for multiple hypothesis testing
-adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
-
-
-# how many transcription factors are significantly different between the clusters?
-length(adj_p_values[adj_p_values<0.05])
-
-# get the TFs that are differentially expressed
-diff5_atac <- overlap_atac$name[adj_p_values < .05]
-
-#write.table(diff5_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=5")
-```
-
-* **Pairwise-Wilcox_Test for k = 5**
-
-Posthoc test for the 15 TFs with significantly different activity between the four clusters.
-
-```{r, warning = FALSE}
-# We perform a posthoc test
-#wilcox_list = list()
-wilcox_list <- map(seq.int(1:length(diff5_atac)), function(i){
-  tf <- diff5_atac[i]
-  print(tf)
-  wilcox <- pairwise.wilcox.test(pull(k5_df[tf]), pull(k5_df["ht_cluster"]), 
-                                 p.adjust.method = "fdr")
-  list(TF = tf, wilcox = wilcox)
-})
-  
-#length(wilcox_list)
-#wilcox_list
-```
-
----
-</details>
-
----
-
-
-## Which Clusters are significantly different for different k? {.tabset}
-
-The results from the statistical tests on difference in TF activity between
-clusters can be seen in the boxplots below. Sixteen, fourteen and twelve TFs
-were found to be differentially active between the clusters for k equal three, 
-four and five respectively. The boxplots below also show very nicely, that 
-the data are not normally distributed and, therefore, non-parametric tests, 
-like the Kruskal-Wallis-Test and pairwise Wilcox-Test were used.
-
-
-### k = 3
-
-```{r, fig.height=20, fig.width=25}
-
-test <- k3_df
-#tf.oi <- c("CTCF", "REST", "YY1")
-#names(tf.oi) <- tf.oi
-test.list <- map(hiv1_atac, function(tf) {
-  ggplot() +
-  geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
-                   fill = test %>% pull("ht_cluster"), alpha = .6)) +
-  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
-               alpha = 0) +
-  stat_pvalue_manual(test %>% 
-    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
-      add_xy_position()) +
-    xlab("heatmap cluster") +
-    ylab(paste0(tf)) +
-    guides(fill = guide_legend(title = "heatmap cluster")) })
-
-do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 4))
-```
-
-### k = 4
-
-```{r, fig.width=25, fig.height=15}
-
-test <- k4_df
-
-test.list <- map(diff4_atac, function(tf) {
-  ggplot() +
-  geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
-                   fill = test %>% pull("ht_cluster"), alpha = .6)) +
-  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
-               alpha = 0) +
-  stat_pvalue_manual(test %>% 
-    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
-      add_xy_position()) +
-    xlab("heatmap cluster") +
-    ylab(paste0(tf)) +
-    guides(fill = guide_legend(title = "heatmap cluster")) +
-    geom_violin(alpha = 0)
-})
-
-do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
-
-
-```
-
-
-### k = 5
-```{r, fig.width=25, fig.height=15}
-test <- k5_df
-
-test.list <- map(diff5_atac, function(tf) {
-  ggplot() +
-  geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
-                   fill = test %>% pull("ht_cluster"), alpha = .6)) +
-  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
-               alpha = 0) +
-  stat_pvalue_manual(test %>% 
-    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
-      add_xy_position()) +
-    xlab("heatmap cluster") +
-    ylab(paste0(tf)) +
-    guides(fill = guide_legend(title = "heatmap cluster"))
-})
-
-do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
-```
-
----
-
-## Conclusion on how many k's to use for k-means clustering
-
-As mentioned, k = 3 was used for the subsequent analysis, since more clusters 
-did not add additional insights.
-
-The Venn diagram below shows very nicely, that out of all TFs with different
-activity between clusters, 68% overlap for all k (k=3/4/5) that I tested (right plot). 
-75% of the TF with differential binding scores in the C20 cell line overlapped
-for all k (left plot). 
-
-Therefore, I decided to proceed with 
-k = 3 for the following analysis. 
-
-```{r}
-diff5_atac <- as.vector(read.table( "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=5"))[["x"]]
-diff5 <- as.vector(read.table( "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=5"))[["x"]]
-
-
-diff4_atac <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=4"))[["x"]]
-
-diff4 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=4"))[["x"]]
-# list of TFs from ATAC-seq differntially active between the 3 heatmap 
-#clusters from patient 1
-diff3_atac <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1"))[["x"]]
-
-# list of TFs differntially active between the 3 heatmap clusters from patient 1
-diff3 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1"))[["x"]]
-```
-
-
-```{r, fig.width = 12}
-p1 <- ggVennDiagram(list(diff3_atac, diff4_atac, diff5_atac),
-              label_alpha = 0,
-              category.names= c("k = 3", "k = 4", "k = 5"),
-              #set.size = 20,
-              label = "percent",
-              label_size = 6) +
-   scale_fill_distiller(palette = "RdBu") +
-  labs(title = "TFs with differential binding scores in C20 cell line")
-  #scale_fill_gradient (low = "lightblue", high = "darkblue")
-
-p2 <- ggVennDiagram(list(diff3, diff4, diff5),
-              label_alpha = 0,
-              category.names= c("k = 3", "k = 4", "k = 5"),
-              label = "percent",
-              label_size = 6) +
-   scale_fill_distiller(palette = "RdBu") +
-  labs(title = "all TFs with different activity")
-
-fig <- ggarrange(p1, p2, ncol = 2, nrow = 1)
-annotate_figure(fig, top = text_grob("TFs with significantly different activity  between clusters for different k", size = 20))
-```
-
-
-
-# 2. Transfer cluster identitites 
-
-The cluster identities from patient 1 were transferred to patient 2 and patient 3
-to assign each cell to one of the 3 clusters. 
-
-
-<details>
-<summary>**Cluster annotation using an integrated referenc**</summary>
-
-Label Transfer
-
-Here we do not integrate the datasets beforehand and we do not modify the query
-expression data.
-
-```{
-Idents(hiv7) <- "cell_type"
-hiv <- subset(hiv7, idents = "Myeloid2")
-
-# the cell type is replaced by the heatmap cluster
-hiv1_my2 <- subset(hiv7, cells = c(c1,c2,c3))
-
-clusters <- (
-  hiv1_my2@meta.data %>% 
-  rownames_to_column("cell") %>% 
-  mutate(ht_cluster = ifelse(cell %in% c1, "c1", ifelse(cell %in% c2, "c2", "c3"))) %>% 
-  column_to_rownames("cell"))["ht_cluster"]
-
-hiv <- AddMetaData(hiv, metadata = clusters, col.name = "cell_type")
-
-# the seurat_cluster number is replaced by the number of the heatmap cluster
-seurat_clusters <- (
-  hiv1_my2@meta.data %>% 
-  rownames_to_column("cell") %>% 
-  mutate(ht_cluster = ifelse(cell %in% c1, 1, ifelse(cell %in% c2, 2, 3))) %>% 
-  column_to_rownames("cell"))["ht_cluster"]
-
-hiv <- AddMetaData(hiv, metadata = seurat_clusters, col.name = "seurat_clusters")
-
-
-# split the object according to the patients
-hiv_list <- SplitObject(hiv, split.by = "orig.ident")[3:5]
-# normalize each object
-for (i in names(hiv_list)) {
-    hiv_list[[i]] <- SCTransform(hiv_list[[i]], verbose = FALSE)
-}
-
-
-# patient 2 and patient 3 are our query datasets
-query <-merge(hiv_list[[1]], hiv_list[[3]])
-reference <- hiv_list[[2]]
-reference <- RunPCA(reference, 
-                    # by default a partial PCA is run, but we compute mostgular values -> run standard SVD instead
-                    approx = FALSE, 
-                    verbose = FALSE)
-
-hiv_anchors <- FindTransferAnchors(reference = reference,
-                                   query = query, 
-                                   dims = 1:30, verbose = FALSE,
-                                   k.filter = NA, 
-                                   reference.reduction = "pca",
-                                   normalization.method = "SCT",
-                                   reduction = "pcaproject")
-
-predictions <- TransferData(anchorset = hiv_anchors, 
-                            refdata = reference$cell_type,
-                            k.weight = 34, dims = 1:30, verbose = FALSE)
-
-query <- AddMetaData(query, metadata = predictions)
-
-
-hiv2 <- subset(query, orig.ident == "HIV2_CSF")
-hiv3 <- subset(query, orig.ident == "HIV3_CSF")
-#saveRDS(hiv2,"/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv2_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
-#saveRDS(hiv3, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv3_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
-```
-Now that we have transferred the cluster identitities to patient2 and patient3
-and saved the results in two separate Seurat objects, we can add the TF activity 
-score to the metadata of each patient.
-
-```{r}
-hiv2 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv2_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
-hiv3 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv3_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
-
-hiv2_scenic <- AddMetaData(hiv2, metadata = auc_mtx,
-                           col.name = colnames(auc_mtx))
-hiv3_scenic <- AddMetaData(hiv3, metadata = auc_mtx,
-                           col.name = colnames(auc_mtx))
-```
-
----
-</details>
-
-## Predicted cluster labels
-
-The heatmaps below show the predicted clusters from label transfer for
-patient 2 and patient 3
-
-The clusters obtained after transferring the cluster identities from patient 1 to
-patient2 do not seem to be very good at separating cells according to TF activity.
-
-When you transfer the cluster identities from patient1 to patient3 all cells, but
-one, are assigned to cluster1. This shows that the label transfer did not work 
-very well. This is probably due to the low number of Myeloid2 cells in each sample.
-
-```{r, fig.width=15, fig.height=17}
-cluster_anno <- as.data.frame(hiv2$predicted.id)
-
-#map(seq.int(1:5), function(k){
-df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
-                                  orig.ident == "HIV2_CSF")
-# select only the cells of the activity matrix which are myeloid2 and the correct patient
-mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
-# heatmap
-set.seed(123)
-ht_hiv2_label <- Heatmap(t(mtx), 
-             column_title = "Predicted Clusters from Label Transfer for HIV2_CSF",             
-             column_title_gp = gpar(fontsize = 15),
-             column_split = paste0("cluster", hiv2$predicted.id),#cluster_anno,
-             #column_km = 4,
-             #column_km_repeats = 100,
-             show_column_names = FALSE,
-             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
-             right_annotation = la,
-             top_annotation = HeatmapAnnotation(df = cluster_anno, name = "predicted cluster")
-             ) 
-             #top_annotation = column_annotation) 
-```
-
-
-```{r, fig.width=15, fig.height=17}
-cluster_anno <- as.data.frame(hiv3$predicted.id)
-
-#map(seq.int(1:5), function(k){
-df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
-                                  orig.ident == "HIV3_CSF")
-# select only the cells of the activity matrix which are myeloid2 and the correct patient
-mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
-# heatmap
-set.seed(123)
-ht_hiv3_label <- Heatmap(t(mtx), 
-             column_title = "Predicted clusters from Label Transfer for HIV3_CSF", 
-             column_title_gp = gpar(fontsize = 15),
-             column_split = paste0("cluster", hiv3$predicted.id),#cluster_anno,
-             #column_km = 4,
-             #column_km_repeats = 100,
-             show_column_names = FALSE,
-             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
-             right_annotation = la,
-             top_annotation = HeatmapAnnotation(df = cluster_anno, name = "predicted cluster")
-             ) 
-             #top_annotation = column_annotation) 
-
-```
-
-```{r, fig.width=15, fig.height=20}
-ht_list <- ht_hiv2_label + ht_hiv3_label
-draw(ht_list, ht_gap= unit(2, "cm"))
-```
-
-
-
-# 3. Independent Clustering 
-
-Since the label transfer of the 3 cluster identities from patient1 did not seem
-to work very well, we next tried to perform k-means clustering using k = 3
-for all 3 patients separately. This way we might be able to see if the TF
-activities in the 3 clusters show similar patterns across the different patients.
-
-In the two heatmaps below the clusters look more sensible than the clusters
-observed after cluster label transfer.
-
-## k = 3 {.tabset}
 
 ### Patient 2
-
-#### K-means clustering with k = 3 for patient 2 
-
-##### 1. Draw Heatmap for Patient 2
-
 
 ```{r, fig.width=15, fig.height=20}
 #map(seq.int(1:5), function(k){
@@ -1157,7 +422,22 @@ ht_pat2 <- draw(ht2)
 
 ```
 
-##### 2. Kruskal_Wallis Test Patient 2 
+
+<details>
+<summary>**Kruskal_Wallis test & Pairwise-Wilcox test for Patient 2**</summary>
+
+
+Performing Kruskal-Wallis-Test to find differences between the three clusters in
+patient two yields 71 TFs out of all 125 TFs which are differentially active 
+between the three clusters(p-value < 0.05). Of the 24 TFs with 
+differential binding scores in the C20 cell line, nineteen have significantly
+different activity between the clusters.
+
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other
+cluster/s, using Pairwise-Wilcox-Test, a non-parametric test. Again, because 
+we repeat the test we will correct for multiple hypothesis testing using the 
+FDR method. 
 
 ```{r}
 # extract the cells from the 3 clusters 
@@ -1214,12 +494,13 @@ length(adj_p_values[adj_p_values<0.05])
 # get the TFs that are differentially expressed
 hiv2_atac <- overlap_atac$name[adj_p_values < .05]
 ```
+---
+</details>
+
+---
+
 
 ### Patient 3
-
-#### K-means clustering with k = 3 for patient 3
-
-##### 1. Draw Heatmap for Patient 3
 
 ```{r, fig.width=15, fig.height=20}
 df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
@@ -1243,8 +524,20 @@ ht3 <- Heatmap(t(mtx),
 ht_pat3 <- draw(ht3)
 ```
 
+<details>
+<summary>**Kruskal_Wallis test & Pairwise-Wilcox test for Patient 3**</summary>
 
-##### 2. Kruskal-Wallis test Patient 3
+Performing Kruskal-Wallis-Test to find differences between the three clusters in
+patient three yields 66 TFs out of all 125 TFs which are differentially active 
+between the three clusters(p-value < 0.05). Of the 24 TFs with 
+differential binding scores in the C20 cell line, eighteen have significantly
+different activity between the clusters.
+
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other
+cluster/s, using Pairwise-Wilcox-Test, a non-parametric test. Again, because 
+we repeat the test we will correct for multiple hypothesis testing using the 
+FDR method. 
 
 ```{r}
 # extract the cells from the 3 clusters 
@@ -1301,11 +594,12 @@ length(adj_p_values[adj_p_values<0.05])
 # get the TFs that are differentially expressed
 hiv3_atac <- overlap_atac$name[adj_p_values < .05]
 ```
+---
+</details>
 
+---
 
 ### comparison between all 3 patients
-
-##### Heatmaps of k-means clustering with k = 3 for all three patients
 
 ```{r, fig.width=15, fig.height=17}
 # patient 1
@@ -1339,28 +633,20 @@ draw(ht_list, ht_gap= unit(2, "cm"),
 
 # Different activities between clusters
 
-Which TFs show significantly different activity between the clusters across 
-patients? Since the independent k-means clustering for all three patients yields 
-clusters which look more reasonable, we will compare the three clusters we obtain 
-across the three patients to see if there is a pattern between them. 
+The three clusters obtained with k-means clustering for all three patients
+separately were compared to see if there is a pattern in TF activity that
+can be found in all three patients. The question was if the same group of TFs 
+characterize the three 
+clusters in all three patients or if they are different. To answer this question,
+Kruskal-Wallis-Test was used to determine the TFs which are significantly 
+different between clusters and then a pairwise Wilcox test was used to determine
+which clusters are different. 
 
-We already saw that there are a few TFs which show significantly different
-activity between the clusters in patient1.
-
-Next, we want to see if the same group of TFs characterize the three 
-clusters in all three patients or if they are different. 
-We will test which TFs are significantly different between clusters and then
-use a pairwise Wilcox test to determine which clusters are different.
-
-
-### Are TFs differentiating the three clusters similar across all three patients?
-
-In the Venn diagram below it can be seen that 46 with significantly different
-activities between clusters overlap across patients.
-
-Additionally, eleven of the TFs found to have differential binding scores between
-infection conditions in C20 microglia cell line show different activity between the 
-three clusters across all patients. These are the TFs we are most interested in,
+In the Venn diagram below it can be seen that 46 TFs with significantly different
+activities between clusters overlap between patients (see figure, left). Additionally,
+eleven of the TFs found to have differential binding scores between
+infection conditions in C20 microglia cell line overlap between patients
+(see figure, right). These eleven TFs are the ones we are most interested in,
 since we want to see if we can find patterns that correlate with the binding 
 scores in C20 microglia.
 
@@ -1372,7 +658,7 @@ p1 <- ggVennDiagram(list(hiv1_diff, diff_hiv2, diff_hiv3),
               label = "count",
               label_size = 6) +
    scale_fill_distiller(palette = "RdBu") +
-  labs(title = "TFs with different activity between 3 clusters")
+  labs(title = "All TFs with different activity")
 ```
 
 ```{r}
@@ -1383,7 +669,7 @@ p2 <- ggVennDiagram(list(hiv1_atac, hiv2_atac, hiv3_atac),
               label = "count",
               label_size = 6) +
    scale_fill_distiller(palette = "RdBu") +
-  labs(title = "TFs with different activity between 3 clusters")
+  labs(title = "TFs with differential binding scores")
 ```
 
 ```{r}
@@ -1394,7 +680,10 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 ## Eleven TFs with different activities {.tabset}
 
 In the boxplots below it can be seen that in all three patients there seems to
-be one cluster which is different from two other clusters. 
+be one cluster which is different from two other clusters. It seems that ETS1, 
+REST, and YY1 are more active in clusters where all other TFs are less active and
+vice versa. All three TFs are repressors, however, this alone does not explain their 
+correlation, because for example KLF4 and MXI1 are also repressors.
 
 ```{r}
 intersect <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/intersect_TFs_different_across_patients_3_clusters")[["x"]]
@@ -1520,19 +809,34 @@ CTCF has been implicated to regulate HIV latency [@Jeffereys]. In the boxplots
 below it can be seen that there is a significant difference between the first 
 cluster and the other two clusters in patient1 and patient2. Similarly in 
 patient3 there is a difference, however the difference is not as significant.
-This might imply that cluster contains a group of cells which are latently 
-infected and therefore CTCF is more active.
+This might imply that the cluster contains a group of cells which are latently 
+infected and, therefore, CTCF is more active.
 
 ```{r, fig.width=15, fig.height=5}
 ggarrange(ctcf1, ctcf2, ctcf3, ncol = 3, nrow = 1)
 ```
 
 
-## Correlations between clusters across patients
+## Correlation between clusters 
 
-Using a correlation matrix we can visualize how clusters are correlated across
-patients:
+The average TF activity of all 125 TFs was computed for every cluster. Based on 
+the average TF activity in each cluster, the correlation between clusters was 
+computed. The scatter plot below shows the average expression for each TF across all 
+three clusters in all three patients and the  corresponding correlation 
+coefficients. The correlation matrix visualizes the Spearman correlation 
+coefficient between all clusters. Black numbers indicate the not-significant 
+p-values. Clusters two and three of all patients seem to be highly 
+correlated, with cluster two of patient3 being the exception. Clusters one of 
+patient2 and patient3 are highly correlated with each other, but less correlated 
+with clusters two and three. Cluster one of patient2 is again an exception, because it 
+is not as highly correlated with clusters one of patient2 and patient3, but still
+more correlated than with clusters two and three. 
 
+These results led to the hypothesis  that the clusters one, which showed different 
+TF activity from clusters two and three correspond to a different infection state. 
+Cells of clusters one could be latently infected cells. This hypothesis would be
+supported by having a look at the role of TFs with different activity in 
+clusters one (see discussion). 
 
 ```{r}
 # read in 3 Clusters for each of the 3 HIV+ patients
@@ -1573,29 +877,6 @@ auc_df <- auc_df %>%
          cell %in% hiv3_c2 ~ "hiv3_c2",
          cell %in% hiv3_c3 ~ "hiv3_c3"))
 ```
-
-### Correlation between clusters based on all 125 TFs {.tabset}
-
-The average TF activity of all 125 TFs was computed for every cluster. Based on 
-the average TF activity in each cluster, the correlation between clusters was 
-computed.
-
-The scatter plot below shows the average expression for each TF across all 
-three clusters in all three patients and the  corresponding correlation 
-coefficients. The correlation matrix visualizes the Spearman correlation coefficient between all clusters with black numbers indicating the p-values which are not 
-significant. Clusters two and three of all patients seem to be highly 
-correlated, with cluster two of patient three being the exception. Cluster one of 
-patient one and patient three are highly correlated with each other, but less correlated 
-with clusters two and three. Cluster one of patient two is again an exception, because it 
-is not as highly correlated with clusters one of patient two and patient three, but still
-more correlated than with clusters two and three. 
-
-Seeing these results, the hypothesis is that the cluster one, which showed different 
-TF activity from clusters two and three correspond to a different infection state. 
-Cells of cluster one could be latently infected cells. This hypothesis would be
-supported by having a look at the role of TFs with different activity in 
-cluster one. 
-
 
 
 <details>
@@ -1660,61 +941,20 @@ df %>%
 
 ---
 
-<details>
-*<summary>Additional correlation plots which do not aid the interpretation much</summary>*
-  
-
-Correlation between clusters based on all TFs with differential activity between clusters
-
-```{r}
-intersect_total <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_intersect_TFs_different_across_patients_3_clusters"))[["x"]]
-```
-
-```{r}
-# correlation matrix
-cor_mtx <- auc_df %>%
-  select(ht_cluster, intersect_total) %>% 
-  group_by(ht_cluster) %>%
-  summarize_if(is.numeric, mean) %>% 
-  gather(TF, value, -ht_cluster) %>% 
-  spread(ht_cluster, value) %>% 
-  column_to_rownames("TF") %>% cor(method = "spearman")
-
-# calculate confidence intervals and p_values
-# function produces p-values and confidence intervals for each pair of input features
-# returns a matrix each
-# of p_values, upper confidence interval, lower confidence interval
-testCor <- cor.mtest(cor_mtx, conf.level = 0.95, method = "spearman")
-```
-
-
-```{r}
-corrplot(cor_mtx,
-         order = "hclust", 
-         addrect = 4, # add boxes 
-         p.mat = testCor$p, 
-         insig = "p-value", 
-         tl.col = "black")
-```
-
-
----
-</details>
 
 ---
 
-### TF correlation across clusters {.tabset}
+### TF correlation {.tabset}
 
 For the eleven TFs with different activity between clusters, the correlation 
-was computed for the TF activities. 
-
-The scatter matrix and correlation plot below show very nicely, that the
+between the TF activities was computed. The scatter matrix and correlation plot
+below show very nicely, that the
 three TFs YY1, REST, MXI1 are positively correlated, but negatively correlated
 with the rest of the TFs and vice versa. The fact that these TF activities 
 correlate across all patients indicates that there might be a biological meaning 
-behind the different clusters. Having a look at the TFs which are up- or
+behind the different clusters. Having a look at the function of TFs which are up- or
 downregulated in cluster one compared to the other clusters could provide 
-further insights. 
+further insights (see discussion). 
 
 <details>
 <summary>**Correlation computation**</summary>
@@ -1782,7 +1022,7 @@ df <- auc_df %>%
 
 # Gene expression analysis
 
-Using the information of the three clusters from above we will pool the two clusters
+We will now pool the two clusters
 which are significantly different from the third cluster in all patients.
 Consequently, in the following analysis we will compare Cluster1 to Cluster2 (pool of two similar 
 clusters). The gene expression might give a hint about the identity of these 
@@ -1811,18 +1051,18 @@ hivmy2 <- AddMetaData(hivmy2, metadata = ht_cluster, col.name = "ht_cluster")
 
 There is an evident difference in library size and number of features between
 the two clusters. This could mean that there is a technical difference between
-the two clusters. Conversely, it could also mean that there is this a biological
+the two clusters. Conversely, it could also mean that there is a biological
 difference. For example, if cells of cluster1 represent a latently infected group 
-of Myeloid2 cells it could be that gene expression is reduced overall due to the
-infection compared to healthy uninfected cells from cluster2.
+of Myeloid2 cells it could be that gene expression is reduced compared to healthy
+uninfected cells from cluster2 due to infection.
 
 One way to investigate this further would be to have a look at the housekeeping 
 genes in both clusters. If housekeeping genes were more highly expressed in 
 one cluster than in the other this would indicate that the difference is not 
 biological, but a technical artefact.
 
-Since there is one cluster which has lower number of counts and features 
-to start with, further qualitative analysis of gene expression might be skewed 
+One problem that arises, because there is one cluster which has lower number of 
+counts and features, is that further qualitative analysis of gene expression might be skewed 
 as well. For this reason the following analysis on the difference between these
 two clusters will be mainly qualitative. Due to the low number of cells it 
 is not possible to get significant results for the differential gene expression.
@@ -1844,9 +1084,8 @@ annotate_figure(fig, top = text_grob("Quality of Clusters"))
 
 ## Housekeeping genes
 
-A list of 3804 houseekping genes were used from [@Eisenberg].
-
-A quantitative analysis might be difficult, because due to the small sample
+A list of 3804 houseekping genes were used from [@Eisenberg]. A quantitative
+analysis might be difficult, because due to the small sample
 size and large feature number, we get very high p_values for all genes in 
 differential gene expression analysis. Visualization of the
 housekeeping gene expression, unfortunately does not help either with the 
@@ -1910,6 +1149,818 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))
 </details>
 
 # Appendix
+
+### Determine k for k-means clustering {.tabset}
+
+The plot of within cluster sum of squares shows that the sweet spot for the 
+value of k is somewhere between 3 and 5. To determine the best k for k-means
+clustering k = 3, k = 4 and k = 5 were tried and the different outcomes compared.
+Since k = 4 and k = 5 does not yield an increased number of TFs which differentiate
+the different clusters and, therefore, do not add any insights we proceeded with
+k = 3 in the following analysis.
+
+```{r}
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                    orig.ident == "HIV1_CSF")
+mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
+
+# Decide on a k for clustering
+wss = sapply(2:15, function(k) {
+  kmeans(x = t(mtx), centers = k)$tot.withinss
+})
+
+plot(2:15, wss, type = "b", 
+     xlab = "Number of clusters k", 
+     ylab = "Total within-clusters sum of square")
+```
+
+The results of using differnet k can be seen below. Click on the tabs to see heatmaps of the k-means clustering, as well as statistical test on different TF
+acitivities between clusters.
+
+### k-means Clustering with k = 3
+
+#### Heatmap for patient 1
+
+```{r, fig.width=15, fig.height=17}
+#map(seq.int(1:5), function(k){
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                  orig.ident == "HIV1_CSF")
+# select only the cells of the activity matrix which are myeloid2 and the correct patient
+mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
+# heatmap
+set.seed(123)
+ht_pat1 <-draw(Heatmap(t(mtx), 
+             column_title = "Myeloid2 cells from patient 1, k = 3", 
+
+             column_km = 3,
+             column_km_repeats = 100,
+             show_column_names = FALSE,
+             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
+             right_annotation = la
+             ))
+             #top_annotation = column_annotation) 
+```
+
+
+After performing k-means cluster we extract the cells from each cluster. 
+In the table below you can see the number of cells in each cluster. 
+
+```{r}
+### Extract cells from each cluster
+
+
+# if you draw the heatmap, the results of th eclustering will not change anymore
+#png("/media/ag-cherrmann/kmikulik/HIV_microglia/analysis/Myeloid2_cluster/Myeloid2_3clusters.png", width = 15, height = 17, res = 1200)
+#ht <- draw(ht_pat1)
+# get the columns names of cluster one
+c1 <- colnames(t(mtx[column_order(ht_pat1)[[1]],]))
+#write.table(c1, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster1.tsv", sep = "\t")
+
+# get the column names of cluster two
+c2 <- colnames(t(mtx[column_order(ht_pat1)[[2]],]))
+#write.table(c2, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster2.tsv", sep = "\t")
+
+# get the column names of cluster 3
+c3 <- colnames(t(mtx[column_order(ht_pat1)[[3]],]))
+#write.table(c3, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv1_cluster3.tsv", sep = "\t")
+```
+
+
+##### number of cells in each cluster 
+
+```{r, results = "asis"}
+# summary staticstics
+hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(c1,c2,c3))%>% 
+  mutate(ht_cluster = case_when(cell %in% c1 ~ "c1", 
+                                cell %in% c2 ~ "c2",
+                                cell %in% c3 ~ "c3")) %>%
+  group_by(ht_cluster) %>% 
+  summarize(count = n()) %>% 
+  kable(caption = "number of cells in each cluster")
+
+```
+
+##### Are there significant differences in TF activity between the three clusters?
+
+Performing Kruskal-Wallis-Test to find differences between the three clusters in patient one yields 54 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the 24 TFs with differential binding scores in the C20 cell line, sixteen have significantly different activity between the clusters.
+
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other cluster/s.
+
+Pairwise-Wilcox-Test is a non-parametric pairwise test. Again, because 
+we repeat the test we will correct for multiple hypothesis testing using the 
+FDR method. The results are shown in boxplots below.
+
+</details>
+
+<details> 
+<summary>Kruskal-Wallis-Test, p-value adjustment, posthoc tests</summary>
+
+**Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
+
+```{r}
+# non-parametric alternative to ANOVA -> Kruskal_wallis test
+k3_df <- hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(c1,c2,c3)) %>% 
+  mutate(ht_cluster = ifelse(cell %in% c1, "c1", ifelse(cell %in% c2, "c2", "c3"))) 
+# check all TFs 
+p_values <- map(seq.int(1:125), function(n){
+  tf <- colnames(auc_mtx)[n]
+  p_values <- unlist(kruskal.test(pull(k3_df[tf]) ~ ht_cluster, k3_df))["p.value"]
+  #list(tf = tf, p_value = p_values)
+})
+
+# plot distribution of p_values
+hist(as.numeric(unname(unlist(p_values))), 
+     main = "distribution of p_values",
+     xlab = "p_values",
+     breaks = 20)
+
+# adjust for multiple testing with FDR
+adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
+
+
+# how many transcription factors are significantly different between the clusters?
+sign3 <- adj_p_values[adj_p_values<.05]
+length(adj_p_values[adj_p_values<0.05])
+
+# get TFs that are significantly different
+hiv1_diff <- colnames(auc_mtx)[adj_p_values < .05]
+
+#write.table(diff3, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1")
+```
+
+* **Kruskal-Wallis test and p-value adjustment  for 24 TFs also identified by ATAC-seq**
+
+
+```{r}
+# check 24 TFs with Kruskal Wallis test
+p_values <- map(seq.int(1:24), function(n){
+  tf <- overlap_atac$name[n]
+  p_values <- unlist(kruskal.test(pull(k3_df[tf]) ~ ht_cluster, k3_df))["p.value"]
+})
+#sign_p_values <- p_values[p_values < 0.01]
+
+# adjust for multiple hypothesis testing
+adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
+
+
+# how many transcription factors are significantly different between the clusters?
+length(adj_p_values[adj_p_values<0.05])
+
+# get TFs that are differentially expressed
+hiv1_atac <- overlap_atac$name[adj_p_values < .05]
+#write.table(diff3_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1")
+```
+
+* **Posthoc tests for k = 3**
+
+
+The posthoc test was performed for the 16 TFs with significantly different activity between the 3 clusters.
+
+```{r, warning = FALSE}
+# We perform a posthoc test
+#wilcox_list = list()
+wilcox_list <- map(seq.int(1:length(hiv1_atac)), function(i){
+  tf <- hiv1_atac[i]
+  #print(tf)
+  wilcox <- pairwise.wilcox.test(pull(k3_df[tf]), pull(k3_df["ht_cluster"]), 
+                                 p.adjust.method = "fdr")
+  list(TF = tf, wilcox = wilcox)
+})
+  
+#length(wilcox_list)
+#wilcox_list
+```
+
+---
+</details>
+
+---
+
+### K-means clustering with k = 4
+
+#### Heatmap for patient 1
+
+```{r, fig.width=15, fig.height=17}
+#map(seq.int(1:5), function(k){
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                  orig.ident == "HIV1_CSF")
+# select only the cells of the activity matrix which are myeloid2 and the correct patient
+mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
+# heatmap
+set.seed(123)
+ht <- draw(Heatmap(t(mtx), 
+             column_title = "Myeloid2 cells from patient 2, k = 4", 
+
+             column_km = 4,
+             column_km_repeats = 100,
+             show_column_names = FALSE,
+             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
+             right_annotation = la
+             )) 
+             #top_annotation = column_annotation) 
+
+
+```
+
+
+```{r}
+### Extract cells from each cluster of k = 4
+
+# get the columns names of cluster one
+cl1 <- colnames(t(mtx[column_order(ht)[[1]],]))
+
+# get the column names of cluster two
+cl2 <- colnames(t(mtx[column_order(ht)[[2]],]))
+
+
+# get the column names of cluster 3
+cl3 <- colnames(t(mtx[column_order(ht)[[3]],]))
+
+cl4 <- colnames(t(mtx[column_order(ht)[[4]],]))
+```
+
+
+```{r, results = "asis"}
+# summary staticstics
+hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(c1,c2,c3)) %>% 
+  mutate(ht_cluster = case_when(cell %in% cl1 ~ "c1", 
+                                cell %in% cl2 ~ "c2",
+                                cell %in% cl3 ~ "c3",
+                                cell %in% cl4 ~ "c4")) %>% 
+  group_by(ht_cluster) %>% 
+  summarize(count = n()) %>% 
+  kable(caption = "number of cells in each cluster")
+
+```
+
+##### Are there significant differences in TF activity between the four clusters?
+
+
+Performing Kruskal-Wallis-Test to find differences between the four clusters in patient one yields 51 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the 24 TFs with differential binding scores in the C20 cell line, fourteen have significantly different activity between the clusters.
+
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other 
+cluster/s. For this pairwise Wilcox test was used.
+
+
+</details>
+
+<details> 
+<summary>Kruskal-Wallis-Test, p-value adjustment, posthoc tests</summary>
+
+* **Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
+
+```{r}
+
+k4_df <- hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(cl1,cl2,cl3,cl4)) %>% 
+  mutate(ht_cluster = ifelse(cell %in% cl1, "cl1", 
+                             ifelse(cell %in% cl2, "cl2", 
+                                    ifelse(cell %in% cl3, "cl3", "cl4"))))
+
+# check all TFs 
+p_values <- map(seq.int(1:125), function(n){
+  tf <- colnames(auc_mtx)[n]
+  p_values <- unlist(kruskal.test(pull(k4_df[tf]) ~ ht_cluster, k4_df))["p.value"]
+  #list(tf = tf, p_value = p_values)
+})
+
+# adjust for multiple testing with FDR
+adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
+
+# how many transcription factors are significantly different between the clusters?
+sign <- adj_p_values[adj_p_values < 0.05]
+length(adj_p_values[adj_p_values<0.05])
+
+
+# get the TFs that are differentially expressed
+diff4 <- colnames(auc_mtx)[adj_p_values < 0.05]
+
+#write.table(diff4, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=4")
+
+```
+
+* **Kruskal-Wallis Test and p-value adjustments for 14 TFs with differential binding scores**
+
+
+```{r}
+# check 24 TFs with Kruskal Wallis test
+p_values <- map(seq.int(1:24), function(n){
+  tf <- overlap_atac$name[n]
+  p_values <- unlist(kruskal.test(pull(k4_df[tf]) ~ ht_cluster, k4_df))["p.value"]
+})
+#sign_p_values <- p_values[p_values < 0.01]
+
+# adjust for multiple hypothesis testing
+adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
+
+
+# how many transcription factors are significantly different between the clusters?
+length(adj_p_values[adj_p_values<0.05])
+
+# get the TFs that are differentially expressed
+diff4_atac <- overlap_atac$name[adj_p_values < .05]
+
+#write.table(diff4_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=4")
+
+```
+
+* **Pairwise-Wilcox_Test for k = 4**
+
+Posthoc test for the 16 TFs with significantly different activity between the four clusters.
+
+```{r, warning = FALSE}
+# We perform a posthoc test
+#wilcox_list = list()
+wilcox_list <- map(seq.int(1:length(diff4_atac)), function(i){
+  tf <- diff4_atac[i]
+  print(tf)
+  wilcox <- pairwise.wilcox.test(pull(k4_df[tf]), pull(k4_df["ht_cluster"]), 
+                                 p.adjust.method = "fdr")
+  list(TF = tf, wilcox = wilcox)
+})
+  
+#length(wilcox_list)
+#wilcox_list
+```
+---
+</details>
+
+---
+
+### K-means Clustering with k = 5
+
+#### Heatmap for patient 1
+
+```{r, fig.width=15, fig.height=17}
+#map(seq.int(1:5), function(k){
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                  orig.ident == "HIV1_CSF")
+# select only the cells of the activity matrix which are myeloid2 and the correct patient
+mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
+# heatmap
+set.seed(123)
+ht <- draw(Heatmap(t(mtx), 
+             column_title = "Myeloid2 cells from patient 1, k = 5", 
+
+             column_km = 5,
+             column_km_repeats = 100,
+             show_column_names = FALSE,
+             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
+             right_annotation = la
+             )) 
+
+```
+
+
+```{r}
+##### Extract cells from each cluster for k= 5
+
+# get the columns names of cluster one
+clu1 <- colnames(t(mtx[column_order(ht)[[1]],]))
+
+# get the column names of cluster two
+clu2 <- colnames(t(mtx[column_order(ht)[[2]],]))
+
+
+# get the column names of cluster 3
+clu3 <- colnames(t(mtx[column_order(ht)[[3]],]))
+
+clu4 <- colnames(t(mtx[column_order(ht)[[4]],]))
+
+clu5 <- colnames(t(mtx[column_order(ht)[[5]], ]))
+
+```
+
+
+```{r, results = "asis"}
+# summary staticstics
+hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(c1,c2,c3)) %>% 
+  mutate(ht_cluster = case_when(cell %in% clu1 ~ "c1", 
+                                cell %in% clu2 ~ "c2",
+                                cell %in% clu3 ~ "c3",
+                                cell %in% clu4 ~ "c4",
+                                cell %in% clu5 ~ "c5")) %>% 
+  group_by(ht_cluster) %>% 
+  summarize(count = n()) %>% 
+  kable(caption = "number of cells in each cluster")
+
+```
+
+##### Are there significant differences in TF activity between the four clusters?
+
+Performing Kruskal-Wallis-Test to find differences between the four clusters in patient one yields 59 TFs of all 125 TFs which are differentially active between the three clusters(p-value < 0.05). Of the 24 TFs with differential binding scores in the C20 cell line, fifteen have significantly different activity between the clusters.
+
+Now that it is known that there are significant differences between clusters, 
+the next step is to identify which cluster/s are different from which other 
+cluster/s. For this pairwise Wilcox test was used.
+
+
+</details>
+
+<details> 
+<summary>Kruskal-Wallis-Test, p-value adjustment, posthoc tests</summary>
+
+* **Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
+
+```{r}
+# all TFs
+k5_df <- hiv7_scenic@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  filter(orig.ident == "HIV1_CSF",
+         cell_type == "Myeloid2",
+         cell %in% c(clu1,clu2,clu3,clu4, clu5)) %>% 
+  mutate(ht_cluster = ifelse(cell %in% clu1, "clu1", 
+                             ifelse(cell %in% clu2, "clu2", 
+                                    ifelse(cell %in% clu3, "clu3",
+                                           ifelse(cell %in% clu4, "clu4", "clu5")))))
+n = 1
+# check all TFs 
+p_values <- map(seq.int(1:125), function(n){
+  tf <- colnames(auc_mtx)[n]
+  p_values <- unlist(kruskal.test(pull(k5_df[tf]) ~ ht_cluster, k5_df))["p.value"]
+  #list(tf = tf, p_value = p_values)
+})
+
+# adjust for multiple testing with FDR
+adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
+
+# how many transcription factors are significantly different between the clusters?
+sign <- adj_p_values[adj_p_values < 0.05]
+length(adj_p_values[adj_p_values<0.05])
+
+
+# get the TFs that are differentially expressed
+diff5 <- colnames(auc_mtx)[adj_p_values < 0.05]
+
+#write.table(diff5, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=5")
+```
+
+* **Kruskal-Wallis Test and p-value adjustments for all 125 TFs**
+
+```{r}
+# check 24 TFs with Kruskal Wallis test
+p_values <- map(seq.int(1:24), function(n){
+  tf <- overlap_atac$name[n]
+  p_values <- unlist(kruskal.test(pull(k5_df[tf]) ~ ht_cluster, k5_df))["p.value"]
+})
+#sign_p_values <- p_values[p_values < 0.01]
+
+# adjust for multiple hypothesis testing
+adj_p_values <- p.adjust(as.numeric(unname(unlist(p_values))), method = "fdr")
+
+
+# how many transcription factors are significantly different between the clusters?
+length(adj_p_values[adj_p_values<0.05])
+
+# get the TFs that are differentially expressed
+diff5_atac <- overlap_atac$name[adj_p_values < .05]
+
+#write.table(diff5_atac, "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=5")
+```
+
+* **Pairwise-Wilcox_Test for k = 5**
+
+Posthoc test for the 15 TFs with significantly different activity between the four clusters.
+
+```{r, warning = FALSE}
+# We perform a posthoc test
+#wilcox_list = list()
+wilcox_list <- map(seq.int(1:length(diff5_atac)), function(i){
+  tf <- diff5_atac[i]
+  print(tf)
+  wilcox <- pairwise.wilcox.test(pull(k5_df[tf]), pull(k5_df["ht_cluster"]), 
+                                 p.adjust.method = "fdr")
+  list(TF = tf, wilcox = wilcox)
+})
+  
+#length(wilcox_list)
+#wilcox_list
+```
+
+---
+</details>
+
+---
+
+
+### Which Clusters are significantly different for different k? {.tabset}
+
+The results from the statistical tests on difference in TF activity between
+clusters can be seen in the boxplots below. Sixteen, fourteen and twelve TFs
+were found to be differentially active between the clusters for k equal three, 
+four and five respectively. The boxplots below also show very nicely, that 
+the data are not normally distributed and, therefore, non-parametric tests, 
+like the Kruskal-Wallis-Test and pairwise Wilcox-Test were used.
+
+
+#### k = 3
+
+```{r, fig.height=20, fig.width=25}
+
+test <- k3_df
+#tf.oi <- c("CTCF", "REST", "YY1")
+#names(tf.oi) <- tf.oi
+test.list <- map(hiv1_atac, function(tf) {
+  ggplot() +
+  geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
+                   fill = test %>% pull("ht_cluster"), alpha = .6)) +
+  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
+               alpha = 0) +
+  stat_pvalue_manual(test %>% 
+    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
+      add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster")) })
+
+do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 4))
+```
+
+#### k = 4
+
+```{r, fig.width=25, fig.height=15}
+
+test <- k4_df
+
+test.list <- map(diff4_atac, function(tf) {
+  ggplot() +
+  geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
+                   fill = test %>% pull("ht_cluster"), alpha = .6)) +
+  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
+               alpha = 0) +
+  stat_pvalue_manual(test %>% 
+    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
+      add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster")) +
+    geom_violin(alpha = 0)
+})
+
+do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
+
+
+```
+
+
+#### k = 5
+```{r, fig.width=25, fig.height=15}
+test <- k5_df
+
+test.list <- map(diff5_atac, function(tf) {
+  ggplot() +
+  geom_violin(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf), 
+                   fill = test %>% pull("ht_cluster"), alpha = .6)) +
+  geom_boxplot(aes(x = test %>% pull("ht_cluster"), y = test %>% pull(tf)), 
+               alpha = 0) +
+  stat_pvalue_manual(test %>% 
+    pairwise_wilcox_test(as.formula(paste0(tf, " ~ ht_cluster"))) %>%
+      add_xy_position()) +
+    xlab("heatmap cluster") +
+    ylab(paste0(tf)) +
+    guides(fill = guide_legend(title = "heatmap cluster"))
+})
+
+do.call(gridExtra::grid.arrange, c(test.list, ncol=5, nrow = 3))
+```
+
+---
+
+## Conclusion on how many k's to use for k-means clustering
+
+As mentioned, k = 3 was used for the subsequent analysis, since more clusters 
+did not add additional insights.
+
+The Venn diagram below shows very nicely, that out of all TFs with different
+activity between clusters, 68% overlap for all k (k=3/4/5) that I tested (right plot). 
+75% of the TF with differential binding scores in the C20 cell line overlapped
+for all k (left plot). 
+
+Therefore, I decided to proceed with 
+k = 3 for the following analysis. 
+
+```{r}
+diff5_atac <- as.vector(read.table( "/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=5"))[["x"]]
+diff5 <- as.vector(read.table( "/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=5"))[["x"]]
+
+
+diff4_atac <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1_k=4"))[["x"]]
+
+diff4 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1_k=4"))[["x"]]
+# list of TFs from ATAC-seq differntially active between the 3 heatmap 
+#clusters from patient 1
+diff3_atac <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/atac_TFs_differentially_active_in_HIV1"))[["x"]]
+
+# list of TFs differntially active between the 3 heatmap clusters from patient 1
+diff3 <- as.vector(read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/total_TFs_differentially_active_in_HIV1"))[["x"]]
+```
+
+
+```{r, fig.width = 12}
+p1 <- ggVennDiagram(list(diff3_atac, diff4_atac, diff5_atac),
+              label_alpha = 0,
+              category.names= c("k = 3", "k = 4", "k = 5"),
+              #set.size = 20,
+              label = "count",
+              label_size = 6) +
+   scale_fill_distiller(palette = "RdBu") +
+  labs(title = "TFs with differential binding scores in C20 cell line")
+  #scale_fill_gradient (low = "lightblue", high = "darkblue")
+
+p2 <- ggVennDiagram(list(diff3, diff4, diff5),
+              label_alpha = 0,
+              category.names= c("k = 3", "k = 4", "k = 5"),
+              label = "count",
+              label_size = 6) +
+   scale_fill_distiller(palette = "RdBu") +
+  labs(title = "all TFs with different activity")
+
+fig <- ggarrange(p1, p2, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob("TFs with significantly different activity between clusters for different k", size = 20))
+```
+
+
+
+## Transfer cluster identitites 
+
+The cluster identities from patient 1 were transferred to patient 2 and patient 3
+to assign each cell to one of the 3 clusters. 
+
+
+<details>
+<summary>**Cluster annotation using an integrated referenc**</summary>
+
+Label Transfer
+
+Here we do not integrate the datasets beforehand and we do not modify the query
+expression data.
+
+```{
+Idents(hiv7) <- "cell_type"
+hiv <- subset(hiv7, idents = "Myeloid2")
+
+# the cell type is replaced by the heatmap cluster
+hiv1_my2 <- subset(hiv7, cells = c(c1,c2,c3))
+
+clusters <- (
+  hiv1_my2@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  mutate(ht_cluster = ifelse(cell %in% c1, "c1", ifelse(cell %in% c2, "c2", "c3"))) %>% 
+  column_to_rownames("cell"))["ht_cluster"]
+
+hiv <- AddMetaData(hiv, metadata = clusters, col.name = "cell_type")
+
+# the seurat_cluster number is replaced by the number of the heatmap cluster
+seurat_clusters <- (
+  hiv1_my2@meta.data %>% 
+  rownames_to_column("cell") %>% 
+  mutate(ht_cluster = ifelse(cell %in% c1, 1, ifelse(cell %in% c2, 2, 3))) %>% 
+  column_to_rownames("cell"))["ht_cluster"]
+
+hiv <- AddMetaData(hiv, metadata = seurat_clusters, col.name = "seurat_clusters")
+
+
+# split the object according to the patients
+hiv_list <- SplitObject(hiv, split.by = "orig.ident")[3:5]
+# normalize each object
+for (i in names(hiv_list)) {
+    hiv_list[[i]] <- SCTransform(hiv_list[[i]], verbose = FALSE)
+}
+
+
+# patient 2 and patient 3 are our query datasets
+query <-merge(hiv_list[[1]], hiv_list[[3]])
+reference <- hiv_list[[2]]
+reference <- RunPCA(reference, 
+                    # by default a partial PCA is run, but we compute mostgular values -> run standard SVD instead
+                    approx = FALSE, 
+                    verbose = FALSE)
+
+hiv_anchors <- FindTransferAnchors(reference = reference,
+                                   query = query, 
+                                   dims = 1:30, verbose = FALSE,
+                                   k.filter = NA, 
+                                   reference.reduction = "pca",
+                                   normalization.method = "SCT",
+                                   reduction = "pcaproject")
+
+predictions <- TransferData(anchorset = hiv_anchors, 
+                            refdata = reference$cell_type,
+                            k.weight = 34, dims = 1:30, verbose = FALSE)
+
+query <- AddMetaData(query, metadata = predictions)
+
+
+hiv2 <- subset(query, orig.ident == "HIV2_CSF")
+hiv3 <- subset(query, orig.ident == "HIV3_CSF")
+#saveRDS(hiv2,"/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv2_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
+#saveRDS(hiv3, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv3_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
+```
+Now that we have transferred the cluster identitities to patient2 and patient3
+and saved the results in two separate Seurat objects, we can add the TF activity 
+score to the metadata of each patient.
+
+```{r}
+hiv2 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv2_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
+hiv3 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/hiv3_CSF_myleoid2_heatmap_cluster_label_transfer.rds")
+
+hiv2_scenic <- AddMetaData(hiv2, metadata = auc_mtx,
+                           col.name = colnames(auc_mtx))
+hiv3_scenic <- AddMetaData(hiv3, metadata = auc_mtx,
+                           col.name = colnames(auc_mtx))
+```
+
+---
+</details>
+
+### Predicted cluster labels
+
+The heatmaps below show the predicted clusters from label transfer for
+patient 2 and patient 3
+
+The clusters obtained after transferring the cluster identities from patient 1 to
+patient2 do not seem to be very good at separating cells according to TF activity.
+
+When you transfer the cluster identities from patient1 to patient3 all cells, but
+one, are assigned to cluster1. This shows that the label transfer did not work 
+very well. This is probably due to the low number of Myeloid2 cells in each sample.
+
+```{r, fig.width=15, fig.height=17}
+cluster_anno <- as.data.frame(hiv2$predicted.id)
+
+#map(seq.int(1:5), function(k){
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                  orig.ident == "HIV2_CSF")
+# select only the cells of the activity matrix which are myeloid2 and the correct patient
+mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
+# heatmap
+set.seed(123)
+ht_hiv2_label <- Heatmap(t(mtx), 
+             column_title = "Predicted Clusters from Label Transfer for HIV2_CSF",             
+             column_title_gp = gpar(fontsize = 15),
+             column_split = paste0("cluster", hiv2$predicted.id),#cluster_anno,
+             #column_km = 4,
+             #column_km_repeats = 100,
+             show_column_names = FALSE,
+             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
+             right_annotation = la,
+             top_annotation = HeatmapAnnotation(df = cluster_anno, name = "predicted cluster")
+             ) 
+             #top_annotation = column_annotation) 
+```
+
+
+```{r, fig.width=15, fig.height=17}
+cluster_anno <- as.data.frame(hiv3$predicted.id)
+
+#map(seq.int(1:5), function(k){
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                  orig.ident == "HIV3_CSF")
+# select only the cells of the activity matrix which are myeloid2 and the correct patient
+mtx <- auc_mtx[rownames(auc_mtx) %in% rownames(df), ]
+# heatmap
+set.seed(123)
+ht_hiv3_label <- Heatmap(t(mtx), 
+             column_title = "Predicted clusters from Label Transfer for HIV3_CSF", 
+             column_title_gp = gpar(fontsize = 15),
+             column_split = paste0("cluster", hiv3$predicted.id),#cluster_anno,
+             #column_km = 4,
+             #column_km_repeats = 100,
+             show_column_names = FALSE,
+             col =colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100),
+             right_annotation = la,
+             top_annotation = HeatmapAnnotation(df = cluster_anno, name = "predicted cluster")
+             ) 
+             #top_annotation = column_annotation) 
+
+```
+
+```{r, fig.width=15, fig.height=20}
+ht_list <- ht_hiv2_label + ht_hiv3_label
+draw(ht_list, ht_gap= unit(2, "cm"))
+```
+
 
 ## Gene expression analysis of the two Myeloid2 subclusters
 

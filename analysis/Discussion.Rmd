@@ -7,19 +7,21 @@ link-citations: yes
 ---
 
 
-GRN-inference on gene expresiond at from the Myeloid2 cells identified eleven
+GRN-inference on gene expression data from the Myeloid2 cells identified eleven
 TFs with different activity
 between three cell clusters in all three patients, which were also shown to 
 have different binding scores in the C20 cell line. In all three patients there was 
 one cluster which was different from the other two clusters. In this cluster of
 interest ETS1, REST and YY1 had an increased activity, while the other TFs had a
-decreased activity. 
-
-Since YY1 represses HIV1 transcription it promotes latent infection 
-[@He; @Romerio; @Lee]. ETS1 binds to HIV promoter to decrease HIV transcription
-[@Zhang]. REST acts as a repressor of cell migration in microglia [@Yu]. Conversely, transcription factors with decreased activity, like for example
-MEF2C and MEF2A suppress the inflammatory response, meaning that if they are less active in this cluster, the cell might be in a more reactive state
-[@Deczkowska; Butovsky]. MEF2A is downregulated in disease and loosing MEF2C might prime microglia to increased sensitivity to immune stimuli [@Butovsky; @Deczkowska; @Li]. The MEF2 Family is  
+decreased activity. Since YY1 represses HIV-1 transcription it promotes latent infection 
+[@He; @Romerio; @Lee]. ETS1 binds to HIV-1 promoter to decrease HIV-1 transcription
+[@Zhang]. REST acts as a repressor of cell migration in microglia [@Yu].
+Conversely, transcription factors with decreased activity, like for example
+MEF2C and MEF2A suppress the inflammatory response, meaning that if they are 
+less active in this cluster, the cell might be in a more reactive state
+[@Deczkowska; Butovsky]. MEF2A is downregulated in disease and loosing MEF2C 
+might prime microglia to increased sensitivity to immune stimuli [@Butovsky; 
+@Deczkowska; @Li]. The MEF2 Family is  
 expressed primarily in microglia [@Li]. Lower activity of members of the MEF 
 family does not necessarily mean that the cells are not microglia, but could
 be associated with the disease state.
@@ -32,13 +34,16 @@ neurons slightly decrease CEBPB expression, astrocytes and likely other brain
 cells increase their expression of CEBPB [@Canchi]. However, there is no data from 
 microglia cells. An increased expression in the brain might be caused by an
 increased response to inflammation, because CEBPB is involved in the
-inflammatory response. The TF KLF4 is also proposed to be involved in neuroinflammation [@Rickert]. Additionally, JUNB, CEBPB, MEF2A, MEF2C, ETV6 and KLF4 are used as specific 
+inflammatory response. The TF KLF4 is also proposed to be involved in
+neuroinflammation [@Rickert]. Additionally, JUNB, CEBPB, MEF2A, MEF2C, ETV6 
+and KLF4 are used as specific 
 TFs characterizing microglia cells [@Gosselin].
 
 Because of the functions of TFs listed above the hypothesis is that the cells 
-in the first cluster/cluster of interest of each patient are latently infected microglia-like cells. TFs which show decreased activity 
+in the first cluster/cluster of interest of each patient are latently infected
+microglia-like cells. TFs which show decreased activity 
 are involved in inflammation. Conversely, they show increased activity 
-of two TFs which have been related to latent HIV infection, YY1 and ETS1. These
+of two TFs which have been related to latent HIV-1 infection, YY1 and ETS1. These
 microglia-like cells could be latently infected cells which entered the brain 
 as macrophages and
 acquired microglia markers and functions which they kept when leaving the brain 
@@ -46,7 +51,10 @@ and migrating into CSF [@Grassivaro].
 
 Analysing the TF activity of iMg and comparing it to the footprinting binding
 scores of the C20 cell was interesting, because in this case the infection status 
-of each cell is known, as well as the treatment condition. It was shown that the treatment has a very large effect on the TF activity and, therefore, on gene expression. The effect of the treatment seems to overshadow the effect of latent or active infection in iMg. The two 
+of each cell is known, as well as the treatment condition. It was shown that the 
+treatment has a very large effect on the TF activity and, therefore, on gene 
+expression. The effect of the treatment seems to overshadow the effect of latent 
+or active infection in iMg. The two 
 TFs RUNX3 and JUNB were more active in treated cells, while NFAT5, TCF7L and CEBPB 
 were more active in not treated cells, independently of the infection status. An 
 important insight to keep in mind for any further analysis is this huge effect that
@@ -55,13 +63,16 @@ by a drug to non-infected cells which are affected by a drug might yield very
 different results than comparing them with non-infected cells which are not 
 affected by a drug. 
 
-Finding a pattern of activity which corresponds to the infection status or resembles the footprinting binding scores was more difficult and even though some TFs followed
+Finding a pattern of activity which corresponds to the infection status or 
+resembles the footprinting binding scores was more difficult and even though 
+some TFs followed
 the footprinting pattern it was usually only the case for either non-treated cells
 or treated cells, but not for both treatment conditions. The reason for this 
 remains unclear.
 
 Comparing the activities in iMg to the activities in Myeloid2 cells from CSF,
-there are only five transcription factors which are found to have differential TF activities in both model systems. Transferring the information from the iMg, where 
+there are only five transcription factors which are found to have differential
+TF activities in both model systems. Transferring the information from the iMg, where 
 the infection status is known, to the Myeloid2 cells could support the hypothesis
 that the group of Myeloid2 cells described above are latently infected. YY1 is 
 more active in the cluster of interest in Myeloid2 and more active in infected +
@@ -75,7 +86,8 @@ the opposite. No clear conclusion can be drawn from these five TFs alone.
 Integrating the triculture dataset and the CSF/Blood dataset it became evident 
 that iMg and all Myeloid clusters, not only the Myeloid2 share some similarities,
 because they are from the same cell lineage. Using the up- and downregulated
-gene signature of infected and treated iMg, 51 Myeloid2 cells were identified with high scores for the signatures. These cells probably represent latently infected cells,
+gene signature of infected and treated iMg, 51 Myeloid2 cells were identified 
+with high scores for the signatures. These cells probably represent latently infected cells,
 however, they did not correspond to the cells in the cluster of interest (see 
 above) hypothesised to be latently infected cells. Consequently, two 
 different approaches yielded two different groups of cells which are potentially

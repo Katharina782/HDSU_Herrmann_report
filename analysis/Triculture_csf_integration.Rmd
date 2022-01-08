@@ -123,6 +123,9 @@ all_cond_list <- map(seq.int(3,7), function(n){
 ---
 </details>
 
+<details>
+<summary>**Files and data structure**</summary>
+
 # Data processing {.tabset}
 
 ## Before Quality Control:
@@ -333,6 +336,10 @@ triculture <- AddMetaData(triculture, cell_types, col.name = "cell_type")
 
 ---
 </details>
+
+
+---
+</details
 
 ---
 
@@ -678,131 +685,6 @@ DimPlot(subset_monocytes, group.by = "seurat_clusters",
 ```
 
 
-## De-nove clustering 
-
-Next, de-novo clustering of the myeloid-lineage cluster of the integrated dataset was
-performed. Isolating the iMg and all Myeloid cell clusters from the integrated  dataset and normalizing, scaling and re-clustering these isolated cells might   
-give us additional insights. 
-
-
-
-<details>
-<summary>Details on de-novo clustering</summary>
-
-
-```
-
-microglia <- subset(combined, cell_type %in% c("iMg",
-                                                "Myeloid1",
-                                                "Myeloid2",
-                                                "Myeloid3",
-                                                "Myeloid4",
-                                                "Myeloid5"))
-microglia_recluster <- SCTransform(microglia, verbose = FALSE)
-microglia_recluster <- ScaleData(microglia_recluster, verbose = FALSE)
-microglia_recluster <- RunPCA(microglia_recluster, verbose = FALSE)
-ElbowPlot(microglia_recluster)
-microglia_recluster <- RunTSNE(microglia_recluster, reduction = "pca", dims = 1:10)
-microglia_recluster <- FindNeighbors(microglia_recluster)
-microglia_recluster <- FindClusters(microglia_recluster, resolution = 0.5)
-```
-
----
-</details> 
-
-
-It is no surprise that cells from the triculture dataset separate from the 
-CSF/Blood-derived cells which can be seen in the plot below. When reclustering the myeloid lineage derived cells,five subclusters for the iMg and three subclusters for the five CSF/Blood Myeloid clusters are obtained. It can also be observed that
-the Myeloid2 and Myeloid5 separate from Myeloid1/2/3 which is expected, since Myeloid2/5 originate from CSF samples and Myeloid1/3/4 originate from blood samples.
-
-```{r, fig.width=15, fig.height=12}
-microglia_recluster <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/microglia_myeloid_seurat_object_reclustering")
-a1 <- DimPlot(microglia_recluster, reduction = "tsne",
-              group.by = "seurat_clusters", pt.size = .4) +
-  labs(title = "Clustering")
-a2 <- DimPlot(microglia_recluster, reduction ="tsne", 
-              group.by = "cell_type", pt.size = .4) +
-  labs(title = "Cell type")
-a3 <- DimPlot(microglia_recluster, reduction ="tsne",
-              group.by = "dataset", pt.size = .4) +
-    labs(title = "Dataset")
-a4 <- DimPlot(microglia_recluster, reduction = "tsne",
-              group.by = "orig.ident", pt.size = .4) +
-  labs(title = "Sample origin")
-
-fig <- ggarrange(a1, a2, a3, a4, ncol = 2, nrow = 2)
-annotate_figure(fig, 
-                top = text_grob("De-novo clustering of myeloid-lineage clusters", 
-               color = "black", face = "bold", size = 20))
-```
-
-
-Interestingly, both the Myeloid5 cells and the Myeloid2 cells are split between 
-the cluster six (blue) and seven (purple) in the figure below. In the following
-we will have a closer look at this segregation. When performing GRN inference 
-with Scenic we also identified two potentially biologically relevant subclusters of
-the Myeloid2 cells. It could be that these independently found clusters correlate. 
-
-```{r, fig.width=15, fig.height=10}
-a5 <- DimPlot(microglia_recluster, reduction ="tsne", 
-              split.by = "cell_type", pt.size = .4, ncol=3) +
-  labs(title = "Contribution of different cell types to different myeloid clusters")
-a5
-```
-
-It looks like the two clusters identified this way correspond to different
-sample origins. CSF cells from patient1 (HIV1_CSF) and patient2 (HIV2_CSF)
-belong to cluster six, while CSF cells from patient3 (HIV3_CSF) and the two 
-uninfected patients (Uninfected1_CSF, Uninfected2_CSF) belong to 
-cluster seven. The separation of patient3 (HIV3_CSF) from patient1 (HIV1_CSF) 
-and patient2 (HIV2_CSF) might correspond to a batch effect, or it might be a 
-biological effect, for example, the infection might have affected the cells differently.
-
-
-```{r, fig.width=15, fig.height=7}
-#a1 <- DimPlot(subset(microglia_recluster, cell_type == "iMg"), reduction = "tsne",
-           #   group.by = "orig.ident", pt.size = .4)
-a2 <- DimPlot(subset(microglia_recluster, cell_type != "iMg"), reduction = "tsne",
-              group.by = "orig.ident", pt.size = .4) +
-  labs(title = "Sample origin")
-#a3 <- DimPlot(subset(microglia_recluster, cell_type == "iMg"), reduction = "tsne",
-              #group.by = "seurat_clusters", pt.size = .4)
-a4 <- DimPlot(subset(microglia_recluster, cell_type != "iMg"), reduction = "tsne",
-              group.by = "seurat_clusters", pt.size = .4) +
-  labs(title = "Cluster")
-fig <- ggarrange(a2, a4, ncol = 2, nrow = 1)
-annotate_figure(fig, top = text_grob("CSF/Blood Myeloid cells", 
-                                     face = "bold", size = 20))
-```
-
-Since the segregation into two clusters seems to be related to the sample origin
-rather than to the infection status, we would not expect the clusters to overlap
-with the clusters identified after GRN inference with SCENIC. In the figure 
-below it can be seen that the clusters do not overlap (only the Myeloid2 cells from infected CSF samples (HIV1_CSF, HIV2_CSF, HIV3_CSF) are shown). For this reason the reclustering did not lead to any useful insights and will 
-not be analyzed further. 
-
-```{r, fig.width=15, figh.height = 5}
-# read in Myeloid2 cells
-hivmy2 <- readRDS("data_files/hiv_myeloid2_subclusters")
-
-my2 <- subset(microglia_recluster, cell_type == "Myeloid2" & 
-                orig.ident %in% c("HIV1_CSF", "HIV2_CSF", "HIV3_CSF"))
-
-my2 <- AddMetaData(my2, hivmy2@meta.data["ht_cluster"], 
-                   col.name = "TF_activity_clusters")
-p1 <- DimPlot(my2, group.by = "seurat_clusters") +
-  labs(title="Clusters")
-p2 <- DimPlot(my2, group.by = "TF_activity_clusters") +
-  labs(title = "TF activity")
-p3 <- DimPlot(my2, group.by = "orig.ident") +
-  labs(title = "Sample origin")
-figure <- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
-annotate_figure(figure, 
-                top = text_grob("Comparison with clusters of different TF acitivty", 
-               color = "black", face = "bold", size = 20))
-#my25 <- subset(microglia, seurat_clusters %in% c(6,7) &cell_type %in% c("Myeloid2", "Myeloid5"))
-
-```
 
 
 # Differential gene expression
@@ -819,7 +701,7 @@ signatures of infected cells +/- EFZ. Finding genes which overlap independently
 of treamtent condition increases the confidence in the results
 
 <details>
-<summary>**List if top up- or downregulated genes in Inf+EFZ vs Uninf+EFZ**</summary>
+<summary>**List of top up- or downregulated genes in Inf+EFZ vs Uninf+EFZ**</summary>
 
 ```{r, results = "asis"}
 # isolate iMg cells
@@ -1051,6 +933,7 @@ show a similar signature.
   
 
 ```{r}
+hivmy2 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/data/hiv_myeloid2_subclusters")
 # select only genes which are also found in the sc-RNAseq dataset
 up_inf_filt <- up_inf_art$gene[up_inf_art$gene %in% rownames(hivmy2@assays$RNA@counts)]
 down_inf_filt <- down_inf_art$gene[down_inf_art$gene %in% rownames(hivmy2@assays$RNA@counts)]
@@ -1063,15 +946,29 @@ Using the signature genes from differential gene expression analysis between
 Inf+EFZ and Uninf+EFZ we can compute a score of activity of these gene sets in 
 the Myeloid2 cluster of CSF samples. We can plot these scores in a t-SNE 
 representation, but we can also get the scores from the metadata and use them 
-for other visualizations. If the Inf+EFZ signature can be found in some of the Myeloid2 cells from the CSF samples this might provide additional insights 
+for other visualizations. If the Inf+EFZ signature can be found in some of the
+Myeloid2 cells from the CSF samples this might provide additional insights 
 about the infection status of these microglia-like cells.
 
-#### Scores of gene signature upregulated in Inf+EFZ iMg in Myeloid2 cells
+#### Scores of gene signature up- or downregulated in Inf+EFZ iMg in Myeloid2 cells
 
-In the plot below there are some cells visible which have a high score for the signature composed of genes upregulated in Inf+EFZ iMg To be precise,
+In the plot below (top) there are some cells visible which have a high score
+for the signature composed of genes upregulated in Inf+EFZ iMg To be precise,
 63% percent of the Myeloid2 cells have a positive score (92 out of 145 cells).
-These high scoring cells do, however, not correspond to the two clusters (c1, c2) obtained from analysis of TF activity (SCENIC).
+These high scoring cells do, however, not correspond to the two clusters (c1, c2)
+obtained from analysis of TF activity (SCENIC).
 
+In the bottom part of the plot below there are some cells with a negative score for 
+the downregualated gene signature. To be precise, 58% of of all cells (85 out of 146) have a 
+negative score. It would be interesting to know if some of these cells 
+are the same as those with a high score for the upregulated genes.
+Identifying cells in which both the upregulated gene
+signature and the downregulated gene signature have a positive or negative score
+respectively increases the confidence in the results. 51 cells have both a 
+positive score for the upregulated genes and a negative score for the
+downregulated genes. Cells exhibiting this specific pattern of gene expression 
+are likely infected cells. Since the infection status of the cells in the CSF 
+sample is unknown, this provides valuable new insights.
 
 ```{r, fig.width=15}
 up_sign <- AddModuleScore(hivmy2,
@@ -1094,37 +991,6 @@ annotate_figure(figure, top = text_grob("Signature score of genes upregulated in
 
 ```
 
-
-<details>
-<summary>**Exact scores for each cell**</summary>
-
-```{r, results = "asis"}
-# divide the number of rows(cells) with positive ccores by the number of total 
-# rows(cells) to get the percentage of cells with positive scores.
-percentage_inf <- dim(up_sign@meta.data %>% filter(upregulated1 > 0))[1] / 
-  dim(up_sign@meta.data["upregulated1"])[1]
-
-# show the positive scores.
-up_sign@meta.data["upregulated1"] %>% 
-  filter(upregulated1 > 0) %>% 
-  rename("Score" = "upregulated1") %>% head %>% 
-  kable(caption = "upregulated scores")
-```
-
----
-</details>
-
-#### Scores of gene signature downregulated in Inf+EFZ iMg in Myeloid2 cells
-
-As can be seen in the plot below there are some cells with a neagative score for 
-the gene signature. To be precise, 58% of of all cells (85 out of 146) have a 
-negative score. Next, it would be interesting to know if some of this cells are the same as those with a high score for the upregulated genes. Identifying cells in which both the upregulated gene
-signature and the downregulated gene signature have a positive or negative score
-respectively increases the confidence in the results. 51 cells have both a 
-positive score for the upregulated genes and a negative score for the
-downregulated genes. Cells exhibiting this specific pattern of gene expression 
-are likely infected cells. Since the infection status of the cells in the CSF 
-sample is unknown this provides valuable new insights.
 
 ```{r, fig.width=15}
 
@@ -1176,7 +1042,8 @@ condition. There should be one peak with base level gene expression correspondin
 to uninfected cells and a second peak with higher levels of gene expression 
 corresponding to infected cells. 
 
-In the histograms below the distribution of the sum of log-normalized feature counts of genes upregulated or downregulated  respectively can be seen. For the
+In the histograms below the distribution of the sum of log-normalized feature
+counts of genes upregulated or downregulated  respectively can be seen. For the
 upregulated genes (green) a bimodal distribution is not evident from 
 the histogram below. No clear conclusions can be drawn, since the number of
 cells is probably too low.
@@ -1235,8 +1102,10 @@ p1 + p2
 
 #### Scores of gene signature up- or downregulated in cells treated with EFZ independently of infection condition.
 
-Of the Myeloid2 cells 70% (103 out of 146 cells) have a score above 0.2 for the upregulated gene signature. Only 26% of cells have a negative score (below 0) 
-for the downregulated gene signature. Again, to increase the confidence in the
+Of the Myeloid2 cells 70% (103 out of 146 cells) have a score above 0.2 for the
+upregulated gene signature (see figure below, top). Only 26% of cells have a
+negative score (below 0) for the downregulated gene signature (see figure below, 
+bottom). Again, to increase the confidence in the
 results, the overlap between the cells with up/downregulated gene signatures
 was identified. Only 15 cells have both a positive and negative score for the
 up- and downregulated signature respectively.
@@ -1307,18 +1176,6 @@ each patient, but rather are more frequent in the other two clusters.
 
 ### k = 3 hierarchical clustering
 
-```#{r}
-# calculate scores for genes upregualted in Inf+EFZ iMg
-up_sign <- AddModuleScore(hivmy2,
-                           features = up_inf_filt)
-
-# extract the Myeloid2 cells which have a positive score for the Inf+EFZ signature
-inf_efz_cells <- rownames(up_sign@meta.data %>% filter(Cluster1 > 0))
-#uninf_efz_cells <- rownames(hivmy2_uninf_efz_sign@meta.data %>% filter(Cluster1 > 0))
-#uninf_cells <- rownames(hivmy2_uninf_sign@meta.data %>% filter(Cluster1 > 0))
-```
-
-
 ```{r,fig.width=15, fig.height=20}
 # read in Seurat object contianing alls samples and conditions
 hiv7 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/total_7_samples_label_transfer.rds")
@@ -1362,7 +1219,7 @@ ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap
 
 ---
 
-### group according to infection condition
+### Grouped by infection condition
 
 When you group the cells according to their different gene signatures as in the 
 heatmap below, you do not see a difference between the two groups. Testing
@@ -1459,7 +1316,7 @@ ht_list[[1]]$heatmap + ht_list[[2]]$heatmap + ht_list[[3]]$heatmap
 
 ---
 
-### Group by treatment condition
+### Grouped by treatment condition
 
 ```{r, fig.width=15, fig.height=20}
 # filter the dataset for only Myeloid2 cells 
@@ -1627,7 +1484,7 @@ but rather a combination of infection and EFZ treatment [@Ryan].
   + FOS was upregulated
   + NFKBIA, ICAM1, TFNAIP3 were downregulated 
   
-Here, we would like to see if cell with high scores for the Inf+EFZ signature
+Here, we would like to see if cells with high scores for the Inf+EFZ signature
 show gene expression patterns that are in line with the findings by [@Ryan]. 
 The gene expression for each gene is shown in the figure below.
 We would expect only PP1R12A and FOS to be more highly expressed in the cells
@@ -1682,6 +1539,134 @@ inf_sign_df %>% ggplot(aes(x = signature, y = FOS)) +
 ---
 
 # Appendix
+
+
+## De-novo clustering 
+
+De-novo clustering of the myeloid-lineage cluster of the integrated dataset was
+performed, but did not yield any additional insights. Isolating the iMg and all Myeloid cell clusters from the integrated  dataset and normalizing, scaling and re-clustering these isolated cells might have  
+provided additional insights. 
+
+
+
+<details>
+<summary>Details on de-novo clustering</summary>
+
+
+```
+
+microglia <- subset(combined, cell_type %in% c("iMg",
+                                                "Myeloid1",
+                                                "Myeloid2",
+                                                "Myeloid3",
+                                                "Myeloid4",
+                                                "Myeloid5"))
+microglia_recluster <- SCTransform(microglia, verbose = FALSE)
+microglia_recluster <- ScaleData(microglia_recluster, verbose = FALSE)
+microglia_recluster <- RunPCA(microglia_recluster, verbose = FALSE)
+ElbowPlot(microglia_recluster)
+microglia_recluster <- RunTSNE(microglia_recluster, reduction = "pca", dims = 1:10)
+microglia_recluster <- FindNeighbors(microglia_recluster)
+microglia_recluster <- FindClusters(microglia_recluster, resolution = 0.5)
+```
+
+---
+</details> 
+
+
+It is no surprise that cells from the triculture dataset separate from the 
+CSF/Blood-derived cells which can be seen in the plot below. When reclustering the myeloid lineage derived cells,five subclusters for the iMg and three subclusters for the five CSF/Blood Myeloid clusters are obtained. It can also be observed that
+the Myeloid2 and Myeloid5 separate from Myeloid1/2/3 which is expected, since Myeloid2/5 originate from CSF samples and Myeloid1/3/4 originate from blood samples.
+
+```{r, fig.width=15, fig.height=12}
+microglia_recluster <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/microglia_myeloid_seurat_object_reclustering")
+a1 <- DimPlot(microglia_recluster, reduction = "tsne",
+              group.by = "seurat_clusters", pt.size = .4) +
+  labs(title = "Clustering")
+a2 <- DimPlot(microglia_recluster, reduction ="tsne", 
+              group.by = "cell_type", pt.size = .4) +
+  labs(title = "Cell type")
+a3 <- DimPlot(microglia_recluster, reduction ="tsne",
+              group.by = "dataset", pt.size = .4) +
+    labs(title = "Dataset")
+a4 <- DimPlot(microglia_recluster, reduction = "tsne",
+              group.by = "orig.ident", pt.size = .4) +
+  labs(title = "Sample origin")
+
+fig <- ggarrange(a1, a2, a3, a4, ncol = 2, nrow = 2)
+annotate_figure(fig, 
+                top = text_grob("De-novo clustering of myeloid-lineage clusters", 
+               color = "black", face = "bold", size = 20))
+```
+
+
+Interestingly, both the Myeloid5 cells and the Myeloid2 cells are split between 
+the cluster six (blue) and seven (purple) in the figure below. In the following
+we will have a closer look at this segregation. When performing GRN inference 
+with Scenic we also identified two potentially biologically relevant subclusters of
+the Myeloid2 cells. It could be that these independently found clusters correlate. 
+
+```{r, fig.width=15, fig.height=10}
+a5 <- DimPlot(microglia_recluster, reduction ="tsne", 
+              split.by = "cell_type", pt.size = .4, ncol=3) +
+  labs(title = "Contribution of different cell types to different myeloid clusters")
+a5
+```
+
+It looks like the two clusters identified this way correspond to different
+sample origins. CSF cells from patient1 (HIV1_CSF) and patient2 (HIV2_CSF)
+belong to cluster six, while CSF cells from patient3 (HIV3_CSF) and the two 
+uninfected patients (Uninfected1_CSF, Uninfected2_CSF) belong to 
+cluster seven. The separation of patient3 (HIV3_CSF) from patient1 (HIV1_CSF) 
+and patient2 (HIV2_CSF) might correspond to a batch effect, or it might be a 
+biological effect, for example, the infection might have affected the cells differently.
+
+
+```{r, fig.width=15, fig.height=7}
+#a1 <- DimPlot(subset(microglia_recluster, cell_type == "iMg"), reduction = "tsne",
+           #   group.by = "orig.ident", pt.size = .4)
+a2 <- DimPlot(subset(microglia_recluster, cell_type != "iMg"), reduction = "tsne",
+              group.by = "orig.ident", pt.size = .4) +
+  labs(title = "Sample origin")
+#a3 <- DimPlot(subset(microglia_recluster, cell_type == "iMg"), reduction = "tsne",
+              #group.by = "seurat_clusters", pt.size = .4)
+a4 <- DimPlot(subset(microglia_recluster, cell_type != "iMg"), reduction = "tsne",
+              group.by = "seurat_clusters", pt.size = .4) +
+  labs(title = "Cluster")
+fig <- ggarrange(a2, a4, ncol = 2, nrow = 1)
+annotate_figure(fig, top = text_grob("CSF/Blood Myeloid cells", 
+                                     face = "bold", size = 20))
+```
+
+Since the segregation into two clusters seems to be related to the sample origin
+rather than to the infection status, we would not expect the clusters to overlap
+with the clusters identified after GRN inference with SCENIC. In the figure 
+below it can be seen that the clusters do not overlap (only the Myeloid2 cells from infected CSF samples (HIV1_CSF, HIV2_CSF, HIV3_CSF) are shown). For this reason the reclustering did not lead to any useful insights and will 
+not be analyzed further. 
+
+```{r, fig.width=15, figh.height = 5}
+# read in Myeloid2 cells
+hivmy2 <- readRDS("data_files/hiv_myeloid2_subclusters")
+
+my2 <- subset(microglia_recluster, cell_type == "Myeloid2" & 
+                orig.ident %in% c("HIV1_CSF", "HIV2_CSF", "HIV3_CSF"))
+
+my2 <- AddMetaData(my2, hivmy2@meta.data["ht_cluster"], 
+                   col.name = "TF_activity_clusters")
+p1 <- DimPlot(my2, group.by = "seurat_clusters") +
+  labs(title="Clusters")
+p2 <- DimPlot(my2, group.by = "TF_activity_clusters") +
+  labs(title = "TF activity")
+p3 <- DimPlot(my2, group.by = "orig.ident") +
+  labs(title = "Sample origin")
+figure <- ggarrange(p1, p2, p3, ncol = 3, nrow = 1)
+annotate_figure(figure, 
+                top = text_grob("Comparison with clusters of different TF acitivty", 
+               color = "black", face = "bold", size = 20))
+#my25 <- subset(microglia, seurat_clusters %in% c(6,7) &cell_type %in% c("Myeloid2", "Myeloid5"))
+
+```
+
 
 ## Inflammatory Pathways
 

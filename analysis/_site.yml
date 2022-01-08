@@ -37,5 +37,5 @@ output:
     highlight: textmate
 bibliography: references.bib
 link-citations: yes
-csl: apa.csl
+csl: science.csl
     
