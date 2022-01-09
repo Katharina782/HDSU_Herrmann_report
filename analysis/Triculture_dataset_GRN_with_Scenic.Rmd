@@ -43,7 +43,7 @@ library(multtest)
 library(readxl)
 ```
 
-## Gene regulatory network inference with SCENIC
+# GRN inference with SCENIC
 
 To infer GRNs from iMg cells of the triculture dataset [@Ryan] (4333 cells in 
 total) SCENIC was used as before. When referring to differentially bound TFs in the C20 cell line in the following I am referring to differential binding scores between infection conditions 
@@ -135,14 +135,13 @@ tri_mg@meta.data %>%
 </details>
 
 
-# Bulk ATACseq footprinting, C20 cell line
+# Bulk ATACseq footprinting
 
 The C20 cell line was derived from 
 an HIV+ patient  treated with ART (Antiretroviral Therapy). Since the access 
 of ART to the brain is limited due to the blood-brain barrier, the effects of 
 ART on these cells are probably negligible. Only the 75 TFs with p-values for differential binding scores below 1e-50 were used. We will focus on TFs which show differential binding scores between latent
-infection and uninfected conditions in primary microglia.
-For 25 of these 75 TFs there is a TF activity score for the iMg. Focusing on these 25 TFs we might be able to find activity patterns that 
+infection and uninfected conditions in the C20 cell line. For 25 of these 75 TFs there is a TF activity score for the iMg. Focusing on these 25 TFs we might be able to find activity patterns that 
 correlate with the TF binding scores. Five TFs are more bound in latent infection
 and twenty TFs are more bound in uninfected cells. The reason why we find more of the TFs more bound in uninfected cells 
 in the TF activity score matrix from SCENIC is unclear.
@@ -195,10 +194,13 @@ top_tfs %>%
 
 # TF activity in iMg 
 
-## Heatmap for all TFs
-
 In the heatmap of TF activities below you can already see a trend towards a separation of 
-cells treated with EFZ (blue and green) from untreated cells (red and orange).
+cells treated with EFZ (blue and green) from untreated cells (red and orange). It
+will be interesting to see if an activity pattern resembling the differential
+binding score pattern from the C20 cell line footprinting can be found. For this
+we will focus on the 25 TFs which are found in the C20 cell line and the 
+triculture dataset respectively.
+
 
 <details>
 <summary>**Heatmap of 232 TFs and their activity in iMg**</summary>
@@ -228,12 +230,6 @@ ht
 </details>
 
 
-## Heatmap of 25 TFs with differential binding score
-
-We will now investigate if we can find activity patterns which resemble
-the differential binding score patterns found in 25 TFs.
-
-
 ### K-means clustering with different k {.tabset}
 
 Using k-means clustering we might be able to identify clusters with certain
@@ -259,24 +255,8 @@ and Uninf compared to Inf+EFZ and Uninf+EFZ, namely NFAT5, TCF7L2 and CEBPB.
 TCF4 distinguishes a third cluster. Is there a biological meaning behind that? 
 Can these TFs be associated with a particular condition?
 
-#### wss plot
 
-```{r}
-df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
-                                    orig.ident == "HIV1_CSF")
-mtx <- auc_mtx[, atac_tfs_df$name]
-
-# Decide on a k for clustering
-wss = sapply(2:15, function(k) {
-  kmeans(x = t(mtx), centers = k)$tot.withinss
-})
-
-plot(2:15, wss, type = "b", 
-     xlab = "Number of clusters k", 
-     ylab = "Total within-clusters sum of square")
-```
-
-#### different k
+#### Different k
 
 ```{r, fig.width=15, fig.height=10}
 
@@ -321,6 +301,24 @@ ht <- draw(Heatmap(t(auc_mtx[, atac_tfs_df$name]),
       column_km = 4,
        ))
 ```
+
+#### WSS plot
+
+```{r}
+df <- hiv7@meta.data %>% filter(cell_type == "Myeloid2", 
+                                    orig.ident == "HIV1_CSF")
+mtx <- auc_mtx[, atac_tfs_df$name]
+
+# Decide on a k for clustering
+wss = sapply(2:15, function(k) {
+  kmeans(x = t(mtx), centers = k)$tot.withinss
+})
+
+plot(2:15, wss, type = "b", 
+     xlab = "Number of clusters k", 
+     ylab = "Total within-clusters sum of square")
+```
+
 
 #### {-}
 

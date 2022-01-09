@@ -1,7 +1,10 @@
 ---
 title: "Methods"
 author: "Katharina Mikulik"
-output: html_document
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_depth: 3
 bibliography: references.bib
 link-citations: yes
 ---

@@ -231,12 +231,11 @@ draw(ht_list, ht_gap = unit(1, "cm"))
 
 ## Different approaches
 
-We tried to cluster the Myeloid2 cells based on their TF activity using
-k-means clustering. To do this k-means clustering was performed on 
-Myeloid2 cells from patient one (HIV1_CSF) with k=3/4/5. The reason why only 
-patient one was used, is that the other two patients might be used for validation of the 
-clustering later on. If the clusters have a biological meaning, it should be 
-possible to transfer the clusters onto the Myeloid2 cells from patient2 
+Myeloid2 cells of patient1 (HIV1_CSF) were clustered based on their TF activity
+using k-means clustering with k=3/4/5. The reason why only 
+patient one was used, is that the other two patients might be used for validation
+of the  clustering later on. If the clusters have a biological meaning, it should 
+be possible to transfer the clusters onto the Myeloid2 cells from patient2 
 (HIV2_CSF) and patient3 (HIV3_CSF). Also, if the clusters separate the Myeloid2 
 cells of the other two patients in an interpretable and meaningful way this
 would validate that there is a biological meaning behind the clusters.
@@ -244,8 +243,8 @@ would validate that there is a biological meaning behind the clusters.
 However, the label transfer of the cluster identities did not 
 work, probably due to the small sample size. There are only 146 cells in total in the 
 Myeloid2 cluster of infected patients. A more detailed description of this step
-and corresponding results can be found in the appendix under "Determine k for 
-k-means clustering" and "Transfer the cluster identities to patient2 and patient3".
+and corresponding results can be found in the appendix under *"Determine k for*
+*k-means clustering"* and *"Transfer the cluster identities to patient2 and patient3"*.
 
 Since the approach described did not yield any interesting results, an 
 alternative strategy was used, namely, performing independent k-means clustering
@@ -254,21 +253,20 @@ This way we might find TF activities which differentiate clusters across
 patients and find correlations between clusters across patients.
 
 
-
 ## K-means clustering with k = 3 {.tabset}
 
-Using k = 3, k-means clustering was performed for all 3 patients separately. This
+K-means clustering with k = 3, was performed for all 3 patients separately. This
 way it might be possible to find TFs with different activities between the
 three clusters. The clusters in the heatmaps below look more sensible than the
 clusters observed after cluster label transfer (see appendix).
 
 Since the data is not normally distributed, the Kruskal-Wallis-Test is more
-appropriate than ANOVA. The Null-Hypothesis of the Kruskal-Wallis-Test is that 
+appropriate than ANOVA to test for differences between clusters. The
+Null-Hypothesis of the Kruskal-Wallis-Test is that 
 there is no difference between the groups. Since the test is repeated 125 times, 
 the p-values are adjusted with the
 FDR method. This methods is more powerful than more conservative methods, like
 Bonferroni, Holm or Hochberg. 
-
 
 ### Patient 1
 
@@ -599,7 +597,7 @@ hiv3_atac <- overlap_atac$name[adj_p_values < .05]
 
 ---
 
-### comparison between all 3 patients
+### Comparison between all 3 patients
 
 ```{r, fig.width=15, fig.height=17}
 # patient 1
@@ -629,7 +627,6 @@ draw(ht_list, ht_gap= unit(2, "cm"),
 ```
 
 ---
-
 
 # Different activities between clusters
 
@@ -817,7 +814,7 @@ ggarrange(ctcf1, ctcf2, ctcf3, ncol = 3, nrow = 1)
 ```
 
 
-## Correlation between clusters 
+## Correlation between clusters {.tabset}
 
 The average TF activity of all 125 TFs was computed for every cluster. Based on 
 the average TF activity in each cluster, the correlation between clusters was 
@@ -916,17 +913,8 @@ testCor <- cor.mtest(cor_mtx, conf.level = 0.95, method = "spearman")
 ---
 </details>
 
-#### Scatter matrix
 
-```{r, fig.width = 15, fig.height=15}
-
-GGally::ggpairs(df) + theme_bw() +
-  labs(title = "Scatter matrix for all conditions")
-```
-
----
-
-#### Correlation matrix
+### Correlation matrix
 
 ```{r}
 df %>%
@@ -941,10 +929,18 @@ df %>%
 
 ---
 
+### Scatter matrix
+
+```{r, fig.width = 15, fig.height=15}
+
+GGally::ggpairs(df) + theme_bw() +
+  labs(title = "Scatter matrix for all conditions")
+```
 
 ---
 
-### TF correlation {.tabset}
+
+## TF correlation {.tabset}
 
 For the eleven TFs with different activity between clusters, the correlation 
 between the TF activities was computed. The scatter matrix and correlation plot
@@ -992,19 +988,7 @@ testCor <- cor.mtest(cor_mtx, conf.level = 0.95, method = "spearman")
 </details>
 
 
-#### Scatter matrix
-
-```{r, fig.width=15, fig.height=15}
-GGally::ggpairs(auc_df %>%
-  select(intersect_atac)) + 
-  theme_bw() +
-  labs(title = "Scatter matrix for all TFs with different activity between clusters")
-
-```
-
----
-
-#### Correlation matrix 
+### Correlation matrix 
 
 ```{r}
 df <- auc_df %>%
@@ -1020,6 +1004,19 @@ df <- auc_df %>%
 
 ---
 
+
+### Scatter matrix
+
+```{r, fig.width=15, fig.height=15}
+GGally::ggpairs(auc_df %>%
+  select(intersect_atac)) + 
+  theme_bw() +
+  labs(title = "Scatter matrix for all TFs with different activity between clusters")
+
+```
+
+---
+
 # Gene expression analysis
 
 We will now pool the two clusters
@@ -1027,9 +1024,6 @@ which are significantly different from the third cluster in all patients.
 Consequently, in the following analysis we will compare Cluster1 to Cluster2 (pool of two similar 
 clusters). The gene expression might give a hint about the identity of these 
 two Myeloid2 clusters. 
-
-
-### TF gene expression of the 11 TFs with different activity between clusters
 
 ```{r}
 hivmy2 <- subset(hiv7, cell_type == "Myeloid2" & orig.ident %in% c("HIV1_CSF", "HIV2_CSF", "HIV3_CSF"))
@@ -1177,9 +1171,7 @@ plot(2:15, wss, type = "b",
 The results of using differnet k can be seen below. Click on the tabs to see heatmaps of the k-means clustering, as well as statistical test on different TF
 acitivities between clusters.
 
-### k-means Clustering with k = 3
-
-#### Heatmap for patient 1
+#### k-means Clustering with k = 3
 
 ```{r, fig.width=15, fig.height=17}
 #map(seq.int(1:5), function(k){
@@ -1345,9 +1337,8 @@ wilcox_list <- map(seq.int(1:length(hiv1_atac)), function(i){
 
 ---
 
-### K-means clustering with k = 4
+#### K-means clustering with k = 4
 
-#### Heatmap for patient 1
 
 ```{r, fig.width=15, fig.height=17}
 #map(seq.int(1:5), function(k){
@@ -1504,9 +1495,8 @@ wilcox_list <- map(seq.int(1:length(diff4_atac)), function(i){
 
 ---
 
-### K-means Clustering with k = 5
+#### K-means Clustering with k = 5
 
-#### Heatmap for patient 1
 
 ```{r, fig.width=15, fig.height=17}
 #map(seq.int(1:5), function(k){
@@ -1802,7 +1792,7 @@ annotate_figure(fig, top = text_grob("TFs with significantly different activity 
 
 
 
-## Transfer cluster identitites 
+### Transfer cluster identitites 
 
 The cluster identities from patient 1 were transferred to patient 2 and patient 3
 to assign each cell to one of the 3 clusters. 
@@ -1894,15 +1884,12 @@ hiv3_scenic <- AddMetaData(hiv3, metadata = auc_mtx,
 ---
 </details>
 
-### Predicted cluster labels
 
 The heatmaps below show the predicted clusters from label transfer for
-patient 2 and patient 3
-
-The clusters obtained after transferring the cluster identities from patient 1 to
-patient2 do not seem to be very good at separating cells according to TF activity.
-
-When you transfer the cluster identities from patient1 to patient3 all cells, but
+patient 2 and patient 3. The clusters obtained after transferring the cluster 
+identities from patient 1 to patient2 do not seem to be very good at separating
+cells according to TF activity. When you transfer the cluster identities from 
+patient1 to patient3 all cells, but
 one, are assigned to cluster1. This shows that the label transfer did not work 
 very well. This is probably due to the low number of Myeloid2 cells in each sample.
 
@@ -1962,7 +1949,7 @@ draw(ht_list, ht_gap= unit(2, "cm"))
 ```
 
 
-## Gene expression analysis of the two Myeloid2 subclusters
+### Gene expression analysis of the two Myeloid2 subclusters
 
 #### TF from Farhadian et al.
 

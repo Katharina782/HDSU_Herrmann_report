@@ -519,13 +519,14 @@ percentage_my2_transcripts <- map2_dfr(subset.list, names(subset.list), function
 })
 ```
 
-#### Is there a significant difference in percentage of Myeloid2 transcripts
-between the three conditions?
+#### Is there a significant difference in percentage of Myeloid2 transcripts between the three conditions?
 
 The table below shows that the mean number of Myeloid2 transcripts of both 
 infected and uninfected CSF samples is slightly higher than the mean of blood 
 samples. The mean is even higher in uninfected compared to infected CSF samples. However, the median is highest in blood samples, followed by infected CSF samples
-and it is lowest in uninfected CSF samples. 
+and it is lowest in uninfected CSF samples. To see if there is a difference between the three conditions a Kruskal-Wallis-Test
+was performed. We get a p-value of 4.88 * 10^-9. Therefore, we will perform 
+a pairwise Wilcox test to see which condtions are different from each other.
 
 ```{r}
 percentage_my2_transcripts %>% 
@@ -539,9 +540,6 @@ percentage_my2_transcripts %>%
         caption = "Summary statistics of percentage of Myeloid2 transcripts for different conditions")
 ```
 
-To see if there is a difference between the three conditions a Kruskal-Wallis-Test
-was performed. We get a p-value of 4.88 * 10^-9. Therefore, we will perform 
-a pairwise Wilcox test to see which condtions are different from each other.
 
 ```{r}
 percentage_my2_transcripts %>% 
@@ -595,7 +593,8 @@ p2 <- percentage_my2_transcripts %>% ggplot() +
                outlier.shape = NA) +
   xlab("Sample origin") +
   ylab("Frequency of myeloid2 transcripts per cell") +
-  labs(title = "Remove outliers to see difference") +
+  labs(title = "Remove outliers to zoom in") +
+  ylim(-0.01, 0.05)
   NoLegend()
 
 ggarrange(p1, p2, ncol = 2, nrow = 1)
@@ -817,12 +816,6 @@ two groups of cells. In this case one group of cells at a time was compared agai
 the rest of cells using a Wilcoxon Rank Sum test. 
 The table below lists the two most highly differentially expressed genes for 
 each clusters.
----
-
-</details>
-
-
-</details>
 
 <details> 
 <summary>Table</summary>
@@ -871,8 +864,10 @@ DotPlot(object = hiv4, features = c("MS4A1", # B cells
 B cell markers are found primarily in cluster 7.
 
 ```{r, fig.width=15, fig.height=12}
-p1 <- VlnPlot(hiv4, features = c("MS4A1", "CD79A", "TCL1A"), pt.size = .01)
-p2 <- RidgePlot(hiv4, features =  c("MS4A1", "CD79A", "TCL1A"), sort = "decreasing" )
+p1 <- VlnPlot(hiv4, features = c("MS4A1", "CD79A", "TCL1A"), pt.size = .01, 
+              group.by = "cell_type")
+p2 <- RidgePlot(hiv4, features =  c("MS4A1", "CD79A", "TCL1A"), 
+                sort = "decreasing", group.by = "cell_type" )
 ggarrange(p1,p2, nrow = 2, ncol = 1)
 ```
 
@@ -885,8 +880,9 @@ GZMB, a NK cell marker is also found in cluster 14.
 
 ```{r, fig.width=15, fig.height=12}
 p1 <- VlnPlot(hiv4, features = c("NKG7", "GNLY", "GZMB"),
-        pt.size = .01, ncol = 3)#, stack = TRUE)
-p2 <- RidgePlot(hiv4, features = c("NKG7", "GNLY", "GZMB"), sort = "decreasing")
+        pt.size = .01, ncol = 3, group.by = "cell_type")#, stack = TRUE)
+p2 <- RidgePlot(hiv4, features = c("NKG7", "GNLY", "GZMB"), 
+                sort = "decreasing", group.by = "cell_type")
 
 ggarrange(p1,p2, nrow = 2, ncol = 1)
 ```
@@ -915,20 +911,28 @@ Tcells1/2/3 are numbered arbitrarily, because they are not used for further anal
 
 ```{r, fig.height=20, fig.width=15}
 # general T cell marker for CD4+ and CD8+ Tcells
-p1 <- VlnPlot(hiv4, features = c("CD8A","CD3E"), pt.size = .01, ncol = 2)
-p2 <- RidgePlot(hiv4, features = c("CD8A","CD3E"), sort = "decreasing")
+p1 <- VlnPlot(hiv4, features = c("CD8A","CD3E"), pt.size = .01, ncol = 2,
+              group.by = "cell_type")
+p2 <- RidgePlot(hiv4, features = c("CD8A","CD3E"), sort = "decreasing",
+                group.by = "cell_type")
 
 
-p3 <- VlnPlot(hiv4, features = c("IL7R", "TRAC"), pt.size = 0.01)
-p4 <- RidgePlot(hiv4, features = c("IL7R", "TRAC"), sort = "decreasing")
+p3 <- VlnPlot(hiv4, features = c("IL7R", "TRAC"), pt.size = 0.01,
+              group.by = "cell_type")
+p4 <- RidgePlot(hiv4, features = c("IL7R", "TRAC"), sort = "decreasing",
+                group.by = "cell_type")
 
 # helper T cells
-p5 <- VlnPlot(hiv4, features = c("LTB", "CD2"), pt.size = .01, ncol = 2)
-p6 <- RidgePlot(hiv4, features = c("LTB", "CD2"), sort = "decreasing")
+p5 <- VlnPlot(hiv4, features = c("LTB", "CD2"), pt.size = .01, ncol = 2, 
+              group.by = "cell_type")
+p6 <- RidgePlot(hiv4, features = c("LTB", "CD2"), sort = "decreasing",
+                group.by = "cell_type")
 
 # CD4+ naive T cells
-p7 <- VlnPlot(hiv4, features = c("LDHB", "CCR7"), pt.size = .01, ncol = 2)
-p8 <- RidgePlot(hiv4, features = c("LDHB", "CCR7"), sort = "decreasing")
+p7 <- VlnPlot(hiv4, features = c("LDHB", "CCR7"), pt.size = .01, ncol = 2,
+              group.by = "cell_type")
+p8 <- RidgePlot(hiv4, features = c("LDHB", "CCR7"), sort = "decreasing",
+                group.by = "cell_type")
 
 
 ggarrange(p1, p2,p3, p4, p5, p6, p7,p8, ncol = 2, nrow = 4)
@@ -941,8 +945,10 @@ ggarrange(p1, p2,p3, p4, p5, p6, p7,p8, ncol = 2, nrow = 4)
 Cluster 14 seems to contain plasma cells.
 
 ```{r, fig.width=12, fig.height=5}
-p1 <- VlnPlot(hiv4, features = c("IGJ"), pt.size = .01, ncol = 2)
-p2 <- RidgePlot(hiv4, features = c("IGJ"), sort = "decreasing")
+p1 <- VlnPlot(hiv4, features = c("IGJ"), pt.size = .01, ncol = 2,
+              group.by = "cell_type")
+p2 <- RidgePlot(hiv4, features = c("IGJ"), sort = "decreasing",
+                group.by = "cell_type")
 ggarrange(p1,p2, nrow = 1, ncol = 2)
 ```
 
@@ -963,11 +969,11 @@ Myeloid1, 3, 4 are assigned arbitrarily, because they are not of particular inte
 
 
 ```{r, fig.width=15, fig.height=15}
-p1 <- VlnPlot(hiv4, features = c("LYZ", "FCER1A", "CD14", "FCGR3A"), # FCG3A is also expressed in cluster 9 (NK cells)
-        pt.size = .01, ncol = 2)
-p2 <- RidgePlot(hiv4, features = c("LYZ", "FCER1A"),
+p1 <- VlnPlot(hiv4, features = c("LYZ", "FCER1A", "CD14", "FCGR3A"), 
+                                 group.by = "cell_type", pt.size = .01, ncol = 2)
+p2 <- RidgePlot(hiv4, features = c("LYZ", "FCER1A"), group.by = "cell_type",
           sort = "decreasing", ncol = 2) # DC markers
-p3 <- RidgePlot(hiv4, features = c("CD14", "FCGR3A"), 
+p3 <- RidgePlot(hiv4, features = c("CD14", "FCGR3A"), group.by = "cell_type",
           sort = "decreasing", ncol = 2) # monocytes (LYC also in monocytes)
 ggarrange(p1,p2,p3, nrow = 3, ncol = 1)
 ```
@@ -981,8 +987,10 @@ ggarrange(p1,p2,p3, nrow = 3, ncol = 1)
 
 ```{r, fig.width=15, fig.height=12}
 # Myeloid 5 in the paper
-p1 <- VlnPlot(hiv4, features = c( "FCER1A", "CD1C"), pt.size = .01, ncol = 2)
-p2 <- RidgePlot(hiv4, features = c("FCER1A", "CD1C"), sort = "decreasing", ncol = 2)
+p1 <- VlnPlot(hiv4, features = c( "FCER1A", "CD1C"), pt.size = .01, ncol = 2,
+              group.by = "cell_type")
+p2 <- RidgePlot(hiv4, features = c("FCER1A", "CD1C"), sort = "decreasing", 
+                ncol = 2, group.by = "cell_type")
 ggarrange(p1, p2, nrow = 2, ncol = 1)
 ```
 
@@ -996,12 +1004,14 @@ expressed more highly in Myeloid2 compared to other myeloid clusters [@Farhadian
 
 ```{r, fig.width=15, fig.height=20}
 # Myeloid 2
-p1 <- VlnPlot(hiv4, features = c("AXL", "APOE", "TREM2"), pt.size = .01, ncol = 3)
-p2 <- RidgePlot(hiv4, features = c("AXL", "APOE", "TREM2"), sort = "decreasing")
-p3 <- VlnPlot(hiv4, features = c("CTSB", "APOC1", "MSR1", "C1QA"), 
-              pt.size = .01, ncol = 4)
+p1 <- VlnPlot(hiv4, features = c("AXL", "APOE", "TREM2"), pt.size = .01,
+              ncol = 3, group.by = "cell_type")
+p2 <- RidgePlot(hiv4, features = c("AXL", "APOE", "TREM2"), sort = "decreasing",
+                group.by = "cell_type")
+p3 <- VlnPlot(hiv4, features = c("CTSB", "APOC1", "MSR1", "C1QA"),
+              group.by = "cell_type", pt.size = .01, ncol = 4)
 p4 <- RidgePlot(hiv4, features = c("CTSB", "APOC1", "MSR1", "C1QA"),
-                sort = "decreasing", ncol = 4)
+                sort = "decreasing", ncol = 4, group.by = "cell_type")
 
 ggarrange(p1, p2, p3, p4, ncol = 1, nrow = 4)
 
@@ -1033,10 +1043,6 @@ names(conditions) <- c("HIV1_Bld", "HIV2_Bld", "HIV1_CSF", "HIV2_CSF")
 hiv4 <- RenameIdents(hiv4, conditions)
 
 hiv4 <- AddMetaData(hiv4, col.name = "Condition", metadata = Idents(hiv4))
-
-as.data.frame(cell_types) %>%  rownames_to_column("cluster") %>% knitr::kable()
-
-#table(cell_types) %>% kable(caption = "Table of clusters with annotated cell types")
 ```
 
 ---
@@ -1508,73 +1514,6 @@ do.call(grid.arrange, c(cluster_plots, ncol = 2, nrow = 4))
 ```
 
 ---
-
-### Genes which are upregulated in Myeloid2 compared to all other Myeloid clusters
-
-* overlap of 5 genes with Kraseman microglia -> inflammatory molecules 
-upregulated in disease associated microglia (Krasemann)
-* overlap of 3 genes with disease-associated microglia (Keren-Shaul)
-* Sankowski signature
-
-  + 4 genes overlap with microglia signature
-  + **zero overlap with monocyte gene signature**
-  + 4 genes overlap with homeostatic microglia signature
-  
-* Esaulova paper -> 8 of 10 genes that discriminate microglia are found upregulated
-in Myeloid2 cluster
-* Glass paper -> 132 of the microglia signature are found in the genes 
-upregulated in Myeloid2, 28 of these are also included in the Farhadian Paper 
-signature, 104 are new marekr genes 
-
-```{r}
-Idents(hiv4) <- "cell_type"
-# Find Markers that distinguish My2 from the other Myeloid clusters
-my2_markers <- FindMarkers(hiv4, ident.1  = "Myeloid2",
-            ident.2  = c("Myeloid1", "Myeloid3", "Myeloid4", "Myeloid5"))
-my2_markers <- my2_markers %>% rownames_to_column(var = "gene")
-# Can we find mgnd genes? (Krasemann)
-my2_markers %>% filter(gene %in% mgnd & avg_log2FC > 0)
-# genes in disease-assocaited microglia (Keren-Shaul)
-my2_markers %>% filter(gene %in% disease & avg_log2FC > 0)
-
-# Sankowski
-# microglia gene signature
-microglia <- c("P2RY12", "CX3CR1", "CSF1R", "TMEM119", "SLC2A5" )
-
-# monocyte gene signature
-monocyte <- c("CCR2", "CLEC12A", "PLAC8", "FCN1", "S100A9")
-
-# homeostatic microlgia gene siganture
-homeostatic <- c("CX3CR1", "TMEM119", "CSF1R", "P2RY12",
-                 "P2RY13","SELPLG", "MARCKS")
-
-
-my2_markers %>% filter(gene %in% microglia & avg_log2FC > 0)
-my2_markers %>% filter(gene %in% monocyte & avg_log2FC > 0)
-my2_markers %>% filter(gene %in% homeostatic & avg_log2FC > 0)
-
-
-# Esaulova
-# 10 genes that discriminate microglia
-microglia <- c("C1QC", "C1QB", "C1QA", "TREM2", "TIMD4", "APOC1", 
-               "APOE", "TNFSF18", "CLEC9A", "CXCL12")
-# Can we find these 10 genes in the Myeloid2 upregulated genes?
-my2_markers %>% filter(gene %in% microglia & avg_log2FC > 0)
-
-
-# Glass
-# 84 of the microglia signature genes are more highly expressed in the 
-microglia_genes <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples")
-m1 <- my2_markers %>% filter(gene %in% microglia_genes [["gene_name"]] & avg_log2FC >0)
-# remove the genes that were already used by the Farhadian paper
-m1 <- m1[["gene"]][m1[["gene"]] %in% paper == FALSE]
-
-hiv_new <- AddModuleScore(hiv4, features = m1)
-FeaturePlot(hiv_new, features = "Cluster1") +
-  scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu"))) +
-    labs(title = "Selected signature genes from the Glass paper")
-
-```
 
 ###  Conclusions on Myeloid2 cell type
 

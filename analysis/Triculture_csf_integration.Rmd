@@ -65,283 +65,17 @@ There was decreased expression of pro-imflammatory genes IL1b, Il8 and TNFalpha
 in the infected and treated (Inf+EFZ) vs Inf condition. This suggests a reduced inflammatory reaction [@Ryan]. Nevertheless, there were
 two distinct pathways which were upregulated in 
 Inf+EFZ iMg, namely RhoGDI signaling and CD40 signaling pathway. This will be 
-discussed in more detail later on [@Ryan].
-
-There was  a change in signaling pathways caused by EFZ treatment even in 
+discussed in more detail later on [@Ryan]. There was  a change in signaling 
+pathways caused by EFZ treatment even in 
 the uninfected and treated (Uninf+EFZ) versus the uninfected, but not treated
-(Uninf) condition. The EFZ treatment alone was very different from the EFZ treatment with infection [@Ryan]. 
+(Uninf) condition. The EFZ treatment alone was very different from the EFZ 
+treatment with infection [@Ryan]. 
+
+The data was processed as described by [@Ryan]. For more details on quality 
+control, dimensionality reduction and cell type annotation see in the appendix
+under *"Data processing"*.
 
  
-<details>
-<summary>**Files and data structure**</summary>
-  
-**Read in Files:**
-
-Abbreviations: 
-
-* ia/2 = infected with HIV + treated with ART
-* ca = uninfected + ART
-* ctl = uninfected
-* inf = infected 
-
-File structure: 
-
-* the ".mtx" files contains a sparse matrix of class dgTMatrix
-* the "barcodes.tsv" files contain the cell barcodes
-* the "features.tsv" files contain the feature names as well as ensemble gene ids 
-and "gene expression" strings in a third column
-
-
-There are duplicated features in the data, probably, because there are multiple ensemble gene IDs mapping to the same gene symbol. Therefore, the same gene 
-symbol has multiple expression values. How do you deal with this problem?
-
-* You could make them unique with the function `make.unique()`
-* You could remove the duplicated features. **This is what I did**
-
-```
-path <- "/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/" #"/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/"
-all_files <- list.files(path)
-
-all_cond_list <- map(seq.int(3,7), function(n){
-  file <- all_files[grepl(paste0("GSM427258", n), all_files)]
-  name <- str_extract(file[[1]],"ca|ctl|ia2|ia|inf")
-  barcodes <- read.table(paste0(path,file[[1]]), sep = "\t") 
-  features <- read.table(paste0(path, file[[2]]), sep = "\t")
-  matrix <- readMM(paste0(path, file[[3]]))
-  colnames(matrix) <- barcodes$V1
-  rownames(matrix) <- features$V2
-  matrix <- matrix[!duplicated(rownames(matrix)),]
-  seurat_ob <- CreateSeuratObject(matrix, project = name,
-                                  assay = "RNA", min.cells = 1, min.features = 1)
-  seurat_ob[["percent_mt"]] <- PercentageFeatureSet(seurat_ob, pattern = "^MT-")
-  list(name = name, count = matrix, seurat_ob = seurat_ob)
-})
-
-#saveRDS(all_cond_list, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/seurat_list")
-```
-
----
-</details>
-
-<details>
-<summary>**Files and data structure**</summary>
-
-# Data processing {.tabset}
-
-## Before Quality Control:
-
-
-```{r, fig.width=15}
-all_cond_list <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/seurat_list")
-
-before_qc <- merge(all_cond_list[[1]]$seurat_ob,
-                    c(all_cond_list[[2]]$seurat_ob,
-                      all_cond_list[[3]]$seurat_ob,
-                      all_cond_list[[4]]$seurat_ob,
-                      all_cond_list[[5]]$seurat_ob),
-                    project = "triculture_all_conditions",
-                    add.cell.ids = c(paste0(all_cond_list[[1]]$name),
-                                     paste0(all_cond_list[[2]]$name),
-                                     paste0(all_cond_list[[3]]$name),
-                                     paste0(all_cond_list[[4]]$name),
-                                     paste0(all_cond_list[[5]]$name)))
-```
-
-
-```{r, fig.width=15, fig.height=7}
-qual_metric <- c("nFeature_RNA", "nCount_RNA", "percent_mt")
-
-plots <- map(qual_metric, function(metric){
-  ggplot() +
-    geom_violin(aes(x = before_qc@meta.data %>% pull("orig.ident"),
-                 y = before_qc@meta.data %>% pull(metric), 
-                 fill = before_qc@meta.data %>% pull("orig.ident")), 
-                alpha = .5) +
-    geom_boxplot(aes(x = before_qc@meta.data %>% pull("orig.ident"),
-                     y = before_qc@meta.data %>% pull(metric)),
-                 alpha = 0) +
-    xlab("sample origin") +
-    ylab(paste0(metric)) +
-    NoLegend() 
-})
-
-do.call(grid.arrange, c(plots, ncol = 3, nrow = 1))
-```
-
----
-
-## After quality control
-
-For each sample separately
-
-* remove genes expressing less than 200 genes or more than 5000
-* remove cells expressing more than 20% mitochondrial genes
-* merge Seurat objects after Quality Control
-
-```{r}
-# add percentage of mitochondiral genes to metadata
-all_cond <- map(seq.int(1,5), function(n){
-  seurat_ob <- all_cond_list[[n]]$seurat_ob
-  #seurat_ob[["percent_mt"]] <- PercentageFeatureSet(seurat_ob, pattern = "^MT-")
-  #plot <- VlnPlot(seurat_ob,
-   #               features = c("nFeature_RNA", "percent_mt", "nCount_RNA"),
-    #              ncol = 3) +
-    #labs(title = paste0("condition ", all_cond_list[[n]]$name))
-  seurat_ob <- subset(seurat_ob, nFeature_RNA > 200 & nFeature_RNA < 5000 & percent_mt < 20)
-  list(name = all_cond_list[[n]]$name, seurat_ob = seurat_ob)#, plot = plot)
-})
-```
-
-
-```{r, fig.width=15}
-triculture <- merge(all_cond[[1]]$seurat_ob,
-                    c(all_cond[[2]]$seurat_ob,
-                      all_cond[[3]]$seurat_ob,
-                      all_cond[[4]]$seurat_ob,
-                      all_cond[[5]]$seurat_ob),
-                    project = "triculture_all_conditions",
-                    add.cell.ids = c(paste0(all_cond[[1]]$name),
-                                     paste0(all_cond[[2]]$name),
-                                     paste0(all_cond[[3]]$name),
-                                     paste0(all_cond[[4]]$name),
-                                     paste0(all_cond[[5]]$name)))
-```
-
-
-```{r, fig.width=15, fig.height=7}
-qual_metric <- c("nFeature_RNA", "nCount_RNA", "percent_mt")
-
-plots <- map(qual_metric, function(metric){
-  ggplot() +
-    geom_violin(aes(x = triculture@meta.data %>% pull("orig.ident"),
-                 y = triculture@meta.data %>% pull(metric), 
-                 fill = triculture@meta.data %>% pull("orig.ident")), 
-                alpha = .5) +
-    geom_boxplot(aes(x = triculture@meta.data %>% pull("orig.ident"),
-                     y = triculture@meta.data %>% pull(metric)),
-                 alpha = 0) +
-    xlab("sample origin") +
-    ylab(paste0(metric)) +
-    NoLegend() 
-})
-
-do.call(grid.arrange, c(plots, ncol = 3, nrow = 1))
-```
-
----
-
-## Normalization, Scaling, Find Variable Features
-
-* log normalization
-* scale data so that we have mean = 0 and variance = 1
-* Find the 2000 most highly variable features
-
-```
-triculture <- NormalizeData(triculture, verbose = FALSE)
-triculture <- ScaleData(triculture, verbose = FALSE)
-triculture <- FindVariableFeatures(triculture, verbose = FALSE)
-```
----
-
-## Dimensionality reduction
-
-* compute PCA
-* use elbow plot to determine dimensions that contribute to variability
-* find the k-nearest neighbors
-* find Clusters based on KNN-graph
-* calculate TSNE embedding
-
-```
-triculture <- RunPCA(triculture, features = VariableFeatures(triculture), verbose = FALSE)
-ElbowPlot(triculture)
-
-triculture <- FindNeighbors(triculture, verbose = FALSE)
-triculture <- FindClusters(triculture, verbose = FALSE)
-
-triculture <- RunTSNE(triculture, dims = 1:10, verbose = FALSE)
-```
-
-```{r}
-triculture <- readRDS("seurat_objects/triculture_seurat_object")
-
-#triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
-
-DimPlot(triculture, reduction = "tsne", pt.size = .01,label = TRUE,
-        group.by = "seurat_clusters")
-```
-
----
-
-## Cell type annotation
-
-For annotating the different clusters the same markers as in [@Ryan] were used:
-
-* *Microglia:* AIF1, SPI1, CD4
-* *Astrocytes:* SOX9, THBS1
-* *Neurons:* SYN1, MAP2
-
-```{r, fig.widht = 15, fig.height=12}
-#markers <- FindAllMarkers(triculture)
-#triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
-markers <- read.table("data_files/marker_genes_triculture_dataset")
-#markers <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/marker_genes_triculture_dataset")
-
-top_2 <- markers %>% group_by("seurat_cluster") %>% top_n(n = 2, wt = avg_log2FC)
-
-marker_genes <- c("AIF1", "SPI1", "CD4", "MAP2", "SYN1", "THBS1", "SOX9")
-p1 <- FeaturePlot(triculture, features = "AIF1")
-p2 <- FeaturePlot(triculture, features = "SPI1")
-p3 <- FeaturePlot(triculture, features = "CD4")
-p4 <- FeaturePlot(triculture, features = "MAP2")
-p5 <- FeaturePlot(triculture, features = "SYN1")
-p6 <- FeaturePlot(triculture, features = "THBS1")
-p7 <- FeaturePlot(triculture, features = "SOX9")
-
-ggarrange(p1,p2,p3,p4,p5,p6,p7, ncol = 2, nrow =4 )
-
-```
-
-
-
-<details>
-<summary>**Details on cell type annotation**</summary>
-
-**Gene expression**
-
-Different clusters were annotated according to the gene expression of 
-marker genes mentioned above.
-
-```{r, fig.width=15}
-
-VlnPlot(triculture, features = c("CD4", "SPI1", "AIF1"), group.by = "seurat_clusters")#, group.by = seurat_cluster)
-VlnPlot(triculture, features = c("MAP2", "SYN1"), group.by = "seurat_clusters")
-VlnPlot(triculture, features = c("THBS1", "SOX9"), group.by = "seurat_clusters")
-```
-
-```{r}
-# 4, 9, 11, 18 = Microglia
-# 0, 1, 2, 3,8, 10, 13, 15, 18, 19 = Neurons 
-# 6, 7, 12, 14, 16 = Astrocytes
-# 5, 17 are undesginated
-cell_types <- (triculture@meta.data %>% 
-  mutate(cell_type = case_when(
-    seurat_clusters %in% c(4,9,11) ~ "iMg", 
-    seurat_clusters %in% c(6,7,12,14,16) ~ "iAst", 
-    seurat_clusters %in% c(0,1,2,3,8,10,13,15,18,19) ~ "iNeurons",
-    TRUE  ~ "Undesignated")))[["cell_type"]]
-  
-triculture <- AddMetaData(triculture, cell_types, col.name = "cell_type")
-
-```
-
----
-</details>
-
-
----
-</details
-
----
 
 # Exploring the dataset
 
@@ -353,6 +87,7 @@ did.
 
 
 ```{r}
+triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
 p1 <- DimPlot(triculture, reduction = "tsne", pt.size = .01, label = TRUE,
         group.by = "cell_type") +
   labs(title = "cell types")
@@ -382,6 +117,7 @@ Top20 marker genes for each cell cell type:
  
 ```{r, fig.width=15, fig.height=25}
 Idents(triculture_clean) <- "cell_type"
+markers <- read.table("data_files/marker_genes_triculture_dataset")
 top_n <- markers %>% group_by (cluster) %>% top_n(n = 20, wt = avg_log2FC)
 DoHeatmap(triculture_clean, features = top_n$gene)
 ```
@@ -489,9 +225,8 @@ DoHeatmap(subset(triculture_clean, cell_type == "iMg"),
 # Integration Triculture & CSF/Blood 
 
 The HIV Blood & CSF dataset [@Farhadian]
-used in the previous analysis was integrated with the triculture dataset [@Ryan].
-
-Integration of the two datasets is based on the Seurat package [@Stuart].
+used in the previous analysis was integrated with the triculture dataset 
+[@Ryan]. Integration of the two datasets is based on the Seurat package [@Stuart].
 It first identifies 
 anchors between datasets, calculates scores for all anchors and 
 then calculates an integrated expression matrix which can be used for downstream
@@ -572,7 +307,9 @@ since they are both
 myeloid-lineage cells. However, it also makes it more difficult to draw conclusions
 on which of the five Myeloid clusters is the most microglia-like. Therefore, we 
 had a closer look at this myeloid-lineage cluster consisting of iMg from
-triculture and Myeloid cells from CSF and Blood samples.
+triculture and Myeloid cells from CSF and Blood samples. De-novo clustering
+of the myeloid-lineage cells was performed, but did not lead to any additional
+insights (see appendix under *"De-novo clustering"*)
 
 
 #### Visualization of the integrated dataset
@@ -691,14 +428,14 @@ DimPlot(subset_monocytes, group.by = "seurat_clusters",
 
 ### Between infection conditions
 
-In the following I will compare gene expression between infected cells and 
-uninfected cells, both treated with EFZ and not treated. I will use the uninfected cells as a 
-baseline to find genes which are upregulated or downregulated in infected cells
-compared to uninfected cells. Since we have both cells treated with EFZ and 
-cells not treated with EFZ, we can define a signature for both treatment 
-conditions separately and then see if there is an overlap between the gene 
-signatures of infected cells +/- EFZ. Finding genes which overlap independently 
-of treamtent condition increases the confidence in the results
+In the following gene expression was compared between infected cells and 
+uninfected cells, both treated with EFZ and not treated. The uninfected cells 
+were used as a baseline to find genes which are upregulated or downregulated in
+infected cells compared to uninfected cells. Since there are both cells treated with EFZ and 
+cells not treated with EFZ, a signature can be defined for both treatment 
+conditions separately. This way, an overlap between the gene signatures of infected
+cells +/- EFZ might be identified. Finding genes which overlap independently 
+of treatment condition increases the confidence in the results-
 
 <details>
 <summary>**List of top up- or downregulated genes in Inf+EFZ vs Uninf+EFZ**</summary>
@@ -927,7 +664,7 @@ treatment_marker_uninf %>%
 
 Checking the differentially expressed genes and trying to identify an infection signature through literature search turned out to be very difficult. Therefore, 
 a different approach was used. The top twenty up- and downregulated genes in 
-Inf+EFZ vs Uninf+EFZ were computed. Using these genes as an "infection signature" 
+Inf+EFZ vs Uninf+EFZ were computed. Using these genes as an infection signature 
 it will be investigated whether some of the Myeloid2 cells from the CSF samples 
 show a similar signature.
   
@@ -1540,6 +1277,269 @@ inf_sign_df %>% ggplot(aes(x = signature, y = FOS)) +
 
 # Appendix
 
+## Data processing {.tabset}
+
+<details>
+<summary>**Files and data structure**</summary>
+  
+**Read in Files:**
+
+Abbreviations: 
+
+* ia/2 = infected with HIV + treated with ART
+* ca = uninfected + ART
+* ctl = uninfected
+* inf = infected 
+
+File structure: 
+
+* the ".mtx" files contains a sparse matrix of class dgTMatrix
+* the "barcodes.tsv" files contain the cell barcodes
+* the "features.tsv" files contain the feature names as well as ensemble gene ids 
+and "gene expression" strings in a third column
+
+
+There are duplicated features in the data, probably, because there are multiple ensemble gene IDs mapping to the same gene symbol. Therefore, the same gene 
+symbol has multiple expression values. How do you deal with this problem?
+
+* You could make them unique with the function `make.unique()`
+* You could remove the duplicated features. **This is what I did**
+
+```
+path <- "/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/" #"/media/ag-cherrmann/kmikulik/HIV_microglia/data/GSE143686_RAW/"
+all_files <- list.files(path)
+
+all_cond_list <- map(seq.int(3,7), function(n){
+  file <- all_files[grepl(paste0("GSM427258", n), all_files)]
+  name <- str_extract(file[[1]],"ca|ctl|ia2|ia|inf")
+  barcodes <- read.table(paste0(path,file[[1]]), sep = "\t") 
+  features <- read.table(paste0(path, file[[2]]), sep = "\t")
+  matrix <- readMM(paste0(path, file[[3]]))
+  colnames(matrix) <- barcodes$V1
+  rownames(matrix) <- features$V2
+  matrix <- matrix[!duplicated(rownames(matrix)),]
+  seurat_ob <- CreateSeuratObject(matrix, project = name,
+                                  assay = "RNA", min.cells = 1, min.features = 1)
+  seurat_ob[["percent_mt"]] <- PercentageFeatureSet(seurat_ob, pattern = "^MT-")
+  list(name = name, count = matrix, seurat_ob = seurat_ob)
+})
+
+#saveRDS(all_cond_list, "/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/seurat_list")
+```
+
+---
+</details>
+
+### Before Quality Control:
+
+
+```{r, fig.width=15}
+all_cond_list <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/seurat_list")
+
+before_qc <- merge(all_cond_list[[1]]$seurat_ob,
+                    c(all_cond_list[[2]]$seurat_ob,
+                      all_cond_list[[3]]$seurat_ob,
+                      all_cond_list[[4]]$seurat_ob,
+                      all_cond_list[[5]]$seurat_ob),
+                    project = "triculture_all_conditions",
+                    add.cell.ids = c(paste0(all_cond_list[[1]]$name),
+                                     paste0(all_cond_list[[2]]$name),
+                                     paste0(all_cond_list[[3]]$name),
+                                     paste0(all_cond_list[[4]]$name),
+                                     paste0(all_cond_list[[5]]$name)))
+```
+
+
+```{r, fig.width=15, fig.height=7}
+qual_metric <- c("nFeature_RNA", "nCount_RNA", "percent_mt")
+
+plots <- map(qual_metric, function(metric){
+  ggplot() +
+    geom_violin(aes(x = before_qc@meta.data %>% pull("orig.ident"),
+                 y = before_qc@meta.data %>% pull(metric), 
+                 fill = before_qc@meta.data %>% pull("orig.ident")), 
+                alpha = .5) +
+    geom_boxplot(aes(x = before_qc@meta.data %>% pull("orig.ident"),
+                     y = before_qc@meta.data %>% pull(metric)),
+                 alpha = 0) +
+    xlab("sample origin") +
+    ylab(paste0(metric)) +
+    NoLegend() 
+})
+
+do.call(grid.arrange, c(plots, ncol = 3, nrow = 1))
+```
+
+---
+
+### After quality control
+
+For each sample separately
+
+* remove genes expressing less than 200 genes or more than 5000
+* remove cells expressing more than 20% mitochondrial genes
+* merge Seurat objects after Quality Control
+
+```{r}
+# add percentage of mitochondiral genes to metadata
+all_cond <- map(seq.int(1,5), function(n){
+  seurat_ob <- all_cond_list[[n]]$seurat_ob
+  #seurat_ob[["percent_mt"]] <- PercentageFeatureSet(seurat_ob, pattern = "^MT-")
+  #plot <- VlnPlot(seurat_ob,
+   #               features = c("nFeature_RNA", "percent_mt", "nCount_RNA"),
+    #              ncol = 3) +
+    #labs(title = paste0("condition ", all_cond_list[[n]]$name))
+  seurat_ob <- subset(seurat_ob, nFeature_RNA > 200 & nFeature_RNA < 5000 & percent_mt < 20)
+  list(name = all_cond_list[[n]]$name, seurat_ob = seurat_ob)#, plot = plot)
+})
+```
+
+
+```{r, fig.width=15}
+triculture <- merge(all_cond[[1]]$seurat_ob,
+                    c(all_cond[[2]]$seurat_ob,
+                      all_cond[[3]]$seurat_ob,
+                      all_cond[[4]]$seurat_ob,
+                      all_cond[[5]]$seurat_ob),
+                    project = "triculture_all_conditions",
+                    add.cell.ids = c(paste0(all_cond[[1]]$name),
+                                     paste0(all_cond[[2]]$name),
+                                     paste0(all_cond[[3]]$name),
+                                     paste0(all_cond[[4]]$name),
+                                     paste0(all_cond[[5]]$name)))
+```
+
+
+```{r, fig.width=15, fig.height=7}
+qual_metric <- c("nFeature_RNA", "nCount_RNA", "percent_mt")
+
+plots <- map(qual_metric, function(metric){
+  ggplot() +
+    geom_violin(aes(x = triculture@meta.data %>% pull("orig.ident"),
+                 y = triculture@meta.data %>% pull(metric), 
+                 fill = triculture@meta.data %>% pull("orig.ident")), 
+                alpha = .5) +
+    geom_boxplot(aes(x = triculture@meta.data %>% pull("orig.ident"),
+                     y = triculture@meta.data %>% pull(metric)),
+                 alpha = 0) +
+    xlab("sample origin") +
+    ylab(paste0(metric)) +
+    NoLegend() 
+})
+
+do.call(grid.arrange, c(plots, ncol = 3, nrow = 1))
+```
+
+---
+
+### Normalization, Scaling, Find Variable Features
+
+* log normalization
+* scale data so that we have mean = 0 and variance = 1
+* Find the 2000 most highly variable features
+
+```
+triculture <- NormalizeData(triculture, verbose = FALSE)
+triculture <- ScaleData(triculture, verbose = FALSE)
+triculture <- FindVariableFeatures(triculture, verbose = FALSE)
+```
+---
+
+### Dimensionality reduction
+
+* compute PCA
+* use elbow plot to determine dimensions that contribute to variability
+* find the k-nearest neighbors
+* find Clusters based on KNN-graph
+* calculate TSNE embedding
+
+```
+triculture <- RunPCA(triculture, features = VariableFeatures(triculture), verbose = FALSE)
+ElbowPlot(triculture)
+
+triculture <- FindNeighbors(triculture, verbose = FALSE)
+triculture <- FindClusters(triculture, verbose = FALSE)
+
+triculture <- RunTSNE(triculture, dims = 1:10, verbose = FALSE)
+```
+
+```{r}
+triculture <- readRDS("seurat_objects/triculture_seurat_object")
+
+#triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
+
+DimPlot(triculture, reduction = "tsne", pt.size = .01,label = TRUE,
+        group.by = "seurat_clusters")
+```
+
+---
+
+### Cell type annotation
+
+For annotating the different clusters the same markers as in [@Ryan] were used:
+
+* *Microglia:* AIF1, SPI1, CD4
+* *Astrocytes:* SOX9, THBS1
+* *Neurons:* SYN1, MAP2
+
+```{r, fig.widht = 15, fig.height=12}
+#markers <- FindAllMarkers(triculture)
+#triculture <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Triculture_dataset_Ryan_paper/triculture_seurat_object")
+markers <- read.table("data_files/marker_genes_triculture_dataset")
+#markers <- read.table("/media/ag-cherrmann/kmikulik/HIV_microglia/data/marker_genes_triculture_dataset")
+
+top_2 <- markers %>% group_by("seurat_cluster") %>% top_n(n = 2, wt = avg_log2FC)
+
+marker_genes <- c("AIF1", "SPI1", "CD4", "MAP2", "SYN1", "THBS1", "SOX9")
+p1 <- FeaturePlot(triculture, features = "AIF1")
+p2 <- FeaturePlot(triculture, features = "SPI1")
+p3 <- FeaturePlot(triculture, features = "CD4")
+p4 <- FeaturePlot(triculture, features = "MAP2")
+p5 <- FeaturePlot(triculture, features = "SYN1")
+p6 <- FeaturePlot(triculture, features = "THBS1")
+p7 <- FeaturePlot(triculture, features = "SOX9")
+
+ggarrange(p1,p2,p3,p4,p5,p6,p7, ncol = 2, nrow =4 )
+
+```
+
+
+
+<details>
+<summary>**Details on cell type annotation**</summary>
+
+**Gene expression**
+
+Different clusters were annotated according to the gene expression of 
+marker genes mentioned above.
+
+```{r, fig.width=15}
+
+VlnPlot(triculture, features = c("CD4", "SPI1", "AIF1"), group.by = "seurat_clusters")#, group.by = seurat_cluster)
+VlnPlot(triculture, features = c("MAP2", "SYN1"), group.by = "seurat_clusters")
+VlnPlot(triculture, features = c("THBS1", "SOX9"), group.by = "seurat_clusters")
+```
+
+```{r}
+# 4, 9, 11, 18 = Microglia
+# 0, 1, 2, 3,8, 10, 13, 15, 18, 19 = Neurons 
+# 6, 7, 12, 14, 16 = Astrocytes
+# 5, 17 are undesginated
+cell_types <- (triculture@meta.data %>% 
+  mutate(cell_type = case_when(
+    seurat_clusters %in% c(4,9,11) ~ "iMg", 
+    seurat_clusters %in% c(6,7,12,14,16) ~ "iAst", 
+    seurat_clusters %in% c(0,1,2,3,8,10,13,15,18,19) ~ "iNeurons",
+    TRUE  ~ "Undesignated")))[["cell_type"]]
+  
+triculture <- AddMetaData(triculture, cell_types, col.name = "cell_type")
+
+```
+
+---
+</details>
+
+---
 
 ## De-novo clustering 
 
