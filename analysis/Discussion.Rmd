@@ -83,7 +83,7 @@ infected + EFZ iMg. This would suggest that the cluster of interest are indeed
 latently infected microglia-like cells. However, MEF2A and MEF2C are suggesting
 the opposite. No clear conclusion can be drawn from these five TFs alone.
 
-Integrating the triculture dataset and the CSF/Blood dataset it became evident 
+Integrating the triculture data set and the CSF/Blood data set it became evident 
 that iMg and all Myeloid clusters, not only the Myeloid2 share some similarities,
 because they are from the same cell lineage. Using the up- and downregulated
 gene signature of infected and treated iMg, 51 Myeloid2 cells were identified 

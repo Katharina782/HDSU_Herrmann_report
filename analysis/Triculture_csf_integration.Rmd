@@ -1,5 +1,5 @@
 ---
-title: "Analysis of Triculture dataset and integration with CSF/Blood dataset"
+title: "Analysis of triculture data set & integration with CSF/Blood data set"
 author: "kmikulik"
 date: "28 12 2021"
 output: html_document
@@ -44,9 +44,9 @@ library(multtest)
 library(readxl)
 ```
 
-# Triculture Dataset
+# Triculture data set
 
-The triculture dataset used in the following analysis was published by [@Ryan]. 
+The triculture data set used in the following analysis was published by Ryan et al. [@Ryan]. 
 They used a Triculture system with induced neurons, induced astrocytes and 
 induced microglia.
 Induced microglia express marker genes CX3CR1, IBA1, TMEM119 and P2RY12.
@@ -71,18 +71,18 @@ the uninfected and treated (Uninf+EFZ) versus the uninfected, but not treated
 (Uninf) condition. The EFZ treatment alone was very different from the EFZ 
 treatment with infection [@Ryan]. 
 
-The data was processed as described by [@Ryan]. For more details on quality 
+The data was processed as described by Ryan et al. [@Ryan]. For more details on quality 
 control, dimensionality reduction and cell type annotation see in the appendix
 under *"Data processing"*.
 
  
 
-# Exploring the dataset
+# Exploring the data set
 
 ### Remove undesignated cells
 
 There is one group of cells where it is not clear which cell state they 
-represent (Undesignated), we will exclude them from further analysis as [@Ryan] 
+represent (Undesignated), we will exclude them from further analysis as Ryan et al. [@Ryan] 
 did.
 
 
@@ -131,7 +131,7 @@ DoHeatmap(triculture_clean, features = top_n$gene)
 <summary>**Number of cells per condition and cell type**</summary>
 
 
-How many cells of each cell type and condition are present in the dataset?
+How many cells of each cell type and condition are present in the data set?
 
 ```{r, results = "asis"}
 triculture_clean@meta.data %>% group_by(cell_type, orig.ident) %>% 
@@ -224,17 +224,17 @@ DoHeatmap(subset(triculture_clean, cell_type == "iMg"),
 
 # Integration Triculture & CSF/Blood 
 
-The HIV Blood & CSF dataset [@Farhadian]
-used in the previous analysis was integrated with the triculture dataset 
-[@Ryan]. Integration of the two datasets is based on the Seurat package [@Stuart].
+The HIV Blood & CSF data set [@Farhadian]
+used in the previous analysis was integrated with the triculture data set 
+[@Ryan]. Integration of the two data sets is based on the Seurat package [@Stuart].
 It first identifies 
-anchors between datasets, calculates scores for all anchors and 
+anchors between data sets, calculates scores for all anchors and 
 then calculates an integrated expression matrix which can be used for downstream
 analysis.
 
 
-1. Identify features which are variable across datasets
-2. Identify anchors between the two datasets and create an integrated data assay
+1. Identify features which are variable across data sets
+2. Identify anchors between the two data sets and create an integrated data assay
 3. Run a single integrated analysis on all cells
 
 
@@ -243,8 +243,8 @@ analysis.
 
 For more details see: [@Stuart] and Discussion
 
-1. Identify features which are variable across datasets
-2. Identify anchors between the two datasets and create an integrated data assay
+1. Identify features which are variable across data sets
+2. Identify anchors between the two data sets and create an integrated data assay
 3. Run a single integrated analysis on all cells
 
 ```
@@ -300,7 +300,7 @@ combined <- AddMetaData(combined, combined_clusters, col.name = "combined_cluste
 
 ## Integrated clusters
 
-When integrating the CSF dataset and the Triculture dataset the iMg cells 
+When integrating the CSF data set and the Triculture data set the iMg cells 
 cluster together with the Myeloid cells from the CSF and Blood samples from 
 the HIV infected/uninfected patients (see figure below). This is as expected,
 since they are both
@@ -312,14 +312,14 @@ of the myeloid-lineage cells was performed, but did not lead to any additional
 insights (see appendix under *"De-novo clustering"*)
 
 
-#### Visualization of the integrated dataset
+#### Visualization of the integrated data set
 
 ```{r, fig.width=15, fig.height=15}
 combined = readRDS("seurat_objects/triculture_hiv_combined_seurat_object_2")
 
 p1 <- DimPlot(combined, reduction = "tsne", group.by  = "dataset",
               label = TRUE) + NoLegend() +
-  labs(title = "Dataset")
+  labs(title = "Data set")
 p2 <- DimPlot(combined, reduction = "tsne", group.by = "cell_type",
               label = TRUE, repel = TRUE) + NoLegend() +
   labs(title = "Cell types")
@@ -333,11 +333,11 @@ p4 <- DimPlot(combined, reduction = "tsne", group.by = "seurat_clusters",
 a1 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
         group.by = "seurat_clusters", label = TRUE, repel =TRUE) +
   NoLegend() +
-  labs(title = "Clusters split into datasets")
+  labs(title = "Clusters split into data sets")
 
 a2 <- DimPlot(combined, reduction = "tsne", split.by = "dataset", 
               group.by = "orig.ident") +
-  labs(title = "Sample origin split into datasets")
+  labs(title = "Sample origin split into data sets")
 
 ggarrange(p1, p2, p3,p4, a1, a2, ncol = 2, nrow = 3)
 
@@ -701,7 +701,7 @@ negative score. It would be interesting to know if some of these cells
 are the same as those with a high score for the upregulated genes.
 Identifying cells in which both the upregulated gene
 signature and the downregulated gene signature have a positive or negative score
-respectively increases the confidence in the results. 51 cells have both a 
+respectively increases the confidence in the results. 35% of cells (51 out of 146) cells have both a 
 positive score for the upregulated genes and a negative score for the
 downregulated genes. Cells exhibiting this specific pattern of gene expression 
 are likely infected cells. Since the infection status of the cells in the CSF 
@@ -1209,7 +1209,7 @@ sign <- adj_p_values[adj_p_values < 0.05]
 
 ## Gene expression of inflammatory genes 
 
-[@Ryan] showed that two pathways are specifically activated in the Inf+EFZ 
+[@Ryan] 'Ryan et al. showed that two pathways are specifically activated in the Inf+EFZ 
 condition, namely RhoGDI signaling and CD40 signaling. This effect was not seen 
 in Uninf+EFZ, so it does not seem to be caused by EFZ alone, 
 but rather a combination of infection and EFZ treatment [@Ryan].
@@ -1222,7 +1222,7 @@ but rather a combination of infection and EFZ treatment [@Ryan].
   + NFKBIA, ICAM1, TFNAIP3 were downregulated 
   
 Here, we would like to see if cells with high scores for the Inf+EFZ signature
-show gene expression patterns that are in line with the findings by [@Ryan]. 
+show gene expression patterns that are in line with the findings by Ryan et al. [@Ryan]. 
 The gene expression for each gene is shown in the figure below.
 We would expect only PP1R12A and FOS to be more highly expressed in the cells
 with Inf+EFZ signature, while all other genes should be less highly expressed.
@@ -1274,6 +1274,25 @@ inf_sign_df %>% ggplot(aes(x = signature, y = FOS)) +
 ```
 
 ---
+
+# Conclusions
+
+Integrating the triculture data set with the CSF and blood data set confirmed our
+expectation that Myeloid cells from the CSF, and blood respectively, clustered 
+together with the iMg cells, because they share the same cell lineage. Since the infection
+status of iMg is known it was possible to define a signature for infected and EFZ-treated
+iMg. This signature showed high scores in some of the Myeloid2 cells. 51 out of 
+145 Myeloid2 cells (35%) had a positive or negative score for genes upregulated or 
+downregulated in infected iMg (+EFZ) respectively. These 51 cells are hypothesized to be 
+infected Myeloid2 cells. Yet, they are not the same group of cells which were described
+before to be latently infected cells. For more details see 
+discussion. The identified signature of infection & treatment could
+also be used for other data sets on HIV infection in microglia. An interesting finding to keep in mind
+is that the effect of the ART treatment was very strong. However, the identified 
+treatment signature was not found at a significant level in the Myeloid2 cells, 
+probably, because patients from which CSF samples were obtained received a different 
+drug and the drug concentrations are not as high in the central nervous system as when
+directly applied to cell culture. 
 
 # Appendix
 
@@ -1543,8 +1562,8 @@ triculture <- AddMetaData(triculture, cell_types, col.name = "cell_type")
 
 ## De-novo clustering 
 
-De-novo clustering of the myeloid-lineage cluster of the integrated dataset was
-performed, but did not yield any additional insights. Isolating the iMg and all Myeloid cell clusters from the integrated  dataset and normalizing, scaling and re-clustering these isolated cells might have  
+De-novo clustering of the myeloid-lineage cluster of the integrated data set was
+performed, but did not yield any additional insights. Isolating the iMg and all Myeloid cell clusters from the integrated  data set and normalizing, scaling and re-clustering these isolated cells might have  
 provided additional insights. 
 
 
@@ -1574,7 +1593,7 @@ microglia_recluster <- FindClusters(microglia_recluster, resolution = 0.5)
 </details> 
 
 
-It is no surprise that cells from the triculture dataset separate from the 
+It is no surprise that cells from the triculture data set separate from the 
 CSF/Blood-derived cells which can be seen in the plot below. When reclustering the myeloid lineage derived cells,five subclusters for the iMg and three subclusters for the five CSF/Blood Myeloid clusters are obtained. It can also be observed that
 the Myeloid2 and Myeloid5 separate from Myeloid1/2/3 which is expected, since Myeloid2/5 originate from CSF samples and Myeloid1/3/4 originate from blood samples.
 
@@ -1712,7 +1731,7 @@ inf_uninf_art_marker %>%
 
 
 The changes in gene expression of both pathways are in line with the findings 
-by [@Ryan]. 
+by Ryan et al. [@Ryan]. 
 
 Additionally, we were interested whether this pattern in gene expression 
 correlated with the two clusters identified in Myeloid2 which exhibit different

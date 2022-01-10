@@ -1,5 +1,5 @@
 ---
-title: "TF activity in iMg from triculture dataset"
+title: "Transcription factor activity in iMg"
 author: "Katharina Mikulik"
 output: html_document
 bibliography: references.bib
@@ -45,7 +45,7 @@ library(readxl)
 
 # GRN inference with SCENIC
 
-To infer GRNs from iMg cells of the triculture dataset [@Ryan] (4333 cells in 
+To infer GRNs from iMg cells of the triculture data set [@Ryan] (4333 cells in 
 total) SCENIC was used as before. When referring to differentially bound TFs in the C20 cell line in the following I am referring to differential binding scores between infection conditions 
 obtained from bulk ATACseq data from C20 cell line cultures using TOBIAS.
 
@@ -199,7 +199,7 @@ cells treated with EFZ (blue and green) from untreated cells (red and orange). I
 will be interesting to see if an activity pattern resembling the differential
 binding score pattern from the C20 cell line footprinting can be found. For this
 we will focus on the 25 TFs which are found in the C20 cell line and the 
-triculture dataset respectively.
+triculture data set respectively.
 
 
 <details>
@@ -619,7 +619,7 @@ These TFs were differentially active between the three k-means clusters in
 Myeloid2 cells from HIV-infected patients. Across three different patients
 they showed correlated changes in activity. YY1, ETS1 and REST were positively
 correlated with each other and negatively
-correlated with MEF2A, ETV6, JUNB, MEF2C, MXI1 and CEBPB. The pattern observed for the iMg from the triculture dataset does not
+correlated with MEF2A, ETV6, JUNB, MEF2C, MXI1 and CEBPB. The pattern observed for the iMg from the triculture data set does not
 resemble the pattern observed in Myeloid2 cells. A suprising observation is that
 there is pairs of TFs which are highly correlated, for example ETS1 and ETV6 or 
 REST and CEBPB. 
@@ -661,5 +661,24 @@ tri_mg@meta.data %>%
 ```
 
 ---
+
+# Conclusions
+
+GRN inference based on gene expression in iMg did not show very 
+clear results. 25 of the TFs were also found to have differential binding scores 
+in the C20 cell line, but the patterns in activity were not always consistent. Some 
+TFs more bound in uninfected cells followed the pattern found by footprinting, but
+only for either the treated cells or the untreated cells, but not for both. For the
+five TFs more bound in latent infection in C20 cells, no pattern was observed. Also, 
+the correlation in activity of the tree TFs YY1, ETS1 and REST, found in Myeloid2 cells, 
+was not found in iMg which weakens the hypothesis that the cluster of interest found
+in Myeloid2 cells might be latently infected cells. The interpretation of the 
+results is difficult due to the fact that the effect of EFZ treatment seems
+to overshadow any effect of the HIV infection. This strong effect of the drugs
+should be kept in mind in any further analysis, since it makes the comparison between
+cells from patients and from cell culture particularly hard. Drug concentrations 
+in the blood and even more so in the CSF are very low and the direct application of
+drugs in cell culture might not resemble the physiological effect very well. 
+
 
 # References

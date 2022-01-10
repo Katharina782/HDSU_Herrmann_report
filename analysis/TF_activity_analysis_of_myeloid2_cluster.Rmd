@@ -1,5 +1,5 @@
 ---
-title: "TF activity in Myeloid2 cells"
+title: "Transcription factor activity in Myeloid2 cells"
 author: "Katharina Mikulik"
 output: html
 bibliography: references.bib
@@ -54,7 +54,7 @@ of 125 different transcription factors.
 First, we wanted to see if we can identify patterns in the TF activity in the
 Myeloid2 cells. We compared the TF activity to TFs shown to have differential 
 binding scores between three infection states (uninfected, latent infection, 
-active infection) in primary microglia (bulk ATACseq). For the comparison
+active infection) in the C20 cell line (bulk ATACseq). For the comparison
 with the TF activity in Myeloid2 cells we focused on the TF with differential 
 binding scores between **uninfected** and **latently infected** states.
 
@@ -67,7 +67,7 @@ microglia?
 </details>
 
 <details> 
-<summary>TF activity matrix and HIV CSF/Blood dataset</summary>
+<summary>TF activity matrix and HIV CSF/Blood data set</summary>
 
 
 * read in Seurat object
@@ -104,7 +104,7 @@ hiv7_scenic <- AddMetaData(hiv7,
 Using bulk ATACseq data from the C20 cell line (immortalized microglia) with three different conditions,
 active infection, latent infection, uninfected, differential binding scores were
 obtained using TOBIAS. Here, I will use the TFs which were previously shown to 
-have differential binding scores in these primary microglia. Since I expect the 
+have differential binding scores in this cell line. Since I expect the 
 CSF Myeloid cells to be latently infected, because they have been obtained from 
 patients receiving ART, I will use the TFs with differential binding scores 
 between latent infection and uninfected. We would like to know if the TF activity
@@ -112,7 +112,7 @@ inferred from RNAseq data of Myeloid2 cells correlates with these differential
 binding scores. In other words, we want to know if the patterns of differential 
 TF activity are similar to the patterns of differential TF binding scores. 
 For example, if a TF was shown to be more bound in latently infected primary
-microglia compared to uninfected primary microglia, we would expect the TF to be
+microglia compared to uninfected C20 cells, we would expect the TF to be
 more active in a group of Myeloid2 cells which are latently infected compared
 to a group of Myeloid2 cells which are uninfected. 
 
@@ -149,7 +149,7 @@ up_uninf <- overlap_atac$name[overlap_atac$uninf_red_change > 0]
 ## Volcano Plot ATAC-seq footprinting
 
 Only four TFs found in the TF activity matrix of Myeloid2 cells 
-are more bound in latent infection than in uninfected primary microglia.
+are more bound in latent infection than in uninfected C20 cells.
 
 ```{r, fig.height=8, fig.width=12}
 
@@ -177,7 +177,8 @@ top_tfs %>%
 # Compare TF activities between clusters and look for patterns
 
 The heatmaps below were split into 3 separate heatmaps, one for each patient. Shown are
-the 24 TFs found by ATAC-seq footprinting as rows and cells as columns. Judging from the plots no TFs clearly separate the clusters or
+the 24 TFs found by ATAC-seq footprinting as rows and cells as columns. Judging
+from the plots no TFs clearly separate the clusters or
 show a pattern of activity which is similar to the footprinting binding scores. 
 If the pattern was similar to the footprinting binding scores we would expect to
 see one cluster where REST, KLF4, PAX5 and MXI1 are upregulated. This cannot be
@@ -1142,6 +1143,27 @@ do.call(gridExtra::grid.arrange, c(boxplot_list, ncol = 5, nrow = 4))
 ---
 </details>
 
+# Conclusions
+ 
+TF activity scores inferred from gene expression data of Myeloid2 cells did not
+show similar patterns as TF binding scores from ATACseq footprinting data of the
+C20 cell line. Independent k-means clustering (k = 3) of all three patients revealed that there 
+is one cluster in every patient which is different from the other two clusters. Eleven
+TFs were identified which also have differential binding scores in C20 cells. Of 
+these eleven TFs three were positively correlated with each other and negatively 
+correlated with the other eight TFs and vice versa. This correlation in TF activity
+was observed in all three patients independently. Hence, these differences could
+be biologically meaningful and hint at different infection status of the cells in
+the respective clusters. Since YY1 and ETS1 repress HIV-1 transcription and CTCF
+is associated with latency as well, and all three TFs are more active in cluster1
+compared to cluster2 and cluster3, we propose that the cluster1 contains a group 
+of latently infected cells. For more details see discussion. To confirm or falsify
+this hypothesis a second data set of iMg in a triculture system was analysed and 
+integrated with the CSF and blood data set. Results will be described in the next
+chapters.
+
+
+
 # Appendix
 
 ### Determine k for k-means clustering {.tabset}
@@ -1803,7 +1825,7 @@ to assign each cell to one of the 3 clusters.
 
 Label Transfer
 
-Here we do not integrate the datasets beforehand and we do not modify the query
+Here we do not integrate the data sets beforehand and we do not modify the query
 expression data.
 
 ```{
@@ -1839,7 +1861,7 @@ for (i in names(hiv_list)) {
 }
 
 
-# patient 2 and patient 3 are our query datasets
+# patient 2 and patient 3 are our query s
 query <-merge(hiv_list[[1]], hiv_list[[3]])
 reference <- hiv_list[[2]]
 reference <- RunPCA(reference, 

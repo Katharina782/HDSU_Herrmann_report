@@ -104,7 +104,7 @@ signatures of these microglia-like cells resembled those of disease-associated
 microglia cells and, therefore, it was proposed that these cells might  be used 
 for diagnosis of HAND from CSF samples [@Farhadian].
 
-The triculture dataset used in the following analysis originates from a 
+The triculture data set used in the following analysis originates from a 
 human-induced pluripotent stem cell model, including induced neurons (iNs),
 inuced astrocytes (iAst) and induced microglia (iMg) co-cultured with or without 
 HIV-1 infection and antiretroviral therapy (ART) with efavirenz (EFZ) [@Ryan]. The
@@ -117,7 +117,7 @@ and IL-6 did not change in any condition [@Ryan].
 
 In the following analysis the aim was to provide further evidence for the 
 microglia-like nature of myeloid CSF cells by performing additional analysis on the
-sc-RNAseq dataset and integrating it with additional datasets from, on the one 
+sc-RNAseq data set and integrating it with additional data sets from, on the one 
 hand a microglia cell line derived from an HIV-1 patient (C20 cell) and, on the 
 other hand, a triculture system of induced neurons, astrocytes and microglia, 
 infected with HIV-1 and treated with ART [@Ryan; @Garcia-Mesa]. 
@@ -125,7 +125,7 @@ infected with HIV-1 and treated with ART [@Ryan; @Garcia-Mesa].
 ATACseq footprinting results from the C20 cell line could allow us to draw conclusions
 on the infection status of CSF microglia-like cells by comparing the footprinting
 patterns to TF activities in CSF cells. Similarly, since the infection states
-of the cells in the triculture dataset are known, we might be 
+of the cells in the triculture data set are known, we might be 
 able to extract a gene signature of infection or infection + ART compared to
 uninfected cells or uninfected cells treated with ART. This gene signature could 
 then be compared to the microglia-like cells of the CSF samples. This way we 

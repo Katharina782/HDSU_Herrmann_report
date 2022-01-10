@@ -1,5 +1,5 @@
 ---
-title: "Analysis of HIV CSF/Blood dataset"
+title: "Analysis of HIV-1 infected CSF & Blood samples"
 author: "Katharina Mikulik"
 bibliography: references.bib
 link-citations: yes
@@ -50,13 +50,13 @@ library(SeuratDisk)
 library(patchwork)
 ```
 
-# Description of dataset
+# Description of data set
 
-First, the analysis done by [@Farhadian] was reproduced and then a more extended
-analysis of the dataset was performed. The microglia-like cell cluster identified
-by [@Farhadian] was of particular interest.
+First, the analysis done by Farhadian et al. [@Farhadian] was reproduced and then a more extended
+analysis of the data set was performed. The microglia-like cell cluster identified
+by Farhadian et al. [@Farhadian] was of particular interest.
 
-The dataset includes three CSF samples from HIV infected patients, two blood 
+The data set includes three CSF samples from HIV infected patients, two blood 
 samples from the same HIV-1 infected patients as two of the CSF samples, as well
 as, two CSF samples from uninfected
 patients. In the following HIV was written for simplicity, but all data and 
@@ -70,7 +70,7 @@ the CSF samples from uninfected patients. It is shown that the percentage of Mye
 transcripts was higher in CSF from infected patients than in CSF from uninfected
 patients and higher in CSF than in blood in general. In the following analysis
 the existence of a microglia-like group of cells was confirmed, however, 
-the percentage of Myeloid2 transcripts found by [@Farhadian] could not be 
+the percentage of Myeloid2 transcripts found by Farhadian et al. [@Farhadian] could not be 
 recapitulated.
 
 Blood and CSF were processed separately for sc-RNAseq using SeqWell. The seven
@@ -350,7 +350,7 @@ Details on the cell type annotation can be found in the appendix under
 *"Marker gene expression of predicted cell types after label transfer"*. The 
 tSNE embedding with the annotated cell types resembles the results by
 [@Farhadian]. There are two clusters, Myeloid2 and Myeloid5 which mainly contain
-cells from CSF. These two clusters were termed microglia-like by [@Farhadian]. 
+cells from CSF. These two clusters were termed microglia-like by Farhadian et al. [@Farhadian]. 
 In the following analysis I will try to confirm this and investigate the Myeloid2
 cluster in more detail.
 
@@ -479,7 +479,7 @@ compared to all other samples which contain between 932 and 2520 cells (see
 table below). However, also the CSF sample from patient1 (HIV1_CSF) with 932
 cells contains much fewer cells compared to all other samples. 
 
-The results shown by [@Farhadian] are controversial, because when the authors compare
+The results shown by Farhadian et al. [@Farhadian] are controversial, because when the authors compare
 the percentage of Myeloid2 transcripts between the three conditions, 1770 cells 
 are pooled for the uninfected condition, which is a lot more than we find
 here. Yet, it is not mentioned that different thresholds were used for quality 
@@ -557,7 +557,7 @@ Only the p-value for the comparison between infected CSF vs uninfected CSF is
 the same as in the paper, where it is stated that the Myeloid2 transcripts were
 found at lower levels in the uninfected samples compared to the infected samples.
 Otherwise, the results contradict the results found
-by [@Farhadian]. Contradictory to what is claimed in the paper, it is not evident
+by Farhadian et al. [@Farhadian]. Contradictory to what is claimed in the paper, it is not evident
 that both infected and uninfected CSF samples have higher rates of Myeloid2 
 transcripts, but rather the Blood samples seem to have the highest rate of Myeloid2 
 transcripts according to the median (see boxplots below). 
@@ -794,7 +794,24 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 ```
 
+# Conclusions
 
+To summarize the results presented above, the analysis of the data set revealed
+a microglia-like group of Myeloid cells as described by Farhadian et al. [@Farhadian]. In 
+the appendix more details can be found on how we independently confirmed the 
+microglia-like signature of these Myeloid2 cells using marker genes described 
+in the literature. We found 
+that the frequency of Myeloid2 transcripts was higher in infected blood and CSF
+samples than in the CSF sample from uninfected patients and the median frequency
+was higher in infected blood than in infected CSF. Conversely Farhadian et al. [@Farhadian] 
+found that the frequency of Myeloid2 transcripts was higher in both infected
+and uninfected CSF samples than in infected blood samples. Since details on 
+how data was processed in the paper are not available it is difficult to say 
+how the authors arrived at this conclusion. In addition to the standard analysis
+steps performed in the paper we performed 
+a label transfer of cell types to the three remaining samples (1 infected CSF, 
+2 uninfected CSF). Using the gene expression data of the CSF samples we will
+in the following do gene regulatory network (GRN) inference to gain additional insights.
 
 # Appendix
 
@@ -982,7 +999,7 @@ ggarrange(p1,p2,p3, nrow = 3, ncol = 1)
 
 ### Myeloid 5
  
- Cluster 12 are Myeloid5 cells, which were characterized by [@Farhadian] with 
+ Cluster 12 are Myeloid5 cells, which were characterized by Farhadian et al. [@Farhadian] with 
  the markers FCER1A and CD1C  
 
 ```{r, fig.width=15, fig.height=12}
@@ -1081,7 +1098,7 @@ hiv4 <- readRDS("/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhad
 
 #### Esaulova et al.
 
-Gene signature defined by [@Esaulova]
+Gene signature defined by Esaulova et al. [@Esaulova]
 
 ##### Homeostatic genes: 
 
@@ -1117,9 +1134,9 @@ ggarrange(dotplot, tsne, ncol =2, nrow = 1)
 * **GPR34**, **TMEM119** supports the hypothesis that myeloid2 are microglia-like,
 since they are expressed at higher levels in the Myeloid2 cluster
 * 10 genes were used to discriminate microglia, four of which have not been 
-inlcuded by [@Farhadian]: **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12**
+inlcuded [@Farhadian]: **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12**
 * the genes **CLEC9A**, **TIMD4**, **TNFSF18**, **CXCL12** are not included in
-the 60 genes used by [@Farhadian], but they do not show specific expression
+the 60 genes used by Farhadian et al. [@Farhadian], but they do not show specific expression
 for Myeloid2 cells
 
 ```{r, fig.width=15, fig.height=20}
@@ -1153,8 +1170,8 @@ FeaturePlot(hiv4, features = c("CLEC9A", "TIMD4", "TNFSF18", "CXCL12",
 #### Farhadian et al.
 
 60 genes were used by Farhadian et al. to distinguish the Myeloid2 cell type.
-28 of the 60 genes used as microglia signature in the [@Farhadian] Paper are also 
-found in the 881 microglia signature genes defined by [@Gosselin].
+28 of the 60 genes used as microglia signature in the paper [@Farhadian]  are also 
+found in the 881 microglia signature genes defined by Gosselin et al. [@Gosselin].
 
 ```{r}
 ## Read in list of microglia signature genes found in the Gosselin paper
@@ -1200,7 +1217,7 @@ FeaturePlot(hiv_farhadian, features = "Cluster1" , pt.size = .5, label = TRUE, r
 
 
 Here, I will first use the 881 microglia marker genes and then also try the list
-of TFs provided by [@Gosselin].
+of TFs provided by Gosselin et al. [@Gosselin].
 
 The Transcription Factors mentioned in the paper do not seem to be 
 specific for the Myeloid2 cluster. Interestingly, there is a very low score  
@@ -1281,8 +1298,8 @@ FeaturePlot(hiv_hand, features = "Cluster1", pt.size = .01) +
 
 #### Keren-Shaul et al. & Kraseman et al.
 
-The marker genes mentioned by [@Keren-Shaul] and [@Kraseman] were referred to 
-by [@Farhadian] and used as marker genes for microglia associated with 
+The marker genes mentioned by Keren_Shaul et al. [@Keren-Shaul] and [@Kraseman] were referred to 
+by Farhadian et al. [@Farhadian] and used as marker genes for microglia associated with 
 neurodegenerative disease.
 
 [@Keren-Shaul] defined a signature consisting of genes upregulated in 
@@ -1293,9 +1310,9 @@ disease-assocaited microglia.
 
 Neither of these signatures show a high score for the Myeloid2/5 clusters. 
 
-* The signature genes defined by [@Keren-Shaul] are expressed to some level 
+* The signature genes defined by Keren-Shaul et al. [@Keren-Shaul] are expressed to some level 
 in all myeloid clusters
-* The signature defined by [@Kraseman] is also mainly expressed in the 
+* The signature defined by Kraseman et al. [@Kraseman] is also mainly expressed in the 
 Myeloid clusters
 * CD9 and SPP1 might be added to the list of microglia marker genes expressed
 in Myeloid2 cluster
@@ -1520,7 +1537,7 @@ do.call(grid.arrange, c(cluster_plots, ncol = 2, nrow = 4))
 Taken together the results above do not provide a clear picture on whether the
 Myeloid2 cluster consists of microglia-like cells. There are several genes which 
 are associated with microglia and disease-associated microglia, several of which 
-referred to by [@Farhadian]. Nevertheless, there are also many genes which 
+referred to by Farhadian et al. [@Farhadian]. Nevertheless, there are also many genes which 
 are described to be microglia markers in the literature, but do not show a 
 significantly higher expression in Myeloid2 than in the other Myeloid clusters.
 Therefore, the cluster will be considered microglia-like for now and the

@@ -13,12 +13,12 @@ link-citations: yes
 
 ## Quality Control
 
-For Quality Control I used the publications from which the datasets were obtained
+For Quality Control I used the publications from which the data sets were obtained
 as an orientation, in order to be able to reproduce the results and findings. For
-the dataset from [@Farhadian] genes expressed in less than 3 cells were 
+the data set from [@Farhadian] genes expressed in less than 3 cells were 
 removed. Additionally, the ten percent of cells with the highest percentage
 of mitochondrial genes and cells with a number of features below 500 or above 
-2500 was removed. For the dataset from [@Ryan] cells with a percentage of mitochondrial genes above 20% were removed, as well as, cells with a number of features below 200 
+2500 was removed. For the data set from [@Ryan] cells with a percentage of mitochondrial genes above 20% were removed, as well as, cells with a number of features below 200 
 and above 5000. 
 
 ## Normalization
@@ -52,31 +52,31 @@ https://satijalab.org/seurat/articles/integration_mapping.html
 ### Integration
 
 First, canonical correlation analysis is performed to reduce dimensionality of both
-datasets. This method can find shared biological markers, even if batch effects 
+data sets. This method can find shared biological markers, even if batch effects 
 are very large. Second, expression data is L2 normalized. After the 
-projection of distinct datasets into a shared subspace, pairs of MNN in this shared subspace are identified. These MNN correspond to cells which are biologically
+projection of distinct data sets into a shared subspace, pairs of MNN in this shared subspace are identified. These MNN correspond to cells which are biologically
 similar. The MNN serve as integration anchors for the integration, but 
 beforehand the anchors are scored. The score is a measure of how similar the two 
 anchor cells are. Using anchors and their corresponding scores, 
 correction vectors are computed for each cell. The correction vectors contain 
 information on the difference between two anchor cells. Using the correction vectors 
 the expression values of each cell are transformed, so that they are part of an
-integrated dataset [@Stuart]. This integrated dataset can then be used for 
-further analysis. Finding anchors between datasets is not only required for 
-integration of two distinct datasets, but also for label transfer. 
+integrated data set [@Stuart]. This integrated data set can then be used for 
+further analysis. Finding anchors between data sets is not only required for 
+integration of two distinct data sets, but also for label transfer. 
 
 ### Label Transfer
 
-After finding anchors between distinct datasets as described above, it 
+After finding anchors between distinct data sets as described above, it 
 is also possible to transfer information, for example cell type annotations. This
 means that instead of de-nove analysis of cell type markers the cell labels are 
-learned from a reference dataset. Instead of using canonical correlation analysis, the
-PCA computed for the reference dataset is projected onto the query dataset. 
+learned from a reference data set. Instead of using canonical correlation analysis, the
+PCA computed for the reference data set is projected onto the query data set. 
 A binary classification matrix is build with rows corresponding to all possible 
 classes and columns corresponding to reference anchors of the anchor pairs. 
 If a reference anchor belongs to a certain class the entry will be one, otherwise
 it will be zero. The classification matrix is then multiplied with a weight matrix.
-This way we get prediction scores for each class and cell in the query dataset
+This way we get prediction scores for each class and cell in the query data set
 [@Stuart].
 
 ## Correlation  
@@ -100,7 +100,7 @@ $\rho = \frac{\sum_{i} (x_{i} - \overline{x}) (y_{i} - \overline{y})}
 
 The function `AddModuleScore()` from the Seurat package calculates gene expression
 scores for a particular set of signature genes. For example, I calculated 
-scores for the genes defining the infected iMg from the triculture dataset in 
+scores for the genes defining the infected iMg from the triculture data set in 
 Myeloid2. Calculating the gene signature score for each cell provides information 
 on whether a particular cell shows a higher/unchanged/lower expression of a
 particular set of genes (signature for a particular cell tpye).
@@ -153,7 +153,7 @@ the t-test.
 
 The Seurat functions `FindAllMarkers()` and `FindMarkers()` uses a Wilcoxon Rank
 Sum test to identify differentially expressed genes between two groups. For the
-dataset from [@Farhadian] to find also genes with small log-fold changes,
+data set from [@Farhadian] to find also genes with small log-fold changes,
 I set the threshold to 0.01 and 
 the minimum fraction of cells in which the gene is detected to 0.01. This 
 increased the computation time, but made it possible to also include
