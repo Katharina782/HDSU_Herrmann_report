@@ -489,7 +489,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-12-31
+<strong>Last updated:</strong> 2022-01-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -580,16 +580,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree51bcaf3edef9692eac321325ef570b593e2f6379targetblank51bcaf3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/51bcaf3edef9692eac321325ef570b593e2f6379" target="_blank">51bcaf3</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree62d16f3043806e5fedbcfbe59a665a3831327f83targetblank62d16f3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/Katharina782/report/tree/62d16f3043806e5fedbcfbe59a665a3831327f83" target="_blank">62d16f3</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree51bcaf3edef9692eac321325ef570b593e2f6379targetblank51bcaf3a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKatharina782reporttree62d16f3043806e5fedbcfbe59a665a3831327f83targetblank62d16f3a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/51bcaf3edef9692eac321325ef570b593e2f6379" target="_blank">51bcaf3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/Katharina782/report/tree/62d16f3043806e5fedbcfbe59a665a3831327f83" target="_blank">62d16f3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -645,6 +645,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Katharina782/report/f35ba45536a8b7546c4144a569fe908ce206aa4d/docs/Independent_cell_type_identification_Farhadian_dataset.html" target="_blank">f35ba45</a>
+</td>
+<td>
+Katharina782
+</td>
+<td>
+2021-12-31
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1018,8 +1035,8 @@ library(knitr)
 library(pheatmap)</code></pre>
 <div id="independent-annotation-of-myeloid2-and-myeloid5-clusters-as-microglia-like-cells" class="section level1">
 <h1>Independent annotation of Myeloid2 and Myeloid5 clusters as Microglia-like cells</h1>
-<p>Can we identify the microglia-like myeloid2/myeloid5 cluster they found in the paper by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> when using independent genes for annotations?</p>
-<p>Here, I will first use the 881 Microglia marker genes and then also try the list of TFs provided by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
+<p>Can we identify the microglia-like myeloid2/myeloid5 cluster they found in the paper by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Farhadian SF 2018</a>)</span> when using independent genes for annotations?</p>
+<p>Here, I will first use the 881 Microglia marker genes and then also try the list of TFs provided by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">Gosselin D 2017</a>)</span>.</p>
 <div id="function-add-module-score" class="section level4">
 <h4>Function Add Module Score</h4>
 <p>This Function Caluclate the average expression levels of each cluster on single cell level, subtracted by the aggregated expression of control feature sets. The analyzed features are binned based on averaged expression and the control features are randomly selected from each bin.</p>
@@ -1029,13 +1046,13 @@ library(pheatmap)</code></pre>
 <pre class="r"><code>hiv4 &lt;- readRDS(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/src/Reproduce_Farhadian_Paper/Seurat_objects/non_integrated_HIV1_HIV2_4samples_seurat_object.rds&quot;)</code></pre>
 </div>
 <div id="gene-signature-defined-by-farhadian" class="section level2">
-<h2>Gene signature defined by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span></h2>
-<p>Do we find the 60 signature genes from <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> for myeloid2 among the signature defined by @[Gossselin]?</p>
+<h2>Gene signature defined by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Farhadian SF 2018</a>)</span></h2>
+<p>Do we find the 60 signature genes from <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Farhadian SF 2018</a>)</span> for myeloid2 among the signature defined by @[Gossselin]?</p>
 <div id="read-in-list-of-microglia-signature-genes-found-in-the-gosselin-paper" class="section level5">
 <h5>Read in list of microglia signature genes found in the Gosselin paper</h5>
 <p>which are also found in the HIV1 and HIV2 samples:</p>
 <pre class="r"><code>microglia_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Microglia_gene_signatur_found_in_HIV1_HIV2_samples&quot;)</code></pre>
-<p>28 of the 60 genes used as microglia signature in the <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span> Paper are also found in the 881 microglia signature genes defined by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>.</p>
+<p>28 of the 60 genes used as microglia signature in the <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Farhadian SF 2018</a>)</span> Paper are also found in the 881 microglia signature genes defined by <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">Gosselin D 2017</a>)</span>.</p>
 <pre class="r"><code># Are there any genes overlapping between Farhadian and Glass paper?
 #import the 60 genes that were upregulated in Myeloid-2 in the paper compared to the four other myeloid subsets
 paper &lt;- read.table(file = &quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/Myeloid-2_genes_paper.csv&quot;, sep = &quot;\t&quot;, header = FALSE, skipNul = TRUE)#, n_max = 60)
@@ -1345,7 +1362,7 @@ Katharina782
 </div>
 <div id="signature-of-hand-hiv-associated-neurodegenerative-disease" class="section level3">
 <h3>signature of HAND (HIV-associated neurodegenerative disease)</h3>
-<p><span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span> defined a group of genes upregulated in microglia from patients with HAND.</p>
+<p><span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">Gosselin D 2017</a>)</span> defined a group of genes upregulated in microglia from patients with HAND.</p>
 <p>This gene signature can, however not be detected in any of the Myeloid clusters.</p>
 <pre class="r"><code>hand_genes &lt;- read.table(&quot;/media/ag-cherrmann/kmikulik/HIV_microglia/data/HAND_upregulated_microglia_signature_genes&quot;)
 hand_genes &lt;- as.vector(hand_genes[[&quot;genes&quot;]])
@@ -1443,7 +1460,7 @@ Katharina782
 </div>
 <div id="tfs-downregulated-in-in-vitro-microglia" class="section level5">
 <h5>TFs downregulated in in vitro microglia</h5>
-<p>The list of TFs is derived from <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">David Gosselin 2020</a>)</span>:</p>
+<p>The list of TFs is derived from <span class="citation">(<a href="#ref-Gosselin" role="doc-biblioref">Gosselin D 2017</a>)</span>:</p>
 <p><strong>Comparison between microglia and primitive yolk sac macrphages:</strong></p>
 <p>In this paper they found:</p>
 <ul>
@@ -1785,7 +1802,7 @@ Katharina782
 </div>
 </div>
 <div id="features-identified-in-a-paper-on-convergence-of-microglia-and-macrophages-grassivaro" class="section level2">
-<h2>Features identified in a paper on convergence of microglia and macrophages <span class="citation">(<a href="#ref-Grassivaro" role="doc-biblioref">Francesca Grassivaro and Martino 2018</a>)</span></h2>
+<h2>Features identified in a paper on convergence of microglia and macrophages <span class="citation">(<a href="#ref-Grassivaro" role="doc-biblioref">Grassivaro F 2018</a>)</span></h2>
 <p>They identified 14 genes that are conserved in microglia throughout development, but not expressed in myeloid-derived monocytes MDM. Only in the context of neuroinflammation are the 14 genes expressed in macrophages.</p>
 <pre class="r"><code>tfs &lt;- c(&quot;CRYBB1&quot;, &quot;GARNL3&quot;, &quot;GPR34&quot;, &quot;LAG3&quot;, &quot;NUAK1&quot;, &quot;OLFML3&quot;, &quot;RTN1&quot;,  &quot;SALL3&quot;,  &quot;SLC1A3&quot;, &quot;SPARC&quot;, &quot;TNFRSF17&quot;)
 
@@ -1888,11 +1905,11 @@ Katharina782
 </div>
 </div>
 <div id="marker-genes-referred-to-by-farhadian" class="section level2">
-<h2>Marker genes referred to by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Shelli F. Farhadian and Spudich 2018</a>)</span></h2>
+<h2>Marker genes referred to by <span class="citation">(<a href="#ref-Farhadian" role="doc-biblioref">Farhadian SF 2018</a>)</span></h2>
 <p>References:</p>
 <ul>
-<li><span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Hadas Keren-Shaul 2017</a>)</span></li>
-<li><span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Susanne Krasemann 2017</a>)</span></li>
+<li><span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Keren-Shaul H 2017</a>)</span></li>
+<li><span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Krasemann S 2017</a>)</span></li>
 </ul>
 <p>Neither of these signatures shows a high score for the Myeloid2 clusters.</p>
 <pre class="r"><code># upregulated in disease associated microglia (Keren-Shaul)
@@ -2103,8 +2120,8 @@ Katharina782
 </div>
 <p>Neither of the signature genes are very specific for the Myeloid2/5 cluster.</p>
 <ul>
-<li>The signature genes defined by <span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Hadas Keren-Shaul 2017</a>)</span> are expressed to some level in all myeloid clusters</li>
-<li>The signature defined by <span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Susanne Krasemann 2017</a>)</span> is also mainly expressed in the Myeloid clusters</li>
+<li>The signature genes defined by <span class="citation">(<a href="#ref-Keren-Shaul" role="doc-biblioref">Keren-Shaul H 2017</a>)</span> are expressed to some level in all myeloid clusters</li>
+<li>The signature defined by <span class="citation">(<a href="#ref-Kraseman" role="doc-biblioref">Krasemann S 2017</a>)</span> is also mainly expressed in the Myeloid clusters</li>
 <li>CD9 and SPP1 might be added to the list of microglia marker genes expressed in Myeloid2 cluster</li>
 </ul>
 <pre class="r"><code># Keren Shaul et al. signature
@@ -2374,7 +2391,7 @@ Katharina782
 </div>
 </div>
 <div id="gene-signature-defined-by-esaulova" class="section level2">
-<h2>Gene signature defined by <span class="citation">(<a href="#ref-Esaulova" role="doc-biblioref">Ekaterina Esaulova 2020</a>)</span></h2>
+<h2>Gene signature defined by <span class="citation">(<a href="#ref-Esaulova" role="doc-biblioref">Esaulova E 2020</a>)</span></h2>
 <div id="homeostatic-genes" class="section level5">
 <h5>Homeostatic genes</h5>
 <ul>
@@ -4399,23 +4416,23 @@ Katharina782
 </div>
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-Gosselin" class="csl-entry">
-David Gosselin, Nicole G. Coufal, Dylan Skola. 2020. <em>Single-Cell RNA Sequencing Reveals Microglia-Like Cells in Cerebrospinal Fluid During Virologically Suppressed HIV</em>. <em>JNEUROSCI</em>. Vol. 356, 1248. <a href="https://DOI: 10.1126/science.aal3222">DOI: 10.1126/science.aal3222</a>.
-</div>
 <div id="ref-Esaulova" class="csl-entry">
-Ekaterina Esaulova, Irina Shchukina, Claudia Cantoni. 2020. <em>Single-Cell RNA-Seq Analysis of Human CSF Microglia and Myeloid Cells in Neuroinflammation</em>. <em>Nat Neurosci</em>. Vol. 7:e732. <a href="https://doi:10.1212/NXI.0000000000000732">doi:10.1212/NXI.0000000000000732</a>.
-</div>
-<div id="ref-Grassivaro" class="csl-entry">
-Francesca Grassivaro, Massimo Acquaviva, Ramesh Menon, and Gianvito Martino. 2018. <em>Convergence Between Microglia and Peripheral Macrophages Phenotype During Development and Neuroinflammation</em>. <em>JCI Insight</em>. Vol. 40 (4). <a href="https://doi.org/10.1523/JNEUROSCI.1523-19.2019">https://doi.org/10.1523/JNEUROSCI.1523-19.2019</a>.
-</div>
-<div id="ref-Keren-Shaul" class="csl-entry">
-Hadas Keren-Shaul, Assaf Weiner, Amit Spinrad. 2017. <em>A Unique Microglia Type Associated with Restricting Development of Alzheimer’s Disease</em>. <em>Cell</em>. Vol. 169. <a href="http://dx.doi.org/10.1016/j.cell.2017.05.018">http://dx.doi.org/10.1016/j.cell.2017.05.018</a>.
+Esaulova E, Shchukina I, Cantoni C. 2020. <em>Single-Cell RNA-Seq Analysis of Human CSF Microglia and Myeloid Cells in Neuroinflammation</em>. <em>Nat Neurosci</em>. Vol. 7:e732. <a href="https://doi:10.1212/NXI.0000000000000732">doi:10.1212/NXI.0000000000000732</a>.
 </div>
 <div id="ref-Farhadian" class="csl-entry">
-Shelli F. Farhadian, Chrysoula Zografou, Sameet S. Mehta, and Serena S. Spudich. 2018. <em>Single-Cell RNA Sequencing Reveals Microglia-Like Cells in Cerebrospinal Fluid During Virologically Suppressed HIV</em>. <em>JCI Insight</em>. Vol. 3(18):e121718. <a href="https://doi.org/10.1172/jci.insight.121718">https://doi.org/10.1172/jci.insight.121718</a>.
+Farhadian SF, Zografou C, Mehta SS. 2018. <em>Single-Cell RNA Sequencing Reveals Microglia-Like Cells in Cerebrospinal Fluid During Virologically Suppressed HIV</em>. <em>JCI Insight</em>. Vol. 3(18):e121718. <a href="https://doi.org/10.1172/jci.insight.121718">https://doi.org/10.1172/jci.insight.121718</a>.
+</div>
+<div id="ref-Gosselin" class="csl-entry">
+Gosselin D, Coufal NG, Skola D. 2017. <em>An Environment-Dependent Transcriptional Network Specifies Human Microglia Identity</em>. <em>Science</em>. Vol. 356(6344). <a href="https://doi: 10.1126/science.aal3222">doi: 10.1126/science.aal3222</a>.
+</div>
+<div id="ref-Grassivaro" class="csl-entry">
+Grassivaro F, Acquaviva M, Menon R. 2018. <em>Convergence Between Microglia and Peripheral Macrophages Phenotype During Development and Neuroinflammation</em>. <em>JCI Insight</em>. Vol. 40 (4). <a href="https://doi.org/10.1523/JNEUROSCI.1523-19.2019">https://doi.org/10.1523/JNEUROSCI.1523-19.2019</a>.
+</div>
+<div id="ref-Keren-Shaul" class="csl-entry">
+Keren-Shaul H, Weiner A, Spinrad A. 2017. <em>A Unique Microglia Type Associated with Restricting Development of Alzheimer’s Disease</em>. <em>Cell</em>. Vol. 169. <a href="http://dx.doi.org/10.1016/j.cell.2017.05.018">http://dx.doi.org/10.1016/j.cell.2017.05.018</a>.
 </div>
 <div id="ref-Kraseman" class="csl-entry">
-Susanne Krasemann, Ron Cialic, Charlotte Madore. 2017. <em>The Trem2-APOE Pathway Drives the Transcriptional Phenotype of Dysfunctional Microglia in Neurodegenerative Diseases</em>. <em>Immunity</em>. Vol. 47. <a href="http://dx.doi.org/10.1016/j.immuni.2017.08.008">http://dx.doi.org/10.1016/j.immuni.2017.08.008</a>.
+Krasemann S, Cialic R, Madore C. 2017. <em>The Trem2-APOE Pathway Drives the Transcriptional Phenotype of Dysfunctional Microglia in Neurodegenerative Diseases</em>. <em>Immunity</em>. Vol. 47. <a href="http://dx.doi.org/10.1016/j.immuni.2017.08.008">http://dx.doi.org/10.1016/j.immuni.2017.08.008</a>.
 </div>
 </div>
 <br>
