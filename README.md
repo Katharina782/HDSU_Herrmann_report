@@ -30,4 +30,4 @@ code chunks or not
 All Rmd files can be downloaded by clickin on the "Code" dropdown menu and 
 selecting "Download Rmd" at the top right of each page. If you want to modify 
 the files and rerun the analysis, you can get all files, tables and objects
-in the data folder () on the Curry Cluster.
+in the data folder ("/media/ag-cherrmann/kmikulik/HIV_microglia/data") on the Curry Cluster.
