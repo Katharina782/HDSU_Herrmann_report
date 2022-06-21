@@ -8,8 +8,7 @@ This repository contains the report of my labrotation in the HDSU (Sep - Dec
 2021), supervised by Carl Herrmann and Ana Luisa Costa, as well as Rmd files 
 written for the analysis including results.
 
-Click here to have a look at my report.
-https://katharina782.github.io/report/
+Click here to have a look at my report: https://katharina782.github.io/HDSU_Herrmann_report
 
 The report is interactive. 
 
